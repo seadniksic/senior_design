@@ -9,6 +9,14 @@ void drive_left()
   axis_backward(FL_IN2_PIN, FL_IN1_PIN, FL_EN_PIN);
 }
 
+void drive_right()
+{
+  axis_forward(BR_IN1_PIN, BR_IN2_PIN, BR_EN_PIN);
+  axis_backward(BL_IN3_PIN, BL_IN4_PIN, BL_EN_PIN);
+  axis_backward(FR_IN4_PIN, FR_IN3_PIN, FR_EN_PIN);
+  axis_forward(FL_IN2_PIN, FL_IN1_PIN, FL_EN_PIN);
+}
+
 void drive_diag_FL()
 {
   FRFOR;
@@ -41,6 +49,14 @@ void drive_forward()
   BRFOR;
 }
 
+void drive_backward()
+{
+  FLBACK;
+  FRBACK;
+  BLBACK;
+  BRBACK;
+}
+
 void all_axis_off()
 {
   axis_off(BR_IN1_PIN, BR_IN2_PIN, BR_EN_PIN);
@@ -63,8 +79,8 @@ void init_axis(uint8_t in1, uint8_t in2, uint8_t en)
 
 void axis_forward(uint8_t in1, uint8_t in2, uint8_t en)
 {
-  // digitalWrite(en, HIGH);
-  analogWrite(en, 100);
+  digitalWrite(en, HIGH);
+  // analogWrite(en, 100);
   digitalWrite(in1, LOW);
   digitalWrite(in2, HIGH);
 }
@@ -125,3 +141,4 @@ void locomotion_run()
     digitalWrite(13, HIGH);
   }
 }
+
