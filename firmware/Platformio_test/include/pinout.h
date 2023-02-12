@@ -34,8 +34,8 @@
 /* i2c buses */
 #define I2C_SCL_GYRO_PIN 19
 #define I2C_SDA_GYRO_PIN 18
-#define I2C_SCL1_JETSON_PIN 17 //backup bus
-#define I2C_SDA1_JETSON_PIN 16
+#define I2C_SCL1_JETSON_PIN 24 //backup bus
+#define I2C_SDA1_JETSON_PIN 25
 
 /* LEDs */
 //using the WS2812 library https://www.pjrc.com/non-blocking-ws2812-led-library/
@@ -70,9 +70,20 @@
 
 
 /* UART (comms with jetson) */
+// https://www.pjrc.com/teensy/td_uart.html
 #define UART3_TX_PIN 14
 #define UART3_RX_PIN 15
+#define UART3_RTS_PIN 33 // can be any
+#define UART3_CTS_PIN 19
+#define UART3_TX_EN_PIN  //can be any, not needed this is for enabling RS 485 transceiver chips
 
+
+/* pins for battery monitoring / control */
+#warning "complete these pins battery control"
+
+
+/* pins for interacting with jetson? */
+#warning "complete these pins for jetson"
 
 
 /* Joystick pinout
@@ -108,5 +119,6 @@ The code will need to account for this and flip them
 #define JOY_RY_PIN
 #define JOY_LED_PIN 33
 #define JOY_HOMEBTN_PIN 
+
 
 #endif 
