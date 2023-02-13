@@ -121,14 +121,12 @@
     #define DPAD_DOWN_PIN 11
     #define DPAD_RIGHT_PIN 12
     #define DPAD_LEFT_PIN 24
-    #define JOY_LX_PIN 
-    #define JOY_LY_PIN 
-    #define JOY_RX_PIN 
-    #define JOY_RY_PIN 
+    #define JOY_LX_PIN 14
+    #define JOY_LY_PIN 15
+    #define JOY_RX_PIN 40
+    #define JOY_RY_PIN 41
     #define JOY_LED_PIN 33
-    #define JOY_HOMEBTN_PIN 
-
-    #error "fix pin numbers"
+    #define JOY_HOMEBTN_PIN 39  
 
     /* Motor Driver pinout  */
     // BR = Back Right

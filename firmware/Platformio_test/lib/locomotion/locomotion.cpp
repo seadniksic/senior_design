@@ -1,20 +1,19 @@
 #include "locomotion.h"
 
-
 void drive_left()
 {
-  axis_backward(BR_IN1_PIN, BR_IN2_PIN, BR_EN_PIN);
-  axis_forward(BL_IN3_PIN, BL_IN4_PIN, BL_EN_PIN);
-  axis_forward(FR_IN4_PIN, FR_IN3_PIN, FR_EN_PIN);
-  axis_backward(FL_IN2_PIN, FL_IN1_PIN, FL_EN_PIN);
+  BRBACK;
+  BLFOR;
+  FRFOR;
+  FLBACK;
 }
 
 void drive_right()
 {
-  axis_forward(BR_IN1_PIN, BR_IN2_PIN, BR_EN_PIN);
-  axis_backward(BL_IN3_PIN, BL_IN4_PIN, BL_EN_PIN);
-  axis_backward(FR_IN4_PIN, FR_IN3_PIN, FR_EN_PIN);
-  axis_forward(FL_IN2_PIN, FL_IN1_PIN, FL_EN_PIN);
+  BRFOR;
+  BLBACK;
+  FRBACK;
+  FLFOR;
 }
 
 void drive_diag_FL()
@@ -29,6 +28,19 @@ void drive_diag_FR()
   BRFOR;
 }
 
+void drive_diag_BL()
+{
+  FLBACK;
+  BRBACK;
+  
+}
+
+void drive_diag_BR()
+{
+  FRBACK;
+  BLBACK; 
+}
+
 void lateral_arc_CW()
 {
   FLFOR;
@@ -39,6 +51,21 @@ void lateral_arc_CCW()
 {
   FRFOR;
   FLBACK;
+}
+
+void rotate_CW()
+{
+  FLFOR;
+  BLFOR;
+  FRBACK;
+  BRBACK;
+}
+void rotate_CCW()
+{
+  FRFOR;
+  BRFOR;
+  FLBACK;
+  BLBACK;
 }
 
 void drive_forward()
@@ -59,10 +86,10 @@ void drive_backward()
 
 void all_axis_off()
 {
-  axis_off(BR_IN1_PIN, BR_IN2_PIN, BR_EN_PIN);
-  axis_off(BL_IN3_PIN, BL_IN4_PIN, BL_EN_PIN);
-  axis_off(FR_IN4_PIN, FR_IN3_PIN, FR_EN_PIN);
-  axis_off(FL_IN2_PIN, FL_IN1_PIN, FL_EN_PIN);
+  AXIS_OFF(BR_IN1_PIN, BR_IN2_PIN, BR_EN_PIN);
+  AXIS_OFF(BL_IN3_PIN, BL_IN4_PIN, BL_EN_PIN);
+  AXIS_OFF(FR_IN4_PIN, FR_IN3_PIN, FR_EN_PIN);
+  AXIS_OFF(FL_IN2_PIN, FL_IN1_PIN, FL_EN_PIN);
 }
 
 void init_axis(uint8_t in1, uint8_t in2, uint8_t en)
@@ -75,33 +102,6 @@ void init_axis(uint8_t in1, uint8_t in2, uint8_t en)
   digitalWrite(in1, LOW);
   digitalWrite(in2, LOW);
 
-}
-
-void axis_forward(uint8_t in1, uint8_t in2, uint8_t en)
-{
-  digitalWrite(en, HIGH);
-  // analogWrite(en, 100);
-  digitalWrite(in1, LOW);
-  digitalWrite(in2, HIGH);
-}
-
-void axis_backward(uint8_t in1, uint8_t in2, uint8_t en)
-{
-  digitalWrite(en, HIGH);
-  digitalWrite(in1, HIGH);
-  digitalWrite(in2, LOW);
-}
-
-void axis_off(uint8_t in1, uint8_t in2, uint8_t en)
-{
-  digitalWrite(en, LOW);
-  digitalWrite(in1, LOW);
-  digitalWrite(in2, LOW);
-}
-
-void axis_on(uint8_t en)
-{
-  digitalWrite(en, HIGH);
 }
 
 void locomotion_init()

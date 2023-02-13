@@ -15,36 +15,31 @@ void main_prog()
   elapsedMillis LED_clock;
   uint8_t LED_state = HIGH;
 
+  elapsedMillis print_clock;
+  Serial.begin(115200);
+
   while(1)
   {
-    if( LED_clock > 750 )
+    if(LED_clock > 750 )
     {
       LED_clock -= 750;
       LED_state = !LED_state;
       digitalWrite(JOY_LED_PIN, LED_state);
+    }
 
-    }
+    // if (print_clock > 200)
+    // {
+    //   joystick_print();
+    //   print_clock -= 200;
+    // }
+
+    delay(100);
+
+    joystick_run();
+
     
-    if(dpad_down_pressed())
-    {
-      drive_backward();
-    }
-    else if(dpad_left_pressed())
-    {
-      drive_left();
-    }
-    else if(dpad_right_pressed())
-    {
-      drive_right(); 
-    }
-    else if(dpad_up_pressed())
-    {
-      drive_forward();
-    }
-    else
-    {
-      all_axis_off();
-    }
+
+
   }
   
 }
