@@ -87,14 +87,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/joeyblack/Documents/School/ECE1896/senior_design/network_stuff/baseStation/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/joeyblack/Documents/School/ECE1896/senior_design/network_stuff/baseStation/build/CMakeFiles /home/joeyblack/Documents/School/ECE1896/senior_design/network_stuff/baseStation/build/NetworkLibrary//CMakeFiles/progress.marks
-	cd /home/joeyblack/Documents/School/ECE1896/senior_design/network_stuff/baseStation/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 NetworkLibrary/all
+	cd /home/joeyblack/Documents/School/ECE1896/senior_design/network_stuff/baseStation/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/joeyblack/Documents/School/ECE1896/senior_design/network_stuff/baseStation/build/CMakeFiles /home/joeyblack/Documents/School/ECE1896/senior_design/network_stuff/baseStation/build/networkLibrary//CMakeFiles/progress.marks
+	cd /home/joeyblack/Documents/School/ECE1896/senior_design/network_stuff/baseStation/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 networkLibrary/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/joeyblack/Documents/School/ECE1896/senior_design/network_stuff/baseStation/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/joeyblack/Documents/School/ECE1896/senior_design/network_stuff/baseStation/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 NetworkLibrary/clean
+	cd /home/joeyblack/Documents/School/ECE1896/senior_design/network_stuff/baseStation/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 networkLibrary/clean
 .PHONY : clean
 
 # The main clean target
@@ -103,12 +103,12 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/joeyblack/Documents/School/ECE1896/senior_design/network_stuff/baseStation/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 NetworkLibrary/preinstall
+	cd /home/joeyblack/Documents/School/ECE1896/senior_design/network_stuff/baseStation/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 networkLibrary/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/joeyblack/Documents/School/ECE1896/senior_design/network_stuff/baseStation/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 NetworkLibrary/preinstall
+	cd /home/joeyblack/Documents/School/ECE1896/senior_design/network_stuff/baseStation/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 networkLibrary/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
@@ -117,17 +117,17 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
-NetworkLibrary/CMakeFiles/NetworkLibrary.dir/rule:
-	cd /home/joeyblack/Documents/School/ECE1896/senior_design/network_stuff/baseStation/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 NetworkLibrary/CMakeFiles/NetworkLibrary.dir/rule
-.PHONY : NetworkLibrary/CMakeFiles/NetworkLibrary.dir/rule
+networkLibrary/CMakeFiles/NetworkLibrary.dir/rule:
+	cd /home/joeyblack/Documents/School/ECE1896/senior_design/network_stuff/baseStation/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 networkLibrary/CMakeFiles/NetworkLibrary.dir/rule
+.PHONY : networkLibrary/CMakeFiles/NetworkLibrary.dir/rule
 
 # Convenience name for target.
-NetworkLibrary: NetworkLibrary/CMakeFiles/NetworkLibrary.dir/rule
+NetworkLibrary: networkLibrary/CMakeFiles/NetworkLibrary.dir/rule
 .PHONY : NetworkLibrary
 
 # fast build rule for target.
 NetworkLibrary/fast:
-	cd /home/joeyblack/Documents/School/ECE1896/senior_design/network_stuff/baseStation/build && $(MAKE) $(MAKESILENT) -f NetworkLibrary/CMakeFiles/NetworkLibrary.dir/build.make NetworkLibrary/CMakeFiles/NetworkLibrary.dir/build
+	cd /home/joeyblack/Documents/School/ECE1896/senior_design/network_stuff/baseStation/build && $(MAKE) $(MAKESILENT) -f networkLibrary/CMakeFiles/NetworkLibrary.dir/build.make networkLibrary/CMakeFiles/NetworkLibrary.dir/build
 .PHONY : NetworkLibrary/fast
 
 lib/receiveData.o: lib/receiveData.cpp.o
@@ -135,7 +135,7 @@ lib/receiveData.o: lib/receiveData.cpp.o
 
 # target to build an object file
 lib/receiveData.cpp.o:
-	cd /home/joeyblack/Documents/School/ECE1896/senior_design/network_stuff/baseStation/build && $(MAKE) $(MAKESILENT) -f NetworkLibrary/CMakeFiles/NetworkLibrary.dir/build.make NetworkLibrary/CMakeFiles/NetworkLibrary.dir/lib/receiveData.cpp.o
+	cd /home/joeyblack/Documents/School/ECE1896/senior_design/network_stuff/baseStation/build && $(MAKE) $(MAKESILENT) -f networkLibrary/CMakeFiles/NetworkLibrary.dir/build.make networkLibrary/CMakeFiles/NetworkLibrary.dir/lib/receiveData.cpp.o
 .PHONY : lib/receiveData.cpp.o
 
 lib/receiveData.i: lib/receiveData.cpp.i
@@ -143,7 +143,7 @@ lib/receiveData.i: lib/receiveData.cpp.i
 
 # target to preprocess a source file
 lib/receiveData.cpp.i:
-	cd /home/joeyblack/Documents/School/ECE1896/senior_design/network_stuff/baseStation/build && $(MAKE) $(MAKESILENT) -f NetworkLibrary/CMakeFiles/NetworkLibrary.dir/build.make NetworkLibrary/CMakeFiles/NetworkLibrary.dir/lib/receiveData.cpp.i
+	cd /home/joeyblack/Documents/School/ECE1896/senior_design/network_stuff/baseStation/build && $(MAKE) $(MAKESILENT) -f networkLibrary/CMakeFiles/NetworkLibrary.dir/build.make networkLibrary/CMakeFiles/NetworkLibrary.dir/lib/receiveData.cpp.i
 .PHONY : lib/receiveData.cpp.i
 
 lib/receiveData.s: lib/receiveData.cpp.s
@@ -151,7 +151,7 @@ lib/receiveData.s: lib/receiveData.cpp.s
 
 # target to generate assembly for a file
 lib/receiveData.cpp.s:
-	cd /home/joeyblack/Documents/School/ECE1896/senior_design/network_stuff/baseStation/build && $(MAKE) $(MAKESILENT) -f NetworkLibrary/CMakeFiles/NetworkLibrary.dir/build.make NetworkLibrary/CMakeFiles/NetworkLibrary.dir/lib/receiveData.cpp.s
+	cd /home/joeyblack/Documents/School/ECE1896/senior_design/network_stuff/baseStation/build && $(MAKE) $(MAKESILENT) -f networkLibrary/CMakeFiles/NetworkLibrary.dir/build.make networkLibrary/CMakeFiles/NetworkLibrary.dir/lib/receiveData.cpp.s
 .PHONY : lib/receiveData.cpp.s
 
 lib/transmitData.o: lib/transmitData.cpp.o
@@ -159,7 +159,7 @@ lib/transmitData.o: lib/transmitData.cpp.o
 
 # target to build an object file
 lib/transmitData.cpp.o:
-	cd /home/joeyblack/Documents/School/ECE1896/senior_design/network_stuff/baseStation/build && $(MAKE) $(MAKESILENT) -f NetworkLibrary/CMakeFiles/NetworkLibrary.dir/build.make NetworkLibrary/CMakeFiles/NetworkLibrary.dir/lib/transmitData.cpp.o
+	cd /home/joeyblack/Documents/School/ECE1896/senior_design/network_stuff/baseStation/build && $(MAKE) $(MAKESILENT) -f networkLibrary/CMakeFiles/NetworkLibrary.dir/build.make networkLibrary/CMakeFiles/NetworkLibrary.dir/lib/transmitData.cpp.o
 .PHONY : lib/transmitData.cpp.o
 
 lib/transmitData.i: lib/transmitData.cpp.i
@@ -167,7 +167,7 @@ lib/transmitData.i: lib/transmitData.cpp.i
 
 # target to preprocess a source file
 lib/transmitData.cpp.i:
-	cd /home/joeyblack/Documents/School/ECE1896/senior_design/network_stuff/baseStation/build && $(MAKE) $(MAKESILENT) -f NetworkLibrary/CMakeFiles/NetworkLibrary.dir/build.make NetworkLibrary/CMakeFiles/NetworkLibrary.dir/lib/transmitData.cpp.i
+	cd /home/joeyblack/Documents/School/ECE1896/senior_design/network_stuff/baseStation/build && $(MAKE) $(MAKESILENT) -f networkLibrary/CMakeFiles/NetworkLibrary.dir/build.make networkLibrary/CMakeFiles/NetworkLibrary.dir/lib/transmitData.cpp.i
 .PHONY : lib/transmitData.cpp.i
 
 lib/transmitData.s: lib/transmitData.cpp.s
@@ -175,7 +175,7 @@ lib/transmitData.s: lib/transmitData.cpp.s
 
 # target to generate assembly for a file
 lib/transmitData.cpp.s:
-	cd /home/joeyblack/Documents/School/ECE1896/senior_design/network_stuff/baseStation/build && $(MAKE) $(MAKESILENT) -f NetworkLibrary/CMakeFiles/NetworkLibrary.dir/build.make NetworkLibrary/CMakeFiles/NetworkLibrary.dir/lib/transmitData.cpp.s
+	cd /home/joeyblack/Documents/School/ECE1896/senior_design/network_stuff/baseStation/build && $(MAKE) $(MAKESILENT) -f networkLibrary/CMakeFiles/NetworkLibrary.dir/build.make networkLibrary/CMakeFiles/NetworkLibrary.dir/lib/transmitData.cpp.s
 .PHONY : lib/transmitData.cpp.s
 
 # Help Target
