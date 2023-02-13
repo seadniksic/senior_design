@@ -8,3 +8,5 @@ add_library(NetworkLibrary SHARED
     lib/receiveData.cpp
     lib/transmitData.cpp
 )
+
+target_include_directories(NetworkLibrary PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)

@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC -shared -Wl,-soname,libNetworkLibrary.so -o libNetworkLibrary.so CMakeFiles/NetworkLibrary.dir/lib/receiveData.cpp.o CMakeFiles/NetworkLibrary.dir/lib/transmitData.cpp.o 

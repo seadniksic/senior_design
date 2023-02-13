@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/baseStation.dir/src/baseStationApp.cpp.o CMakeFiles/baseStation.dir/lib/receiveCameraFeed.cpp.o -o baseStation  -Wl,-rpath,/home/joeyblack/Documents/School/ECE1896/senior_design/network_stuff/build/networkLibrary ../networkLibrary/libNetworkLibrary.so 

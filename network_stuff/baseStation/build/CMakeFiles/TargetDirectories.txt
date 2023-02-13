@@ -1,0 +1,6 @@
+/home/joeyblack/Documents/School/ECE1896/senior_design/network_stuff/baseStation/build/CMakeFiles/baseStation.dir
+/home/joeyblack/Documents/School/ECE1896/senior_design/network_stuff/baseStation/build/CMakeFiles/edit_cache.dir
+/home/joeyblack/Documents/School/ECE1896/senior_design/network_stuff/baseStation/build/CMakeFiles/rebuild_cache.dir
+/home/joeyblack/Documents/School/ECE1896/senior_design/network_stuff/baseStation/build/NetworkLibrary/CMakeFiles/NetworkLibrary.dir
+/home/joeyblack/Documents/School/ECE1896/senior_design/network_stuff/baseStation/build/NetworkLibrary/CMakeFiles/edit_cache.dir
+/home/joeyblack/Documents/School/ECE1896/senior_design/network_stuff/baseStation/build/NetworkLibrary/CMakeFiles/rebuild_cache.dir
