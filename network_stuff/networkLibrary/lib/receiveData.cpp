@@ -3,7 +3,7 @@
 
 #include "receiveData.h"
 
-template <typename PayloadType>
+template <class PayloadType>
 ReceiveData<PayloadType>::ReceiveData(uint16_t port)
 {
     sock = socket(AF_INET, SOCK_DGRAM, 0);
@@ -19,17 +19,17 @@ ReceiveData<PayloadType>::ReceiveData(uint16_t port)
         std::cerr << "Failed to bind socket to address." << std::endl;
 }
 
-template <typename PayloadType>
+template <class PayloadType>
 int ReceiveData<PayloadType>::getData(PayloadType *buffer)
 {
-    int bytesReceived = recvfrom(sock, buffer, sizeof(buffer), 0, nullptr, nullptr);
+    int bytesReceived = recvfrom(sock, buffer, sizeof(*buffer), 0, nullptr, nullptr);
     if(bytesReceived == -1)
         std::cerr << "Failed to receive data." << std::endl;
     
     return bytesReceived;
 }
 
-template <typename PayloadType>
+template <class PayloadType>
 ReceiveData<PayloadType>::~ReceiveData()
 {
     close(sock);

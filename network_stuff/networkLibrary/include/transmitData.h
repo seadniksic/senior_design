@@ -4,8 +4,9 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <unistd.h>
+#include <opencv2/opencv.hpp>
 
-template <typename PayloadType>
+template <class PayloadType>
 class TransmitData{
     private:
         int sock;
@@ -16,4 +17,6 @@ class TransmitData{
         ~TransmitData();
 };
 
+template class TransmitData<int>;
+template class TransmitData<cv::Mat>;
 #endif

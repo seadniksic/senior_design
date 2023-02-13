@@ -3,7 +3,7 @@
 #include "transmitData.h"
 
 
-template <typename PayloadType>
+template <class PayloadType>
 TransmitData<PayloadType>::TransmitData(const char *ipAddress, uint16_t port)
 {
     sock = socket(AF_INET, SOCK_DGRAM, 0);
@@ -15,7 +15,7 @@ TransmitData<PayloadType>::TransmitData(const char *ipAddress, uint16_t port)
     serverAddress.sin_addr.s_addr = inet_addr(ipAddress);
 }
 
-template <typename PayloadType>
+template <class PayloadType>
 int TransmitData<PayloadType>::sendPayload(PayloadType *payLoad, size_t dataLength)
 {
     int sendData = sendto(sock, payLoad, dataLength, 0, (struct sockaddr *) &serverAddress, sizeof(serverAddress));
@@ -28,7 +28,7 @@ int TransmitData<PayloadType>::sendPayload(PayloadType *payLoad, size_t dataLeng
     return 0;
 }
 
-template <typename PayloadType>
+template <class PayloadType>
 TransmitData<PayloadType>::~TransmitData()
 {
     close(sock);
