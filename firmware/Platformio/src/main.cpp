@@ -3,20 +3,31 @@
 #include <locomotion.h>
 #include <elapsedMillis.h>
 #include <joystick.h>
+#include <bno055.h>
 
 void main_prog()
 {
 
-  //setup
-  joystick_init();
-  locomotion_init();
+  // init the LED
+  pinMode(13, OUTPUT);
+
+  // Setup serial.
+  Serial.begin(SERIAL_BAUD);
+
+  // delay to allow for serial monitor setup and what not
+  delay(5000);
+
+  // setup
+  // joystick_init();
+  // locomotion_init();
+  bno055::init();
 
   // variables
   elapsedMillis LED_clock;
   uint8_t LED_state = HIGH;
 
   elapsedMillis print_clock;
-  Serial.begin(115200);
+  
 
   while(1)
   {
@@ -24,7 +35,8 @@ void main_prog()
     {
       LED_clock -= 750;
       LED_state = !LED_state;
-      digitalWrite(JOY_LED_PIN, LED_state);
+      // digitalWrite(JOY_LED_PIN, LED_state);
+      digitalWrite(13, LED_state);
     }
 
     // if (print_clock > 200)
@@ -35,10 +47,7 @@ void main_prog()
 
     delay(100);
 
-    joystick_run();
-
-    
-
+    // joystick_run();
 
   }
   
