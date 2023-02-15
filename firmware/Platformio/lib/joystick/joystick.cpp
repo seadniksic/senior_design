@@ -2,7 +2,12 @@
 #include <String>
 #include "locomotion.h"
 
-void joystick_init()
+// declare struct, by making static, should only be visible within this translation unit
+// which i think means object file
+static joy_state_t joy_state = {0};
+
+
+void joystick::init()
 {
 #ifdef INIT_DPAD
     pinMode(DPAD_DOWN_PIN, INPUT);
@@ -12,14 +17,14 @@ void joystick_init()
 #endif
 #ifdef INIT_AUX
     pinMode(JOY_LED_PIN, OUTPUT);
-    pinMode(JOY_HOMEBTN_PIN, INPUT); // need to put the pins in for this
+    pinMode(JOY_FNCBTN_PIN, INPUT); // need to put the pins in for this
 #endif
 
     //analog pins need no configuration
 
 }
 
-void joystick_print()
+void joystick::print()
 {
 #ifdef PRINT_DPAD
     Serial.print("[DPAD]: ");
@@ -35,7 +40,7 @@ void joystick_print()
 #endif
 #ifdef PRINT_AUX
     Serial.print("[AUX]: BTN: ");
-    Serial.print(homebtn_pressed());
+    Serial.print(fncbtn_pressed());
     Serial.print(";\t");
 #endif
 #ifdef PRINT_RJOY
@@ -57,11 +62,20 @@ void joystick_print()
     Serial.print("\n");
 }
 
-void joystick_run()
+void joystick::store_joy_state()
 {
+    joy_state.dpad_down = dpad_down_pressed();
+    joy_state.dpad_left = dpad_left_pressed();
+    joy_state.dpad_right = dpad_right_pressed();
+    joy_state.dpad_up = dpad_up_pressed();
+    joy_state.ljoy_x = analogRead(JOY_LY_PIN); //intentionally switched because joystick is rotated.
+    joy_state.ljoy_y = analogRead(JOY_LX_PIN);
+    joy_state.rjoy_x = analogRead(JOY_RY_PIN);
+    joy_state.rjoy_y = analogRead(JOY_RX_PIN);
+}
 
-    
-
+void joystick::run()
+{
     //check for controller input
     if(ljoy_deadzone() && !dpad_up_pressed() && !dpad_left_pressed() && !dpad_right_pressed() && !dpad_down_pressed())
     {
