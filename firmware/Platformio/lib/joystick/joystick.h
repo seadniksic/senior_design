@@ -25,6 +25,22 @@ Right joystick for camera movements
     left = pan camera left
 */
 
+/* revised control
+
+right joystick stays the same
+left joystick i think 4 translational direction
+and then someething else to switch it to the diag mode?
+or just leave as is
+
+dpad left, rotate CCW
+dpad right, rotate CW
+
+dpad left and ljoy forward, go straight and turn left
+dpad right and ljoy forward, go straight and turn right
+
+
+*/
+
 #define INIT_DPAD
 #define INIT_AUX //led and button
 #define PRINT_DPAD
@@ -52,6 +68,9 @@ typedef struct joy_state_struct
     uint16_t rjoy_x;
     uint16_t rjoy_y;
 } joy_state_t;
+
+extern joy_state_t joy_state;
+
 
 
 namespace joystick {
@@ -93,52 +112,52 @@ namespace joystick {
 
     inline bool ljoy_right()
     {
-        return (analogRead(JOY_LY_PIN) < JOY_LOW); //joystick is rotated so swap pin
+        return (joy_state.ljoy_x < JOY_LOW); 
     }
 
     inline bool ljoy_left()
     {
-        return (analogRead(JOY_LY_PIN) > JOY_HIGH); //joystick is rotated so swap pin
+        return (joy_state.ljoy_x > JOY_HIGH); 
     }
 
     inline bool ljoy_up()
     {
-        return (analogRead(JOY_LX_PIN) < JOY_LOW); //joystick is rotated so swap pin
+        return (joy_state.ljoy_y < JOY_LOW); 
     }
 
     inline bool ljoy_down()
     {
-        return (analogRead(JOY_LX_PIN) > JOY_HIGH); //joystick is rotated so swap pin
+        return (joy_state.ljoy_y > JOY_HIGH); 
     }
 
     inline bool rjoy_right()
     {
-        return (analogRead(JOY_RY_PIN) < JOY_LOW); //joystick is rotated so swap pin
+        return (joy_state.rjoy_x < JOY_LOW); 
     }
 
     inline bool rjoy_left()
     {
-        return (analogRead(JOY_RY_PIN) > JOY_HIGH); //joystick is rotated so swap pin
+        return (joy_state.rjoy_x > JOY_HIGH); 
     }
 
     inline bool rjoy_up()
     {
-        return (analogRead(JOY_RX_PIN) < JOY_LOW); //joystick is rotated so swap pin
+        return (joy_state.rjoy_y < JOY_LOW); 
     }
 
     inline bool rjoy_down()
     {
-        return (analogRead(JOY_RX_PIN) > JOY_HIGH); //joystick is rotated so swap pin
+        return (joy_state.rjoy_y > JOY_HIGH); 
     }
 
     inline bool ljoy_y_deadzone()
     {
-        return (analogRead(JOY_LX_PIN) < JOY_HIGH && analogRead(JOY_LX_PIN) > JOY_LOW); //joystick is rotated so swap pin
+        return (joy_state.ljoy_y < JOY_HIGH && joy_state.ljoy_y > JOY_LOW); 
     }
 
     inline bool ljoy_x_deadzone()
     {
-        return (analogRead(JOY_LY_PIN) < JOY_HIGH && analogRead(JOY_LY_PIN) > JOY_LOW); //joystick is rotated so swap pin
+        return (joy_state.ljoy_x < JOY_HIGH && joy_state.ljoy_x > JOY_LOW); 
     }
 
     inline bool ljoy_deadzone()

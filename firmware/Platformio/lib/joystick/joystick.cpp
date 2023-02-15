@@ -2,9 +2,7 @@
 #include <String>
 #include "locomotion.h"
 
-// declare struct, by making static, should only be visible within this translation unit
-// which i think means object file
-static joy_state_t joy_state = {0};
+joy_state_t joy_state = {0};
 
 
 void joystick::init()
@@ -29,13 +27,13 @@ void joystick::print()
 #ifdef PRINT_DPAD
     Serial.print("[DPAD]: ");
     Serial.print("U: " );
-    Serial.print(dpad_up_pressed());
+    Serial.print(joy_state.dpad_up);
     Serial.print(", D: ");
-    Serial.print(dpad_down_pressed());
+    Serial.print(joy_state.dpad_down);
     Serial.print(", R: ");
-    Serial.print(dpad_right_pressed());
+    Serial.print(joy_state.dpad_right);
     Serial.print(", L: ");
-    Serial.print(dpad_left_pressed());
+    Serial.print(joy_state.dpad_left);
     Serial.print(";\t");
 #endif
 #ifdef PRINT_AUX
@@ -46,17 +44,17 @@ void joystick::print()
 #ifdef PRINT_RJOY
     Serial.print("[RJOY]: ");
     Serial.print("X: ");
-    Serial.print(analogRead(JOY_RY_PIN)); //because theyre physically switched
+    Serial.print(joy_state.rjoy_x); 
     Serial.print(", Y: ");
-    Serial.print(analogRead(JOY_RX_PIN));
+    Serial.print(joy_state.rjoy_y);
     Serial.print(";\t");
 #endif
 #ifdef PRINT_LJOY
     Serial.print("[LJOY]: ");
     Serial.print("X: ");
-    Serial.print(analogRead(JOY_LY_PIN)); //because the switches are rotated
+    Serial.print(joy_state.ljoy_x); 
     Serial.print(", Y: ");
-    Serial.print(analogRead(JOY_LX_PIN));
+    Serial.print(joy_state.ljoy_y);
     Serial.print(";\t");
 #endif
     Serial.print("\n");
@@ -77,7 +75,7 @@ void joystick::store_joy_state()
 void joystick::run()
 {
     //check for controller input
-    if(ljoy_deadzone() && !dpad_up_pressed() && !dpad_left_pressed() && !dpad_right_pressed() && !dpad_down_pressed())
+    if(ljoy_deadzone() && !joy_state.dpad_up && !joy_state.dpad_left && !joy_state.dpad_right && !joy_state.dpad_down)
     {
         all_axis_off();
         return;
@@ -139,15 +137,17 @@ void joystick::run()
 
     // check for no motion
 
-    if(dpad_up_pressed())
+    if(joy_state.dpad_up)
     {
         Serial.println("CW");
         rotate_CW();
     }
-    else if(dpad_down_pressed())
+    else if(joy_state.dpad_down)
     {
         Serial.println("CWW");
         rotate_CCW();
     }
 
 }
+
+
