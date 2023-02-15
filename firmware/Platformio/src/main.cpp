@@ -53,9 +53,10 @@ void main_prog()
     {
       joystick::store_joy_state();
       joy_update_clock -= 100;
+      joystick::run();
     }
 
-    joystick::run();
+    // joystick::run();
 
   }
   

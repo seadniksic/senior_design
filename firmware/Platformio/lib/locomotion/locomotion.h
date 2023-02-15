@@ -8,13 +8,13 @@
 #define FREQ 1000
 
 // Function Macros
-#define AXIS_FORWARD(in1, in2, en) \
-  analogWrite(en, ANALOG_WRITE_VAL); \
+#define AXIS_FORWARD(in1, in2, en, pwm) \
+  analogWrite(en, pwm); \
   digitalWrite(in1, LOW); \
   digitalWrite(in2, HIGH);
 
-#define AXIS_BACKWARD(in1, in2, en) \
-    analogWrite(en, ANALOG_WRITE_VAL); \
+#define AXIS_BACKWARD(in1, in2, en, pwm) \
+    analogWrite(en, pwm); \
     digitalWrite(in1, HIGH); \
     digitalWrite(in2, LOW); 
 
@@ -24,14 +24,14 @@
     digitalWrite(in2, LOW);
 
 // Wheel directions
-#define FRFOR AXIS_FORWARD(FR_IN4_PIN, FR_IN3_PIN, FR_EN_PIN)
-#define FLFOR AXIS_FORWARD(FL_IN2_PIN, FL_IN1_PIN, FL_EN_PIN)
-#define BRFOR AXIS_FORWARD(BR_IN1_PIN, BR_IN2_PIN, BR_EN_PIN)
-#define BLFOR AXIS_FORWARD(BL_IN3_PIN, BL_IN4_PIN, BL_EN_PIN)
-#define FRBACK AXIS_BACKWARD(FR_IN4_PIN, FR_IN3_PIN, FR_EN_PIN)
-#define FLBACK AXIS_BACKWARD(FL_IN2_PIN, FL_IN1_PIN, FL_EN_PIN)
-#define BRBACK AXIS_BACKWARD(BR_IN1_PIN, BR_IN2_PIN, BR_EN_PIN)
-#define BLBACK AXIS_BACKWARD(BL_IN3_PIN, BL_IN4_PIN, BL_EN_PIN)
+#define FRFOR(PWM) AXIS_FORWARD(FR_IN4_PIN, FR_IN3_PIN, FR_EN_PIN, PWM)
+#define FLFOR(PWM) AXIS_FORWARD(FL_IN2_PIN, FL_IN1_PIN, FL_EN_PIN, PWM)
+#define BRFOR(PWM) AXIS_FORWARD(BR_IN1_PIN, BR_IN2_PIN, BR_EN_PIN, PWM)
+#define BLFOR(PWM) AXIS_FORWARD(BL_IN3_PIN, BL_IN4_PIN, BL_EN_PIN, PWM)
+#define FRBACK(PWM) AXIS_BACKWARD(FR_IN4_PIN, FR_IN3_PIN, FR_EN_PIN, PWM)
+#define FLBACK(PWM) AXIS_BACKWARD(FL_IN2_PIN, FL_IN1_PIN, FL_EN_PIN, PWM)
+#define BRBACK(PWM) AXIS_BACKWARD(BR_IN1_PIN, BR_IN2_PIN, BR_EN_PIN, PWM)
+#define BLBACK(PWM) AXIS_BACKWARD(BL_IN3_PIN, BL_IN4_PIN, BL_EN_PIN, PWM)
 
 // Wheel EN
 #define BLON digitalWrite(BL_EN_PIN, HIGH);

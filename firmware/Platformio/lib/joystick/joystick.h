@@ -5,6 +5,7 @@
 
 #include "pinout.h"
 
+#define DRIVE_MODE_1 
 /* 
 Left joystick will control translational movements
     up = translate (right) forward
@@ -25,12 +26,14 @@ Right joystick for camera movements
     left = pan camera left
 */
 
+// #define DRIVE_MODE_2
 /* revised control
-
 right joystick stays the same
 left joystick i think 4 translational direction
 and then someething else to switch it to the diag mode?
-or just leave as is
+or just leave as is, yes. Can it be like 
+
+fnc button is to recenter the camera
 
 dpad left, rotate CCW
 dpad right, rotate CW
@@ -40,6 +43,10 @@ dpad right and ljoy forward, go straight and turn right
 
 
 */
+
+#if defined(DRIVE_MODE_1) && defined(DRIVE_MODE_2)
+    #error "Both drive modes enabled."
+#endif
 
 #define INIT_DPAD
 #define INIT_AUX //led and button
@@ -55,18 +62,23 @@ dpad right and ljoy forward, go straight and turn right
 #define JOY_HIGH 711 //doing the math here instead of using #def for efficiency
 #define JOY_LOW 311
 
+#define STRAIGHT_DRIVE_MODE 0x00
+#define DIAG_DRIVE_MODE 0x01
 
 typedef struct joy_state_struct
 {
     bool dpad_up; 
     bool dpad_down;
+    bool dpad_down_prev;
     bool dpad_right;
     bool dpad_left;
-    bool fnc_btn;
+    bool fnc_btn; 
+    bool fnc_btn_prev;
     uint16_t ljoy_x; //x represents natural direction, not the pin its attached to
     uint16_t ljoy_y;
     uint16_t rjoy_x;
     uint16_t rjoy_y;
+    uint8_t drive_mode;
 } joy_state_t;
 
 extern joy_state_t joy_state;
@@ -82,6 +94,8 @@ namespace joystick {
 
 
     /* digital inputs */
+
+    #pragma message "replace all these with macros and then u can make the joy_state struct static"
 
     inline bool dpad_up_pressed()
     {
