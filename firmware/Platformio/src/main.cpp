@@ -46,6 +46,7 @@ void main_prog()
     // }
 
     delay(100);
+    bno055::getTemp();
 
     // joystick_run();
 

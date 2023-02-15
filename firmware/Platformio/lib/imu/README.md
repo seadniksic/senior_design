@@ -29,4 +29,10 @@ https://learn.adafruit.com/adafruit-bno055-absolute-orientation-sensor/pinouts
 
 
 - M4G to start. no magnetometer calibration is needed.
-- 
+
+
+# NOTES ON READ/WRITE
+Any reserved bit is ignored when it is written and
+no specific value is guaranteed when read. It is recommended not to use registers at all
+which are completely marked as ‘reserved’. Furthermore it is recommended to mask out
+(logical and with zero) reserved bits of registers which are partially marked as reserved.
