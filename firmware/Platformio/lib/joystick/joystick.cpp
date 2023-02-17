@@ -160,12 +160,19 @@ void joystick::run()
     if(joy_state.dpad_right && ljoy_up())
     {
         Serial.println("drive forward and turn right");
-        //TODO: finish
+        FLFOR(ANALOG_WRITE_VAL);
+        BLFOR(ANALOG_WRITE_VAL);
+        FRFOR(ANALOG_WRITE_VAL - 100);
+        BRFOR(ANALOG_WRITE_VAL - 100);
+
     }
     else if(joy_state.dpad_left && ljoy_up())
     {
         Serial.println("drive forward and turn right");
-        //todo: finish
+        FLFOR(ANALOG_WRITE_VAL - 100);
+        BLFOR(ANALOG_WRITE_VAL - 100);
+        FRFOR(ANALOG_WRITE_VAL);
+        BRFOR(ANALOG_WRITE_VAL);
     }
     else if(joy_state.dpad_right)
     {
