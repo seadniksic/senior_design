@@ -46,7 +46,8 @@ void main_prog()
     // }
 
     delay(100);
-    bno055::getTemp();
+    // bno055::getTemp();
+    bno055::getEULypr();
 
     // joystick_run();
 

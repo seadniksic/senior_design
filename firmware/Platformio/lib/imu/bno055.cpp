@@ -8,50 +8,83 @@ I2CDevice bno = I2CDevice(master1, BNO_I2C_ADDRESS, _BIG_ENDIAN); //confirmed it
 
 #pragma message "im curious how the library does it? is it writing direct to reg or reading then writing back with a mask?"
 
+static const uint8_t mask8[8] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80};
+
 void bno055::init()
 {
+
+    uint8_t result = 0;
+
     master1.begin(400000); //start the i2c master at 400khz
     
     // check to if comms up and chip is working
-
-    getsysstatus();
-
     checkIDs();
 
-    getsysstatus();
+    //check the current operating mode
+    bno.read(BNO_OPR_MODE, &result, true);
+    while((result & 0x0F) != BNO_OPR_MODE_CONFIG)
+    {
+        Serial.println("IMU is not in config mode. returning to config");
+        result = (result & 0xF0) | BNO_OPR_MODE_CONFIG; 
+        bno.write(BNO_OPR_MODE, result, true);
+        delay(20); // needs 20 seconds to get to config mode. 
+    }
+
+    // power on self test (section 3.8)
+    // the self test checks the acc, mag, and gyr ids so the original check for if comms is working can just be check chip id
+    bno.read(BNO_ST_RESULT, &result, true);
+    if((result & 0x0F) == 0xF)
+    {
+        Serial.println("Power on Self Test Passed");
+    }
+    else
+    {
+        for(uint8_t i = 0; i < 4; i++)
+        {
+            if(!(result & mask8[i]))
+            {
+                Serial.printf("bit %u failed.\n", i);
+            }
+        }
+    }
+
 
     //config units
     // set temp to be F
-
-    uint8_t result = 0;
     bno.read(BNO_UNIT_SEL, &result, true);
-    Serial.printf("result is %X\n", result);
+    Serial.printf("result is %X (reading unit_sel reg)\n", result);
 
     if(bno.write(BNO_UNIT_SEL, (uint8_t)(result | 0b10000), true))
     {
         Serial.println("wrote config units");
-        delay(1000);
     }
+
+    // read again to confirm selection
+    bno.read(BNO_UNIT_SEL, &result, true);
+    Serial.printf("result is %X (reading unit_sel reg after writing to it)\n", result);
+
 
     getsysstatus();
 
-
+    // set operating mode
     if(bno.write(BNO_OPR_MODE, (uint8_t)BNO_OPR_MODE_M4G, true))
     {
-        Serial.println("wrote opr mode");
-        delay(1000);
+        Serial.println("wrote opr mode to M4G");
     }
 
-    //for some reason the units arent being switched over to F even tho its reading
-    //back the correct value of the reg.
-    bno.read(BNO_UNIT_SEL, &result, true);
-    Serial.printf("result is %X\n", result);
-    // now it works! just needed to power cycle.
-    // can read in both C and F
+    // Sensor calibration
+    Serial.println("waiting for calibration...");
+    do
+    {
+        Serial.printf("attempting to calibrature: result = %u\n", result);
+        bno.read(BNO_CALIB_STAT, &result, true);
+        delay(50);
+    }while((result & 0xC0) == 0xC0);
+
+    Serial.println("finished calibrating");
 
 
-
-
+    Serial.println("COMPLETED INIT");
 
 }
 
@@ -107,7 +140,7 @@ void bno055::getTemp()
 
     uint8_t result = 0;
     bno.read(BNO_TEMP_REG, &result, true);
-    Serial.printf("temperature is %X\n", result);
+    Serial.printf("temperature is %u\n", result);
 
 
 }
@@ -124,3 +157,35 @@ void bno055::getsysstatus()
     Serial.printf("sys error reg is %X\n", result);
     delay(1000);
 }
+
+void bno055::getEULypr()
+{
+    uint8_t ypr_data[6] = {0}; //in that order exactly, yaw is array 0 and 1
+    // register is automatically incremented when reading multiple bytes
+    bno.read(BNO_EUL_HEADING_LSB, ypr_data, (size_t)6, true);
+    // 1 degree = 16 LSB, so need to divide by 16 which is same as right shifting 4
+    int16_t heading = (int16_t)((ypr_data[1] << 8 | ypr_data[0]) >> 4);
+    int16_t pitch = (int16_t)((ypr_data[3] << 8 | ypr_data[2]) >> 4);
+    int16_t roll = (int16_t)((ypr_data[5] << 8 | ypr_data[4]) >> 4);
+
+    // heading = heading -180;
+    // pitch = map(pitch, 0, 4096, -180, 180 );
+    // roll = map(pitch, 0, 4096, -180, 180 );
+    
+    heading = ((heading +180) % 360) - 140;
+    if(pitch > 180)
+    {
+        pitch = pitch - 4096;
+    }
+    if(roll > 180)
+    {
+        roll = roll -4096;
+    }
+
+
+
+
+    Serial.printf("Y:%d \tP:%d \tR:%d\n", heading, pitch, roll);
+
+}
+

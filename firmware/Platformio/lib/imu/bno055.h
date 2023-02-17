@@ -1,6 +1,8 @@
 #ifndef BNO055_H_
 #define BNO055_H_
 
+#include <stdint.h>
+
 #define BNO_I2C_ADDRESS 0x28
 #define BNO_CHIP_ID_REG 0x00
 #define BNO_ACC_ID_REG 0x01
@@ -18,12 +20,27 @@
 #define BNO_TEMP_SRC_GYR 0x01
 
 #define BNO_OPR_MODE 0x3D
-#define BNO_OPR_MODE_M4G 0x0A
+#define BNO_OPR_MODE_CONFIG 0x00
+#define BNO_OPR_MODE_M4G 0x0A //for opr mode, the high 4 bits are reserved
+
 
 #define BNO_UNIT_SEL 0x3B
+#define TEMP_UNIT_F 0b10000
+#define EULER_ANG_UNIT_RAD 0b100
 
 #define BNO_SYS_STATUS_REG 0x39
 #define BNO_SYS_ERR 0x3A
+
+#define BNO_ST_RESULT 0x36
+
+#define BNO_CALIB_STAT 0x35
+
+#define BNO_EUL_PITCH_MSB 0x1F
+#define BNO_EUL_PITCH_LSB 0x1E
+#define BNO_EUL_ROLL_MSB 0x1D
+#define BNO_EUL_ROLL_LSB 0x1C
+#define BNO_EUL_HEADING_MSB 0x1B
+#define BNO_EUL_HEADING_LSB 0x1A
 
 namespace bno055
 {
@@ -31,7 +48,12 @@ namespace bno055
     void checkIDs();
     void getTemp();
     void getsysstatus();
+    void getEULypr();
+}
 
+inline int16_t map(int16_t val, int16_t in_min, int16_t in_max, int16_t out_min, int16_t out_max)
+{
+    return (val - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
 
