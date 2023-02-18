@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.9)
 
 add_subdirectory(networkLibrary)
 add_subdirectory(baseStation)
+add_subdirectory(rover)
 
 # cmake_minimum_required (VERSION 3.9)
 

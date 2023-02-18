@@ -19,4 +19,5 @@ class TransmitData{
 
 template class TransmitData<int>;
 template class TransmitData<cv::Mat>;
+template class TransmitData<char>;
 #endif

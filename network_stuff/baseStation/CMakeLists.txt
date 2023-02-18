@@ -14,6 +14,12 @@ set(SRC_FILES
     lib/receiveCameraFeed.cpp
 )
 
+set(TEST_FILES
+    src/testTransmit.cpp
+)
+
 add_executable(baseStationApp ${SRC_FILES})
+add_executable(testTransmitBaseStation ${TEST_FILES})
 
 target_link_libraries(baseStationApp PUBLIC NetworkLibrary ${OpenCV_LIBS})
+target_link_libraries(testTransmitBaseStation PUBLIC NetworkLibrary)

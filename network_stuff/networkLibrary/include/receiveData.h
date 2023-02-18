@@ -19,6 +19,6 @@ class ReceiveData{
 };
 
 template class ReceiveData<int>;
-
 template class ReceiveData<cv::Mat>;
+template class ReceiveData<char>;
 #endif
