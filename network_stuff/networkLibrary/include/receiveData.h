@@ -14,7 +14,7 @@ class ReceiveData{
         struct sockaddr_in serverAddress;
     public:
         ReceiveData(uint16_t port);
-        int getData(PayloadType *buffer);
+        int getData(PayloadType *buffer, size_t bufferLength);
         ~ReceiveData();
 };
 

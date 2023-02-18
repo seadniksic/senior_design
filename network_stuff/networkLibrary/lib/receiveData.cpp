@@ -21,10 +21,9 @@ ReceiveData<PayloadType>::ReceiveData(uint16_t port)
 }
 
 template <class PayloadType>
-int ReceiveData<PayloadType>::getData(PayloadType *buffer)
+int ReceiveData<PayloadType>::getData(PayloadType *buffer, size_t bufferLength)
 {
-    int bytesReceived = recvfrom(sock, buffer, sizeof(buffer), 0, nullptr, nullptr);
-    std::cout << "Size of Buffer: " << sizeof(buffer) << std::endl;
+    int bytesReceived = recvfrom(sock, buffer, sizeof(buffer[0]) * bufferLength, 0, nullptr, nullptr);
     if(bytesReceived == -1)
         std::cerr << "Failed to receive data." << std::endl;
     

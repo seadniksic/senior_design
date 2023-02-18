@@ -6,7 +6,7 @@
 typedef cv::Mat image_t;
 
 void initServer(uint16_t port);
-void getImageData(image_t *buffer);
+void getImageData(image_t *buffer, size_t bufferSize);
 void turnOffServer();
 
 #endif

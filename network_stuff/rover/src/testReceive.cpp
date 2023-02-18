@@ -8,8 +8,8 @@ int main()
     int bytesReceived;
     while(1)
     {
-        bytesReceived = testReceive.getData(buffer);
+        bytesReceived = testReceive.getData(buffer, 1024);
         buffer[bytesReceived] = '\0';
-        std::cout << bytesReceived << std::endl;
+        std::cout << buffer << std::endl;
     }
 }

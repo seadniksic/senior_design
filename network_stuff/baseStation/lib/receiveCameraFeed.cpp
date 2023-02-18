@@ -10,9 +10,9 @@ void initServer(uint16_t port)
     server = new ReceiveData<image_t>(port);
 }
 
-void getImageData(image_t *buffer)
+void getImageData(image_t *buffer, size_t bufferSize)
 {
-    int error = server->getData(buffer);
+    int error = server->getData(buffer, bufferSize);
 }
 
 void turnOffServer()
