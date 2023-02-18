@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+#warning "recall that the sensor can only output data so fast, don't need to read it every loop cause the data woun't be fresh."
+
 #define BNO_I2C_ADDRESS 0x28
 #define BNO_CHIP_ID_REG 0x00
 #define BNO_ACC_ID_REG 0x01
@@ -30,6 +32,8 @@
 
 #define BNO_SYS_STATUS_REG 0x39
 #define BNO_SYS_ERR 0x3A
+#define BNO_SYS_TRIGGER 0x3F
+#define BNO_SYS_CLK_STATUS 0x38
 
 #define BNO_ST_RESULT 0x36
 
@@ -41,6 +45,9 @@
 #define BNO_EUL_ROLL_LSB 0x1C
 #define BNO_EUL_HEADING_MSB 0x1B
 #define BNO_EUL_HEADING_LSB 0x1A
+
+#define REG_DATA_TO_VAL_S16(msbyte, lsbyte) (((int16_t)(msbyte)) << 8 | ((int16_t)(lsbyte)))
+
 
 namespace bno055
 {

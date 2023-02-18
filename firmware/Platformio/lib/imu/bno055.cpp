@@ -20,6 +20,14 @@ void bno055::init()
     // check to if comms up and chip is working
     checkIDs();
 
+    //reset sys
+    bno.write(BNO_SYS_TRIGGER, mask8[5], true);
+
+    delay(1000); // to let chip reboot
+
+    // // check to if comms up and chip is working
+    checkIDs();
+
     //check the current operating mode
     bno.read(BNO_OPR_MODE, &result, true);
     while((result & 0x0F) != BNO_OPR_MODE_CONFIG)
@@ -51,10 +59,12 @@ void bno055::init()
 
     //config units
     // set temp to be F
-    bno.read(BNO_UNIT_SEL, &result, true);
-    Serial.printf("result is %X (reading unit_sel reg)\n", result);
+    // TODO: YOU CHANGED THIS SO THAT IT WOULD BE IN WINDOWS ORIENTATION MODE
+    // bno.read(BNO_UNIT_SEL, &result, true);
+    // Serial.printf("result is %X (reading unit_sel reg)\n", result);
 
-    if(bno.write(BNO_UNIT_SEL, (uint8_t)(result | 0b10000), true))
+    // if(bno.write(BNO_UNIT_SEL, (uint8_t)(result | 0b10000), true))
+    if(bno.write(BNO_UNIT_SEL, (uint8_t)(0b00010000), true))
     {
         Serial.println("wrote config units");
     }
@@ -63,6 +73,26 @@ void bno055::init()
     bno.read(BNO_UNIT_SEL, &result, true);
     Serial.printf("result is %X (reading unit_sel reg after writing to it)\n", result);
 
+
+    //check sys clk status
+    bno.read(BNO_SYS_CLK_STATUS, &result, true);
+    if(!(result & 0x01)) //bit 0 of result needs to be 0
+    {
+        //if state true then, we are free to configure clk source
+        Serial.println("free to config clk source, configuring..");
+        //set to external oscillator
+        //set clk to external osc
+        bno.write(BNO_SYS_TRIGGER, (uint8_t)0x80, true);
+        delay(100);
+        Serial.println("CLK SOURCE CONFIGURED");
+    }
+    else{
+        Serial.println("system not available to config clk source.");
+    }
+
+    // theres no way to check whether the clock config was sucessful or not i dont think.
+
+    
 
     getsysstatus();
 
@@ -126,17 +156,6 @@ void bno055::checkIDs()
 
 void bno055::getTemp()
 {
-    // if(bno.write(BNO_TEMP_SOURCE_REG, (uint8_t)BNO_TEMP_SRC_ACC, true))
-    // {
-    //     Serial.println("sucessfulyl wrote");
-    //     uint8_t result = 0;
-    //     bno.read(BNO_TEMP_REG, &result, true);
-    //     Serial.printf("temperature is %X\n", result);
-
-    // }
-    // else{
-    //     Serial.println("failed to write");
-    // }
 
     uint8_t result = 0;
     bno.read(BNO_TEMP_REG, &result, true);
@@ -164,28 +183,29 @@ void bno055::getEULypr()
     // register is automatically incremented when reading multiple bytes
     bno.read(BNO_EUL_HEADING_LSB, ypr_data, (size_t)6, true);
     // 1 degree = 16 LSB, so need to divide by 16 which is same as right shifting 4
-    int16_t heading = (int16_t)((ypr_data[1] << 8 | ypr_data[0]) >> 4);
-    int16_t pitch = (int16_t)((ypr_data[3] << 8 | ypr_data[2]) >> 4);
-    int16_t roll = (int16_t)((ypr_data[5] << 8 | ypr_data[4]) >> 4);
 
-    // heading = heading -180;
-    // pitch = map(pitch, 0, 4096, -180, 180 );
-    // roll = map(pitch, 0, 4096, -180, 180 );
+    int16_t heading = REG_DATA_TO_VAL_S16(ypr_data[1], ypr_data[0]);
+    int16_t pitch = REG_DATA_TO_VAL_S16(ypr_data[3], ypr_data[2]);
+    int16_t roll = REG_DATA_TO_VAL_S16(ypr_data[5], ypr_data[4]);
+
+
+    //notes on calibration. depending on the mode, you need to wait for different things to be calibrated.
     
-    heading = ((heading +180) % 360) - 140;
-    if(pitch > 180)
-    {
-        pitch = pitch - 4096;
-    }
-    if(roll > 180)
-    {
-        roll = roll -4096;
-    }
+    // heading = ((heading +180) % 360) - 140;
+    // if(pitch > 180)
+    // {
+    //     pitch = pitch - 4096;
+    // }
+    // if(roll > 180)
+    // {
+    //     roll = roll -4096;
+    // }
 
+    // perform adjustments on the angles. zero them out
+    heading = heading - (int16_t)(70 << 4);
+    // pitch = pitch - (5 << 4);
 
-
-
-    Serial.printf("Y:%d \tP:%d \tR:%d\n", heading, pitch, roll);
+    Serial.printf("Y:%f \tP:%f \tR:%f\n", (float)(heading) / 16.0f, (float)(pitch) / 16.0f, (float)(roll) / 16.0f );
 
 }
 
