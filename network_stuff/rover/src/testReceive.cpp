@@ -10,6 +10,6 @@ int main()
     {
         bytesReceived = testReceive.getData(buffer);
         buffer[bytesReceived] = '\0';
-        std::cout << buffer << std::endl;
+        std::cout << bytesReceived << std::endl;
     }
 }
