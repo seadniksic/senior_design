@@ -1,4 +1,5 @@
 #include "receiveCameraFeed.h"
+#include <iostream>
 
 int main()
 {
@@ -7,7 +8,8 @@ int main()
 
     while(1)
     {
-        getImageData(buffer);
+        getImageData(buffer, 10);
+        std::cout << "Here: " << std::endl;
     }
 
     turnOffServer();

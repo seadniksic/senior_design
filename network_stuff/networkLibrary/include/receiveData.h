@@ -5,17 +5,20 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <unistd.h>
+#include <opencv2/opencv.hpp>
 
-
-template <typename PayloadType>
+template <class PayloadType>
 class ReceiveData{
     private:
         int sock;
         struct sockaddr_in serverAddress;
     public:
         ReceiveData(uint16_t port);
-        int getData(PayloadType *buffer);
+        int getData(PayloadType *buffer, size_t bufferLength);
         ~ReceiveData();
 };
 
+template class ReceiveData<int>;
+template class ReceiveData<cv::Mat>;
+template class ReceiveData<char>;
 #endif
