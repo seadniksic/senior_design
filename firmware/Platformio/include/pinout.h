@@ -40,6 +40,7 @@
 #define I2C_SDA_GYRO_PIN 18
 #define I2C_SCL1_JETSON_PIN 24 //backup bus
 #define I2C_SDA1_JETSON_PIN 25
+#define I2C_BNO055_INT_PIN 39
 
 /* LEDs */
 //using the WS2812 library https://www.pjrc.com/non-blocking-ws2812-led-library/
