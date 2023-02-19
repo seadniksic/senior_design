@@ -5,19 +5,21 @@
 // which master you pick will depend on the pins
 // Master1 is defined in imx_rt1060_i2c_driver.cpp
 I2CMaster & master1 = Master1; //pins 16 and 17 on teensy 4.1
-I2CDevice bno = I2CDevice(master1, BNO_I2C_ADDRESS, _BIG_ENDIAN); //confirmed its big endian
+I2CDevice bno = I2CDevice(master1, BNO_I2C_ADDRESS, _LITTLE_ENDIAN); //confirmed its big endian
 
 bool bno055::init()
 {
     master1.begin(400000); //start the i2c master at 400khz
     
+    // return false;
+    // return false;
     // check to if comms up and chip is working
     if(!establish_comms())
     {
         return false;
     }
 
-    Serial.println("[BNO055]: Resetting the sensor...");
+    // Serial.println("[BNO055]: Resetting the sensor...");
     if(!reset_sys())
     {
         return false;
@@ -25,6 +27,17 @@ bool bno055::init()
 
     // change to config mode (although it should already be in config mode because of the reset)
     set_mode(OPR_MODE_CONFIG);
+    while(get_mode() != OPR_MODE_CONFIG)
+    {
+        Serial.println("[BNO055]: Failed to set mode, retrying..");
+        set_mode(OPR_MODE_CONFIG);
+    }
+
+    // set to normal power mode
+    bno.write(BNO_POWER_MODE_REG, (uint8_t)0x00, true);
+
+    // set to page 0
+    bno.write(BNO_PAGE_ID_REG, (uint8_t)0x00, true);
 
     // perform self test
     if(!self_test())
@@ -33,10 +46,11 @@ bool bno055::init()
     }
 
     // change temp output to be F
-    set_units(TEMP_UNIT_F);    
+    set_units(TEMP_UNIT_F | ANDRIOD_ORIENTATION);   
+    // uint8_t result; 
+    // bno.read(BNO_UNIT_SEL, &result, true);
+    // Serial.printf("the value of unit sel reg is : 0x%X\n", result);
 
-    // set to page 0
-    // bno.write(BNO_PAGE_ID_REG, (uint8_t)0x00, true);
 
     // check state of the system at this point, if all is good proceed.
     if(!get_sys_status())
@@ -45,13 +59,13 @@ bool bno055::init()
     }
 
     // Set clock to external
-    if(!set_clock_source(BNO_CLK_SRC_EXTERNAL))
-    {
-        return false;
-    }
+    // if(!set_clock_source(BNO_CLK_SRC_EXTERNAL))
+    // {
+    //     return false;
+    // }
 
     // set out of config mode
-    opr_mode_e desired_mode = OPR_MODE_NDOF;
+    opr_mode_e desired_mode = BNO_RUN_MODE;
 
     set_mode(desired_mode);
     while(get_mode() == OPR_MODE_CONFIG)
@@ -75,8 +89,7 @@ bool bno055::init()
 
 void bno055::calibrate(uint8_t mode)
 {
-    uint8_t result = 0, target_calib = BNO_SYS_CALIBRATED;
-
+    uint8_t result = 0, target_calib = 0;
     switch(mode)
     {
         case OPR_MODE_ACCONLY:
@@ -112,14 +125,27 @@ void bno055::calibrate(uint8_t mode)
     {
         // Serial.printf("[BNO055]: attempting to calibrate: result = 0x%X, target = 0x%X\n", result, target_calib);
         bno.read(BNO_CALIB_STAT, &result, true);
-        
         // bits 5 and 4 are gyr stat, bits 3 and 2 are acc stat, bits 1 and 0 are mag stat
-        Serial.printf("[BNO055]: Attempted to calibrate (0 = uncal, 3 = cal):  gyr:%u  acc:%u  mag:%u\n", \
-            (result & 0x30) >> 4, (result & 0xC0) >> 2, (result & 0x03));
+        Serial.printf("[BNO055]: Calibrating... (0 = uncal, 3 = cal):  gyr:%u  acc:%u  mag:%u; Desired:%u,%u,%u; current: 0x%X, Desired 0x%X\n", \
+            BNO_GET_GYR_CAL(result), BNO_GET_ACC_CAL(result), BNO_GET_MAG_CAL(result), \
+            BNO_GET_GYR_CAL(target_calib), BNO_GET_ACC_CAL(target_calib), BNO_GET_MAG_CAL(target_calib), \
+            result, target_calib);
         delay(100);
-    }while(result != target_calib);
+    }while(result != target_calib && (result & BNO_SYS_CALIBRATED) != BNO_SYS_CALIBRATED );
 
+    delay(2000);
     Serial.println("[BNO055]: finished calibrating");
+}
+
+void bno055::print_calibration()
+{
+    uint8_t result = 0;
+    // Serial.printf("[BNO055]: attempting to calibrate: result = 0x%X, target = 0x%X\n", result, target_calib);
+    bno.read(BNO_CALIB_STAT, &result, true);
+        // bits 5 and 4 are gyr stat, bits 3 and 2 are acc stat, bits 1 and 0 are mag stat
+    Serial.printf("gyr_cal=%u \t acc_cal=%u \t mag_cal=%u\n", \
+        BNO_GET_GYR_CAL(result), BNO_GET_ACC_CAL(result), BNO_GET_MAG_CAL(result));
+    
 }
 
 bool bno055::check_IDs()
@@ -184,24 +210,47 @@ bool bno055::get_sys_status()
 
 void bno055::get_euler_ypr()
 {
-    uint8_t ypr_data[6] = {0}; //in that order exactly, yaw is array 0 and 1
+    uint8_t ypr_data[6] = {0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA}; //in that order exactly, yaw is array 0 and 1
     // register is automatically incremented when reading multiple bytes
-    bno.read(BNO_EUL_HEADING_LSB, ypr_data, (size_t)6, true);
+    if(!bno.read(BNO_EUL_HEADING_LSB, ypr_data, (size_t)6, true))
+    {
+        Serial.println("read failing");
+    }
     // 1 degree = 16 LSB, so need to divide by 16 which is same as right shifting 4
 
     int16_t heading = REG_DATA_TO_VAL_S16(ypr_data[1], ypr_data[0]);
     int16_t pitch = REG_DATA_TO_VAL_S16(ypr_data[3], ypr_data[2]);
     int16_t roll = REG_DATA_TO_VAL_S16(ypr_data[5], ypr_data[4]);
 
+    // int16_t heading = (((int16_t)ypr_data[0]) | ((int16_t)ypr_data[1]) << 8);
+    // int16_t pitch = 0;
+    // int16_t roll = 0;
 
-    //notes on calibration. depending on the mode, you need to wait for different things to be calibrated.
+    // Serial.printf("Y:%d \tP:%d \tR:%d\n", heading, pitch, roll);
+
+    double dheading = ((double)heading) / 16.0;
+    double dpitch = ((double)pitch) / 16.0;
+    double droll = ((double)roll) / 16.0;
+
+    double dheading2 = ((double)(heading)) / 16.0;
+    double dpitch2 = ((double)(pitch)) / 16.0;
+    double droll2 = ((double)(roll)) / 16.0;
+
+    if (dheading != dheading2 || dpitch != dpitch2 || droll != droll2)
+    {
+        Serial.println("WRONG");
+    }
+
+
+
+
 
     // perform adjustments on the angles. zero them out
     // heading = heading - (int16_t)(70 << 4);
     // pitch = pitch - (5 << 4);
-    #warning "implement something to zero out heading on start"
+    // #warning "implement something to zero out heading on start"
 
-    Serial.printf("Y:%f \tP:%f \tR:%f\n", (float)(heading) / 16.0f, (float)(pitch) / 16.0f, (float)(roll) / 16.0f );
+    Serial.printf("Y:%lf \tP:%lf \tR:%lf\n", dheading, dpitch, droll);
 
 }
 

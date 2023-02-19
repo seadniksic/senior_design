@@ -5,6 +5,8 @@
 
 #warning "recall that the sensor can only output data so fast, don't need to read it every loop cause the data woun't be fresh."
 
+#define BNO_RUN_MODE OPR_MODE_M4G
+
 #define BNO_I2C_ADDRESS 0x28
 #define NUM_ID_REG (size_t)(4)
 #define BNO_CHIP_ID_REG 0x00
@@ -41,6 +43,7 @@
 #define BNO_UNIT_SEL 0x3B
 #define TEMP_UNIT_F 0b10000
 #define EULER_ANG_UNIT_RAD 0b100
+#define ANDRIOD_ORIENTATION 0x80
 
 #define BNO_SYS_STATUS_REG 0x39
 #define BNO_SYS_ERR 0x3A
@@ -48,7 +51,7 @@
 #define BNO_SYS_CLK_STATUS 0x38
 #define BNO_CLK_SRC_INTERNAL 0x00
 #define BNO_CLK_SRC_EXTERNAL 0x80
-#define BNO_POWER_MODE_REG
+#define BNO_POWER_MODE_REG 0x3E
 
 #define BNO_ST_RESULT 0x36
 
@@ -57,6 +60,10 @@
 #define BNO_GYR_CALIBRATED 0x30
 #define BNO_ACC_CALIBRATED 0x0C
 #define BNO_MAG_CALIBRATED 0x03 
+#define BNO_GET_GYR_CAL(cal_reg) (((cal_reg) & BNO_GYR_CALIBRATED) >> 4)
+#define BNO_GET_ACC_CAL(cal_reg) (((cal_reg) & BNO_ACC_CALIBRATED) >> 2)
+#define BNO_GET_MAG_CAL(cal_reg) ((cal_reg) & BNO_MAG_CALIBRATED)
+
 
 #define BNO_EUL_PITCH_MSB 0x1F
 #define BNO_EUL_PITCH_LSB 0x1E
@@ -65,7 +72,7 @@
 #define BNO_EUL_HEADING_MSB 0x1B
 #define BNO_EUL_HEADING_LSB 0x1A
 
-#define REG_DATA_TO_VAL_S16(msbyte, lsbyte) (((int16_t)(msbyte)) << 8 | ((int16_t)(lsbyte)))
+#define REG_DATA_TO_VAL_S16(msbyte, lsbyte) ((((int16_t)(msbyte)) << 8) | ((int16_t)(lsbyte)))
 
 
 typedef enum opr_mode
@@ -102,6 +109,7 @@ namespace bno055
     void set_units(uint8_t units);
     bool set_clock_source(uint8_t clk_source);
     void calibrate(uint8_t mode);
+    void print_calibration();
 }
 
 

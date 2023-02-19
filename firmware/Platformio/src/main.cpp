@@ -47,6 +47,7 @@ void main_prog()
 
     delay(100);
     bno055::get_euler_ypr();
+    bno055::print_calibration();
 
     // joystick_run();
 
