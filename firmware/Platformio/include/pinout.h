@@ -18,22 +18,22 @@
 // BR = Back Right
 #define BR_IN1_PIN 20 // MOVING TO PIN 20
 #define BR_IN2_PIN 21 // MOVING TO PIN 21
-#define BR_EN_PIN 5 //MOVING TO PIN 5 (updated on fritzing)
 
 // BL = Back Left
 #define BL_IN3_PIN 26
 #define BL_IN4_PIN 27
-#define BL_EN_PIN 23 // MOVING TO PIN 23 (updated on fritzing)
+
+#define Back_EN_PIN 5 //Combining both BR and BL enable pins for new motor driver IC, this frees up pin 23
 
 // FL = Front Left
 #define FL_IN1_PIN 41 //MOVING TO PIN 41 (updated on fritzing)
 #define FL_IN2_PIN 32 //MOVING TO PIN 32 (updated on fritzing)
-#define FL_EN_PIN 28
 
 // FR = Front Right
 #define FR_IN3_PIN 34
 #define FR_IN4_PIN 40 //MOVING TO PIN 40 (updated on fritizing)
-#define FR_EN_PIN 9 //MOVING TO PIN 9 (updated on fritzing)
+
+#define Front_EN_PIN 9 //Combining both FR and FL enable pins for new motor driver IC, this frees up pin 28
 
 /* i2c buses */
 #define I2C_SCL_GYRO_PIN 19
