@@ -1,20 +1,20 @@
 #include <iostream>
-#include "receiveData.h"
+#include "transmitData.h"
 #include "common.h"
 #include <opencv2/opencv.hpp>
 
 int main()
 {
-    TransmitData<char> testTransmit(CLIENT_IP, WIFI_IMAGE_PORT);
+    TransmitData<cv::Mat> testTransmit(CLIENT_IP, WIFI_IMAGE_PORT);
 
-    cv::Mat img = cv::imread("testSources/testImage.jpg", IMREAD_COLOR);
+    cv::Mat img = cv::imread("/home/joeyblack/Documents/School/ECE1896/senior_design/network_stuff/rover/src/testSources/testImage.jpg", cv::IMREAD_COLOR);
     if(img.empty())
     {
-        std::cout << "Could not read the image: " << image_path << std::endl;
+        std::cout << "Could not read the image: " << std::endl;
         return 1;
     }
     while(1)
     {
-        testTransmit.sendPayload(img, img.total());
+        testTransmit.sendPayload(&img, img.total());
     }
 }

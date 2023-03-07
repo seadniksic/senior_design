@@ -28,8 +28,15 @@ set(ROVER_TEST
     networkLibrary/lib/receiveData.cpp
 )
 
+set(ROVER_IMAGE_TEST
+    rover/src/testImageTransmit.cpp
+    networkLibrary/lib/transmitData.cpp
+)
+
 add_executable(baseStationApp ${SRC_FILES})
 add_executable(baseStationTest ${BASE_STATION_TEST})
 add_executable(roverTest ${ROVER_TEST})
+add_executable(roverImageTest ${ROVER_IMAGE_TEST})
 
 target_link_libraries(baseStationApp PUBLIC ${OpenCV_LIBS})
+target_link_libraries(roverImageTest PUBLIC ${OpenCV_LIBS})
