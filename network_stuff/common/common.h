@@ -2,7 +2,7 @@
 #define COMMON_H
 
 #define HOST_IP "10.42.0.1"
-#define CLIENT_IP "127.0.0.1"
+#define CLIENT_IP "10.42.0.12"
 
 #define WIFI_IMAGE_PORT 8080
 #define WIFI_SLAM_PORT 8081
@@ -14,5 +14,7 @@
 
 #define IMAGE_WIDTH 720
 #define IMAGE_HEIGHT 480
+
+#define MAX_PACKET_SIZE 1400
 
 #endif

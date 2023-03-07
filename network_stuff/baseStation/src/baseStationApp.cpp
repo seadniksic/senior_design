@@ -5,11 +5,11 @@
 int main()
 {
     initServer(WIFI_IMAGE_PORT);
-    image_t *buffer = new image_t(IMAGE_HEIGHT, IMAGE_WIDTH, CV_8UC3, cv::Scalar(0, 0, 0));
+    cv::Mat *buffer = new cv::Mat(IMAGE_HEIGHT, IMAGE_WIDTH, CV_8UC3, cv::Scalar(0, 0, 0));
 
     while(1)
     {
-        getImageData(buffer, buffer->total());
+        getImageData(buffer->data, buffer->total() * buffer->elemSize());
         cv::imshow("Display window", *buffer);
         int k = cv::waitKey(0); // Wait for a keystroke in the window
     }

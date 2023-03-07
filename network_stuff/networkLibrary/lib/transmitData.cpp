@@ -2,7 +2,6 @@
 #define TRANSMITDATA_CPP
 #include "transmitData.h"
 
-
 template <class PayloadType>
 TransmitData<PayloadType>::TransmitData(const char *ipAddress, uint16_t port)
 {
@@ -18,13 +17,18 @@ TransmitData<PayloadType>::TransmitData(const char *ipAddress, uint16_t port)
 template <class PayloadType>
 int TransmitData<PayloadType>::sendPayload(PayloadType *payLoad, size_t dataLength)
 {
-    int sendData = sendto(sock, payLoad, dataLength, 0, (struct sockaddr *) &serverAddress, sizeof(serverAddress));
-    if(sendData == -1)
+    int sentBytes = 0;
+    while(sentBytes < dataLength)
     {
-        std::cerr << "Failed to send data." << std::endl;
-        return 1;
+        int bytesToSend = min(MAX_PACKET_SIZE, dataLength - sentBytes);
+        int sendData = sendto(sock, &payLoad[sentBytes], bytesToSend, 0, (struct sockaddr *) &serverAddress, sizeof(serverAddress));
+        if(sendData == -1)
+        {
+            std::cerr << "Failed to send data due to " << errno << std::endl;
+            return 1;
+        }
+        sentBytes += bytesToSend;
     }
-
     return 0;
 }
 
@@ -32,6 +36,14 @@ template <class PayloadType>
 TransmitData<PayloadType>::~TransmitData()
 {
     close(sock);
+}
+
+template <class PayloadType>
+size_t TransmitData<PayloadType>::min(size_t a, size_t b)
+{
+    if(a < b)
+        return a;
+    return b;
 }
 
 #endif

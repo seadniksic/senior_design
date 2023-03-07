@@ -23,17 +23,27 @@ ReceiveData<PayloadType>::ReceiveData(uint16_t port)
 template <class PayloadType>
 int ReceiveData<PayloadType>::getData(PayloadType *buffer, size_t bufferLength)
 {
-    int bytesReceived = recvfrom(sock, buffer, sizeof(buffer[0]) * bufferLength, 0, nullptr, nullptr);
-    if(bytesReceived == -1)
-        std::cerr << "Failed to receive data." << std::endl;
+    int receivedBytes = 0;
+    while(receivedBytes < bufferLength)
+    {
+        receivedBytes += recvfrom(sock, &buffer[receivedBytes], min(MAX_PACKET_SIZE, bufferLength - receivedBytes), 0, nullptr, nullptr);
+    }
     
-    return bytesReceived;
+    return receivedBytes;
 }
 
 template <class PayloadType>
 ReceiveData<PayloadType>::~ReceiveData()
 {
     close(sock);
+}
+
+template<class PayloadType>
+size_t ReceiveData<PayloadType>::min(size_t a, size_t b)
+{
+    if(a < b)
+        return a;
+    return b;
 }
 
 #endif
