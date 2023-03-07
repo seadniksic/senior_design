@@ -1,14 +1,15 @@
 #include "receiveCameraFeed.h"
 #include <iostream>
+#include "common.h"
 
 int main()
 {
-    initServer(8080);
-    image_t *buffer;
+    initServer(WIFI_IMAGE_PORT);
+    image_t *buffer = new image_t(IMAGE_HEIGHT, IMAGE_WIDTH, CV_8UC3, cv::Scalar(0, 0, 0));
 
     while(1)
     {
-        getImageData(buffer, 10);
+        getImageData(buffer, buffer->total());
         std::cout << "Here: " << std::endl;
     }
 

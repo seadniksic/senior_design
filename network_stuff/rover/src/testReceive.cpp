@@ -1,5 +1,6 @@
 #include <iostream>
 #include "receiveData.h"
+#include "common.h"
 
 int main()
 {

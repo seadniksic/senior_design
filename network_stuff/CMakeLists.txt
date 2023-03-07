@@ -9,6 +9,7 @@ include_directories( ${OpenCV_INCLUDE_DIRS} )
 
 include_directories(baseStation/include)
 include_directories(networkLibrary/include)
+include_directories(common/)
 
 set(SRC_FILES
     baseStation/src/baseStationApp.cpp

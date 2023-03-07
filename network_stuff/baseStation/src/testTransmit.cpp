@@ -1,9 +1,10 @@
 #include "transmitData.h"
 #include <unistd.h>
+#include "common.h"
 
 int main()
 {
-    TransmitData<char> testTransmit("10.42.0.1", 8080);
+    TransmitData<char> testTransmit(HOST_IP, 8080);
     char payload[] = "Hello World";
     while(1)
     {
