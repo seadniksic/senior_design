@@ -10,7 +10,8 @@ int main()
     while(1)
     {
         getImageData(buffer, buffer->total());
-        std::cout << "Here: " << std::endl;
+        cv::imshow("Display window", *buffer);
+        int k = cv::waitKey(0); // Wait for a keystroke in the window
     }
 
     turnOffServer();
