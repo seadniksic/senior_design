@@ -2,6 +2,7 @@
 #define RECEIVEDATA_H
 
 #include <iostream>
+#include <sys/select.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <unistd.h>
@@ -16,6 +17,7 @@ class ReceiveData{
         size_t min(size_t a, size_t b);
     public:
         ReceiveData(uint16_t port);
+        bool availableData();
         int getData(PayloadType *buffer, size_t bufferLength);
         ~ReceiveData();
 };

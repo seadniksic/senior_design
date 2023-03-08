@@ -21,6 +21,21 @@ ReceiveData<PayloadType>::ReceiveData(uint16_t port)
 }
 
 template <class PayloadType>
+bool ReceiveData<PayloadType>::availableData()
+{
+    fd_set rfds;
+    FD_ZERO(&rfds);
+    FD_SET(sock, &rfds);
+    struct timeval tv;
+    tv.tv_sec = 0;
+    tv.tv_usec = 0;
+    int retval = select(sock + 1, &rfds, NULL, NULL, &tv);
+    if(retval < 0)
+        return false;
+    return retval;
+}
+
+template <class PayloadType>
 int ReceiveData<PayloadType>::getData(PayloadType *buffer, size_t bufferLength)
 {
     int receivedBytes = 0;

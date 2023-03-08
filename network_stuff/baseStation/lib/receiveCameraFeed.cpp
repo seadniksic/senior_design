@@ -15,6 +15,11 @@ void getImageData(image_t *buffer, size_t bufferSize)
     int error = server->getData(buffer, bufferSize);
 }
 
+bool checkAvailableData()
+{
+    return server->availableData();
+}
+
 void turnOffServer()
 {
     delete server;

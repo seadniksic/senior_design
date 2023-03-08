@@ -51,5 +51,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::timerUpdate()
 {
-    getImageData(cameraFeed->data, cameraFeed->total() * cameraFeed->elemSize());
+    if(checkAvailableData())
+        getImageData(cameraFeed->data, cameraFeed->total() * cameraFeed->elemSize());
 }
