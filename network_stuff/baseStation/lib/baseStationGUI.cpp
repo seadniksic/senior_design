@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(centralWidget);
 
     //Create a QTimer is runs at 30 FPS to handle updating the GUI
-    updateTimer.setInterval(2000);
+    updateTimer.setInterval(33);
     connect(&updateTimer, &QTimer::timeout, this, &MainWindow::timerUpdate);
     updateTimer.start();
 
@@ -17,7 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     QWidget *cameraTab = new QWidget(tabWidget);
     QVBoxLayout *cameraTabLayout = new QVBoxLayout(cameraTab);
-    QLabel *cameraTabLabel = new QLabel(cameraTab);
+    cameraTabLabel = new QLabel(cameraTab);
     cameraTabLayout->addWidget(cameraTabLabel);
     tabWidget->addTab(cameraTab, "Camera Feed");
 
@@ -52,5 +52,9 @@ MainWindow::~MainWindow()
 void MainWindow::timerUpdate()
 {
     if(checkAvailableData())
+    {
         getImageData(cameraFeed->data, cameraFeed->total() * cameraFeed->elemSize());
+        QImage cameraFeedImage(cameraFeed->data, cameraFeed->cols, cameraFeed->rows, QImage::Format_RGB888);
+        cameraTabLabel->setPixmap(QPixmap::fromImage(cameraFeedImage));
+    }
 }
