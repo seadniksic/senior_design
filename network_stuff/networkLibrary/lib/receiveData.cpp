@@ -38,13 +38,20 @@ bool ReceiveData<PayloadType>::availableData()
 template <class PayloadType>
 int ReceiveData<PayloadType>::getData(PayloadType *buffer, size_t bufferLength)
 {
-    this->bufferLength = bufferLength;
     if(availableData())
     {
-        bytesReceived += recvfrom(sock, &buffer[bytesReceived], min(MAX_PACKET_SIZE, bufferLength - bytesReceived), 0, nullptr, nullptr);
-        if(bytesReceived > bufferLength)
-            bytesReceived = 0;
-        return bytesReceived;
+        struct stat st;
+        fstat(sock, &st);
+        if(st.st_size >= bufferLength)
+        {
+            int receivedBytes = 0;
+            while(receivedBytes < bufferLength)
+            {
+                receivedBytes += recvfrom(sock, &buffer[receivedBytes], min(MAX_PACKET_SIZE, bufferLength - receivedBytes), 0, nullptr, nullptr);
+            }
+            
+            return receivedBytes;
+        }
     }
 
     return 0;
