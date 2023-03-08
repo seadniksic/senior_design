@@ -40,9 +40,9 @@ int ReceiveData<PayloadType>::getData(PayloadType *buffer, size_t bufferLength)
 {
     if(availableData())
     {
-        struct stat st;
-        fstat(sock, &st);
-        if(st.st_size >= bufferLength)
+        int bytes_available;
+        ioctl(sock, FIONREAD, &bytes_available);
+        if(bytes_available >= bufferLength)
         {
             int receivedBytes = 0;
             while(receivedBytes < bufferLength)
