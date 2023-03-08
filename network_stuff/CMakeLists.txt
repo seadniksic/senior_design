@@ -7,6 +7,9 @@ project(BaseStationApplication VERSION 1.0.0 DESCRIPTION "The base station appli
 find_package(OpenCV REQUIRED)
 include_directories( ${OpenCV_INCLUDE_DIRS} )
 
+find_package(Qt5 COMPONENTS Core Widgets Gui REQUIRED)
+include_directories(${Qt5_INCLUDE_DIRS})
+
 include_directories(baseStation/include)
 include_directories(networkLibrary/include)
 include_directories(common/)
