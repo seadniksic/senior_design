@@ -1,13 +1,12 @@
 cmake_minimum_required(VERSION 3.9)
-
-cmake_minimum_required (VERSION 3.9)
+set(CMAKE_AUTOMOC ON)
 
 project(BaseStationApplication VERSION 1.0.0 DESCRIPTION "The base station application")
 
 find_package(OpenCV REQUIRED)
 include_directories( ${OpenCV_INCLUDE_DIRS} )
 
-find_package(Qt5 COMPONENTS Core Widgets Gui REQUIRED)
+find_package(Qt5 COMPONENTS Widgets REQUIRED)
 include_directories(${Qt5_INCLUDE_DIRS})
 
 include_directories(baseStation/include)
@@ -19,6 +18,7 @@ set(SRC_FILES
     baseStation/lib/receiveCameraFeed.cpp
     networkLibrary/lib/receiveData.cpp
     networkLibrary/lib/transmitData.cpp
+    baseStation/lib/baseStationGUI.cpp
 )
 
 set(BASE_STATION_TEST
@@ -41,5 +41,5 @@ add_executable(baseStationTest ${BASE_STATION_TEST})
 add_executable(roverTest ${ROVER_TEST})
 add_executable(roverImageTest ${ROVER_IMAGE_TEST})
 
-target_link_libraries(baseStationApp PUBLIC ${OpenCV_LIBS})
+target_link_libraries(baseStationApp PUBLIC ${OpenCV_LIBS} Qt5::Widgets)
 target_link_libraries(roverImageTest PUBLIC ${OpenCV_LIBS})
