@@ -51,9 +51,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::timerUpdate()
 {
-    if(checkAvailableData())
+    if(getImageData(cameraFeed->data, cameraFeed->total() * cameraFeed->elemSize()) > 0)
     {
-        getImageData(cameraFeed->data, cameraFeed->total() * cameraFeed->elemSize());
         QImage cameraFeedImage(cameraFeed->data, cameraFeed->cols, cameraFeed->rows, QImage::Format_RGB888);
         cameraTabLabel->setPixmap(QPixmap::fromImage(cameraFeedImage));
     }

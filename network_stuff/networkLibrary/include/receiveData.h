@@ -15,9 +15,9 @@ class ReceiveData{
         int sock;
         struct sockaddr_in serverAddress;
         size_t min(size_t a, size_t b);
+        bool availableData();
     public:
         ReceiveData(uint16_t port);
-        bool availableData();
         int getData(PayloadType *buffer, size_t bufferLength);
         ~ReceiveData();
 };

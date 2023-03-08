@@ -6,8 +6,7 @@
 typedef unsigned char image_t;
 
 void initServer(uint16_t port);
-void getImageData(image_t *buffer, size_t bufferSize);
-bool checkAvailableData();
+int getImageData(image_t *buffer, size_t bufferSize);
 void turnOffServer();
 
 #endif
