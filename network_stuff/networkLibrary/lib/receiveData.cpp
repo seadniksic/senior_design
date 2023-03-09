@@ -11,6 +11,8 @@ ReceiveData<PayloadType>::ReceiveData(uint16_t port)
     if (sock == -1)
         std::cerr << "Failed to create socket." << std::endl;
 
+    fcntl(sock, F_SETFL, O_NONBLOCK);
+    
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_port = htons(port);
     serverAddress.sin_addr.s_addr = htonl(INADDR_ANY);
@@ -18,6 +20,8 @@ ReceiveData<PayloadType>::ReceiveData(uint16_t port)
     int bindResult = bind(sock, (struct sockaddr *) &serverAddress, sizeof(serverAddress));
     if (bindResult == -1)
         std::cerr << "Failed to bind socket to address." << std::endl;
+    
+    currentIndex = 0;
 }
 
 template <class PayloadType>
@@ -38,15 +42,14 @@ bool ReceiveData<PayloadType>::availableData()
 template <class PayloadType>
 int ReceiveData<PayloadType>::getData(PayloadType *buffer, size_t bufferLength)
 {
-    if(availableData())
+
+    int receivedBytes = recv(sock, &buffer[receivedBytes], min(MAX_PACKET_SIZE, bufferLength - receivedBytes), 0);
+    while(receivedBytes > 0)
     {
-        int receivedBytes = 0;
-        while(receivedBytes < bufferLength)
-        {
-            receivedBytes += recv(sock, &buffer[receivedBytes], min(MAX_PACKET_SIZE, bufferLength - receivedBytes), 0);
-        }
-        
-        return receivedBytes;
+        currentIndex += receivedBytes;
+        if(currentIndex >= bufferLength)
+            currentIndex = 0;
+        receivedBytes = recv(sock, &buffer[currentIndex], min(MAX_PACKET_SIZE, bufferLength - currentIndex), 0);
     }
 
     return 0;

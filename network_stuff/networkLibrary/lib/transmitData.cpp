@@ -32,6 +32,7 @@ int TransmitData<PayloadType>::sendPayload(PayloadType *payLoad, size_t dataLeng
         }
         sentBytes += bytesToSend;
     }
+    std::cout << sentBytes << std::endl;
     return 0;
 }
 
