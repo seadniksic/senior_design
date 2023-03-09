@@ -18,6 +18,7 @@ class MainWindow : public QMainWindow {
         cv::Mat *cameraFeed, *slamFeed;
         QTimer updateTimer;
         QLabel *cameraTabLabel;
+        QImage createQImageCamera(void);
     
     private slots:
         void timerUpdate();

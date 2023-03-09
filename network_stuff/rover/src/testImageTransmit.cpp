@@ -20,12 +20,18 @@ int main()
     {
         testTransmit.sendPayload(img.data, img.total() * img.elemSize());
         std::cout << "Sent image" << std::endl;
-        sleep(10);
+        // sleep(10);
+        cv::imshow("Waka waka", img);
+        cv::waitKey(0);
         testTransmit.sendPayload(img2.data, img2.total() * img2.elemSize());
         std::cout << "Sent image" << std::endl;
-        sleep(10);
+        // sleep(10);
+        cv::imshow("Waka waka",img2);
+        cv::waitKey(0);
         testTransmit.sendPayload(img3.data, img3.total() * img3.elemSize());
         std::cout << "Sent image" << std::endl;
-        sleep(10);
+        // sleep(10);
+        cv::imshow("Waka waka",img3);
+        cv::waitKey(0);
     }
 }

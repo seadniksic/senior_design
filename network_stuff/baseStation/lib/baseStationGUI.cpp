@@ -22,8 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
     tabWidget->addTab(cameraTab, "Camera Feed");
 
     cameraFeed = new cv::Mat(IMAGE_HEIGHT, IMAGE_WIDTH, CV_8UC3, cv::Scalar(0, 0, 0));
-    QImage cameraFeedImage(cameraFeed->data, cameraFeed->cols, cameraFeed->rows, QImage::Format_RGB888);
-    cameraTabLabel->setPixmap(QPixmap::fromImage(cameraFeedImage));
+    cameraTabLabel->setPixmap(QPixmap::fromImage(createQImageCamera()));
 
     QWidget *slamTab = new QWidget(tabWidget);
     QVBoxLayout *slamTabLayout = new QVBoxLayout(slamTab);
@@ -52,8 +51,14 @@ MainWindow::~MainWindow()
 void MainWindow::timerUpdate()
 {
     if(getImageData(cameraFeed->data, cameraFeed->total() * cameraFeed->elemSize()) > 0)
-    {
-        QImage cameraFeedImage(cameraFeed->data, cameraFeed->cols, cameraFeed->rows, QImage::Format_RGB888);
-        cameraTabLabel->setPixmap(QPixmap::fromImage(cameraFeedImage));
-    }
+        cameraTabLabel->setPixmap(QPixmap::fromImage(createQImageCamera()));
+}
+
+QImage MainWindow::createQImageCamera()
+{
+    cv::Mat tempMatrix;
+    cvtColor(*cameraFeed, tempMatrix, cv::COLOR_RGB2BGR);
+    QImage newImage((const uchar *) tempMatrix.data, tempMatrix.cols, tempMatrix.rows, tempMatrix.step, QImage::Format_RGB888);
+    newImage.bits();
+    return newImage;
 }
