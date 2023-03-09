@@ -96,7 +96,6 @@ int ReceiveData<PayloadType>::getData(PayloadType *buffer, size_t bufferLength)
                 std::cout << errno << std::endl;
                 if(receiveValue < 0)
                 {
-                    std::cout << "Connection failed" << std::endl;
                     close(clientSocket);
                     clientSocket = -1;
                     break;

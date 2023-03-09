@@ -1,3 +1,6 @@
+#ifndef BASESTATIONGUI_CPP
+#define BASESTATIONGUI_CPP
+
 #include "baseStationGUI.h"
 #include <iostream>
 
@@ -12,30 +15,41 @@ MainWindow::MainWindow(QWidget *parent)
     connect(&updateTimer, &QTimer::timeout, this, &MainWindow::timerUpdate);
     updateTimer.start();
 
-    QVBoxLayout *mainLayout = new QVBoxLayout(centralWidget);
+    //Create Main layout as well as the tab widget
+    QHBoxLayout *mainLayout = new QHBoxLayout(centralWidget);
     QTabWidget *tabWidget = new QTabWidget(centralWidget);
 
+    //Handle the camera feed tab
     QWidget *cameraTab = new QWidget(tabWidget);
-    QVBoxLayout *cameraTabLayout = new QVBoxLayout(cameraTab);
+    QHBoxLayout *cameraTabLayout = new QHBoxLayout(cameraTab);
+
     cameraTabLabel = new QLabel(cameraTab);
     cameraTabLayout->addWidget(cameraTabLabel);
-    tabWidget->addTab(cameraTab, "Camera Feed");
-
     cameraFeed = new cv::Mat(IMAGE_HEIGHT, IMAGE_WIDTH, CV_8UC3, cv::Scalar(0, 0, 0));
     cameraTabLabel->setPixmap(QPixmap::fromImage(createQImage(*cameraFeed)));
 
+    tabWidget->addTab(cameraTab, "Camera Feed");
+
+    //Handle the slam data tab
     QWidget *slamTab = new QWidget(tabWidget);
-    QVBoxLayout *slamTabLayout = new QVBoxLayout(slamTab);
+    QHBoxLayout *slamTabLayout = new QHBoxLayout(slamTab);
     slamTabLabel = new QLabel(slamTab);
     slamTabLayout->addWidget(slamTabLabel);
-    tabWidget->addTab(slamTab, "Slam Feed");
-
     slamFeed = new cv::Mat(IMAGE_HEIGHT, IMAGE_WIDTH, CV_8UC3, cv::Scalar(0, 0, 0));
     slamTabLabel->setPixmap(QPixmap::fromImage(createQImage(*slamFeed)));
 
-    mainLayout->addWidget(tabWidget);
+    tabWidget->addTab(slamTab, "Slam Feed");
+
+    roverStatus = new QLabel();
+    roverStatus->setText("Current Temperature: " + QString::number(0));
+    currentRoverData = new status_t;
+
+    //Set main layout and main widget
+    mainLayout->addWidget(tabWidget, 8);
+    mainLayout->addWidget(roverStatus, 2);
     centralWidget->setLayout(mainLayout);
 
+    //Initialize the network
     initializeNetwork();
 }
 
@@ -55,6 +69,8 @@ void MainWindow::timerUpdate()
         cameraTabLabel->setPixmap(QPixmap::fromImage(createQImage(*cameraFeed)));
     if(getSlamData(slamFeed->data, slamFeed->total() * slamFeed->elemSize()) > 0)
         slamTabLabel->setPixmap(QPixmap::fromImage(createQImage(*slamFeed)));
+    if(getRoverStatus(currentRoverData, sizeof(status_t)) > 0)
+        roverStatus->setText("Current Temperature: " + QString::number(currentRoverData->battery));
 }
 
 QImage MainWindow::createQImage(cv::Mat input)
@@ -65,3 +81,5 @@ QImage MainWindow::createQImage(cv::Mat input)
     newImage.bits();
     return newImage;
 }
+
+#endif

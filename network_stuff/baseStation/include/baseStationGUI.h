@@ -5,6 +5,7 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QTabWidget>
 #include <QVBoxLayout>
+#include <QHBoxLayout>
 #include <QLabel>
 #include <QImage>
 #include <QTimer>
@@ -17,8 +18,9 @@ class MainWindow : public QMainWindow {
     private:
         cv::Mat *cameraFeed, *slamFeed;
         QTimer updateTimer;
-        QLabel *cameraTabLabel, *slamTabLabel;
+        QLabel *cameraTabLabel, *slamTabLabel, *roverStatus;
         QImage createQImage(cv::Mat input);
+        status_t *currentRoverData;
     
     private slots:
         void timerUpdate();
