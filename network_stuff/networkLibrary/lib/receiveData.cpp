@@ -47,8 +47,8 @@ int ReceiveData<PayloadType>::getData(PayloadType *buffer, size_t bufferLength)
     int bytes_waiting;
     while(ioctl(sock, FIONREAD, &bytes_waiting) < bufferLength - 1)
     {
-        receivedBytes = recv(sock, &buffer[currentIndex], min(MAX_PACKET_SIZE, bufferLength - currentIndex), 0);
-        return receiveBytes;
+        int receivedBytes = recv(sock, &buffer[currentIndex], min(MAX_PACKET_SIZE, bufferLength - currentIndex), 0);
+        return receivedBytes;
     }
 
     return 0;
