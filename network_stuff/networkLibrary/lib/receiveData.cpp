@@ -81,7 +81,7 @@ int ReceiveData<PayloadType>::getData(PayloadType *buffer, size_t bufferLength)
             struct timeval timeout;
             timeout.tv_sec = 5; 
             timeout.tv_usec = 0;
-            setsockopt(clientSocket, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
+            setsockopt(clientSocket, SOL_SOCKET, SO_RCVTIMEO, (const char*)&timeout, sizeof(timeout));
         }
     }
     else
@@ -93,6 +93,7 @@ int ReceiveData<PayloadType>::getData(PayloadType *buffer, size_t bufferLength)
             while(receivedBytes < bufferLength)
             {
                 int receiveValue = recv(clientSocket, &buffer[receivedBytes], min(MAX_PACKET_SIZE, bufferLength - receivedBytes), 0);
+                std::cout << errno << std::endl;
                 if(receiveValue < 0)
                 {
                     std::cout << "Connection failed" << std::endl;
