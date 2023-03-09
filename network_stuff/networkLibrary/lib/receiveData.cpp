@@ -92,7 +92,14 @@ int ReceiveData<PayloadType>::getData(PayloadType *buffer, size_t bufferLength)
             int receivedBytes = 0;
             while(receivedBytes < bufferLength)
             {
-                receivedBytes += recv(clientSocket, &buffer[receivedBytes], min(MAX_PACKET_SIZE, bufferLength - receivedBytes), 0);
+                int receiveValue = recv(clientSocket, &buffer[receivedBytes], min(MAX_PACKET_SIZE, bufferLength - receivedBytes), 0);
+                if(receiveValue < 0)
+                {
+                    close(clientSocket);
+                    clientSocket = -1;
+                    break;
+                }
+                receivedBytes += receiveValue;
             }
             return receivedBytes;
         }
