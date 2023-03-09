@@ -17,4 +17,17 @@
 
 #define MAX_PACKET_SIZE 1400
 
+struct roverCommands{
+    uint8_t forward;
+};
+
+struct roverStatus{
+    uint8_t battery;
+};
+
+typedef unsigned char image_t;
+typedef unsigned char slam_t;
+typedef struct roverCommands commands_t;
+typedef struct roverStatus status_t;
+
 #endif

@@ -23,8 +23,9 @@ class TransmitData{
         ~TransmitData();
 };
 
-template class TransmitData<int>;
-template class TransmitData<cv::Mat>;
+template class TransmitData<image_t>;
+// template class TransmitData<slam_t>;
+template class TransmitData<status_t>;
+template class TransmitData<commands_t>;
 template class TransmitData<char>;
-template class TransmitData<unsigned char>;
 #endif

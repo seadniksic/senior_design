@@ -25,8 +25,9 @@ class ReceiveData{
         ~ReceiveData();
 };
 
-template class ReceiveData<int>;
-template class ReceiveData<cv::Mat>;
+template class ReceiveData<image_t>;
+// template class ReceiveData<slam_t>;
+template class ReceiveData<commands_t>;
+template class ReceiveData<status_t>;
 template class ReceiveData<char>;
-template class ReceiveData<unsigned char>;
 #endif

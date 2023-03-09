@@ -11,14 +11,14 @@
 #include <QObject> 
 #include <opencv2/opencv.hpp>
 #include "common.h"
-#include "receiveCameraFeed.h"
+#include "baseStationNetworking.h"
 
 class MainWindow : public QMainWindow {
     private:
         cv::Mat *cameraFeed, *slamFeed;
         QTimer updateTimer;
-        QLabel *cameraTabLabel;
-        QImage createQImageCamera(void);
+        QLabel *cameraTabLabel, *slamTabLabel;
+        QImage createQImage(cv::Mat input);
     
     private slots:
         void timerUpdate();

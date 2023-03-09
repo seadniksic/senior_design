@@ -22,42 +22,45 @@ MainWindow::MainWindow(QWidget *parent)
     tabWidget->addTab(cameraTab, "Camera Feed");
 
     cameraFeed = new cv::Mat(IMAGE_HEIGHT, IMAGE_WIDTH, CV_8UC3, cv::Scalar(0, 0, 0));
-    cameraTabLabel->setPixmap(QPixmap::fromImage(createQImageCamera()));
+    cameraTabLabel->setPixmap(QPixmap::fromImage(createQImage(*cameraFeed)));
 
     QWidget *slamTab = new QWidget(tabWidget);
     QVBoxLayout *slamTabLayout = new QVBoxLayout(slamTab);
-    QLabel *slamTabLabel = new QLabel(slamTab);
+    slamTabLabel = new QLabel(slamTab);
     slamTabLayout->addWidget(slamTabLabel);
     tabWidget->addTab(slamTab, "Slam Feed");
 
     slamFeed = new cv::Mat(IMAGE_HEIGHT, IMAGE_WIDTH, CV_8UC3, cv::Scalar(0, 0, 0));
-    QImage slamFeedImage(slamFeed->data, slamFeed->cols, slamFeed->rows, QImage::Format_RGB888);
-    slamTabLabel->setPixmap(QPixmap::fromImage(slamFeedImage));
+    slamTabLabel->setPixmap(QPixmap::fromImage(createQImage(*slamFeed)));
 
     mainLayout->addWidget(tabWidget);
     centralWidget->setLayout(mainLayout);
 
-    initServer(WIFI_IMAGE_PORT);
+    initializeNetwork();
 }
 
 MainWindow::~MainWindow()
 {
     delete cameraFeed;
     delete slamFeed;
+    delete cameraTabLabel;
+    delete slamTabLabel;
 
-    turnOffServer();
+    shutdownNetwork();
 }
 
 void MainWindow::timerUpdate()
 {
-    if(getImageData(cameraFeed->data, cameraFeed->total() * cameraFeed->elemSize()) > 0)
-        cameraTabLabel->setPixmap(QPixmap::fromImage(createQImageCamera()));
+    if(getCameraData(cameraFeed->data, cameraFeed->total() * cameraFeed->elemSize()) > 0)
+        cameraTabLabel->setPixmap(QPixmap::fromImage(createQImage(*cameraFeed)));
+    if(getSlamData(slamFeed->data, slamFeed->total() * slamFeed->elemSize()) > 0)
+        slamTabLabel->setPixmap(QPixmap::fromImage(createQImage(*slamFeed)));
 }
 
-QImage MainWindow::createQImageCamera()
+QImage MainWindow::createQImage(cv::Mat input)
 {
     cv::Mat tempMatrix;
-    cvtColor(*cameraFeed, tempMatrix, cv::COLOR_RGB2BGR);
+    cvtColor(input, tempMatrix, cv::COLOR_RGB2BGR);
     QImage newImage((const uchar *) tempMatrix.data, tempMatrix.cols, tempMatrix.rows, tempMatrix.step, QImage::Format_RGB888);
     newImage.bits();
     return newImage;

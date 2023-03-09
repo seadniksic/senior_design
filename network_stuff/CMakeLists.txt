@@ -15,7 +15,7 @@ include_directories(common/)
 
 set(SRC_FILES
     baseStation/src/baseStationApp.cpp
-    baseStation/lib/receiveCameraFeed.cpp
+    baseStation/lib/baseStationNetworking.cpp
     networkLibrary/lib/receiveData.cpp
     networkLibrary/lib/transmitData.cpp
     baseStation/lib/baseStationGUI.cpp
