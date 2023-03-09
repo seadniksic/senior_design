@@ -40,18 +40,13 @@ int ReceiveData<PayloadType>::getData(PayloadType *buffer, size_t bufferLength)
 {
     if(availableData())
     {
-        int bytes_available;
-        ioctl(sock, FIONREAD, &bytes_available);
-        if(bytes_available >= bufferLength)
+        int receivedBytes = 0;
+        while(receivedBytes < bufferLength)
         {
-            int receivedBytes = 0;
-            while(receivedBytes < bufferLength)
-            {
-                receivedBytes += recvfrom(sock, &buffer[receivedBytes], min(MAX_PACKET_SIZE, bufferLength - receivedBytes), 0, nullptr, nullptr);
-            }
-            
-            return receivedBytes;
+            receivedBytes += recv(sock, &buffer[receivedBytes], min(MAX_PACKET_SIZE, bufferLength - receivedBytes), 0);
         }
+        
+        return receivedBytes;
     }
 
     return 0;

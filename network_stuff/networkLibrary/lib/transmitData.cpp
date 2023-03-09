@@ -12,6 +12,9 @@ TransmitData<PayloadType>::TransmitData(const char *ipAddress, uint16_t port)
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_port = htons(port);
     serverAddress.sin_addr.s_addr = inet_addr(ipAddress);
+
+    if(connect(sock, (struct sockaddr *)&serverAddress, sizeof(serverAddress)) == -1)
+        std::cerr << "Failed to connect to server." << std::endl;
 }
 
 template <class PayloadType>
@@ -21,7 +24,7 @@ int TransmitData<PayloadType>::sendPayload(PayloadType *payLoad, size_t dataLeng
     while(sentBytes < dataLength)
     {
         int bytesToSend = min(MAX_PACKET_SIZE, dataLength - sentBytes);
-        int sendData = sendto(sock, &payLoad[sentBytes], bytesToSend, 0, (struct sockaddr *) &serverAddress, sizeof(serverAddress));
+        int sendData = send(sock, &payLoad[sentBytes], bytesToSend, 0);
         if(sendData == -1)
         {
             std::cerr << "Failed to send data due to " << errno << std::endl;
