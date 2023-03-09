@@ -28,20 +28,24 @@ int TransmitData<PayloadType>::sendPayload(PayloadType *payLoad, size_t dataLeng
         if(connect(sock, (struct sockaddr *)&serverAddress, sizeof(serverAddress)) != -1)
             currentlyConnected = true;
     }
-    else
+    if(currentlyConnected)
     {
         //If it is conected send the data
         int sentBytes = 0;
         while(sentBytes < dataLength)
         {
             int bytesToSend = min(MAX_PACKET_SIZE, dataLength - sentBytes);
-            int sendData = send(sock, &payLoad[sentBytes], bytesToSend, 0);
+            int sendData = send(sock, &payLoad[sentBytes], bytesToSend, MSG_NOSIGNAL);
             if(sendData == -1)
             {
                 //If data failed to send due to connection failure, try and reconnect
                 if(errno == EPIPE || errno == ENOTCONN)
                 {
                     currentlyConnected = false;
+                    close(sock);
+                    sock = socket(AF_INET, SOCK_STREAM, 0);
+                    if(sock == -1)
+                        std::cerr << "Failed to create socket." << std::endl;
                     break;
                 }
                 else

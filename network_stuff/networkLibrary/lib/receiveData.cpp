@@ -76,9 +76,12 @@ int ReceiveData<PayloadType>::getData(PayloadType *buffer, size_t bufferLength)
             socklen_t clientAddressLength = sizeof(clientAddress);
             clientSocket = accept(serverSocket, (struct sockaddr*) &clientAddress, &clientAddressLength);
             if(clientSocket == -1)
-            {
                 std::cerr << "Failed to accept socket connection." << std::endl;
-            }
+            
+            struct timeval timeout;
+            timeout.tv_sec = 0; 
+            timeout.tv_usec = 67000;
+            setsockopt(clientSocket, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
         }
     }
     else
