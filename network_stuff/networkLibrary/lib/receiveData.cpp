@@ -12,6 +12,8 @@ ReceiveData<PayloadType>::ReceiveData(uint16_t port)
         std::cerr << "Failed to create socket." << std::endl;
 
     fcntl(sock, F_SETFL, O_NONBLOCK);
+    int recv_buff_size = 1036800; // in bytes
+    setsockopt(sock, SOL_SOCKET, SO_RCVBUF, &recv_buff_size, sizeof(recv_buff_size));
     
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_port = htons(port);
@@ -42,14 +44,11 @@ bool ReceiveData<PayloadType>::availableData()
 template <class PayloadType>
 int ReceiveData<PayloadType>::getData(PayloadType *buffer, size_t bufferLength)
 {
-
-    int receivedBytes = recv(sock, &buffer[receivedBytes], min(MAX_PACKET_SIZE, bufferLength - receivedBytes), 0);
-    while(receivedBytes > 0)
+    int bytes_waiting;
+    while(ioctl(sock, FIONREAD, &bytes_waiting) < bufferLength - 1)
     {
-        currentIndex += receivedBytes;
-        if(currentIndex >= bufferLength)
-            currentIndex = 0;
         receivedBytes = recv(sock, &buffer[currentIndex], min(MAX_PACKET_SIZE, bufferLength - currentIndex), 0);
+        return receiveBytes;
     }
 
     return 0;
