@@ -5,34 +5,51 @@
 template <class PayloadType>
 TransmitData<PayloadType>::TransmitData(const char *ipAddress, uint16_t port)
 {
-    sock = socket(AF_INET, SOCK_DGRAM, 0);
+    //Create socket
+    sock = socket(AF_INET, SOCK_STREAM, 0);
     if(sock == -1)
         std::cerr << "Failed to create socket." << std::endl;
 
+    //Mark the IP address it should be connecting to
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_port = htons(port);
     serverAddress.sin_addr.s_addr = inet_addr(ipAddress);
 
-    if(connect(sock, (struct sockaddr *)&serverAddress, sizeof(serverAddress)) == -1)
-        std::cerr << "Failed to connect to server." << std::endl;
+    currentlyConnected = false;
 }
 
 template <class PayloadType>
 int TransmitData<PayloadType>::sendPayload(PayloadType *payLoad, size_t dataLength)
 {
-    int sentBytes = 0;
-    while(sentBytes < dataLength)
+    //Check to see if the socket is currently connected to anything
+    if(!currentlyConnected)
     {
-        int bytesToSend = min(MAX_PACKET_SIZE, dataLength - sentBytes);
-        int sendData = send(sock, &payLoad[sentBytes], bytesToSend, 0);
-        if(sendData == -1)
-        {
-            std::cerr << "Failed to send data due to " << errno << std::endl;
-            return 1;
-        }
-        sentBytes += bytesToSend;
+        //If not try to connect
+        if(connect(sock, (struct sockaddr *)&serverAddress, sizeof(serverAddress)) != -1)
+            currentlyConnected = true;
     }
-    std::cout << sentBytes << std::endl;
+    else
+    {
+        //If it is conected send the data
+        int sentBytes = 0;
+        while(sentBytes < dataLength)
+        {
+            int bytesToSend = min(MAX_PACKET_SIZE, dataLength - sentBytes);
+            int sendData = send(sock, &payLoad[sentBytes], bytesToSend, 0);
+            if(sendData == -1)
+            {
+                //If data failed to send due to connection failure, try and reconnect
+                if(errno == EPIPE || errno == ENOTCONN)
+                {
+                    currentlyConnected = false;
+                    break;
+                }
+                else
+                    std::cerr << "Failed to send data." << std::endl;
+            }
+            sentBytes += bytesToSend;
+        }
+    }
     return 0;
 }
 

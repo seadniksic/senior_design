@@ -14,11 +14,11 @@
 template <class PayloadType>
 class ReceiveData{
     private:
-        int sock;
+        int serverSocket, clientSocket;
         struct sockaddr_in serverAddress;
         size_t min(size_t a, size_t b);
-        bool availableData();
-        size_t currentIndex;
+        bool availableDataServer();
+        bool availableDataClient();
     public:
         ReceiveData(uint16_t port);
         int getData(PayloadType *buffer, size_t bufferLength);

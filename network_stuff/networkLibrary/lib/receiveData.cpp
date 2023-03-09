@@ -7,35 +7,57 @@
 template <class PayloadType>
 ReceiveData<PayloadType>::ReceiveData(uint16_t port)
 {
-    sock = socket(AF_INET, SOCK_DGRAM, 0);
-    if (sock == -1)
+    //Create socket using TCP protocol
+    serverSocket = socket(AF_INET, SOCK_STREAM, 0);
+    if (serverSocket == -1)
         std::cerr << "Failed to create socket." << std::endl;
 
-    fcntl(sock, F_SETFL, O_NONBLOCK);
+    //Set socket buffer size to 1036800
     int recv_buff_size = 1036800; // in bytes
-    setsockopt(sock, SOL_SOCKET, SO_RCVBUF, &recv_buff_size, sizeof(recv_buff_size));
+    if(setsockopt(serverSocket, SOL_SOCKET, SO_RCVBUF, &recv_buff_size, sizeof(recv_buff_size)) == -1)
+        std::cerr << "Failed to set socket buffer size" << std::endl;
     
+    //Set the IP and port 
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_port = htons(port);
     serverAddress.sin_addr.s_addr = htonl(INADDR_ANY);
 
-    int bindResult = bind(sock, (struct sockaddr *) &serverAddress, sizeof(serverAddress));
-    if (bindResult == -1)
+    //Bind the port to the socket
+    if (bind(serverSocket, (struct sockaddr *) &serverAddress, sizeof(serverAddress)) == -1)
         std::cerr << "Failed to bind socket to address." << std::endl;
+
+    //Mark the socket as a listener
+    if(listen(serverSocket, 2) == -1)
+        std::cerr << "Failed to set up listener." << std::endl;
     
-    currentIndex = 0;
+    clientSocket = -1;
 }
 
 template <class PayloadType>
-bool ReceiveData<PayloadType>::availableData()
+bool ReceiveData<PayloadType>::availableDataServer()
 {
     fd_set rfds;
     FD_ZERO(&rfds);
-    FD_SET(sock, &rfds);
+    FD_SET(serverSocket, &rfds);
     struct timeval tv;
     tv.tv_sec = 0;
     tv.tv_usec = 0;
-    int retval = select(sock + 1, &rfds, NULL, NULL, &tv);
+    int retval = select(serverSocket + 1, &rfds, NULL, NULL, &tv);
+    if(retval < 0)
+        return false;
+    return retval;
+}
+
+template <class PayloadType>
+bool ReceiveData<PayloadType>::availableDataClient()
+{
+    fd_set rfds;
+    FD_ZERO(&rfds);
+    FD_SET(clientSocket, &rfds);
+    struct timeval tv;
+    tv.tv_sec = 0;
+    tv.tv_usec = 0;
+    int retval = select(clientSocket + 1, &rfds, NULL, NULL, &tv);
     if(retval < 0)
         return false;
     return retval;
@@ -44,11 +66,33 @@ bool ReceiveData<PayloadType>::availableData()
 template <class PayloadType>
 int ReceiveData<PayloadType>::getData(PayloadType *buffer, size_t bufferLength)
 {
-    int bytes_waiting;
-    while(ioctl(sock, FIONREAD, &bytes_waiting) < bufferLength - 1)
+    //Check to see if there is an active connection
+    if(clientSocket < 0)
     {
-        int receivedBytes = recv(sock, &buffer[currentIndex], min(MAX_PACKET_SIZE, bufferLength - currentIndex), 0);
-        return receivedBytes;
+        //If there is not an active connection, check to see if there are any in the queue and create connection if there is one
+        if(availableDataServer())
+        {
+            struct sockaddr_in clientAddress;
+            socklen_t clientAddressLength = sizeof(clientAddress);
+            clientSocket = accept(serverSocket, (struct sockaddr*) &clientAddress, &clientAddressLength);
+            if(clientSocket == -1)
+            {
+                std::cerr << "Failed to accept socket connection." << std::endl;
+            }
+        }
+    }
+    else
+    {
+        //If already connected, check to see if there is data waiting
+        if(availableDataClient())
+        {
+            int receivedBytes = 0;
+            while(receivedBytes < bufferLength)
+            {
+                receivedBytes += recv(clientSocket, &buffer[receivedBytes], min(MAX_PACKET_SIZE, bufferLength - receivedBytes), 0);
+            }
+            return receivedBytes;
+        }
     }
 
     return 0;
@@ -57,7 +101,8 @@ int ReceiveData<PayloadType>::getData(PayloadType *buffer, size_t bufferLength)
 template <class PayloadType>
 ReceiveData<PayloadType>::~ReceiveData()
 {
-    close(sock);
+    close(serverSocket);
+    close(clientSocket);
 }
 
 template<class PayloadType>
