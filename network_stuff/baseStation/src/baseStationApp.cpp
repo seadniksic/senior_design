@@ -1,17 +1,11 @@
-#include "receiveCameraFeed.h"
+#include "baseStationGUI.h"
 #include <iostream>
+#include "common.h"
 
-int main()
+int main(int argc, char *argv[])
 {
-    initServer(8080);
-    image_t *buffer;
-
-    while(1)
-    {
-        getImageData(buffer, 10);
-        std::cout << "Here: " << std::endl;
-    }
-
-    turnOffServer();
-    return 0;
+    QApplication app(argc, argv);
+    MainWindow mainWindow;
+    mainWindow.show();
+    return app.exec();
 }
