@@ -93,8 +93,7 @@ int ReceiveData<PayloadType>::getData(PayloadType *buffer, size_t bufferLength)
             while(receivedBytes < bufferLength)
             {
                 int receiveValue = recv(clientSocket, &buffer[receivedBytes], min(MAX_PACKET_SIZE, bufferLength - receivedBytes), 0);
-                std::cout << errno << std::endl;
-                if(receiveValue < 0)
+                if(receiveValue == 0)
                 {
                     close(clientSocket);
                     clientSocket = -1;

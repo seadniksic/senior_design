@@ -17,7 +17,7 @@ int main()
     cv::Mat img3 = cv::imread("/home/joeyblack/Documents/School/ECE1896/senior_design/network_stuff/rover/src/testSources/testImage_3.jpg", cv::IMREAD_COLOR);
     img3.convertTo(img3, CV_8UC3);
 
-    status_t *roverStatus;
+    status_t *roverStatus = new status_t;
     roverStatus->battery = 0;
 
 
