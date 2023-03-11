@@ -3,7 +3,7 @@
 #include <string.h>
 #include <string>
 #include <opencv2/opencv.hpp>
-#include <opencv2/dnn/dnn.hpp>
+//#include <opencv2/dnn/dnn.hpp>
 
 using namespace cv;
 using namespace dnn;
@@ -15,8 +15,8 @@ int main()
 {
     
 // Specify the paths for the 2 files
-string protoFile = "../models/pose/mpi/pose_deploy_linevec.prototxt";
-string weightsFile = "../models/pose/mpi/pose_iter_160000.caffemodel";
+//string protoFile = "../models/pose/mpi/pose_deploy_linevec.prototxt";
+//string weightsFile = "../models/pose/mpi/pose_iter_160000.caffemodel";
 
 // Read the network into Memory
 //Net net = readNetFromTensorflow("../models/movenet_multipose_lightning_1/saved_model.pb");
