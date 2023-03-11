@@ -42,6 +42,7 @@ void main_prog()
   Command received_command;
   Reply outgoing_reply;
   
+  bool print_once = false;
 
   while(1)
   {
@@ -69,21 +70,29 @@ void main_prog()
     // read all of the data
     while(HWSERIAL.available() > 0)
     {
+      // Serial.println("reading in a byte of data");
+      print_once = false;
       data = HWSERIAL.read();
       read_buffer.push(data);
     }
 
     // this is just doing recieve for now
     auto deserialize_status = received_command.deserialize(read_buffer);
+    
     if(::EmbeddedProto::Error::NO_ERRORS == deserialize_status)
     {
       uint32_t rcv_value = received_command.get_value(); // get the value
       
-      Serial.print(rcv_value); // send the value over serial monitor
+      if( print_once == false)
+        Serial.println(rcv_value); // send the value over serial monitor
+
+      print_once = true;
     }
 
     read_buffer.clear();
     write_buffer.clear();
+
+    delay(10);
 
     // joystick_run();
 
