@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+message Command
+{
+    uint32 value  = 1;
+}
+
+message Reply
+{
+    bool led_state = 1;
+}
