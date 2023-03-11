@@ -11,6 +11,7 @@ include_directories(${Qt5_INCLUDE_DIRS})
 
 include_directories(baseStation/include)
 include_directories(networkLibrary/include)
+include_directories(rover/include)
 include_directories(common/)
 
 set(SRC_FILES
@@ -19,6 +20,13 @@ set(SRC_FILES
     networkLibrary/lib/receiveData.cpp
     networkLibrary/lib/transmitData.cpp
     baseStation/lib/baseStationGUI.cpp
+)
+
+set(ROVER_SRC_FILES
+    rover/src/roverConnections.cpp
+    rover/lib/roverNetworking.cpp
+    networkLibrary/lib/receiveData.cpp
+    networkLibrary/lib/transmitData.cpp
 )
 
 set(BASE_STATION_TEST
@@ -40,6 +48,8 @@ add_executable(baseStationApp ${SRC_FILES})
 add_executable(baseStationTest ${BASE_STATION_TEST})
 add_executable(roverTest ${ROVER_TEST})
 add_executable(roverImageTest ${ROVER_IMAGE_TEST})
+add_executable(roverConnections ${ROVER_SRC_FILES})
 
 target_link_libraries(baseStationApp PUBLIC ${OpenCV_LIBS} Qt5::Widgets)
 target_link_libraries(roverImageTest PUBLIC ${OpenCV_LIBS})
+target_link_libraries(roverConnections PUBLIC ${OpenCV_LIBS})
