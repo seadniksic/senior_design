@@ -96,7 +96,6 @@ int ReceiveData<PayloadType>::getData(PayloadType *buffer, size_t bufferLength)
             {
                 close(clientSocket);
                 clientSocket = -1;
-                break;
             }
 
             while(receivedBytes < bufferLength && receivedBytes < receivingPacketLength)
