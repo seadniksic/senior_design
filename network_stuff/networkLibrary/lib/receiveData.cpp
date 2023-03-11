@@ -92,6 +92,12 @@ int ReceiveData<PayloadType>::getData(PayloadType *buffer, size_t bufferLength)
             int receivedBytes = 0;
             uint64_t receivingPacketLength = 0;
             int receiveValue = recv(clientSocket, &receivingPacketLength, sizeof(uint64_t), 0);
+            if(receiveValue == 0)
+            {
+                close(clientSocket);
+                clientSocket = -1;
+                break;
+            }
 
             while(receivedBytes < bufferLength && receivedBytes < receivingPacketLength)
             {
