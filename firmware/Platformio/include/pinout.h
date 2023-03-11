@@ -38,7 +38,7 @@
 /* i2c buses */
 #define I2C_SCL_GYRO_PIN 16
 #define I2C_SDA_GYRO_PIN 17
-#define I2C_SCL1_JETSON_PIN 24 //backup bus
+#define I2C_SCL1_JETSON_PIN 24 //backup bus 
 #define I2C_SDA1_JETSON_PIN 25
 #define I2C_BNO055_INT_PIN 39
 

@@ -1,5 +1,6 @@
 #include "joystick.h"
-#include <String>
+// #include <String>    //included in Arduino.h so no need to include again.
+                        // https://community.platformio.org/t/compiler-doesnt-find-string-class-in-included-files/10832
 #include "locomotion.h"
 
 void joystick_init()
