@@ -31,12 +31,14 @@ int TransmitData<PayloadType>::sendPayload(PayloadType *payLoad, size_t dataLeng
     if(currentlyConnected)
     {
         //If it is conected send the data
-        int sentBytes = 0;
+        uint64_t sendDataSize = (uint64_t)dataLength;
+        int sentBytes = 0, sendResult = send(sock, &sendDataSize, sizeof(uint64_t), MSG_NOSIGNAL), bytesToSend = 0;
+
         while(sentBytes < dataLength)
         {
-            int bytesToSend = min(MAX_PACKET_SIZE, dataLength - sentBytes);
-            int sendData = send(sock, &payLoad[sentBytes], bytesToSend, MSG_NOSIGNAL);
-            if(sendData == -1)
+            bytesToSend = min(MAX_PACKET_SIZE, dataLength - sentBytes);
+            sendResult = send(sock, &payLoad[sentBytes], bytesToSend, MSG_NOSIGNAL);
+            if(sendResult == -1)
             {
                 //If data failed to send due to connection failure, try and reconnect
                 if(errno == EPIPE || errno == ENOTCONN)
