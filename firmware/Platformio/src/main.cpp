@@ -1,5 +1,7 @@
 #include <Arduino.h>
-
+#include <MessageInterface.h>
+#include <Fields.h>
+#include <ReadBufferSection.h>
 #include <locomotion.h>
 #include <elapsedMillis.h>
 #include <joystick.h>

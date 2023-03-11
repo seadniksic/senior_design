@@ -150,6 +150,13 @@
     #define FR_IN4_PIN 35 
     #define FR_EN_PIN 29 
 
+    // UART
+    // using uart1
+    #define RX2_PIN 7
+    #define TX2_PIN 8
+    
+
+
 #endif
 
 #endif 
