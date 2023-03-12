@@ -141,13 +141,10 @@ void main_prog()
         }
         Serial.println();
         
-
-
-
-        
-
-
-
+      }
+      else
+      {
+        Serial.println("Failed to serialize message.")
       }
 
       available_packet = false;

@@ -2,9 +2,13 @@ syntax = "proto3";
 
 message Joystick_Input
 {
+    // fields that are set to its defualt value (0) are not
+    // serialized over the wire!!
+    // solution?
+    // https://embeddedproto.com/documentation/using-a-message/optional-fields/
     enum Buttons
     {
-        dummy = 0;
+        NONE = 0; // first entry required to be zero
         BTN_A = 1;
         BTN_B = 2;
         BTN_X = 4;
@@ -21,11 +25,11 @@ message Joystick_Input
         BTN_TL = 8192;
     }
 
-    Buttons button = 1; // bit per button
-    int32 LJOY = 2; // int16_t
-    int32 RJOY = 3;
-    int32 TR = 4; //uint8_t
-    int32 TL = 5;
+    optional Buttons button = 1; // bit per button
+    optional int32 LJOY = 2; // int16_t
+    optional int32 RJOY = 3;
+    optional int32 TR = 4; //uint8_t
+    optional int32 TL = 5;
 }
 
 message Reply
