@@ -3,12 +3,12 @@
 #include <string.h>
 #include <string>
 #include <opencv2/opencv.hpp>
-//#include <opencv2/dnn/dnn.hpp>
+#include <opencv2/dnn/dnn.hpp>
 
-using namespace cv;
-using namespace dnn;
+//using namespace cv;
+//using namespace dnn;
 
-using namespace std;
+//using namespace std;
 //using namespace tensorflow;
 
 int main() 
@@ -37,8 +37,9 @@ int main()
     {
 
 	//Executed for every frame
+	
 
-
+	std::cout << cam;
         Mat frame;
         cam >> frame;
         
@@ -113,8 +114,10 @@ int main()
 	
 	
         imshow("original",frame);
-        if((char)waitKey(30) == 27)
+        if((char)waitKey(30) == 27) {
+            cam.release();
             break;
+           }
     }
     
     return 0;
