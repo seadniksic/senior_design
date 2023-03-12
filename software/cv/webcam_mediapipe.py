@@ -15,13 +15,13 @@ mp_drawing_styles = mp.solutions.drawing_styles
 mp_pose = mp.solutions.pose
 
 
-window_title = "USB Camera"
+window_title = "Stream"
 
 def show_camera():
-    # ASSIGN CAMERA ADDRESS HERE
+
     camera_id = "/dev/video0"
-    # Full list of Video Capture APIs (video backends): https://docs.opencv.org/3.4/d4/d15/group__videoio__flags__base.html
-    # For webcams, we use V4L2
+
+    # webcams -> V4L2, stereo -> gstreamer
     video_capture = cv2.VideoCapture(camera_id, cv2.CAP_V4L2)
     rsum = 0
     count = 0
@@ -33,12 +33,11 @@ def show_camera():
                 window_handle = cv2.namedWindow(window_title, cv2.WINDOW_AUTOSIZE )
                 # Window
                 now = time.time()
-                while count < 150:
+                while count < 300:
                     count += 1
                     fps = 1 / (time.time() - now)
                     if count != 1:
                         rsum += fps
-                    #print(f"fps: {fps}"
                     now = time.time()
                     
                     ret_val, frame = video_capture.read()
@@ -54,18 +53,12 @@ def show_camera():
                         else:
                             frame.flags.writeable = False
                             results = pose.process(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
-                            
-                            if not results.pose_landmarks:
-                                cv2.imshow(window_title, frame)
-                                continue
-                            
-                            #frame.flags.writeable = True
-                            #frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
-                    
-                            mp_drawing.draw_landmarks(frame, results.pose_landmarks, mp_pose.POSE_CONNECTIONS, landmark_drawing_spec=mp_drawing_styles.get_default_pose_landmarks_style())
-                    #show frame
-                            #print(frame.shape)
-                            cv2.putText(frame, f"{fps:.2}", (int(frame.shape[1] * 5 / 6), int(frame.shape[0] * 5 / 6)), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)
+                            #print(results.pose_landmarks)
+
+                            if results.pose_landmarks:
+                                mp_drawing.draw_landmarks(frame, results.pose_landmarks, mp_pose.POSE_CONNECTIONS, landmark_drawing_spec=mp_drawing_styles.get_default_pose_landmarks_style())
+                        #show frame
+                                cv2.putText(frame, f"{fps:.2}", (int(frame.shape[1] * 5 / 6), int(frame.shape[0] * 5 / 6)), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)
                             cv2.imshow(window_title, frame)
                       
                     else:
