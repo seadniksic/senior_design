@@ -6,7 +6,7 @@
 class UartWriteBuffer : public ::EmbeddedProto::WriteBufferInterface
 {
     //! Store a maximum of MAX_SIZE bytes in the buffer
-    static constexpr uint32_t MAX_SIZE = 50;
+    static constexpr uint32_t MAX_SIZE = 100;
 
   public:
     UartWriteBuffer() = default;

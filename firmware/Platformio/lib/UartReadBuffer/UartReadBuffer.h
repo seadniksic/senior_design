@@ -6,7 +6,7 @@
 class UartReadBuffer : public ::EmbeddedProto::ReadBufferInterface
 {
 
-    static constexpr uint32_t MAX_SIZE = 50;
+    static constexpr uint32_t MAX_SIZE = 100;
 
 public:
     UartReadBuffer();

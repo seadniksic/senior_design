@@ -47,56 +47,145 @@
 // Include external proto definitions
 
 
-class Command final: public ::EmbeddedProto::MessageInterface
+class Joystick_Input final: public ::EmbeddedProto::MessageInterface
 {
   public:
-    Command() = default;
-    Command(const Command& rhs )
+    Joystick_Input() = default;
+    Joystick_Input(const Joystick_Input& rhs )
     {
-      set_value(rhs.get_value());
+      set_button(rhs.get_button());
+      set_LJOY(rhs.get_LJOY());
+      set_RJOY(rhs.get_RJOY());
+      set_TR(rhs.get_TR());
+      set_TL(rhs.get_TL());
     }
 
-    Command(const Command&& rhs ) noexcept
+    Joystick_Input(const Joystick_Input&& rhs ) noexcept
     {
-      set_value(rhs.get_value());
+      set_button(rhs.get_button());
+      set_LJOY(rhs.get_LJOY());
+      set_RJOY(rhs.get_RJOY());
+      set_TR(rhs.get_TR());
+      set_TL(rhs.get_TL());
     }
 
-    ~Command() override = default;
+    ~Joystick_Input() override = default;
+
+    enum class Buttons : uint32_t
+    {
+      BTN_A = 0,
+      BTN_B = 1,
+      BTN_X = 2,
+      BTN_Y = 3,
+      BTN_START = 4,
+      BTN_SELECT = 5,
+      DPAD_UP = 6,
+      DPAD_DOWN = 7,
+      DPAD_LEFT = 8,
+      DPAD_RIGHT = 9,
+      BTN_THUMBR = 10,
+      BTN_THUMBL = 11,
+      BTN_TR = 12,
+      BTN_TL = 13
+    };
 
     enum class FieldNumber : uint32_t
     {
       NOT_SET = 0,
-      VALUE = 1
+      BUTTON = 1,
+      LJOY = 2,
+      RJOY = 3,
+      TR = 4,
+      TL = 5
     };
 
-    Command& operator=(const Command& rhs)
+    Joystick_Input& operator=(const Joystick_Input& rhs)
     {
-      set_value(rhs.get_value());
+      set_button(rhs.get_button());
+      set_LJOY(rhs.get_LJOY());
+      set_RJOY(rhs.get_RJOY());
+      set_TR(rhs.get_TR());
+      set_TL(rhs.get_TL());
       return *this;
     }
 
-    Command& operator=(const Command&& rhs) noexcept
+    Joystick_Input& operator=(const Joystick_Input&& rhs) noexcept
     {
-      set_value(rhs.get_value());
+      set_button(rhs.get_button());
+      set_LJOY(rhs.get_LJOY());
+      set_RJOY(rhs.get_RJOY());
+      set_TR(rhs.get_TR());
+      set_TL(rhs.get_TL());
       return *this;
     }
 
-    static constexpr char const* VALUE_NAME = "value";
-    inline void clear_value() { value_.clear(); }
-    inline void set_value(const uint32_t& value) { value_ = value; }
-    inline void set_value(const uint32_t&& value) { value_ = value; }
-    inline uint32_t& mutable_value() { return value_.get(); }
-    inline const uint32_t& get_value() const { return value_.get(); }
-    inline uint32_t value() const { return value_.get(); }
+    static constexpr char const* BUTTON_NAME = "button";
+    inline void clear_button() { button_.clear(); }
+    inline void set_button(const Buttons& value) { button_ = value; }
+    inline void set_button(const Buttons&& value) { button_ = value; }
+    inline const Buttons& get_button() const { return button_.get(); }
+    inline Buttons button() const { return button_.get(); }
+
+    static constexpr char const* LJOY_NAME = "LJOY";
+    inline void clear_LJOY() { LJOY_.clear(); }
+    inline void set_LJOY(const int32_t& value) { LJOY_ = value; }
+    inline void set_LJOY(const int32_t&& value) { LJOY_ = value; }
+    inline int32_t& mutable_LJOY() { return LJOY_.get(); }
+    inline const int32_t& get_LJOY() const { return LJOY_.get(); }
+    inline int32_t LJOY() const { return LJOY_.get(); }
+
+    static constexpr char const* RJOY_NAME = "RJOY";
+    inline void clear_RJOY() { RJOY_.clear(); }
+    inline void set_RJOY(const int32_t& value) { RJOY_ = value; }
+    inline void set_RJOY(const int32_t&& value) { RJOY_ = value; }
+    inline int32_t& mutable_RJOY() { return RJOY_.get(); }
+    inline const int32_t& get_RJOY() const { return RJOY_.get(); }
+    inline int32_t RJOY() const { return RJOY_.get(); }
+
+    static constexpr char const* TR_NAME = "TR";
+    inline void clear_TR() { TR_.clear(); }
+    inline void set_TR(const int32_t& value) { TR_ = value; }
+    inline void set_TR(const int32_t&& value) { TR_ = value; }
+    inline int32_t& mutable_TR() { return TR_.get(); }
+    inline const int32_t& get_TR() const { return TR_.get(); }
+    inline int32_t TR() const { return TR_.get(); }
+
+    static constexpr char const* TL_NAME = "TL";
+    inline void clear_TL() { TL_.clear(); }
+    inline void set_TL(const int32_t& value) { TL_ = value; }
+    inline void set_TL(const int32_t&& value) { TL_ = value; }
+    inline int32_t& mutable_TL() { return TL_.get(); }
+    inline const int32_t& get_TL() const { return TL_.get(); }
+    inline int32_t TL() const { return TL_.get(); }
 
 
     ::EmbeddedProto::Error serialize(::EmbeddedProto::WriteBufferInterface& buffer) const override
     {
       ::EmbeddedProto::Error return_value = ::EmbeddedProto::Error::NO_ERRORS;
 
-      if((0U != value_.get()) && (::EmbeddedProto::Error::NO_ERRORS == return_value))
+      if((static_cast<Buttons>(0) != button_.get()) && (::EmbeddedProto::Error::NO_ERRORS == return_value))
       {
-        return_value = value_.serialize_with_id(static_cast<uint32_t>(FieldNumber::VALUE), buffer, false);
+        return_value = button_.serialize_with_id(static_cast<uint32_t>(FieldNumber::BUTTON), buffer, false);
+      }
+
+      if((0 != LJOY_.get()) && (::EmbeddedProto::Error::NO_ERRORS == return_value))
+      {
+        return_value = LJOY_.serialize_with_id(static_cast<uint32_t>(FieldNumber::LJOY), buffer, false);
+      }
+
+      if((0 != RJOY_.get()) && (::EmbeddedProto::Error::NO_ERRORS == return_value))
+      {
+        return_value = RJOY_.serialize_with_id(static_cast<uint32_t>(FieldNumber::RJOY), buffer, false);
+      }
+
+      if((0 != TR_.get()) && (::EmbeddedProto::Error::NO_ERRORS == return_value))
+      {
+        return_value = TR_.serialize_with_id(static_cast<uint32_t>(FieldNumber::TR), buffer, false);
+      }
+
+      if((0 != TL_.get()) && (::EmbeddedProto::Error::NO_ERRORS == return_value))
+      {
+        return_value = TL_.serialize_with_id(static_cast<uint32_t>(FieldNumber::TL), buffer, false);
       }
 
       return return_value;
@@ -115,8 +204,24 @@ class Command final: public ::EmbeddedProto::MessageInterface
         id_tag = static_cast<FieldNumber>(id_number);
         switch(id_tag)
         {
-          case FieldNumber::VALUE:
-            return_value = value_.deserialize_check_type(buffer, wire_type);
+          case FieldNumber::BUTTON:
+            return_value = button_.deserialize_check_type(buffer, wire_type);
+            break;
+
+          case FieldNumber::LJOY:
+            return_value = LJOY_.deserialize_check_type(buffer, wire_type);
+            break;
+
+          case FieldNumber::RJOY:
+            return_value = RJOY_.deserialize_check_type(buffer, wire_type);
+            break;
+
+          case FieldNumber::TR:
+            return_value = TR_.deserialize_check_type(buffer, wire_type);
+            break;
+
+          case FieldNumber::TL:
+            return_value = TL_.deserialize_check_type(buffer, wire_type);
             break;
 
           case FieldNumber::NOT_SET:
@@ -148,7 +253,11 @@ class Command final: public ::EmbeddedProto::MessageInterface
 
     void clear() override
     {
-      clear_value();
+      clear_button();
+      clear_LJOY();
+      clear_RJOY();
+      clear_TR();
+      clear_TL();
 
     }
 
@@ -157,8 +266,20 @@ class Command final: public ::EmbeddedProto::MessageInterface
       char const* name = nullptr;
       switch(fieldNumber)
       {
-        case FieldNumber::VALUE:
-          name = VALUE_NAME;
+        case FieldNumber::BUTTON:
+          name = BUTTON_NAME;
+          break;
+        case FieldNumber::LJOY:
+          name = LJOY_NAME;
+          break;
+        case FieldNumber::RJOY:
+          name = RJOY_NAME;
+          break;
+        case FieldNumber::TR:
+          name = TR_NAME;
+          break;
+        case FieldNumber::TL:
+          name = TL_NAME;
           break;
         default:
           name = "Invalid FieldNumber";
@@ -220,7 +341,11 @@ class Command final: public ::EmbeddedProto::MessageInterface
         left_chars.size -= n_chars_used;
       }
 
-      left_chars = value_.to_string(left_chars, indent_level + 2, VALUE_NAME, true);
+      left_chars = button_.to_string(left_chars, indent_level + 2, BUTTON_NAME, true);
+      left_chars = LJOY_.to_string(left_chars, indent_level + 2, LJOY_NAME, false);
+      left_chars = RJOY_.to_string(left_chars, indent_level + 2, RJOY_NAME, false);
+      left_chars = TR_.to_string(left_chars, indent_level + 2, TR_NAME, false);
+      left_chars = TL_.to_string(left_chars, indent_level + 2, TL_NAME, false);
   
       if( 0 == indent_level) 
       {
@@ -245,7 +370,11 @@ class Command final: public ::EmbeddedProto::MessageInterface
   private:
 
 
-      EmbeddedProto::uint32 value_ = 0U;
+      EmbeddedProto::enumeration<Buttons> button_ = static_cast<Buttons>(0);
+      EmbeddedProto::int32 LJOY_ = 0;
+      EmbeddedProto::int32 RJOY_ = 0;
+      EmbeddedProto::int32 TR_ = 0;
+      EmbeddedProto::int32 TL_ = 0;
 
 };
 

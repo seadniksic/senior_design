@@ -39,8 +39,9 @@ void main_prog()
   //protobuf shit
   UartReadBuffer read_buffer;
   UartWriteBuffer write_buffer;
-  Command received_command;
+  Joystick_Input js_in;
   Reply outgoing_reply;
+  elapsedMillis rcv_clock;
   
   bool print_once = false;
 
@@ -65,6 +66,97 @@ void main_prog()
     // bno055::print_calibration();
 
     // protobuf
+    // now the first byte will be a special sync byte indicating start of message. 
+    #define SYNC_BYTE 0x64
+    #define TIMEOUT 15 //ms
+    // the second byte will be the number of messages
+    uint8_t num_bytes = 0;
+    uint8_t data;
+    bool available_packet = false;
+    if(HWSERIAL.available() > 0)
+    {
+      data = HWSERIAL.read();
+      if(data == SYNC_BYTE)
+      {
+        // found start of message
+        rcv_clock = 0; //reset elaspedmillis
+        while(1)
+        {
+          // check for timeout.
+          if(rcv_clock > TIMEOUT)
+          {
+            Serial.print("Message timeout!");
+            break;
+          }
+
+          // read number of bytes
+          if(HWSERIAL.available() > 0)
+          {
+            num_bytes = HWSERIAL.read();
+          }
+
+          // read the actual message.
+          if(num_bytes != 0 && HWSERIAL.available() > 0)
+          {
+            data = HWSERIAL.read();
+            read_buffer.push(data);
+            if(--num_bytes == 0)
+            {
+              available_packet = true;
+              break;
+            } 
+          }
+        }
+      }
+      else
+      {
+        Serial.print("sync byte not found yet.");
+      }
+    }
+
+    if(available_packet)
+    {
+      auto deserialize_status = js_in.deserialize(read_buffer);
+      if(::EmbeddedProto::Error::NO_ERRORS == deserialize_status)
+      {
+        uint32_t btn_status = js_in.get_button();
+        // returns enum class Buttons derived from uint32_t type.
+        // so should be able to bit shift.
+        // theres 14 fields in buttons
+        for(uint8_t i = 0; i < 14; i++)
+        {
+          if((btn_status >> i) & 0x1)
+          {
+            Serial.printf("%u: 1, ", i);
+          }
+          else
+          {
+            Serial.printf("%u: 0, ", i);
+          }
+          // Serial.println();
+        }
+
+
+
+        
+
+
+
+      }
+
+      available_packet = false;
+
+    }
+
+
+
+
+
+
+
+
+
+    #if 0
     uint8_t data;
 
     // read all of the data
@@ -88,6 +180,7 @@ void main_prog()
 
       print_once = true;
     }
+    #endif
 
     read_buffer.clear();
     write_buffer.clear();
