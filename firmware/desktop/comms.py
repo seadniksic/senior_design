@@ -15,6 +15,42 @@ if __name__ == "__main__":
     )
 
     time.sleep(1)
+
+    sync_byte = 100 # 0x64
+
+    while True:
+
+        # store joy message
+        proto_msg = uart_messages_pb2.Joystick_Input()
+
+        # create byte array for the data to send
+        b = bytearray()
+
+        # store the sync byte
+        # length is the number of bytes it will use when it converts count
+        b.extend(sync_byte.to_bytes(length=1, byteorder='little', signed=False))
+
+        #prepare the proto message to send
+        proto_msg.button = uart_messages_pb2.Joystick_Input.BTN_TR #| uart_messages_pb2.Joystick_Input.BTN_TR
+        # serialize the data
+        proto_msg_serialized = proto_msg.SerializeToString()
+
+        # store the length of the message and add it to be sent
+        msg_len = len(proto_msg_serialized)
+        print(proto_msg_serialized)
+        print(msg_len)
+        b.extend(msg_len.to_bytes(length=1, byteorder='little', signed = False))
+        
+        # add the proto data
+        b.extend(proto_msg_serialized)
+        sp.write(b)
+
+
+        time.sleep(1)
+
+    # code below will not run
+    exit()
+
     count = 0
     
     while True:
