@@ -68,7 +68,7 @@ void main_prog()
     // protobuf
     // now the first byte will be a special sync byte indicating start of message. 
     #define SYNC_BYTE 0x64
-    #define TIMEOUT 15 //ms
+    #define TIMEOUT 30 //ms
     // the second byte will be the number of messages
     uint8_t num_bytes = 0;
     uint8_t data;
@@ -79,20 +79,23 @@ void main_prog()
       if(data == SYNC_BYTE)
       {
         // found start of message
+        // read number of bytes to read
+        while(HWSERIAL.available() < 0)
+        {
+          //stall till the next byte comes in
+        }
+
+        // read the number of bytes
+        num_bytes = HWSERIAL.read();
+
         rcv_clock = 0; //reset elaspedmillis
         while(1)
         {
           // check for timeout.
           if(rcv_clock > TIMEOUT)
           {
-            Serial.print("Message timeout!");
+            Serial.println("Message timeout!");
             break;
-          }
-
-          // read number of bytes
-          if(HWSERIAL.available() > 0)
-          {
-            num_bytes = HWSERIAL.read();
           }
 
           // read the actual message.
@@ -110,7 +113,7 @@ void main_prog()
       }
       else
       {
-        Serial.print("sync byte not found yet.");
+        Serial.println("sync byte not found yet.");
       }
     }
 
@@ -119,7 +122,9 @@ void main_prog()
       auto deserialize_status = js_in.deserialize(read_buffer);
       if(::EmbeddedProto::Error::NO_ERRORS == deserialize_status)
       {
-        uint32_t btn_status = js_in.get_button();
+        auto btns = js_in.get_button();
+        uint32_t btn_status = (uint32_t)btns;
+        // Serial.println(btn_status);
         // returns enum class Buttons derived from uint32_t type.
         // so should be able to bit shift.
         // theres 14 fields in buttons
@@ -133,8 +138,9 @@ void main_prog()
           {
             Serial.printf("%u: 0, ", i);
           }
-          // Serial.println();
         }
+        Serial.println();
+        
 
 
 
