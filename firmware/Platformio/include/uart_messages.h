@@ -62,22 +62,40 @@ class Joystick_Input final: public ::EmbeddedProto::MessageInterface
         clear_button();
       }
 
-      if(rhs.has_LJOY())
+      if(rhs.has_LJOY_X())
       {
-        set_LJOY(rhs.get_LJOY());
+        set_LJOY_X(rhs.get_LJOY_X());
       }
       else
       {
-        clear_LJOY();
+        clear_LJOY_X();
       }
 
-      if(rhs.has_RJOY())
+      if(rhs.has_LJOY_Y())
       {
-        set_RJOY(rhs.get_RJOY());
+        set_LJOY_Y(rhs.get_LJOY_Y());
       }
       else
       {
-        clear_RJOY();
+        clear_LJOY_Y();
+      }
+
+      if(rhs.has_RJOY_X())
+      {
+        set_RJOY_X(rhs.get_RJOY_X());
+      }
+      else
+      {
+        clear_RJOY_X();
+      }
+
+      if(rhs.has_RJOY_Y())
+      {
+        set_RJOY_Y(rhs.get_RJOY_Y());
+      }
+      else
+      {
+        clear_RJOY_Y();
       }
 
       if(rhs.has_TR())
@@ -111,22 +129,40 @@ class Joystick_Input final: public ::EmbeddedProto::MessageInterface
         clear_button();
       }
 
-      if(rhs.has_LJOY())
+      if(rhs.has_LJOY_X())
       {
-        set_LJOY(rhs.get_LJOY());
+        set_LJOY_X(rhs.get_LJOY_X());
       }
       else
       {
-        clear_LJOY();
+        clear_LJOY_X();
       }
 
-      if(rhs.has_RJOY())
+      if(rhs.has_LJOY_Y())
       {
-        set_RJOY(rhs.get_RJOY());
+        set_LJOY_Y(rhs.get_LJOY_Y());
       }
       else
       {
-        clear_RJOY();
+        clear_LJOY_Y();
+      }
+
+      if(rhs.has_RJOY_X())
+      {
+        set_RJOY_X(rhs.get_RJOY_X());
+      }
+      else
+      {
+        clear_RJOY_X();
+      }
+
+      if(rhs.has_RJOY_Y())
+      {
+        set_RJOY_Y(rhs.get_RJOY_Y());
+      }
+      else
+      {
+        clear_RJOY_Y();
       }
 
       if(rhs.has_TR())
@@ -174,10 +210,12 @@ class Joystick_Input final: public ::EmbeddedProto::MessageInterface
     {
       NOT_SET = 0,
       BUTTON = 1,
-      LJOY = 2,
-      RJOY = 3,
-      TR = 4,
-      TL = 5
+      LJOY_X = 2,
+      LJOY_Y = 3,
+      RJOY_X = 4,
+      RJOY_Y = 5,
+      TR = 6,
+      TL = 7
     };
 
     Joystick_Input& operator=(const Joystick_Input& rhs)
@@ -191,22 +229,40 @@ class Joystick_Input final: public ::EmbeddedProto::MessageInterface
         clear_button();
       }
 
-      if(rhs.has_LJOY())
+      if(rhs.has_LJOY_X())
       {
-        set_LJOY(rhs.get_LJOY());
+        set_LJOY_X(rhs.get_LJOY_X());
       }
       else
       {
-        clear_LJOY();
+        clear_LJOY_X();
       }
 
-      if(rhs.has_RJOY())
+      if(rhs.has_LJOY_Y())
       {
-        set_RJOY(rhs.get_RJOY());
+        set_LJOY_Y(rhs.get_LJOY_Y());
       }
       else
       {
-        clear_RJOY();
+        clear_LJOY_Y();
+      }
+
+      if(rhs.has_RJOY_X())
+      {
+        set_RJOY_X(rhs.get_RJOY_X());
+      }
+      else
+      {
+        clear_RJOY_X();
+      }
+
+      if(rhs.has_RJOY_Y())
+      {
+        set_RJOY_Y(rhs.get_RJOY_Y());
+      }
+      else
+      {
+        clear_RJOY_Y();
       }
 
       if(rhs.has_TR())
@@ -241,22 +297,40 @@ class Joystick_Input final: public ::EmbeddedProto::MessageInterface
         clear_button();
       }
       
-      if(rhs.has_LJOY())
+      if(rhs.has_LJOY_X())
       {
-        set_LJOY(rhs.get_LJOY());
+        set_LJOY_X(rhs.get_LJOY_X());
       }
       else
       {
-        clear_LJOY();
+        clear_LJOY_X();
       }
       
-      if(rhs.has_RJOY())
+      if(rhs.has_LJOY_Y())
       {
-        set_RJOY(rhs.get_RJOY());
+        set_LJOY_Y(rhs.get_LJOY_Y());
       }
       else
       {
-        clear_RJOY();
+        clear_LJOY_Y();
+      }
+      
+      if(rhs.has_RJOY_X())
+      {
+        set_RJOY_X(rhs.get_RJOY_X());
+      }
+      else
+      {
+        clear_RJOY_X();
+      }
+      
+      if(rhs.has_RJOY_Y())
+      {
+        set_RJOY_Y(rhs.get_RJOY_Y());
+      }
+      else
+      {
+        clear_RJOY_Y();
       }
       
       if(rhs.has_TR())
@@ -303,61 +377,117 @@ class Joystick_Input final: public ::EmbeddedProto::MessageInterface
     inline const Buttons& get_button() const { return button_.get(); }
     inline Buttons button() const { return button_.get(); }
 
-    static constexpr char const* LJOY_NAME = "LJOY";
-    inline bool has_LJOY() const
+    static constexpr char const* LJOY_X_NAME = "LJOY_X";
+    inline bool has_LJOY_X() const
     {
-      return 0 != (presence::mask(presence::fields::LJOY) & presence_[presence::index(presence::fields::LJOY)]);
+      return 0 != (presence::mask(presence::fields::LJOY_X) & presence_[presence::index(presence::fields::LJOY_X)]);
     }
-    inline void clear_LJOY()
+    inline void clear_LJOY_X()
     {
-      presence_[presence::index(presence::fields::LJOY)] &= ~(presence::mask(presence::fields::LJOY));
-      LJOY_.clear();
+      presence_[presence::index(presence::fields::LJOY_X)] &= ~(presence::mask(presence::fields::LJOY_X));
+      LJOY_X_.clear();
     }
-    inline void set_LJOY(const int32_t& value)
+    inline void set_LJOY_X(const int32_t& value)
     {
-      presence_[presence::index(presence::fields::LJOY)] |= presence::mask(presence::fields::LJOY);
-      LJOY_ = value;
+      presence_[presence::index(presence::fields::LJOY_X)] |= presence::mask(presence::fields::LJOY_X);
+      LJOY_X_ = value;
     }
-    inline void set_LJOY(const int32_t&& value)
+    inline void set_LJOY_X(const int32_t&& value)
     {
-      presence_[presence::index(presence::fields::LJOY)] |= presence::mask(presence::fields::LJOY);
-      LJOY_ = value;
+      presence_[presence::index(presence::fields::LJOY_X)] |= presence::mask(presence::fields::LJOY_X);
+      LJOY_X_ = value;
     }
-    inline int32_t& mutable_LJOY()
+    inline int32_t& mutable_LJOY_X()
     {
-      presence_[presence::index(presence::fields::LJOY)] |= presence::mask(presence::fields::LJOY);
-      return LJOY_.get();
+      presence_[presence::index(presence::fields::LJOY_X)] |= presence::mask(presence::fields::LJOY_X);
+      return LJOY_X_.get();
     }
-    inline const int32_t& get_LJOY() const { return LJOY_.get(); }
-    inline int32_t LJOY() const { return LJOY_.get(); }
+    inline const int32_t& get_LJOY_X() const { return LJOY_X_.get(); }
+    inline int32_t LJOY_X() const { return LJOY_X_.get(); }
 
-    static constexpr char const* RJOY_NAME = "RJOY";
-    inline bool has_RJOY() const
+    static constexpr char const* LJOY_Y_NAME = "LJOY_Y";
+    inline bool has_LJOY_Y() const
     {
-      return 0 != (presence::mask(presence::fields::RJOY) & presence_[presence::index(presence::fields::RJOY)]);
+      return 0 != (presence::mask(presence::fields::LJOY_Y) & presence_[presence::index(presence::fields::LJOY_Y)]);
     }
-    inline void clear_RJOY()
+    inline void clear_LJOY_Y()
     {
-      presence_[presence::index(presence::fields::RJOY)] &= ~(presence::mask(presence::fields::RJOY));
-      RJOY_.clear();
+      presence_[presence::index(presence::fields::LJOY_Y)] &= ~(presence::mask(presence::fields::LJOY_Y));
+      LJOY_Y_.clear();
     }
-    inline void set_RJOY(const int32_t& value)
+    inline void set_LJOY_Y(const int32_t& value)
     {
-      presence_[presence::index(presence::fields::RJOY)] |= presence::mask(presence::fields::RJOY);
-      RJOY_ = value;
+      presence_[presence::index(presence::fields::LJOY_Y)] |= presence::mask(presence::fields::LJOY_Y);
+      LJOY_Y_ = value;
     }
-    inline void set_RJOY(const int32_t&& value)
+    inline void set_LJOY_Y(const int32_t&& value)
     {
-      presence_[presence::index(presence::fields::RJOY)] |= presence::mask(presence::fields::RJOY);
-      RJOY_ = value;
+      presence_[presence::index(presence::fields::LJOY_Y)] |= presence::mask(presence::fields::LJOY_Y);
+      LJOY_Y_ = value;
     }
-    inline int32_t& mutable_RJOY()
+    inline int32_t& mutable_LJOY_Y()
     {
-      presence_[presence::index(presence::fields::RJOY)] |= presence::mask(presence::fields::RJOY);
-      return RJOY_.get();
+      presence_[presence::index(presence::fields::LJOY_Y)] |= presence::mask(presence::fields::LJOY_Y);
+      return LJOY_Y_.get();
     }
-    inline const int32_t& get_RJOY() const { return RJOY_.get(); }
-    inline int32_t RJOY() const { return RJOY_.get(); }
+    inline const int32_t& get_LJOY_Y() const { return LJOY_Y_.get(); }
+    inline int32_t LJOY_Y() const { return LJOY_Y_.get(); }
+
+    static constexpr char const* RJOY_X_NAME = "RJOY_X";
+    inline bool has_RJOY_X() const
+    {
+      return 0 != (presence::mask(presence::fields::RJOY_X) & presence_[presence::index(presence::fields::RJOY_X)]);
+    }
+    inline void clear_RJOY_X()
+    {
+      presence_[presence::index(presence::fields::RJOY_X)] &= ~(presence::mask(presence::fields::RJOY_X));
+      RJOY_X_.clear();
+    }
+    inline void set_RJOY_X(const int32_t& value)
+    {
+      presence_[presence::index(presence::fields::RJOY_X)] |= presence::mask(presence::fields::RJOY_X);
+      RJOY_X_ = value;
+    }
+    inline void set_RJOY_X(const int32_t&& value)
+    {
+      presence_[presence::index(presence::fields::RJOY_X)] |= presence::mask(presence::fields::RJOY_X);
+      RJOY_X_ = value;
+    }
+    inline int32_t& mutable_RJOY_X()
+    {
+      presence_[presence::index(presence::fields::RJOY_X)] |= presence::mask(presence::fields::RJOY_X);
+      return RJOY_X_.get();
+    }
+    inline const int32_t& get_RJOY_X() const { return RJOY_X_.get(); }
+    inline int32_t RJOY_X() const { return RJOY_X_.get(); }
+
+    static constexpr char const* RJOY_Y_NAME = "RJOY_Y";
+    inline bool has_RJOY_Y() const
+    {
+      return 0 != (presence::mask(presence::fields::RJOY_Y) & presence_[presence::index(presence::fields::RJOY_Y)]);
+    }
+    inline void clear_RJOY_Y()
+    {
+      presence_[presence::index(presence::fields::RJOY_Y)] &= ~(presence::mask(presence::fields::RJOY_Y));
+      RJOY_Y_.clear();
+    }
+    inline void set_RJOY_Y(const int32_t& value)
+    {
+      presence_[presence::index(presence::fields::RJOY_Y)] |= presence::mask(presence::fields::RJOY_Y);
+      RJOY_Y_ = value;
+    }
+    inline void set_RJOY_Y(const int32_t&& value)
+    {
+      presence_[presence::index(presence::fields::RJOY_Y)] |= presence::mask(presence::fields::RJOY_Y);
+      RJOY_Y_ = value;
+    }
+    inline int32_t& mutable_RJOY_Y()
+    {
+      presence_[presence::index(presence::fields::RJOY_Y)] |= presence::mask(presence::fields::RJOY_Y);
+      return RJOY_Y_.get();
+    }
+    inline const int32_t& get_RJOY_Y() const { return RJOY_Y_.get(); }
+    inline int32_t RJOY_Y() const { return RJOY_Y_.get(); }
 
     static constexpr char const* TR_NAME = "TR";
     inline bool has_TR() const
@@ -425,14 +555,24 @@ class Joystick_Input final: public ::EmbeddedProto::MessageInterface
         return_value = button_.serialize_with_id(static_cast<uint32_t>(FieldNumber::BUTTON), buffer, true);
       }
 
-      if(has_LJOY() && (::EmbeddedProto::Error::NO_ERRORS == return_value))
+      if(has_LJOY_X() && (::EmbeddedProto::Error::NO_ERRORS == return_value))
       {
-        return_value = LJOY_.serialize_with_id(static_cast<uint32_t>(FieldNumber::LJOY), buffer, true);
+        return_value = LJOY_X_.serialize_with_id(static_cast<uint32_t>(FieldNumber::LJOY_X), buffer, true);
       }
 
-      if(has_RJOY() && (::EmbeddedProto::Error::NO_ERRORS == return_value))
+      if(has_LJOY_Y() && (::EmbeddedProto::Error::NO_ERRORS == return_value))
       {
-        return_value = RJOY_.serialize_with_id(static_cast<uint32_t>(FieldNumber::RJOY), buffer, true);
+        return_value = LJOY_Y_.serialize_with_id(static_cast<uint32_t>(FieldNumber::LJOY_Y), buffer, true);
+      }
+
+      if(has_RJOY_X() && (::EmbeddedProto::Error::NO_ERRORS == return_value))
+      {
+        return_value = RJOY_X_.serialize_with_id(static_cast<uint32_t>(FieldNumber::RJOY_X), buffer, true);
+      }
+
+      if(has_RJOY_Y() && (::EmbeddedProto::Error::NO_ERRORS == return_value))
+      {
+        return_value = RJOY_Y_.serialize_with_id(static_cast<uint32_t>(FieldNumber::RJOY_Y), buffer, true);
       }
 
       if(has_TR() && (::EmbeddedProto::Error::NO_ERRORS == return_value))
@@ -466,14 +606,24 @@ class Joystick_Input final: public ::EmbeddedProto::MessageInterface
             return_value = button_.deserialize_check_type(buffer, wire_type);
             break;
 
-          case FieldNumber::LJOY:
-            presence_[presence::index(presence::fields::LJOY)] |= presence::mask(presence::fields::LJOY);
-            return_value = LJOY_.deserialize_check_type(buffer, wire_type);
+          case FieldNumber::LJOY_X:
+            presence_[presence::index(presence::fields::LJOY_X)] |= presence::mask(presence::fields::LJOY_X);
+            return_value = LJOY_X_.deserialize_check_type(buffer, wire_type);
             break;
 
-          case FieldNumber::RJOY:
-            presence_[presence::index(presence::fields::RJOY)] |= presence::mask(presence::fields::RJOY);
-            return_value = RJOY_.deserialize_check_type(buffer, wire_type);
+          case FieldNumber::LJOY_Y:
+            presence_[presence::index(presence::fields::LJOY_Y)] |= presence::mask(presence::fields::LJOY_Y);
+            return_value = LJOY_Y_.deserialize_check_type(buffer, wire_type);
+            break;
+
+          case FieldNumber::RJOY_X:
+            presence_[presence::index(presence::fields::RJOY_X)] |= presence::mask(presence::fields::RJOY_X);
+            return_value = RJOY_X_.deserialize_check_type(buffer, wire_type);
+            break;
+
+          case FieldNumber::RJOY_Y:
+            presence_[presence::index(presence::fields::RJOY_Y)] |= presence::mask(presence::fields::RJOY_Y);
+            return_value = RJOY_Y_.deserialize_check_type(buffer, wire_type);
             break;
 
           case FieldNumber::TR:
@@ -516,8 +666,10 @@ class Joystick_Input final: public ::EmbeddedProto::MessageInterface
     void clear() override
     {
       clear_button();
-      clear_LJOY();
-      clear_RJOY();
+      clear_LJOY_X();
+      clear_LJOY_Y();
+      clear_RJOY_X();
+      clear_RJOY_Y();
       clear_TR();
       clear_TL();
 
@@ -531,11 +683,17 @@ class Joystick_Input final: public ::EmbeddedProto::MessageInterface
         case FieldNumber::BUTTON:
           name = BUTTON_NAME;
           break;
-        case FieldNumber::LJOY:
-          name = LJOY_NAME;
+        case FieldNumber::LJOY_X:
+          name = LJOY_X_NAME;
           break;
-        case FieldNumber::RJOY:
-          name = RJOY_NAME;
+        case FieldNumber::LJOY_Y:
+          name = LJOY_Y_NAME;
+          break;
+        case FieldNumber::RJOY_X:
+          name = RJOY_X_NAME;
+          break;
+        case FieldNumber::RJOY_Y:
+          name = RJOY_Y_NAME;
           break;
         case FieldNumber::TR:
           name = TR_NAME;
@@ -604,8 +762,10 @@ class Joystick_Input final: public ::EmbeddedProto::MessageInterface
       }
 
       left_chars = button_.to_string(left_chars, indent_level + 2, BUTTON_NAME, true);
-      left_chars = LJOY_.to_string(left_chars, indent_level + 2, LJOY_NAME, false);
-      left_chars = RJOY_.to_string(left_chars, indent_level + 2, RJOY_NAME, false);
+      left_chars = LJOY_X_.to_string(left_chars, indent_level + 2, LJOY_X_NAME, false);
+      left_chars = LJOY_Y_.to_string(left_chars, indent_level + 2, LJOY_Y_NAME, false);
+      left_chars = RJOY_X_.to_string(left_chars, indent_level + 2, RJOY_X_NAME, false);
+      left_chars = RJOY_Y_.to_string(left_chars, indent_level + 2, RJOY_Y_NAME, false);
       left_chars = TR_.to_string(left_chars, indent_level + 2, TR_NAME, false);
       left_chars = TL_.to_string(left_chars, indent_level + 2, TL_NAME, false);
   
@@ -639,14 +799,16 @@ class Joystick_Input final: public ::EmbeddedProto::MessageInterface
         enum class fields : uint32_t
         {
           BUTTON,
-          LJOY,
-          RJOY,
+          LJOY_X,
+          LJOY_Y,
+          RJOY_X,
+          RJOY_Y,
           TR,
           TL
         };
 
         // The number of fields for which presence has to be tracked.
-        static constexpr uint32_t N_FIELDS = 5;
+        static constexpr uint32_t N_FIELDS = 7;
 
         // Which type are we using to track presence.
         using TYPE = uint32_t;
@@ -671,8 +833,10 @@ class Joystick_Input final: public ::EmbeddedProto::MessageInterface
       typename presence::TYPE presence_[presence::SIZE] = {0};
 
       EmbeddedProto::enumeration<Buttons> button_ = static_cast<Buttons>(0);
-      EmbeddedProto::int32 LJOY_ = 0;
-      EmbeddedProto::int32 RJOY_ = 0;
+      EmbeddedProto::int32 LJOY_X_ = 0;
+      EmbeddedProto::int32 LJOY_Y_ = 0;
+      EmbeddedProto::int32 RJOY_X_ = 0;
+      EmbeddedProto::int32 RJOY_Y_ = 0;
       EmbeddedProto::int32 TR_ = 0;
       EmbeddedProto::int32 TL_ = 0;
 

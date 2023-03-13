@@ -26,10 +26,12 @@ message Joystick_Input
     }
 
     optional Buttons button = 1; // bit per button
-    optional int32 LJOY = 2; // int16_t
-    optional int32 RJOY = 3;
-    optional int32 TR = 4; //uint8_t
-    optional int32 TL = 5;
+    optional int32 LJOY_X = 2; // int16_t
+    optional int32 LJOY_Y = 3;
+    optional int32 RJOY_X = 4;
+    optional int32 RJOY_Y = 5;
+    optional int32 TR = 6; //uint8_t
+    optional int32 TL = 7;
 }
 
 message Reply

@@ -122,8 +122,7 @@ void main_prog()
       auto deserialize_status = js_in.deserialize(read_buffer);
       if(::EmbeddedProto::Error::NO_ERRORS == deserialize_status)
       {
-        auto btns = js_in.get_button();
-        uint32_t btn_status = (uint32_t)btns;
+        uint32_t btn_status = (uint32_t)js_in.get_button();
         // Serial.println(btn_status);
         // returns enum class Buttons derived from uint32_t type.
         // so should be able to bit shift.
@@ -139,12 +138,22 @@ void main_prog()
             Serial.printf("%u: 0, ", i);
           }
         }
+        // Serial.println();
+
+        int16_t LJOY_X = (int16_t)js_in.get_LJOY_X();
+        int16_t LJOY_Y = (int16_t)js_in.get_LJOY_Y();
+        int16_t RJOY_X = (int16_t)js_in.get_RJOY_X();
+        int16_t RJOY_Y = (int16_t)js_in.get_RJOY_Y();
+        uint8_t TR = (uint8_t)js_in.get_TR();
+        uint8_t TL = (uint8_t)js_in.get_TL();
+
+        Serial.printf("LJOY_X: %6.0d, LJOY_Y: %6.0d, RJOY_X: %6.0d, RJOY_Y: %6.0d, TR: %u, TL: %u", LJOY_X, LJOY_Y, RJOY_X, RJOY_Y, TR, TL);
         Serial.println();
-        
+
       }
       else
       {
-        Serial.println("Failed to serialize message.")
+        Serial.println("Failed to serialize message.");
       }
 
       available_packet = false;
