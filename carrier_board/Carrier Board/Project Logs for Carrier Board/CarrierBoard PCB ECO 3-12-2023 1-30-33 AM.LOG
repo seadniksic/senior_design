@@ -1,0 +1,141 @@
+Removed Pin From Net: NetName=I2C1_SCL Pin=D1-1
+Removed Pin From Net: NetName=GND Pin=D1-2
+Removed Pin From Net: NetName=I2C1_SDA Pin=D2-1
+Removed Pin From Net: NetName=GND Pin=D2-2
+Removed Pin From Net: NetName=I2C_Backup_SCL Pin=D3-1
+Removed Pin From Net: NetName=GND Pin=D3-2
+Removed Pin From Net: NetName=I2C_Backup_SDA Pin=D4-1
+Removed Pin From Net: NetName=GND Pin=D4-2
+Removed Pin From Net: NetName=UART1_RX Pin=D5-1
+Removed Pin From Net: NetName=UART1_TX Pin=D5-2
+Removed Pin From Net: NetName=GND Pin=D5-3
+Removed Pin From Net: NetName=I2C1_SCL Pin=D5-4
+Removed Pin From Net: NetName=I2C1_SDA Pin=D5-5
+Removed Pin From Net: NetName=GND Pin=D5-8
+Change Component Footprint: Designator=D5 Old Footprint=DIO_TPD4E02B04DQAR New Footprint=SODFL3718X108N
+Change Component Footprint: Designator=D1 Old Footprint=ONSC-SOD-923-2-514AB-01_V New Footprint=SODFL3718X108N
+Change Component Footprint: Designator=D2 Old Footprint=ONSC-SOD-923-2-514AB-01_V New Footprint=SODFL3718X108N
+Change Component Footprint: Designator=D3 Old Footprint=ONSC-SOD-923-2-514AB-01_V New Footprint=SODFL3718X108N
+Change Component Footprint: Designator=D4 Old Footprint=ONSC-SOD-923-2-514AB-01_V New Footprint=SODFL3718X108N
+Change Component Comment : Designator=D1 Old Comment=ESD9L5.0ST5G New Comment=SMF3.3
+Change Component Comment : Designator=D2 Old Comment=ESD9L5.0ST5G New Comment=SMF3.3
+Change Component Comment : Designator=D3 Old Comment=ESD9L5.0ST5G New Comment=SMF3.3
+Change Component Comment : Designator=D4 Old Comment=ESD9L5.0ST5G New Comment=SMF3.3
+Change Component Comment : Designator=D5 Old Comment=TPD4E02B04DQAR New Comment=SMF3.3
+Change Managed Component Library Link : Designator=D1 Old VaultGUID=B7D15EC3-160A-466F-A46C-7801FE6295A7 New VaultGUID= Old ItemGUID=39987243-4BCD-492F-B792-F4EED326B4CE New ItemGUID= Old RevisionGUID=E7450407-B907-4DC7-B390-5F96B9238D74 New RevisionGUID=
+Change Managed Component Library Link : Designator=D2 Old VaultGUID=B7D15EC3-160A-466F-A46C-7801FE6295A7 New VaultGUID= Old ItemGUID=39987243-4BCD-492F-B792-F4EED326B4CE New ItemGUID= Old RevisionGUID=E7450407-B907-4DC7-B390-5F96B9238D74 New RevisionGUID=
+Change Managed Component Library Link : Designator=D3 Old VaultGUID=B7D15EC3-160A-466F-A46C-7801FE6295A7 New VaultGUID= Old ItemGUID=39987243-4BCD-492F-B792-F4EED326B4CE New ItemGUID= Old RevisionGUID=E7450407-B907-4DC7-B390-5F96B9238D74 New RevisionGUID=
+Change Managed Component Library Link : Designator=D4 Old VaultGUID=B7D15EC3-160A-466F-A46C-7801FE6295A7 New VaultGUID= Old ItemGUID=39987243-4BCD-492F-B792-F4EED326B4CE New ItemGUID= Old RevisionGUID=E7450407-B907-4DC7-B390-5F96B9238D74 New RevisionGUID=
+Change component parameters: Designator = "D1" ("D1"); Footprint = "ONSC-SOD-923-2-514AB-01_V"; UniqueID = "\JEHUVRBA" ("\JEHUVRBA")
+Change component parameters (AddParameter): Name = "Digi-Key_Part_Number"; Value = "F7701CT-ND"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Digi-Key_Purchase_URL"; Value = "https://www.digikey.ca/product-detail/en/littelfuse-inc/SMF3.3/F7701CT-ND/6189041?utm_source=snapeda&utm_medium=aggregator&utm_campaign=symbol"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "MF"; Value = "Littelfuse Inc."; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "MP"; Value = "SMF3.3"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Package"; Value = "SOD-123 Littelfuse"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "SnapEDA_Link"; Value = "https://www.snapeda.com/parts/SMF3.3/Littelfuse%20Inc./view-part/814507/?ref=snap"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Change component parameters: Designator = "D2" ("D2"); Footprint = "ONSC-SOD-923-2-514AB-01_V"; UniqueID = "\RRNBNIIL" ("\RRNBNIIL")
+Change component parameters (AddParameter): Name = "Digi-Key_Part_Number"; Value = "F7701CT-ND"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Digi-Key_Purchase_URL"; Value = "https://www.digikey.ca/product-detail/en/littelfuse-inc/SMF3.3/F7701CT-ND/6189041?utm_source=snapeda&utm_medium=aggregator&utm_campaign=symbol"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "MF"; Value = "Littelfuse Inc."; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "MP"; Value = "SMF3.3"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Package"; Value = "SOD-123 Littelfuse"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "SnapEDA_Link"; Value = "https://www.snapeda.com/parts/SMF3.3/Littelfuse%20Inc./view-part/814507/?ref=snap"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Change component parameters: Designator = "D3" ("D3"); Footprint = "ONSC-SOD-923-2-514AB-01_V"; UniqueID = "\XGICPUNT" ("\XGICPUNT")
+Change component parameters (AddParameter): Name = "Digi-Key_Part_Number"; Value = "F7701CT-ND"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Digi-Key_Purchase_URL"; Value = "https://www.digikey.ca/product-detail/en/littelfuse-inc/SMF3.3/F7701CT-ND/6189041?utm_source=snapeda&utm_medium=aggregator&utm_campaign=symbol"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "MF"; Value = "Littelfuse Inc."; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "MP"; Value = "SMF3.3"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Package"; Value = "SOD-123 Littelfuse"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "SnapEDA_Link"; Value = "https://www.snapeda.com/parts/SMF3.3/Littelfuse%20Inc./view-part/814507/?ref=snap"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Change component parameters: Designator = "D4" ("D4"); Footprint = "ONSC-SOD-923-2-514AB-01_V"; UniqueID = "\BWIFINTM" ("\BWIFINTM")
+Change component parameters (AddParameter): Name = "Digi-Key_Part_Number"; Value = "F7701CT-ND"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Digi-Key_Purchase_URL"; Value = "https://www.digikey.ca/product-detail/en/littelfuse-inc/SMF3.3/F7701CT-ND/6189041?utm_source=snapeda&utm_medium=aggregator&utm_campaign=symbol"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "MF"; Value = "Littelfuse Inc."; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "MP"; Value = "SMF3.3"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Package"; Value = "SOD-123 Littelfuse"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "SnapEDA_Link"; Value = "https://www.snapeda.com/parts/SMF3.3/Littelfuse%20Inc./view-part/814507/?ref=snap"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Change component parameters: Designator = "D5" ("D5"); Footprint = "DIO_TPD4E02B04DQAR"; UniqueID = "\UDBVIWQB" ("\UDBVIWQB")
+Change component parameters (AddParameter): Name = "Digi-Key_Part_Number"; Value = "F7701CT-ND"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Digi-Key_Purchase_URL"; Value = "https://www.digikey.ca/product-detail/en/littelfuse-inc/SMF3.3/F7701CT-ND/6189041?utm_source=snapeda&utm_medium=aggregator&utm_campaign=symbol"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "MF"; Value = "Littelfuse Inc."; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "MP"; Value = "SMF3.3"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Package"; Value = "SOD-123 Littelfuse"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "SnapEDA_Link"; Value = "https://www.snapeda.com/parts/SMF3.3/Littelfuse%20Inc./view-part/814507/?ref=snap"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Added Component: Designator=D6(SODFL3718X108N)
+Add component (AddParameter): Name = "Digi-Key_Part_Number"; Value = "F7701CT-ND"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Digi-Key_Purchase_URL"; Value = "https://www.digikey.ca/product-detail/en/littelfuse-inc/SMF3.3/F7701CT-ND/6189041?utm_source=snapeda&utm_medium=aggregator&utm_campaign=symbol"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MF"; Value = "Littelfuse Inc."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MP"; Value = "SMF3.3"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "SOD-123 Littelfuse"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "SnapEDA_Link"; Value = "https://www.snapeda.com/parts/SMF3.3/Littelfuse%20Inc./view-part/814507/?ref=snap"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Added Component: Designator=D15(SODFL3718X108N)
+Add component (AddParameter): Name = "Digi-Key_Part_Number"; Value = "F7701CT-ND"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Digi-Key_Purchase_URL"; Value = "https://www.digikey.ca/product-detail/en/littelfuse-inc/SMF3.3/F7701CT-ND/6189041?utm_source=snapeda&utm_medium=aggregator&utm_campaign=symbol"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MF"; Value = "Littelfuse Inc."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MP"; Value = "SMF3.3"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "SOD-123 Littelfuse"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "SnapEDA_Link"; Value = "https://www.snapeda.com/parts/SMF3.3/Littelfuse%20Inc./view-part/814507/?ref=snap"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Added Component: Designator=D(SODFL3718X108N)
+Add component (AddParameter): Name = "Digi-Key_Part_Number"; Value = "F7701CT-ND"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Digi-Key_Purchase_URL"; Value = "https://www.digikey.ca/product-detail/en/littelfuse-inc/SMF3.3/F7701CT-ND/6189041?utm_source=snapeda&utm_medium=aggregator&utm_campaign=symbol"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MF"; Value = "Littelfuse Inc."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MP"; Value = "SMF3.3"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "SOD-123 Littelfuse"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "SnapEDA_Link"; Value = "https://www.snapeda.com/parts/SMF3.3/Littelfuse%20Inc./view-part/814507/?ref=snap"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Added Pin To Net: NetName=UART1_RX Pin=D1-A
+Added Pin To Net: NetName=GND Pin=D1-C
+Added Pin To Net: NetName=I2C1_SCL Pin=D2-A
+Added Pin To Net: NetName=GND Pin=D2-C
+Added Pin To Net: NetName=I2C1_SDA Pin=D3-A
+Added Pin To Net: NetName=GND Pin=D3-C
+Added Pin To Net: NetName=I2C1_SCL Pin=D4-A
+Added Pin To Net: NetName=GND Pin=D4-C
+Added Pin To Net: NetName=I2C1_SDA Pin=D5-A
+Added Pin To Net: NetName=GND Pin=D5-C
+Added Pin To Net: NetName=I2C_Backup_SCL Pin=D6-A
+Added Pin To Net: NetName=GND Pin=D6-C
+Added Pin To Net: NetName=I2C_Backup_SDA Pin=D15-A
+Added Pin To Net: NetName=GND Pin=D15-C
+Added Pin To Net: NetName=UART1_TX Pin=D-A
+Added Pin To Net: NetName=GND Pin=D-C
+Add Pin To Net: Unknown Pin: Pin TH1-1
+Add Pin To Net: Unknown Pin: Pin TH1-2
+Add Pin To Net: Unknown Pin: Pin U4-3
+Add Pin To Net: Unknown Pin: Pin U4-5
+Add Pin To Net: Unknown Pin: Pin U4-8
+Add Pin To Net: Unknown Pin: Pin U4-10
+Add Pin To Net: Unknown Pin: Pin U4-11
+Add Pin To Net: Unknown Pin: Pin U4-27
+Add Pin To Net: Unknown Pin: Pin U4-28
+Add Pin To Net: Unknown Pin: Pin U4-36
+Added Pin To Net: NetName=12V Pin=U11-5
+Add Pin To Net: Unknown Pin: Pin VR1-0
+Add Pin To Net: Unknown Pin: Pin VR1-1
+Add Pin To Net: Unknown Pin: Pin VR1-2
+Add Pin To Net: Unknown Pin: Pin VR1-3
+Add Pin To Net: Unknown Pin: Pin VR2-0
+Add Pin To Net: Unknown Pin: Pin VR2-1
+Add Pin To Net: Unknown Pin: Pin VR2-2
+Add Pin To Net: Unknown Pin: Pin VR2-3
+Add Pin To Net: Unknown Pin: Pin VR3-0
+Add Pin To Net: Unknown Pin: Pin VR3-1
+Add Pin To Net: Unknown Pin: Pin VR3-2
+Add Pin To Net: Unknown Pin: Pin VR3-3
+Added Member To Class: ClassName=ModuleInter Member=Component D6 SMF3.3
+Added Member To Class: ClassName=ModuleInter Member=Component D15 SMF3.3
+Added Member To Class: ClassName=ModuleInter Member=Component D SMF3.3
+Add Class Member: Failed to add class member : Component TH1 103AT-2
+Add Class Member: Failed to add class member : Component U4 Jetson Xavier NX Dev Board GPIO
+Add Class Member: Failed to add class member : Component VR1 Buck Boost Module
+Add Class Member: Failed to add class member : Component VR2 Buck Boost Module
+Add Class Member: Failed to add class member : Component VR3 Buck Boost Module
+Added Room: Name=ModuleInter
+Added Room: Name=Power

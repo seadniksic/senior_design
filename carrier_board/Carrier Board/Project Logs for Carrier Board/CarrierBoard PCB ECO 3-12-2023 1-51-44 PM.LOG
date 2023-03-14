@@ -1,0 +1,53 @@
+Change Component Designator: OldDesignator=R? NewDesignator=R23
+Change Component Designator: OldDesignator=R? NewDesignator=R24
+Change Component Designator: OldDesignator=R? NewDesignator=R25
+Change Component Designator: OldDesignator=R? NewDesignator=R26
+Change Component Designator: OldDesignator=U? NewDesignator=U1
+Change Component Designator: OldDesignator=U? NewDesignator=U6
+Change Component Designator: OldDesignator=U? NewDesignator=U10
+Change Component Designator: OldDesignator=U? NewDesignator=U11
+Add Pin To Net: Unknown Pin: Pin TH1-1
+Add Pin To Net: Unknown Pin: Pin TH1-2
+Add Pin To Net: Unknown Pin: Pin U4-3
+Add Pin To Net: Unknown Pin: Pin U4-5
+Add Pin To Net: Unknown Pin: Pin U4-8
+Add Pin To Net: Unknown Pin: Pin U4-10
+Add Pin To Net: Unknown Pin: Pin U4-11
+Add Pin To Net: Unknown Pin: Pin U4-27
+Add Pin To Net: Unknown Pin: Pin U4-28
+Add Pin To Net: Unknown Pin: Pin U4-36
+Add Pin To Net: Unknown Pin: Pin VR1-0
+Add Pin To Net: Unknown Pin: Pin VR1-1
+Add Pin To Net: Unknown Pin: Pin VR1-2
+Add Pin To Net: Unknown Pin: Pin VR1-3
+Add Pin To Net: Unknown Pin: Pin VR2-0
+Add Pin To Net: Unknown Pin: Pin VR2-1
+Add Pin To Net: Unknown Pin: Pin VR2-2
+Add Pin To Net: Unknown Pin: Pin VR2-3
+Add Pin To Net: Unknown Pin: Pin VR3-0
+Add Pin To Net: Unknown Pin: Pin VR3-1
+Add Pin To Net: Unknown Pin: Pin VR3-2
+Add Pin To Net: Unknown Pin: Pin VR3-3
+Change Net Name : Old Net Name=NetR?_1 New Net Name=NetR23_1
+Added Pin To Net: NetName=NetR24_1 Pin=R24-1
+Added Pin To Net: NetName=NetR24_1 Pin=U6-7
+Added Net: Name=NetR24_1
+Added Pin To Net: NetName=NetR25_1 Pin=R25-1
+Added Pin To Net: NetName=NetR25_1 Pin=U10-7
+Added Net: Name=NetR25_1
+Added Pin To Net: NetName=NetR26_1 Pin=R26-1
+Added Pin To Net: NetName=NetR26_1 Pin=U11-7
+Added Net: Name=NetR26_1
+Added Member To Class: ClassName=ModuleInter Member=Component R23 130 mOhms
+Added Member To Class: ClassName=ModuleInter Member=Component R25 130 mOhms
+Added Member To Class: ClassName=ModuleInter Member=Component R26 130 mOhms
+Add Class Member: Failed to add class member : Component TH1 103AT-2
+Added Member To Class: ClassName=ModuleInter Member=Component U1 DRV8870DDAR
+Add Class Member: Failed to add class member : Component U4 Jetson Xavier NX Dev Board GPIO
+Added Member To Class: ClassName=ModuleInter Member=Component U6 DRV8870DDAR
+Added Member To Class: ClassName=ModuleInter Member=Component U10 DRV8870DDAR
+Add Class Member: Failed to add class member : Component VR1 Buck Boost Module
+Add Class Member: Failed to add class member : Component VR2 Buck Boost Module
+Add Class Member: Failed to add class member : Component VR3 Buck Boost Module
+Added Room: Name=ModuleInter
+Added Room: Name=Power

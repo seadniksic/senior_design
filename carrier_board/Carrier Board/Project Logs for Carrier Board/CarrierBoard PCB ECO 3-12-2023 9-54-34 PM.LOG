@@ -1,0 +1,23 @@
+Removed Pin From Net: NetName=NetC3_2 Pin=R21-2
+Added Pin To Net: NetName=NetR22_2 Pin=R21-2
+Add Pin To Net: Unknown Pin: Pin U2-6
+Add Pin To Net: Unknown Pin: Pin U2-7
+Add Pin To Net: Unknown Pin: Pin U2-9
+Add Pin To Net: Unknown Pin: Pin VR1-0
+Add Pin To Net: Unknown Pin: Pin VR1-1
+Add Pin To Net: Unknown Pin: Pin VR1-2
+Add Pin To Net: Unknown Pin: Pin VR1-3
+Add Pin To Net: Unknown Pin: Pin VR2-0
+Add Pin To Net: Unknown Pin: Pin VR2-1
+Add Pin To Net: Unknown Pin: Pin VR2-2
+Add Pin To Net: Unknown Pin: Pin VR2-3
+Add Pin To Net: Unknown Pin: Pin VR3-0
+Add Pin To Net: Unknown Pin: Pin VR3-1
+Add Pin To Net: Unknown Pin: Pin VR3-2
+Add Pin To Net: Unknown Pin: Pin VR3-3
+Change Net Name : Old Net Name=NetR22_2 New Net Name=NetR21_2
+Add Class Member: Failed to add class member : Component VR1 Buck Boost Module
+Add Class Member: Failed to add class member : Component VR2 Buck Boost Module
+Add Class Member: Failed to add class member : Component VR3 Buck Boost Module
+Added Room: Name=ModuleInter
+Added Room: Name=Power

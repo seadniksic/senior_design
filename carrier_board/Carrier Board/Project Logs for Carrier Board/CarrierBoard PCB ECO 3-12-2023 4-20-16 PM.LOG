@@ -1,0 +1,26 @@
+Change Footprint: Footprint Not Found INFINEON PG-TDSON-8
+Change Footprint: Footprint Not Found INFINEON PG-TDSON-8
+Change Component Designator: OldDesignator=C? NewDesignator=C16
+Change Component Designator: OldDesignator=C? NewDesignator=C17
+Change Component Designator: OldDesignator=C? NewDesignator=C18
+Change Component Designator: OldDesignator=C? NewDesignator=C19
+Add Pin To Net: Unknown Pin: Pin VR1-0
+Add Pin To Net: Unknown Pin: Pin VR1-1
+Add Pin To Net: Unknown Pin: Pin VR1-2
+Add Pin To Net: Unknown Pin: Pin VR1-3
+Add Pin To Net: Unknown Pin: Pin VR2-0
+Add Pin To Net: Unknown Pin: Pin VR2-1
+Add Pin To Net: Unknown Pin: Pin VR2-2
+Add Pin To Net: Unknown Pin: Pin VR2-3
+Add Pin To Net: Unknown Pin: Pin VR3-0
+Add Pin To Net: Unknown Pin: Pin VR3-1
+Add Pin To Net: Unknown Pin: Pin VR3-2
+Add Pin To Net: Unknown Pin: Pin VR3-3
+Added Member To Class: ClassName=ModuleInter Member=Component C16 0.1 µF
+Added Member To Class: ClassName=ModuleInter Member=Component C17 0.1 µF
+Added Member To Class: ClassName=ModuleInter Member=Component C18 0.1 µF
+Add Class Member: Failed to add class member : Component VR1 Buck Boost Module
+Add Class Member: Failed to add class member : Component VR2 Buck Boost Module
+Add Class Member: Failed to add class member : Component VR3 Buck Boost Module
+Added Room: Name=ModuleInter
+Added Room: Name=Power

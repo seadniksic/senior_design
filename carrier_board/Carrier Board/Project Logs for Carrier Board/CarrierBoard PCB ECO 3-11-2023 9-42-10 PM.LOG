@@ -1,0 +1,100 @@
+Added Component: Designator=U9(SOP65P640X120-20N)
+Add Pin To Net: Unknown Pin: Pin D7-1
+Add Pin To Net: Unknown Pin: Pin D7-2
+Add Pin To Net: Unknown Pin: Pin D8-1
+Add Pin To Net: Unknown Pin: Pin D8-2
+Add Pin To Net: Unknown Pin: Pin D9-1
+Add Pin To Net: Unknown Pin: Pin D9-2
+Add Pin To Net: Unknown Pin: Pin D10-1
+Add Pin To Net: Unknown Pin: Pin D10-2
+Add Pin To Net: Unknown Pin: Pin D11-1
+Add Pin To Net: Unknown Pin: Pin D11-2
+Add Pin To Net: Unknown Pin: Pin D12-1
+Add Pin To Net: Unknown Pin: Pin D12-2
+Add Pin To Net: Unknown Pin: Pin D13-1
+Add Pin To Net: Unknown Pin: Pin D13-2
+Add Pin To Net: Unknown Pin: Pin D14-1
+Add Pin To Net: Unknown Pin: Pin D14-2
+Add Pin To Net: Unknown Pin: Pin J1-0
+Add Pin To Net: Unknown Pin: Pin J1-1
+Add Pin To Net: Unknown Pin: Pin J1-2
+Add Pin To Net: Unknown Pin: Pin J1-3
+Add Pin To Net: Unknown Pin: Pin J1-4
+Add Pin To Net: Unknown Pin: Pin J1-5
+Add Pin To Net: Unknown Pin: Pin J2-0
+Add Pin To Net: Unknown Pin: Pin J2-1
+Add Pin To Net: Unknown Pin: Pin J2-2
+Add Pin To Net: Unknown Pin: Pin J2-3
+Add Pin To Net: Unknown Pin: Pin J2-4
+Add Pin To Net: Unknown Pin: Pin J2-5
+Add Pin To Net: Unknown Pin: Pin J3-0
+Add Pin To Net: Unknown Pin: Pin J3-1
+Add Pin To Net: Unknown Pin: Pin J3-2
+Add Pin To Net: Unknown Pin: Pin J3-3
+Add Pin To Net: Unknown Pin: Pin J3-4
+Add Pin To Net: Unknown Pin: Pin J3-5
+Add Pin To Net: Unknown Pin: Pin J4-0
+Add Pin To Net: Unknown Pin: Pin J4-1
+Add Pin To Net: Unknown Pin: Pin J4-2
+Add Pin To Net: Unknown Pin: Pin J4-3
+Add Pin To Net: Unknown Pin: Pin J4-4
+Add Pin To Net: Unknown Pin: Pin J4-5
+Add Pin To Net: Unknown Pin: Pin TH1-1
+Add Pin To Net: Unknown Pin: Pin TH1-2
+Add Pin To Net: Unknown Pin: Pin U4-3
+Add Pin To Net: Unknown Pin: Pin U4-5
+Add Pin To Net: Unknown Pin: Pin U4-8
+Add Pin To Net: Unknown Pin: Pin U4-10
+Add Pin To Net: Unknown Pin: Pin U4-11
+Add Pin To Net: Unknown Pin: Pin U4-27
+Add Pin To Net: Unknown Pin: Pin U4-28
+Add Pin To Net: Unknown Pin: Pin U4-36
+Added Pin To Net: NetName=NetC1_2 Pin=U9-1
+Added Pin To Net: NetName=NetC11_1 Pin=U9-2
+Added Pin To Net: NetName=NetR21_2 Pin=U9-3
+Added Pin To Net: NetName=NetR21_2 Pin=U9-4
+Added Pin To Net: NetName=NetC3_2 Pin=U9-5
+Added Pin To Net: NetName=NetC4_2 Pin=U9-6
+Added Pin To Net: NetName=NetC5_2 Pin=U9-7
+Added Pin To Net: NetName=GND Pin=U9-8
+Added Pin To Net: NetName=GND Pin=U9-9
+Added Pin To Net: NetName=GND Pin=U9-10
+Added Pin To Net: NetName=NetR15_1 Pin=U9-11
+Added Pin To Net: NetName=NetR14_1 Pin=U9-13
+Added Pin To Net: NetName=NetR19_2 Pin=U9-14
+Added Pin To Net: NetName=NetR12_1 Pin=U9-15
+Added Pin To Net: NetName=NetR12_2 Pin=U9-16
+Added Pin To Net: NetName=CCFG Pin=U9-17
+Added Pin To Net: NetName=GND Pin=U9-18
+Added Pin To Net: NetName=GND Pin=U9-19
+Added Pin To Net: NetName=GND Pin=U9-20
+Add Pin To Net: Unknown Pin: Pin VR1-0
+Add Pin To Net: Unknown Pin: Pin VR1-1
+Add Pin To Net: Unknown Pin: Pin VR1-2
+Add Pin To Net: Unknown Pin: Pin VR1-3
+Add Pin To Net: Unknown Pin: Pin VR2-0
+Add Pin To Net: Unknown Pin: Pin VR2-1
+Add Pin To Net: Unknown Pin: Pin VR2-2
+Add Pin To Net: Unknown Pin: Pin VR2-3
+Add Pin To Net: Unknown Pin: Pin VR3-0
+Add Pin To Net: Unknown Pin: Pin VR3-1
+Add Pin To Net: Unknown Pin: Pin VR3-2
+Add Pin To Net: Unknown Pin: Pin VR3-3
+Add Class Member: Failed to add class member : Component D7 SMBJ5.0CA-13-F
+Add Class Member: Failed to add class member : Component D8 SMBJ5.0CA-13-F
+Add Class Member: Failed to add class member : Component D9 SMBJ5.0CA-13-F
+Add Class Member: Failed to add class member : Component D10 SMBJ5.0CA-13-F
+Add Class Member: Failed to add class member : Component D11 SMBJ5.0CA-13-F
+Add Class Member: Failed to add class member : Component D12 SMBJ5.0CA-13-F
+Add Class Member: Failed to add class member : Component D13 SMBJ5.0CA-13-F
+Add Class Member: Failed to add class member : Component D14 SMBJ5.0CA-13-F
+Add Class Member: Failed to add class member : Component J1 Motor Connector
+Add Class Member: Failed to add class member : Component J2 Motor Connector
+Add Class Member: Failed to add class member : Component J3 Motor Connector
+Add Class Member: Failed to add class member : Component J4 Motor Connector
+Add Class Member: Failed to add class member : Component TH1 103AT-2
+Add Class Member: Failed to add class member : Component U4 Jetson Xavier NX Dev Board GPIO
+Added Member To Class: ClassName=Power Member=Component U9 BQ7790518PWR
+Add Class Member: Failed to add class member : Component VR1 Buck Boost Module
+Add Class Member: Failed to add class member : Component VR2 Buck Boost Module
+Add Class Member: Failed to add class member : Component VR3 Buck Boost Module

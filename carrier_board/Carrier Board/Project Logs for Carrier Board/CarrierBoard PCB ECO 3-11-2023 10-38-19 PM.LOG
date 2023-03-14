@@ -1,0 +1,69 @@
+Added Component: Designator=J1(MOLEX_532610671)
+Added Component: Designator=J2(MOLEX_532610671)
+Added Component: Designator=J3(MOLEX_532610671)
+Added Component: Designator=J4(MOLEX_532610671)
+Added Pin To Net: NetName=BR_OUT1 Pin=J1-1
+Added Pin To Net: NetName=BR_OUT2 Pin=J1-2
+Added Pin To Net: NetName=NetD7_1 Pin=J1-3
+Added Pin To Net: NetName=GND Pin=J1-4
+Added Pin To Net: NetName=5V Pin=J1-5
+Added Pin To Net: NetName=NetD8_1 Pin=J1-6
+Added Pin To Net: NetName=GND Pin=J1-S1
+Added Pin To Net: NetName=GND Pin=J1-S2
+Added Pin To Net: NetName=BL_OUT1 Pin=J2-1
+Added Pin To Net: NetName=BL_OUT2 Pin=J2-2
+Added Pin To Net: NetName=NetD9_1 Pin=J2-3
+Added Pin To Net: NetName=GND Pin=J2-4
+Added Pin To Net: NetName=5V Pin=J2-5
+Added Pin To Net: NetName=NetD10_1 Pin=J2-6
+Added Pin To Net: NetName=GND Pin=J2-S1
+Added Pin To Net: NetName=GND Pin=J2-S2
+Added Pin To Net: NetName=FR_OUT1 Pin=J3-1
+Added Pin To Net: NetName=FR_OUT2 Pin=J3-2
+Added Pin To Net: NetName=NetD11_1 Pin=J3-3
+Added Pin To Net: NetName=GND Pin=J3-4
+Added Pin To Net: NetName=5V Pin=J3-5
+Added Pin To Net: NetName=NetD12_1 Pin=J3-6
+Added Pin To Net: NetName=GND Pin=J3-S1
+Added Pin To Net: NetName=GND Pin=J3-S2
+Added Pin To Net: NetName=FL_OUT1 Pin=J4-1
+Added Pin To Net: NetName=FL_OUT2 Pin=J4-2
+Added Pin To Net: NetName=NetD13_1 Pin=J4-3
+Added Pin To Net: NetName=GND Pin=J4-4
+Added Pin To Net: NetName=5V Pin=J4-5
+Added Pin To Net: NetName=NetD14_1 Pin=J4-6
+Added Pin To Net: NetName=GND Pin=J4-S1
+Added Pin To Net: NetName=GND Pin=J4-S2
+Add Pin To Net: Unknown Pin: Pin TH1-1
+Add Pin To Net: Unknown Pin: Pin TH1-2
+Add Pin To Net: Unknown Pin: Pin U4-3
+Add Pin To Net: Unknown Pin: Pin U4-5
+Add Pin To Net: Unknown Pin: Pin U4-8
+Add Pin To Net: Unknown Pin: Pin U4-10
+Add Pin To Net: Unknown Pin: Pin U4-11
+Add Pin To Net: Unknown Pin: Pin U4-27
+Add Pin To Net: Unknown Pin: Pin U4-28
+Add Pin To Net: Unknown Pin: Pin U4-36
+Add Pin To Net: Unknown Pin: Pin VR1-0
+Add Pin To Net: Unknown Pin: Pin VR1-1
+Add Pin To Net: Unknown Pin: Pin VR1-2
+Add Pin To Net: Unknown Pin: Pin VR1-3
+Add Pin To Net: Unknown Pin: Pin VR2-0
+Add Pin To Net: Unknown Pin: Pin VR2-1
+Add Pin To Net: Unknown Pin: Pin VR2-2
+Add Pin To Net: Unknown Pin: Pin VR2-3
+Add Pin To Net: Unknown Pin: Pin VR3-0
+Add Pin To Net: Unknown Pin: Pin VR3-1
+Add Pin To Net: Unknown Pin: Pin VR3-2
+Add Pin To Net: Unknown Pin: Pin VR3-3
+Added Member To Class: ClassName=ModuleInter Member=Component J1 532610671
+Added Member To Class: ClassName=ModuleInter Member=Component J2 532610671
+Added Member To Class: ClassName=ModuleInter Member=Component J3 532610671
+Added Member To Class: ClassName=ModuleInter Member=Component J4 532610671
+Add Class Member: Failed to add class member : Component TH1 103AT-2
+Add Class Member: Failed to add class member : Component U4 Jetson Xavier NX Dev Board GPIO
+Add Class Member: Failed to add class member : Component VR1 Buck Boost Module
+Add Class Member: Failed to add class member : Component VR2 Buck Boost Module
+Add Class Member: Failed to add class member : Component VR3 Buck Boost Module
+Added Room: Name=ModuleInter
+Added Room: Name=Power

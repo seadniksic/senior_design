@@ -1,0 +1,29 @@
+Added Component: Designator=U2(BNO555)
+Added Component: Designator=U5(HTS221)
+Added Pin To Net: NetName=3V3 Pin=U2-0
+Added Pin To Net: NetName=GND Pin=U2-2
+Added Pin To Net: NetName=I2C1_SDA Pin=U2-3
+Added Pin To Net: NetName=I2C1_SCL Pin=U2-4
+Added Pin To Net: NetName=5V Pin=U5-0
+Added Pin To Net: NetName=GND Pin=U5-2
+Added Pin To Net: NetName=I2C1_SDA Pin=U5-3
+Added Pin To Net: NetName=I2C1_SCL Pin=U5-4
+Add Pin To Net: Unknown Pin: Pin VR1-0
+Add Pin To Net: Unknown Pin: Pin VR1-1
+Add Pin To Net: Unknown Pin: Pin VR1-2
+Add Pin To Net: Unknown Pin: Pin VR1-3
+Add Pin To Net: Unknown Pin: Pin VR2-0
+Add Pin To Net: Unknown Pin: Pin VR2-1
+Add Pin To Net: Unknown Pin: Pin VR2-2
+Add Pin To Net: Unknown Pin: Pin VR2-3
+Add Pin To Net: Unknown Pin: Pin VR3-0
+Add Pin To Net: Unknown Pin: Pin VR3-1
+Add Pin To Net: Unknown Pin: Pin VR3-2
+Add Pin To Net: Unknown Pin: Pin VR3-3
+Added Member To Class: ClassName=ModuleInter Member=Component U2 BNO055
+Added Member To Class: ClassName=ModuleInter Member=Component U5 HTS221
+Add Class Member: Failed to add class member : Component VR1 Buck Boost Module
+Add Class Member: Failed to add class member : Component VR2 Buck Boost Module
+Add Class Member: Failed to add class member : Component VR3 Buck Boost Module
+Added Room: Name=ModuleInter
+Added Room: Name=Power

@@ -1,0 +1,55 @@
+Removed Pin From Net: NetName=I2C1_SCL Pin=D3-A
+Removed Pin From Net: NetName=I2C1_SCL Pin=D5-A
+Removed Pin From Net: NetName=I2C1_SCL Pin=DNP1-2
+Removed Pin From Net: NetName=I2C1_SCL Pin=DNP2-1
+Removed Pin From Net: NetName=I2C1_SCL Pin=DNP2-2
+Removed Pin From Net: NetName=I2C1_SCL Pin=R2-1
+Removed Pin From Net: NetName=I2C1_SCL Pin=R3-1
+Removed Pin From Net: NetName=I2C1_SCL Pin=R4-1
+Removed Pin From Net: NetName=I2C1_SCL Pin=U2-3
+Removed Pin From Net: NetName=I2C1_SCL Pin=U3-15
+Removed Pin From Net: NetName=I2C1_SCL Pin=U3-16
+Removed Pin From Net: NetName=I2C1_SCL Pin=U3-33
+Removed Pin From Net: NetName=I2C1_SCL Pin=U4-3
+Removed Pin From Net: NetName=I2C1_SCL Pin=U4-5
+Removed Pin From Net: NetName=I2C1_SCL Pin=U4-27
+Removed Pin From Net: NetName=I2C1_SCL Pin=U5-3
+Add Pin To Net: Unknown Pin: Pin U2-6
+Add Pin To Net: Unknown Pin: Pin U2-7
+Add Pin To Net: Unknown Pin: Pin U2-9
+Add Pin To Net: Unknown Pin: Pin VR1-0
+Add Pin To Net: Unknown Pin: Pin VR1-1
+Add Pin To Net: Unknown Pin: Pin VR1-2
+Add Pin To Net: Unknown Pin: Pin VR1-3
+Add Pin To Net: Unknown Pin: Pin VR2-0
+Add Pin To Net: Unknown Pin: Pin VR2-1
+Add Pin To Net: Unknown Pin: Pin VR2-2
+Add Pin To Net: Unknown Pin: Pin VR2-3
+Add Pin To Net: Unknown Pin: Pin VR3-0
+Add Pin To Net: Unknown Pin: Pin VR3-1
+Add Pin To Net: Unknown Pin: Pin VR3-2
+Add Pin To Net: Unknown Pin: Pin VR3-3
+Added Pin To Net: NetName=I2C1_SDA Pin=D3-A
+Added Pin To Net: NetName=I2C1_SDA Pin=D5-A
+Added Pin To Net: NetName=I2C1_SDA Pin=DNP2-1
+Added Pin To Net: NetName=I2C1_SDA Pin=R2-1
+Added Pin To Net: NetName=I2C1_SDA Pin=U2-3
+Added Pin To Net: NetName=I2C1_SDA Pin=U3-33
+Added Pin To Net: NetName=I2C1_SDA Pin=U4-27
+Added Pin To Net: NetName=I2C1_SDA Pin=U5-3
+Added Net: Name=I2C1_SDA
+Added Pin To Net: NetName=I2C_Backup_SCL Pin=DNP2-2
+Added Pin To Net: NetName=I2C_Backup_SCL Pin=R3-1
+Added Pin To Net: NetName=I2C_Backup_SCL Pin=U3-16
+Added Pin To Net: NetName=I2C_Backup_SCL Pin=U4-5
+Added Net: Name=I2C_Backup_SCL
+Added Pin To Net: NetName=I2C_Backup_SDA Pin=DNP1-2
+Added Pin To Net: NetName=I2C_Backup_SDA Pin=R4-1
+Added Pin To Net: NetName=I2C_Backup_SDA Pin=U3-15
+Added Pin To Net: NetName=I2C_Backup_SDA Pin=U4-3
+Added Net: Name=I2C_Backup_SDA
+Add Class Member: Failed to add class member : Component VR1 Buck Boost Module
+Add Class Member: Failed to add class member : Component VR2 Buck Boost Module
+Add Class Member: Failed to add class member : Component VR3 Buck Boost Module
+Added Room: Name=ModuleInter
+Added Room: Name=Power

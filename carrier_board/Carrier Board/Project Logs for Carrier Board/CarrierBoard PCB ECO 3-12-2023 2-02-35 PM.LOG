@@ -1,0 +1,37 @@
+Removed Pin From Net: NetName=3V3 Pin=U1-4
+Removed Pin From Net: NetName=3V3 Pin=U6-4
+Removed Pin From Net: NetName=3V3 Pin=U10-4
+Removed Pin From Net: NetName=3V3 Pin=U11-4
+Add Pin To Net: Unknown Pin: Pin TH1-1
+Add Pin To Net: Unknown Pin: Pin TH1-2
+Added Pin To Net: NetName=5V Pin=U1-4
+Add Pin To Net: Unknown Pin: Pin U4-3
+Add Pin To Net: Unknown Pin: Pin U4-5
+Add Pin To Net: Unknown Pin: Pin U4-8
+Add Pin To Net: Unknown Pin: Pin U4-10
+Add Pin To Net: Unknown Pin: Pin U4-11
+Add Pin To Net: Unknown Pin: Pin U4-27
+Add Pin To Net: Unknown Pin: Pin U4-28
+Add Pin To Net: Unknown Pin: Pin U4-36
+Added Pin To Net: NetName=5V Pin=U6-4
+Added Pin To Net: NetName=5V Pin=U10-4
+Added Pin To Net: NetName=5V Pin=U11-4
+Add Pin To Net: Unknown Pin: Pin VR1-0
+Add Pin To Net: Unknown Pin: Pin VR1-1
+Add Pin To Net: Unknown Pin: Pin VR1-2
+Add Pin To Net: Unknown Pin: Pin VR1-3
+Add Pin To Net: Unknown Pin: Pin VR2-0
+Add Pin To Net: Unknown Pin: Pin VR2-1
+Add Pin To Net: Unknown Pin: Pin VR2-2
+Add Pin To Net: Unknown Pin: Pin VR2-3
+Add Pin To Net: Unknown Pin: Pin VR3-0
+Add Pin To Net: Unknown Pin: Pin VR3-1
+Add Pin To Net: Unknown Pin: Pin VR3-2
+Add Pin To Net: Unknown Pin: Pin VR3-3
+Add Class Member: Failed to add class member : Component TH1 103AT-2
+Add Class Member: Failed to add class member : Component U4 Jetson Xavier NX Dev Board GPIO
+Add Class Member: Failed to add class member : Component VR1 Buck Boost Module
+Add Class Member: Failed to add class member : Component VR2 Buck Boost Module
+Add Class Member: Failed to add class member : Component VR3 Buck Boost Module
+Added Room: Name=ModuleInter
+Added Room: Name=Power

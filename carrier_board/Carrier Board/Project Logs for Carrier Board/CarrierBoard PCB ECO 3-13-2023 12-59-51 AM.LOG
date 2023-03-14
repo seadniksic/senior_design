@@ -1,0 +1,11 @@
+Added Component: Designator=U2(BNO555)
+Added Pin To Net: NetName=3V3 Pin=U2-0
+Added Pin To Net: NetName=GND Pin=U2-2
+Added Pin To Net: NetName=I2C1_SDA Pin=U2-3
+Added Pin To Net: NetName=I2C1_SCL Pin=U2-4
+Added Pin To Net: NetName=GND Pin=U2-6
+Added Pin To Net: NetName=GND Pin=U2-7
+Added Pin To Net: NetName=BNO555_INT Pin=U2-9
+Added Member To Class: ClassName=ModuleInter Member=Component U2 BNO055
+Added Room: Name=ModuleInter
+Added Room: Name=Power
