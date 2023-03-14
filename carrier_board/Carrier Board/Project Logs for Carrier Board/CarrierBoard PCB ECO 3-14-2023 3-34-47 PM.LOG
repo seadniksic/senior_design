@@ -1,0 +1,9 @@
+Removed Member From Class: ClassName=Power Member=R30
+Change Component Footprint: Designator=R14 Old Footprint=RES 0805_2012 New Footprint=RES 1206_3216
+Change Component Comment : Designator=R14 Old Comment=4.53 Ohms New Comment==Value
+Change component parameters: Designator = "R14" ("R14"); Footprint = "RES 0805_2012"; UniqueID = "\CTAFSJEB" ("\CTAFSJEB")
+Change component parameters (AddParameter): Name = "Part Number"; Value = "RNCP1206FTD4K53"; VariantName = "[No Variations]"
+Added Member To Class: ClassName=Power Member=Component R14 =Value
+Added Member To Class: ClassName=Power Member=Component R15 1 kOhms
+Added Room: Name=ModuleInter
+Added Room: Name=Power

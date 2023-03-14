@@ -1,0 +1,11 @@
+Change Component Designator: OldDesignator=R? NewDesignator=R14
+Change Component Designator: OldDesignator=R? NewDesignator=R15
+Change Component Designator: OldDesignator=R? NewDesignator=R30
+Change Component Designator: OldDesignator=R? NewDesignator=R31
+Change Net Name : Old Net Name=NetR?_1 New Net Name=NetR15_1
+Added Pin To Net: NetName=NetR14_1 Pin=R14-1
+Added Pin To Net: NetName=NetR14_1 Pin=U9-11
+Added Net: Name=NetR14_1
+Added Member To Class: ClassName=Power Member=Component R15 1 kOhms
+Added Member To Class: ClassName=Power Member=Component R30 1 kOhms
+Added Member To Class: ClassName=Power Member=Component R31 1 mOhms
