@@ -4,8 +4,7 @@
 #include "receiveData.h"
 #include <iostream>
 
-template <class PayloadType>
-ReceiveData<PayloadType>::ReceiveData(uint16_t port)
+ReceiveData::ReceiveData(uint16_t port)
 {
     //Create socket using TCP protocol
     serverSocket = socket(AF_INET, SOCK_STREAM, 0);
@@ -33,8 +32,7 @@ ReceiveData<PayloadType>::ReceiveData(uint16_t port)
     clientSocket = -1;
 }
 
-template <class PayloadType>
-bool ReceiveData<PayloadType>::availableDataServer()
+bool ReceiveData::availableDataServer()
 {
     fd_set rfds;
     FD_ZERO(&rfds);
@@ -48,8 +46,7 @@ bool ReceiveData<PayloadType>::availableDataServer()
     return retval;
 }
 
-template <class PayloadType>
-bool ReceiveData<PayloadType>::availableDataClient()
+bool ReceiveData::availableDataClient()
 {
     fd_set rfds;
     FD_ZERO(&rfds);
@@ -63,8 +60,7 @@ bool ReceiveData<PayloadType>::availableDataClient()
     return retval;
 }
 
-template <class PayloadType>
-int ReceiveData<PayloadType>::getData(PayloadType *buffer, size_t bufferLength)
+int ReceiveData::getData(void *buffer, size_t bufferLength)
 {
     //Check to see if there is an active connection
     if(clientSocket < 0)
@@ -100,7 +96,7 @@ int ReceiveData<PayloadType>::getData(PayloadType *buffer, size_t bufferLength)
 
             while(receivedBytes < bufferLength && receivedBytes < receivingPacketLength)
             {
-                receiveValue = recv(clientSocket, &buffer[receivedBytes], min(MAX_PACKET_SIZE, bufferLength - receivedBytes), 0);
+                receiveValue = recv(clientSocket, ((char *)buffer + receivedBytes * sizeof(char)), min(MAX_PACKET_SIZE, bufferLength - receivedBytes), 0);
                 if(receiveValue == 0)
                 {
                     close(clientSocket);
@@ -116,15 +112,13 @@ int ReceiveData<PayloadType>::getData(PayloadType *buffer, size_t bufferLength)
     return 0;
 }
 
-template <class PayloadType>
-ReceiveData<PayloadType>::~ReceiveData()
+ReceiveData::~ReceiveData()
 {
     close(serverSocket);
     close(clientSocket);
 }
 
-template<class PayloadType>
-size_t ReceiveData<PayloadType>::min(size_t a, size_t b)
+size_t ReceiveData::min(size_t a, size_t b)
 {
     if(a < b)
         return a;

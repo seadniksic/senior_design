@@ -4,7 +4,7 @@
 
 int main()
 {
-    TransmitData<char> testTransmit(CLIENT_IP, 8080);
+    TransmitData testTransmit(CLIENT_IP, 8080);
     char payload[] = "Hello World";
     while(1)
     {
