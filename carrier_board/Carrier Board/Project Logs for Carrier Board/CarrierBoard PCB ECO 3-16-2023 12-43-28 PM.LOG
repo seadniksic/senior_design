@@ -1,0 +1,75 @@
+Change Component Comment : Designator=R14 Old Comment==Value New Comment=4.35 kOhms
+Added Component: Designator=U1(VREG_LM5017MR/NOPB)
+Add component (AddParameter): Name = "Digi-Key_Part_Number"; Value = "296-42660-1-ND"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MF"; Value = "Texas Instruments"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MP"; Value = "DRV8870DDAR"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "HSOIC-8 Texas Instruments"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Purchase-URL"; Value = "https://pricing.snapeda.com/search/part/DRV8870DDAR/?ref=eda"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "SnapEDA_Link"; Value = "https://www.snapeda.com/parts/DRV8870DDAR/Texas%20Instruments/view-part/591151/?ref=snap"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Added Component: Designator=U6(VREG_LM5017MR/NOPB)
+Add component (AddParameter): Name = "Digi-Key_Part_Number"; Value = "296-42660-1-ND"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MF"; Value = "Texas Instruments"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MP"; Value = "DRV8870DDAR"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "HSOIC-8 Texas Instruments"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Purchase-URL"; Value = "https://pricing.snapeda.com/search/part/DRV8870DDAR/?ref=eda"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "SnapEDA_Link"; Value = "https://www.snapeda.com/parts/DRV8870DDAR/Texas%20Instruments/view-part/591151/?ref=snap"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Added Component: Designator=U10(VREG_LM5017MR/NOPB)
+Add component (AddParameter): Name = "Digi-Key_Part_Number"; Value = "296-42660-1-ND"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MF"; Value = "Texas Instruments"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MP"; Value = "DRV8870DDAR"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "HSOIC-8 Texas Instruments"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Purchase-URL"; Value = "https://pricing.snapeda.com/search/part/DRV8870DDAR/?ref=eda"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "SnapEDA_Link"; Value = "https://www.snapeda.com/parts/DRV8870DDAR/Texas%20Instruments/view-part/591151/?ref=snap"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Added Component: Designator=U11(VREG_LM5017MR/NOPB)
+Add component (AddParameter): Name = "Digi-Key_Part_Number"; Value = "296-42660-1-ND"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MF"; Value = "Texas Instruments"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MP"; Value = "DRV8870DDAR"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "HSOIC-8 Texas Instruments"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Purchase-URL"; Value = "https://pricing.snapeda.com/search/part/DRV8870DDAR/?ref=eda"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "SnapEDA_Link"; Value = "https://www.snapeda.com/parts/DRV8870DDAR/Texas%20Instruments/view-part/591151/?ref=snap"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Added Pin To Net: NetName=GND Pin=U1-1
+Added Pin To Net: NetName=BR_IN2 Pin=U1-2
+Added Pin To Net: NetName=BR_IN1 Pin=U1-3
+Added Pin To Net: NetName=5V Pin=U1-4
+Added Pin To Net: NetName=12V Pin=U1-5
+Added Pin To Net: NetName=BR_OUT1 Pin=U1-6
+Added Pin To Net: NetName=NetR23_1 Pin=U1-7
+Added Pin To Net: NetName=BR_OUT2 Pin=U1-8
+Added Pin To Net: NetName=GND Pin=U1-9
+Added Pin To Net: NetName=GND Pin=U6-1
+Added Pin To Net: NetName=BL_IN2 Pin=U6-2
+Added Pin To Net: NetName=BL_IN1 Pin=U6-3
+Added Pin To Net: NetName=5V Pin=U6-4
+Added Pin To Net: NetName=12V Pin=U6-5
+Added Pin To Net: NetName=BL_OUT1 Pin=U6-6
+Added Pin To Net: NetName=NetR24_1 Pin=U6-7
+Added Pin To Net: NetName=BL_OUT2 Pin=U6-8
+Added Pin To Net: NetName=GND Pin=U6-9
+Added Pin To Net: NetName=GND Pin=U10-1
+Added Pin To Net: NetName=FR_IN2 Pin=U10-2
+Added Pin To Net: NetName=FR_IN1 Pin=U10-3
+Added Pin To Net: NetName=5V Pin=U10-4
+Added Pin To Net: NetName=12V Pin=U10-5
+Added Pin To Net: NetName=FR_OUT1 Pin=U10-6
+Added Pin To Net: NetName=NetR25_1 Pin=U10-7
+Added Pin To Net: NetName=FR_OUT2 Pin=U10-8
+Added Pin To Net: NetName=GND Pin=U10-9
+Added Pin To Net: NetName=GND Pin=U11-1
+Added Pin To Net: NetName=FL_IN2 Pin=U11-2
+Added Pin To Net: NetName=FL_IN1 Pin=U11-3
+Added Pin To Net: NetName=5V Pin=U11-4
+Added Pin To Net: NetName=12V Pin=U11-5
+Added Pin To Net: NetName=FL_OUT1 Pin=U11-6
+Added Pin To Net: NetName=NetR26_1 Pin=U11-7
+Added Pin To Net: NetName=FL_OUT2 Pin=U11-8
+Added Pin To Net: NetName=GND Pin=U11-9
+Added Member To Class: ClassName=ModuleInter Member=Component U1 DRV8870DDAR
+Added Member To Class: ClassName=ModuleInter Member=Component U6 DRV8870DDAR
+Added Member To Class: ClassName=ModuleInter Member=Component U10 DRV8870DDAR
+Added Member To Class: ClassName=ModuleInter Member=Component U11 DRV8870DDAR
+Added Room: Name=ModuleInter
+Added Room: Name=Power

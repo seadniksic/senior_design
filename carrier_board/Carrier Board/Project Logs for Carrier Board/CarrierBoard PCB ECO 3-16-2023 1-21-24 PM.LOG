@@ -1,0 +1,40 @@
+Removed Pin From Net: NetName=NetIC1_1 Pin=IC1-1
+Removed Pin From Net: NetName=NetIC1_1 Pin=IC1-2
+Removed Pin From Net: NetName=NetIC1_1 Pin=IC1-3
+Removed Pin From Net: NetName=GND Pin=IC2-1
+Removed Pin From Net: NetName=GND Pin=IC2-2
+Removed Pin From Net: NetName=GND Pin=IC2-3
+Removed Member From Class: ClassName=Power Member=IC1
+Removed Member From Class: ClassName=Power Member=IC2
+Added Component: Designator=Q1(TO254P470X1016X2005-3P)
+Add component (AddParameter): Name = "Datasheet Link"; Value = "http://www.ti.com/lit/gpn/csd18502kcs"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Geometry.Height"; Value = "4.7mm"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer_Name"; Value = "Texas Instruments"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer_Part_Number"; Value = "CSD18502KCS"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Mouser Part Number"; Value = "595-CSD18502KCS"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Mouser Price/Stock"; Value = "https://www.mouser.co.uk/ProductDetail/Texas-Instruments/CSD18502KCS?qs=vnbNJPHmPnMgIZsUWlws9A%3D%3D"; VariantName = "[No Variations]"
+Added Component: Designator=Q2(TO254P470X1016X2005-3P)
+Add component (AddParameter): Name = "Datasheet Link"; Value = "http://www.ti.com/lit/gpn/csd18502kcs"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Geometry.Height"; Value = "4.7mm"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer_Name"; Value = "Texas Instruments"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer_Part_Number"; Value = "CSD18502KCS"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Mouser Part Number"; Value = "595-CSD18502KCS"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Mouser Price/Stock"; Value = "https://www.mouser.co.uk/ProductDetail/Texas-Instruments/CSD18502KCS?qs=vnbNJPHmPnMgIZsUWlws9A%3D%3D"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=NetIC1_1 Pin=Q1-3
+Added Pin To Net: NetName=GND Pin=Q2-3
+Change Net Name : Old Net Name=NetIC1_1 New Net Name=NetQ1_3
+Added Pin To Net: NetName=NetQ1_1 Pin=Q1-1
+Added Pin To Net: NetName=NetQ1_1 Pin=R14-2
+Added Pin To Net: NetName=NetQ1_1 Pin=R17-1
+Added Net: Name=NetQ1_1
+Added Pin To Net: NetName=NetQ1_2 Pin=Q1-2
+Added Pin To Net: NetName=NetQ1_2 Pin=Q2-2
+Added Net: Name=NetQ1_2
+Added Pin To Net: NetName=NetQ2_1 Pin=Q2-1
+Added Pin To Net: NetName=NetQ2_1 Pin=R15-2
+Added Pin To Net: NetName=NetQ2_1 Pin=R18-2
+Added Net: Name=NetQ2_1
+Added Member To Class: ClassName=Power Member=Component Q1 CSD18502KCS
+Added Member To Class: ClassName=Power Member=Component Q2 CSD18502KCS
+Added Room: Name=ModuleInter
+Added Room: Name=Power
