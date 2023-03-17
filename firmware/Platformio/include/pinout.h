@@ -127,7 +127,7 @@
     #define JOY_RX_PIN 40
     #define JOY_RY_PIN 41
     #define JOY_LED_PIN 33
-    #define JOY_HOMEBTN_PIN 39  
+    #define JOY_FNCBTN_PIN 39  
 
     /* Motor Driver pinout  */
     // BR = Back Right

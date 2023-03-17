@@ -2,9 +2,9 @@
 #include <MessageInterface.h>
 #include <Fields.h>
 #include <ReadBufferSection.h>
-#include <locomotion.h>
+#include <Locomotion.h>
 #include <elapsedMillis.h>
-#include <joystick.h>
+#include <Joystick.h>
 #include <bno055.h>
 #include <UartReadBuffer.h>
 #include <UartWriteBuffer.h>
