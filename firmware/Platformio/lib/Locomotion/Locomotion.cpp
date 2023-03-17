@@ -104,7 +104,7 @@ void init_axis(uint8_t in1, uint8_t in2, uint8_t en)
 
 }
 
-void locomotion_init()
+void Locomotion_Init()
 {
   pinMode(13, OUTPUT);
 
@@ -122,7 +122,7 @@ void locomotion_init()
   digitalWrite(FL_EN_PIN, LOW);
 }
 
-void locomotion_run()
+void Locomotion_Run()
 {
   for (int i = 0; i < 3; i++)
   {

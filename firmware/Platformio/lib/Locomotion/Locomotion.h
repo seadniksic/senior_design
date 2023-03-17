@@ -57,8 +57,8 @@ void drive_forward();
 void drive_backward();
 void all_axis_off();
 
-void locomotion_init();
-void locomotion_run();
+void Locomotion_Init();
+void Locomotion_Run();
 
 
 #endif

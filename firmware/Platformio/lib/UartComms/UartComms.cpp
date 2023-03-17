@@ -52,6 +52,7 @@ void UartComms_Run(UartReadBuffer &read_buffer, UartWriteBuffer &write_buffer, \
           }
 
           // read the actual message.
+          // you can use readbytes() to read multiple bytes!!
           if(num_bytes != 0 && HWSERIAL.available() > 0)
           {
             data = HWSERIAL.read();

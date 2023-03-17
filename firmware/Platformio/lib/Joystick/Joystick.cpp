@@ -7,79 +7,45 @@ joy_state_t joy_state = {0};
 
 void Joystick::init()
 {
-#ifdef INIT_DPAD
-    pinMode(DPAD_DOWN_PIN, INPUT);
-    pinMode(DPAD_LEFT_PIN, INPUT);
-    pinMode(DPAD_RIGHT_PIN, INPUT);
-    pinMode(DPAD_UP_PIN, INPUT);
-#endif
-#ifdef INIT_AUX
-    pinMode(JOY_LED_PIN, OUTPUT);
-    pinMode(JOY_FNCBTN_PIN, INPUT); // need to put the pins in for this
-#endif
-
-    //analog pins need no configuration
 
 }
 
 void Joystick::print()
 {
-#ifdef PRINT_DPAD
-    Serial.print("[DPAD]: ");
-    Serial.print("U: " );
-    Serial.print(joy_state.dpad_up);
-    Serial.print(", D: ");
-    Serial.print(joy_state.dpad_down);
-    Serial.print(", R: ");
-    Serial.print(joy_state.dpad_right);
-    Serial.print(", L: ");
-    Serial.print(joy_state.dpad_left);
-    Serial.print(";\t");
-#endif
-#ifdef PRINT_AUX
-    Serial.print("[AUX]: BTN: ");
-    Serial.print(joy_state.fnc_btn);
-    Serial.print(";\t");
-#endif
-#ifdef PRINT_RJOY
-    Serial.print("[RJOY]: ");
-    Serial.print("X: ");
-    Serial.print(joy_state.rjoy_x); 
-    Serial.print(", Y: ");
-    Serial.print(joy_state.rjoy_y);
-    Serial.print(";\t");
-#endif
-#ifdef PRINT_LJOY
-    Serial.print("[LJOY]: ");
-    Serial.print("X: ");
-    Serial.print(joy_state.ljoy_x); 
-    Serial.print(", Y: ");
-    Serial.print(joy_state.ljoy_y);
-    Serial.print(";\t");
-#endif
+    Serial.print(joy_state.buttons.button_bits.BTN_A);
+    Serial.print(joy_state.buttons.button_bits.BTN_B);
+    Serial.print(joy_state.buttons.button_bits.BTN_X);
+    Serial.print(joy_state.buttons.button_bits.BTN_Y);
+    Serial.print(joy_state.buttons.button_bits.BTN_START);
+    Serial.print(joy_state.buttons.button_bits.BTN_SELECT);
+    Serial.print(joy_state.buttons.button_bits.DPAD_UP);
+    Serial.print(joy_state.buttons.button_bits.DPAD_DOWN);
+    Serial.print(joy_state.buttons.button_bits.DPAD_LEFT);
+    Serial.print(joy_state.buttons.button_bits.DPAD_RIGHT);
+    Serial.print(joy_state.buttons.button_bits.BTN_THUMBR);
+    Serial.print(joy_state.buttons.button_bits.BTN_THUMBL);
+    Serial.print(joy_state.buttons.button_bits.BTN_TR);
+    Serial.print(joy_state.buttons.button_bits.BTN_TL);
+    Serial.printf(", %d", joy_state.ljoy_x);
+    Serial.printf(", %d", joy_state.ljoy_y);
+    Serial.printf(", %d", joy_state.rjoy_x);
+    Serial.printf(", %d", joy_state.rjoy_y);
+    Serial.printf(", %d", joy_state.tl);
+    Serial.printf(", %d", joy_state.tr);
+    Serial.println("");
 
-    Serial.print("[DRIVE MODE]: ");
-    Serial.print(joy_state.drive_mode);
-    Serial.print("\n");
 }
 
-void Joystick::store_joy_state()
+void Joystick::store_joy_state(Joystick_Input &js_in)
 {
-    //store prev state
-    joy_state.dpad_down_prev = joy_state.dpad_down;
-    joy_state.fnc_btn_prev = joy_state.fnc_btn;
-
-    joy_state.dpad_down = dpad_down_pressed();
-    joy_state.dpad_left = dpad_left_pressed();
-    joy_state.dpad_right = dpad_right_pressed();
-    joy_state.dpad_up = dpad_up_pressed();
-    joy_state.fnc_btn = fncbtn_pressed();
-    joy_state.ljoy_x = analogRead(JOY_LY_PIN); //intentionally switched because joystick is rotated.
-    joy_state.ljoy_y = analogRead(JOY_LX_PIN);
-    joy_state.rjoy_x = analogRead(JOY_RY_PIN);
-    joy_state.rjoy_y = analogRead(JOY_RX_PIN);
-
-
+    uint32_t buttons_in = (uint32_t)js_in.get_button();
+    joy_state.buttons.button_state = buttons_in;
+    joy_state.ljoy_x = js_in.get_LJOY_X();
+    joy_state.ljoy_y = js_in.get_LJOY_Y();
+    joy_state.rjoy_x = js_in.get_RJOY_X();
+    joy_state.rjoy_y = js_in.get_RJOY_Y();
+    joy_state.tl = js_in.get_TL();
+    joy_state.tr = js_in.get_TR();
 }
 
 void Joystick::run()

@@ -1,59 +1,30 @@
 #ifndef JOYSTICK_H_
 #define JOYSTICK_H_
 
-#include <Arduino.h>
+#include <stdint.h>
+#include <MessageInterface.h>
+#include "uart_messages.h"
 
-#include "pinout.h"
-
-#define DRIVE_MODE_1 
 /* 
-Left joystick will control translational movements
-    up = translate (right) forward
-    right = translate right
-    up-right = translate diagonally in the forward-right direction
-    and so on, for a total of 8 driving directions. 
-D-Pad will control rotational movements
-    up = rotate clockwise
-    down = rotate counter clockwise
-    up-right = drive forward and turn right CHANGED TO JUST RIGHT (need to redo pwm stuff to implement)
-    up-left = drive forward and turn left  CHANGED TO JUST LEFT (need to redo pwm stuff implement)
-    down-right = drive backward and turn right OMITTED
-    down-left = drive backward and turn left OMITTED
-Right joystick for camera movements
-    up = tilt camera upwards 
-    down = tilt camera downwards
-    right = pan camera right
-    left = pan camera left
+/// JOYSTICK CONTROLS ///
+LJOY (TRANSLATION MOVEMENTS):
+- Forward, Back, Left, Right
+- Button pressed (TBD) switch to diag drive mode which will be 
+    forward-left, forward-right, back-right, back-left
+- Button A will be used to switch driving modes.
+RJOY (TURNING): 
+- Right -> CW Turning
+- Left > CCW Turning
+- These will be combined with Forward and Back movements on LJOY,
+    mapped porportionally. This will allow to drive while slightly turning
+    like a normal car.
+BUMPERS (PAN):
+- RB -> Pan Right
+- LB -> Pan Left
+TRIGGERS (TILT):
+- RT -> Tilt Up
+- LT -> Tilt Down
 */
-
-// #define DRIVE_MODE_2
-/* revised control
-right joystick stays the same
-left joystick i think 4 translational direction
-and then someething else to switch it to the diag mode?
-or just leave as is, yes. Can it be like 
-
-fnc button is to recenter the camera
-
-dpad left, rotate CCW
-dpad right, rotate CW
-
-dpad left and ljoy forward, go straight and turn left
-dpad right and ljoy forward, go straight and turn right
-
-
-*/
-
-#if defined(DRIVE_MODE_1) && defined(DRIVE_MODE_2)
-    #error "Both drive modes enabled."
-#endif
-
-#define INIT_DPAD
-#define INIT_AUX //led and button
-#define PRINT_DPAD
-// #define PRINT_AUX
-// #define PRINT_RJOY
-// #define PRINT_LJOY
 
 #define JOY_DEADZONE 200 // in one direction
 #define JOY_MIDDLE 511
@@ -65,24 +36,42 @@ dpad right and ljoy forward, go straight and turn right
 #define STRAIGHT_DRIVE_MODE 0x00
 #define DIAG_DRIVE_MODE 0x01
 
+// https://stackoverflow.com/questions/3497345/is-there-a-way-to-access-individual-bits-with-a-union
+typedef struct button_positions
+{
+    unsigned BTN_A : 1;
+    unsigned BTN_B : 1;
+    unsigned BTN_X : 1;
+    unsigned BTN_Y : 1;
+    unsigned BTN_START : 1;
+    unsigned BTN_SELECT : 1;
+    unsigned DPAD_UP : 1;
+    unsigned DPAD_DOWN : 1;
+    unsigned DPAD_LEFT : 1;
+    unsigned DPAD_RIGHT : 1;
+    unsigned BTN_THUMBR : 1;
+    unsigned BTN_THUMBL : 1;
+    unsigned BTN_TR : 1;
+    unsigned BTN_TL : 1;
+} buttons_t;
+
+typedef union {
+    uint32_t button_state;
+    buttons_t button_bits;
+} button_u;
+
 typedef struct joy_state_struct
 {
-    bool dpad_up; 
-    bool dpad_down;
-    bool dpad_down_prev;
-    bool dpad_right;
-    bool dpad_left;
-    bool fnc_btn; 
-    bool fnc_btn_prev;
-    uint16_t ljoy_x; //x represents natural direction, not the pin its attached to
-    uint16_t ljoy_y;
-    uint16_t rjoy_x;
-    uint16_t rjoy_y;
-    uint8_t drive_mode;
+    button_u buttons;
+    int32_t ljoy_x;
+    int32_t ljoy_y;
+    int32_t rjoy_x;
+    int32_t rjoy_y;
+    int32_t tr;
+    int32_t tl;
 } joy_state_t;
 
 extern joy_state_t joy_state;
-
 
 
 namespace Joystick {
@@ -90,10 +79,12 @@ namespace Joystick {
     void init();
     void print(); //serial port must be initialized before using
     void run(); 
-    void store_joy_state();
+    void store_joy_state(Joystick_Input &js_in);
 
 
     /* digital inputs */
+
+    #if 0
 
     #pragma message "replace all these with macros and then u can make the joy_state struct static"
 
@@ -178,6 +169,8 @@ namespace Joystick {
     {
         return ljoy_x_deadzone() && ljoy_y_deadzone();
     }
+
+    #endif
 
 }
 

@@ -20,7 +20,7 @@ void main_prog()
 
   // setup
   Joystick::init();
-  locomotion_init();
+  Locomotion_Init();
   // bno055::init();
   UartComms_Init();
 
@@ -48,55 +48,34 @@ void main_prog()
       digitalWrite(13, LED_state);
     }
 
-    if (print_clock > 200)
+    if (print_clock > 100)
     {
       Joystick::print();
-      print_clock -= 200;
+      print_clock -= 100;
     }
 
-    // delay(100);
-    // bno055::get_euler_ypr();
-    // bno055::print_calibration();
 
-    #if 0
     UartComms_Run(read_buffer, write_buffer, js_in, outgoing_reply, rcv_clock);
+    
+    // Joystick::store_joy_state(js_in);
 
 
-    uint32_t btn_status = (uint32_t)js_in.get_button();
 
-    if((btn_status >> 6) & 0x1)
-    {
-      drive_forward();
-    }
-    else if((btn_status >> 7) & 0x1)
-    {
-      drive_backward();
-    }
-    else if((btn_status >> 8) & 0x1)
-    {
-      drive_left();
-    }
-    else if(btn_status >> 9 & 0x1)
-    {
-      drive_right();
-    }
-    else{
-      all_axis_off();
-    }
-
-    UartComms_ClearBuffers(read_buffer, write_buffer);
-    #endif
   
     if(joy_update_clock > 100)
     {
-      Joystick::store_joy_state();
+      Joystick::store_joy_state(js_in);
       joy_update_clock -= 100;
-      Joystick::run();
+      // Joystick::run();
     }
+
+    // bno055::get_euler_ypr();
+    // bno055::print_calibration();
+
+    UartComms_ClearBuffers(read_buffer, write_buffer);
 
 
     delay(10);
-
 
   }
   
