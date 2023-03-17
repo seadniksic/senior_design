@@ -231,12 +231,12 @@ if __name__ == "__main__":
             msg_len = len(proto_msg_serialized)
             
             # print("proto msg", proto_msg_serialized)
-            print("msg length",msg_len)
+            # print("msg length",msg_len)
             b.extend(msg_len.to_bytes(length=1, byteorder='little', signed = False))
             
             # add the proto data
             b.extend(proto_msg_serialized)
-            print(b)
+            # print(b)
             sp.write(b)
     
 
