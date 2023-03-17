@@ -19,7 +19,7 @@ void main_prog()
   delay(2000);
 
   // setup
-  // joystick_init();
+  Joystick::init();
   locomotion_init();
   // bno055::init();
   UartComms_Init();
@@ -29,6 +29,7 @@ void main_prog()
   uint8_t LED_state = HIGH;
 
   elapsedMillis print_clock;
+  elapsedMillis joy_update_clock;
 
   //protobuf shit
   UartReadBuffer read_buffer;
@@ -43,21 +44,21 @@ void main_prog()
     {
       LED_clock -= 750;
       LED_state = !LED_state;
-      // digitalWrite(JOY_LED_PIN, LED_state);
+      digitalWrite(JOY_LED_PIN, LED_state);
       digitalWrite(13, LED_state);
     }
 
-    // if (print_clock > 200)
-    // {
-    //   joystick_print();
-    //   print_clock -= 200;
-    // }
+    if (print_clock > 200)
+    {
+      Joystick::print();
+      print_clock -= 200;
+    }
 
     // delay(100);
     // bno055::get_euler_ypr();
     // bno055::print_calibration();
 
-    
+    #if 0
     UartComms_Run(read_buffer, write_buffer, js_in, outgoing_reply, rcv_clock);
 
 
@@ -84,11 +85,18 @@ void main_prog()
     }
 
     UartComms_ClearBuffers(read_buffer, write_buffer);
+    #endif
   
+    if(joy_update_clock > 100)
+    {
+      Joystick::store_joy_state();
+      joy_update_clock -= 100;
+      Joystick::run();
+    }
+
 
     delay(10);
 
-    // joystick_run();
 
   }
   

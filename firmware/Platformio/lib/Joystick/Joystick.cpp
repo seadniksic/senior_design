@@ -5,7 +5,7 @@
 joy_state_t joy_state = {0};
 
 
-void joystick::init()
+void Joystick::init()
 {
 #ifdef INIT_DPAD
     pinMode(DPAD_DOWN_PIN, INPUT);
@@ -22,7 +22,7 @@ void joystick::init()
 
 }
 
-void joystick::print()
+void Joystick::print()
 {
 #ifdef PRINT_DPAD
     Serial.print("[DPAD]: ");
@@ -63,7 +63,7 @@ void joystick::print()
     Serial.print("\n");
 }
 
-void joystick::store_joy_state()
+void Joystick::store_joy_state()
 {
     //store prev state
     joy_state.dpad_down_prev = joy_state.dpad_down;
@@ -82,7 +82,7 @@ void joystick::store_joy_state()
 
 }
 
-void joystick::run()
+void Joystick::run()
 {
 
 #ifdef DRIVE_MODE_1

@@ -51,9 +51,9 @@ dpad right and ljoy forward, go straight and turn right
 #define INIT_DPAD
 #define INIT_AUX //led and button
 #define PRINT_DPAD
-#define PRINT_AUX
-#define PRINT_RJOY
-#define PRINT_LJOY
+// #define PRINT_AUX
+// #define PRINT_RJOY
+// #define PRINT_LJOY
 
 #define JOY_DEADZONE 200 // in one direction
 #define JOY_MIDDLE 511
@@ -85,7 +85,7 @@ extern joy_state_t joy_state;
 
 
 
-namespace joystick {
+namespace Joystick {
 
     void init();
     void print(); //serial port must be initialized before using
