@@ -39,23 +39,23 @@
 #define FRON digitalWrite(FR_EN_PIN, HIGH);
 #define FLON digitalWrite(FL_EN_PIN, HIGH);
 
-void init_axis(uint8_t in1, uint8_t in2, uint8_t en);
+void Locomotion_Init_Axis(uint8_t in1, uint8_t in2, uint8_t en);
 
 #pragma message "consider inlining all of these"
 
-void drive_left();
-void drive_right();
-void drive_diag_FL();
-void drive_diag_FR();
-void drive_diag_BL();
-void drive_diag_BR();
-void rotate_CW();
-void rotate_CCW();
-void lateral_arc_CW();
-void lateral_arc_CCW();
-void drive_forward();
-void drive_backward();
-void all_axis_off();
+void Locomotion_Drive_Left();
+void Locomotion_Drive_Right();
+void Locomotion_Drive_Diag_FL();
+void Locomotion_Drive_Diag_FR();
+void Locomotion_Drive_Diag_BL();
+void Locomotion_Drive_Diag_BR();
+void Locomotion_Rotate_CW();
+void Locomotion_Rotate_CCW();
+void Locomotion_Lateral_Arc_CW();
+void Locomotion_Lateral_Arc_CCW();
+void Locomotion_Drive_Forward();
+void Locomotion_Drive_Backward();
+void Locomotion_All_Axis_Off();
 
 void Locomotion_Init();
 void Locomotion_Run();

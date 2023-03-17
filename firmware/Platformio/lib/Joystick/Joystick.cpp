@@ -2,30 +2,34 @@
 #include <string.h>
 #include "Locomotion.h"
 
-joy_state_t joy_state = {0};
+static joy_state_t joy_state = {0};
 
 
-void Joystick::init()
+void Joystick_Init()
 {
-
+    // Nothing to do
 }
 
-void Joystick::print()
+void Joystick_Print()
 {
     Serial.print(joy_state.buttons.button_bits.BTN_A);
     Serial.print(joy_state.buttons.button_bits.BTN_B);
     Serial.print(joy_state.buttons.button_bits.BTN_X);
     Serial.print(joy_state.buttons.button_bits.BTN_Y);
+    Serial.print(" ");
     Serial.print(joy_state.buttons.button_bits.BTN_START);
     Serial.print(joy_state.buttons.button_bits.BTN_SELECT);
     Serial.print(joy_state.buttons.button_bits.DPAD_UP);
     Serial.print(joy_state.buttons.button_bits.DPAD_DOWN);
+    Serial.print(" ");
     Serial.print(joy_state.buttons.button_bits.DPAD_LEFT);
     Serial.print(joy_state.buttons.button_bits.DPAD_RIGHT);
     Serial.print(joy_state.buttons.button_bits.BTN_THUMBR);
     Serial.print(joy_state.buttons.button_bits.BTN_THUMBL);
+    Serial.print(" ");
     Serial.print(joy_state.buttons.button_bits.BTN_TR);
     Serial.print(joy_state.buttons.button_bits.BTN_TL);
+    Serial.print(" ");
     Serial.printf(", %d", joy_state.ljoy_x);
     Serial.printf(", %d", joy_state.ljoy_y);
     Serial.printf(", %d", joy_state.rjoy_x);
@@ -36,7 +40,7 @@ void Joystick::print()
 
 }
 
-void Joystick::store_joy_state(Joystick_Input &js_in)
+void Joystick_Store_State(Joystick_Input &js_in)
 {
     uint32_t buttons_in = (uint32_t)js_in.get_button();
     joy_state.buttons.button_state = buttons_in;
@@ -48,15 +52,42 @@ void Joystick::store_joy_state(Joystick_Input &js_in)
     joy_state.tr = js_in.get_TR();
 }
 
-void Joystick::run()
+void Joystick_Run()
 {
+    if(!Joystick_Input_Present())
+    {
+        
+        return;
+    }
 
-#ifdef DRIVE_MODE_1
+
+
+
+
+
+
+}
+
+bool Joystick_Input_Present()
+{
+    return (
+        BTN_NONE_PRESSED && \
+        LJOY_DEADZONE_XY && \
+        RJOY_DEADZONE_XY && \
+        TRIGGER_LEFT_DEADZONE && \
+        TRIGGER_RIGHT_DEADZONE
+        );
+}
+
+
+
+
+#if 0
 
     //check for controller input
     if(ljoy_deadzone() && !joy_state.dpad_up && !joy_state.dpad_left && !joy_state.dpad_right && !joy_state.dpad_down && !joy_state.fnc_btn)
     {
-        all_axis_off();
+        Locomotion_All_Axis_Off();
         return;
     }
 
@@ -68,25 +99,25 @@ void Joystick::run()
         if(ljoy_up() && ljoy_right())
         {
             Serial.println("diag fr");
-            drive_diag_FR();
+            Locomotion_Drive_Diag_FR();
             return;
         }
         else if(ljoy_up() && ljoy_left())
         {
             Serial.println("diag fl");
-            drive_diag_FL();
+            Locomotion_Drive_Diag_FL();
             return;
         }
         else if(ljoy_down() && ljoy_right())
         {
             Serial.println("diag br");
-            drive_diag_BR();
+            Locomotion_Drive_Diag_BR();
             return;
         }
         else if(ljoy_down() && ljoy_left())
         {
             Serial.println("diag bl");
-            drive_diag_BL();
+            Locomotion_Drive_Diag_BL();
             return;
         }
     }
@@ -98,22 +129,22 @@ void Joystick::run()
         if(ljoy_up())
         {
             Serial.println("forward");
-            drive_forward();
+            Locomotion_Drive_Forward();
         }
         else if(ljoy_down())
         {
             Serial.println("back");
-            drive_backward();
+            Locomotion_Drive_Backward();
         }
         else if(ljoy_right())
         {
             Serial.println("right");
-            drive_right();
+            Locomotion_Drive_Right();
         }
         else if(ljoy_left())
         {
             Serial.println("left");
-            drive_left();
+            Locomotion_Drive_Left();
         }
     }
     
@@ -143,12 +174,12 @@ void Joystick::run()
     else if(joy_state.dpad_right)
     {
         Serial.println("CW");
-        rotate_CW();
+        Locomotion_Rotate_CW();
     }
     else if(joy_state.dpad_left)
     {
         Serial.println("CWW");
-        rotate_CCW();
+        Locomotion_Rotate_CCW();
     }
 
     // check function inputs
@@ -169,7 +200,5 @@ void Joystick::run()
 
 
 #endif
-
-}
 
 

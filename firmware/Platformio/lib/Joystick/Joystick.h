@@ -26,15 +26,66 @@ TRIGGERS (TILT):
 - LT -> Tilt Down
 */
 
-#define JOY_DEADZONE 200 // in one direction
-#define JOY_MIDDLE 511
-#define JOY_MAX 1023
-#define JOY_MIN 0
-#define JOY_HIGH 711 //doing the math here instead of using #def for efficiency
-#define JOY_LOW 311
+#define STRAIGHT_DRIVE_MODE 0
+#define DIAG_DRIVE_MODE 1
 
-#define STRAIGHT_DRIVE_MODE 0x00
-#define DIAG_DRIVE_MODE 0x01
+/* digital inputs */
+#define BTN_A_PRESSED (joy_state.buttons.button_bits.BTN_A)
+#define BTN_B_PRESSED (joy_state.buttons.button_bits.BTN_B)
+#define BTN_X_PRESSED (joy_state.buttons.button_bits.BTN_X)
+#define BTN_Y_PRESSED (joy_state.buttons.button_bits.BTN_Y)
+#define BTN_START_PRESSED (joy_state.buttons.button_bits.BTN_START)
+#define BTN_SELECT_PRESSED (joy_state.buttons.button_bits.BTN_SELECT)
+#define DPAD_UP_PRESSED (joy_state.buttons.button_bits.DPAD_UP)
+#define DPAD_DOWN_PRESSED (joy_state.buttons.button_bits.DPAD_DOWN)
+#define DPAD_LEFT_PRESSED (joy_state.buttons.button_bits.DPAD_LEFT)
+#define DPAD_RIGHT_PRESSED (joy_state.buttons.button_bits.DPAD_RIGHT)
+#define BTN_THUMBR_PRESSED (joy_state.buttons.button_bits.BTN_THUMBR)
+#define BTN_THUMBL_PRESSED (joy_state.buttons.button_bits.BTN_THUMBL)
+#define BTN_TR_PRESSED (joy_state.buttons.button_bits.BTN_TR)
+#define BTN_TL_PRESSED (joy_state.buttons.button_bits.BTN_TL)
+#define BTN_NONE_PRESSED (joy_state.buttons.button_state == 0)
+
+/* analog input ranges*/
+#define JOY_DEADZONE 3000 // in one direction
+#define JOY_MIDDLE 511
+#define JOY_MAX 32768 // down and right are positive
+#define JOY_MIN (-JOY_MAX)
+#define JOY_HIGH JOY_DEADZONE
+#define JOY_LOW (-JOY_DEADZONE)
+#define JOY_TRIG_MAX 255
+#define JOY_TRIG_MIN 0
+#define JOY_TRIG_PRESSED_LIM 150
+
+/* analog input*/
+#define LJOY_RIGHT (joy_state.ljoy_x > JOY_HIGH)
+#define LJOY_LEFT (joy_state.ljoy_x < JOY_LOW)
+#define LJOY_UP (joy_state.ljoy_y < JOW_LOW)
+#define LJOY_DOWN (joy_state.ljoy_y > JOY_HIGH)
+#define LJOY_DEADZONE_X (joy_state.ljoy_x > JOY_LOW && joy_state.ljoy_x < JOY_HIGH)
+#define LJOY_DEADZONE_Y (joy_state.ljoy_y > JOY_LOW && joy_state.ljoy_y < JOY_HIGH)
+#define LJOY_DEADZONE_XY (LJOY_DEADZONE_X && LJOY_DEADZONE_Y)
+#define LJOY_UR (LJOY_UP && LJOY_RIGHT) 
+#define LJOY_UL (LJOY_UP && LJOY_LEFT)
+#define LJOY_DR (LJOY_DOWN && LJOY_RIGHT)
+#define LJOY_DL (LJOY_DOWN && LJOY_LEFT)
+#define RJOY_RIGHT (joy_state.rjoy_x > JOY_HIGH)
+#define RJOY_LEFT (joy_state.rjoy_x < JOY_LOW)
+#define RJOY_UP (joy_state.rjoy_y < JOW_LOW)
+#define RJOY_DOWN (joy_state.rjoy_y > JOY_HIGH)
+#define RJOY_DEADZONE_X (joy_state.rjoy_x > JOY_LOW && joy_state.rjoy_x < JOY_HIGH)
+#define RJOY_DEADZONE_Y (joy_state.rjoy_y > JOY_LOW && joy_state.rjoy_y < JOY_HIGH)
+#define RJOY_DEADZONE_XY (RJOY_DEADZONE_X && RJOY_DEADZONE_Y)
+#define RJOY_UR (RJOY_UP && RJOY_RIGHT) 
+#define RJOY_UL (RJOY_UP && RJOY_REFT)
+#define RJOY_DR (RJOY_DOWN && RJOY_RIGHT)
+#define RJOY_DL (RJOY_DOWN && RJOY_REFT)
+#define TRIGGER_LEFT (joy_state.tl > JOY_TRIG_PRESSED_LIM)
+#define TRIGGER_RIGHT (joy_state.tr > JOY_TRIG_PRESSED_LIM)
+#define TRIGGER_LEFT_DEADZONE (joy_state.tl <= JOY_TRIG_PRESSED_LIM)
+#define TRIGGER_RIGHT_DEADZONE (joy_state.tr <= JOY_TRIG_PRESSED_LIM)
+
+
 
 // https://stackoverflow.com/questions/3497345/is-there-a-way-to-access-individual-bits-with-a-union
 typedef struct button_positions
@@ -71,112 +122,12 @@ typedef struct joy_state_struct
     int32_t tl;
 } joy_state_t;
 
-extern joy_state_t joy_state;
 
-
-namespace Joystick {
-
-    void init();
-    void print(); //serial port must be initialized before using
-    void run(); 
-    void store_joy_state(Joystick_Input &js_in);
-
-
-    /* digital inputs */
-
-    #if 0
-
-    #pragma message "replace all these with macros and then u can make the joy_state struct static"
-
-    inline bool dpad_up_pressed()
-    {
-        return digitalRead(DPAD_UP_PIN);
-    }
-
-    inline bool dpad_down_pressed()
-    {
-        return digitalRead(DPAD_DOWN_PIN);
-    }
-
-    inline bool dpad_right_pressed()
-    {
-        return digitalRead(DPAD_RIGHT_PIN);
-    }
-
-    inline bool dpad_left_pressed()
-    {
-        return digitalRead(DPAD_LEFT_PIN);
-    }
-
-    inline bool fncbtn_pressed()
-    {
-        return digitalRead(JOY_FNCBTN_PIN);
-    }
-
-    /* analog inputs*/
-
-    inline bool ljoy_right()
-    {
-        return (joy_state.ljoy_x < JOY_LOW); 
-    }
-
-    inline bool ljoy_left()
-    {
-        return (joy_state.ljoy_x > JOY_HIGH); 
-    }
-
-    inline bool ljoy_up()
-    {
-        return (joy_state.ljoy_y < JOY_LOW); 
-    }
-
-    inline bool ljoy_down()
-    {
-        return (joy_state.ljoy_y > JOY_HIGH); 
-    }
-
-    inline bool rjoy_right()
-    {
-        return (joy_state.rjoy_x < JOY_LOW); 
-    }
-
-    inline bool rjoy_left()
-    {
-        return (joy_state.rjoy_x > JOY_HIGH); 
-    }
-
-    inline bool rjoy_up()
-    {
-        return (joy_state.rjoy_y < JOY_LOW); 
-    }
-
-    inline bool rjoy_down()
-    {
-        return (joy_state.rjoy_y > JOY_HIGH); 
-    }
-
-    inline bool ljoy_y_deadzone()
-    {
-        return (joy_state.ljoy_y < JOY_HIGH && joy_state.ljoy_y > JOY_LOW); 
-    }
-
-    inline bool ljoy_x_deadzone()
-    {
-        return (joy_state.ljoy_x < JOY_HIGH && joy_state.ljoy_x > JOY_LOW); 
-    }
-
-    inline bool ljoy_deadzone()
-    {
-        return ljoy_x_deadzone() && ljoy_y_deadzone();
-    }
-
-    #endif
-
-}
-
-
-
-
+void Joystick_Init();
+void Joystick_Print(); //serial port must be initialized before using
+void Joystick_Run(); 
+void Joystick_Store_State(Joystick_Input &js_in);
+bool Joystick_Input_Present();
 
 
 #endif

@@ -19,7 +19,7 @@ void main_prog()
   delay(2000);
 
   // setup
-  Joystick::init();
+  Joystick_Init();
   Locomotion_Init();
   // bno055::init();
   UartComms_Init();
@@ -50,23 +50,22 @@ void main_prog()
 
     if (print_clock > 100)
     {
-      Joystick::print();
+      Joystick_Print();
       print_clock -= 100;
     }
 
 
     UartComms_Run(read_buffer, write_buffer, js_in, outgoing_reply, rcv_clock);
     
-    // Joystick::store_joy_state(js_in);
 
 
 
   
     if(joy_update_clock > 100)
     {
-      Joystick::store_joy_state(js_in);
+      Joystick_Store_State(js_in);
       joy_update_clock -= 100;
-      // Joystick::run();
+      //Joystick_Run();
     }
 
     // bno055::get_euler_ypr();
