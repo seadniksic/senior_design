@@ -219,7 +219,7 @@ if __name__ == "__main__":
             proto_msg.LJOY_X = ljoy_x_data
             proto_msg.LJOY_Y = ljoy_y_data            
             proto_msg.RJOY_X = rjoy_x_data
-            proto_msg.RJOY_Y = ljoy_y_data
+            proto_msg.RJOY_Y = rjoy_y_data
             proto_msg.TR = tr_data
             proto_msg.TL = tl_data
 
