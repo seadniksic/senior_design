@@ -8,6 +8,7 @@ ReceiveData *imageServer;
 ReceiveData *slamServer;
 ReceiveData *statusServer;
 TransmitData *commandsClient;
+ReceiveData *commandsServer;
 
 void initializeNetwork()
 {
@@ -15,6 +16,7 @@ void initializeNetwork()
     slamServer = new ReceiveData(WIFI_SLAM_PORT);
     statusServer = new ReceiveData(WIFI_ROVER_STATUS_PORT);
     commandsClient = new TransmitData(HOST_IP, WIFI_ROVER_COMMANDS_PORT);
+    commandsServer = new ReceiveData(BASE_STATION_COMMANDS_PORT);
 }
 
 void shutdownNetwork()
@@ -43,9 +45,14 @@ int getRoverStatus(status_t *buffer, size_t bufferSize)
     return returnVal;   
 }
 
-void sendRoverCommands(commands_t *commands, size_t bufferSize)
+void sendRoverCommands()
 {
-    commandsClient->sendPayload(commands, bufferSize);
+    commands_t buffer;
+    size_t bufferSize = sizeof(buffer);
+
+    while(commandsServer->getData(&buffer, bufferSize) == 0);
+    commandsClient->sendPayload(&buffer, bufferSize);
 }
+
 
 #endif
