@@ -87,7 +87,10 @@ int ReceiveData::getData(void *buffer, size_t bufferLength)
         {
             int receivedBytes = 0;
             uint64_t receivingPacketLength = 0;
-            int receiveValue = recv(clientSocket, &receivingPacketLength, sizeof(uint64_t), 0);
+            char firstPacket[1400];
+            int receiveValue = recv(clientSocket, firstPacket, sizeof(uint64_t), 0);
+            receivingPacketLength = atoi(firstPacket);
+            
             if(receiveValue == 0)
             {
                 close(clientSocket);
