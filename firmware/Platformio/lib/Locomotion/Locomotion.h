@@ -53,6 +53,7 @@ void Locomotion_Differential_Drive_Forward(const uint8_t &pwm_left, const uint8_
 
 void Locomotion_Drive_Backward();
 void Locomotion_Drive_Backward(const uint8_t &val);
+void Locomotion_Differential_Drive_Backward(const uint8_t &pwm_left, const uint8_t &pwm_right);
 
 void Locomotion_Drive_Diag_FL();
 void Locomotion_Drive_Diag_FL(const uint8_t &val);

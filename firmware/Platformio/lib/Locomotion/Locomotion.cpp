@@ -74,6 +74,15 @@ void Locomotion_Drive_Backward(const uint8_t &val)
   BRBACK(val);
 }
 
+void Locomotion_Differential_Drive_Backward(const uint8_t &pwm_left, const uint8_t &pwm_right)
+{
+  FLBACK(pwm_left);
+  BLBACK(pwm_left);
+
+  FRBACK(pwm_right);
+  BRBACK(pwm_right);
+}
+
 void Locomotion_Drive_Diag_FL()
 {
   FRFOR(ANALOG_WRITE_VAL);

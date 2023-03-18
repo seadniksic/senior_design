@@ -107,18 +107,33 @@ void Joystick_Run()
     {
         if(LJOY_UP && RJOY_RIGHT)
         {
-            const uint8_t mapped_right = Joystick_Map_Generic(Joystick_Map(joy_state.rjoy_x), 0, 255, 0, (OUT_MAX - OUT_MIN)/2);
-            const uint8_t pwm_left = OUT_MAX - OUT_MIN + mapped_right;  // left side should move faster
-            const uint8_t pwm_right = OUT_MAX - OUT_MIN - mapped_right;
+            const uint8_t mapped = Joystick_Map_Generic(Joystick_Map(joy_state.rjoy_x), 0, 255, 0, (OUT_MAX - OUT_MIN)/2);
+            const uint8_t pwm_left = OUT_MAX - OUT_MIN + mapped;  // left side should move faster
+            const uint8_t pwm_right = OUT_MAX - OUT_MIN - mapped;
             Locomotion_Differential_Drive_Forward(pwm_left, pwm_right);
         }
         else if(LJOY_UP && RJOY_LEFT)
         {
-            const uint8_t mapped_right = Joystick_Map_Generic(Joystick_Map(joy_state.rjoy_x), 0, 255, 0, (OUT_MAX - OUT_MIN)/2);
-            const uint8_t pwm_left = OUT_MAX - OUT_MIN - mapped_right; 
-            const uint8_t pwm_right = OUT_MAX - OUT_MIN + mapped_right; // right_side should move faster
+            const uint8_t mapped = Joystick_Map_Generic(Joystick_Map(joy_state.rjoy_x), 0, 255, 0, (OUT_MAX - OUT_MIN)/2);
+            const uint8_t pwm_left = OUT_MAX - OUT_MIN - mapped; 
+            const uint8_t pwm_right = OUT_MAX - OUT_MIN + mapped; // right_side should move faster
             Locomotion_Differential_Drive_Forward(pwm_left, pwm_right);
         }
+        else if(LJOY_DOWN && RJOY_RIGHT)
+        {
+            const uint8_t mapped = Joystick_Map_Generic(Joystick_Map(joy_state.rjoy_x), 0, 255, 0, (OUT_MAX - OUT_MIN)/2);
+            const uint8_t pwm_left = OUT_MAX - OUT_MIN + mapped; 
+            const uint8_t pwm_right = OUT_MAX - OUT_MIN - mapped; // right_side should move faster
+            Locomotion_Differential_Drive_Backward(pwm_left, pwm_right);
+        }
+        else if(LJOY_DOWN && RJOY_LEFT)
+        {
+            const uint8_t mapped = Joystick_Map_Generic(Joystick_Map(joy_state.rjoy_x), 0, 255, 0, (OUT_MAX - OUT_MIN)/2);
+            const uint8_t pwm_left = OUT_MAX - OUT_MIN - mapped; 
+            const uint8_t pwm_right = OUT_MAX - OUT_MIN + mapped; // right_side should move faster
+            Locomotion_Differential_Drive_Backward(pwm_left, pwm_right);
+        }
+        
         else if(RJOY_RIGHT)
         {
             Locomotion_Rotate_CW(Joystick_Map(joy_state.rjoy_x));
@@ -171,16 +186,6 @@ void Joystick_Run()
             Locomotion_Drive_Diag_BL(Joystick_Map(min(joy_state.ljoy_x, joy_state.rjoy_x)));
         }
     }
-
-    // if(RJOY_LEFT)
-    // {
-    //     Locomotion_Rotate_CCW();
-    // }
-    // else if(RJOY_RIGHT)
-    // {
-    //     Locomotion_Rotate_CW();
-    // }
-
 
 }
 
