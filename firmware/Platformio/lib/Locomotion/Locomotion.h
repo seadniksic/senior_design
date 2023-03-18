@@ -41,22 +41,40 @@
 
 void Locomotion_Init_Axis(uint8_t in1, uint8_t in2, uint8_t en);
 
-#pragma message "consider inlining all of these"
-
 void Locomotion_Drive_Left();
+void Locomotion_Drive_Left(const uint8_t &val);
+
 void Locomotion_Drive_Right();
-void Locomotion_Drive_Diag_FL();
-void Locomotion_Drive_Diag_FR();
-void Locomotion_Drive_Diag_BL();
-void Locomotion_Drive_Diag_BR();
-void Locomotion_Rotate_CW();
-void Locomotion_Rotate_CCW();
-void Locomotion_Lateral_Arc_CW();
-void Locomotion_Lateral_Arc_CCW();
+void Locomotion_Drive_Right(const uint8_t &val);
+
 void Locomotion_Drive_Forward();
 void Locomotion_Drive_Forward(const uint8_t &val);
+void Locomotion_Differential_Drive_Forward(const uint8_t &pwm_left, const uint8_t &pwm_right);
+
 void Locomotion_Drive_Backward();
 void Locomotion_Drive_Backward(const uint8_t &val);
+
+void Locomotion_Drive_Diag_FL();
+void Locomotion_Drive_Diag_FL(const uint8_t &val);
+
+void Locomotion_Drive_Diag_FR();
+void Locomotion_Drive_Diag_FR(const uint8_t &val);
+
+void Locomotion_Drive_Diag_BL();
+void Locomotion_Drive_Diag_BL(const uint8_t &val);
+
+void Locomotion_Drive_Diag_BR();
+void Locomotion_Drive_Diag_BR(const uint8_t &val);
+
+void Locomotion_Rotate_CW();
+void Locomotion_Rotate_CW(const uint8_t &val);
+
+void Locomotion_Rotate_CCW();
+void Locomotion_Rotate_CCW(const uint8_t &val);
+
+
+void Locomotion_Lateral_Arc_CW();
+void Locomotion_Lateral_Arc_CCW();
 void Locomotion_All_Axis_Off();
 
 void Locomotion_Init();

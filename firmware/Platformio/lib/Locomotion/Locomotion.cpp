@@ -8,6 +8,14 @@ void Locomotion_Drive_Left()
   FLBACK(ANALOG_WRITE_VAL);
 }
 
+void Locomotion_Drive_Left(const uint8_t &val)
+{
+  BRBACK(val);
+  BLFOR(val);
+  FRFOR(val);
+  FLBACK(val);
+}
+
 void Locomotion_Drive_Right()
 {
   BRFOR(ANALOG_WRITE_VAL);
@@ -16,10 +24,66 @@ void Locomotion_Drive_Right()
   FLFOR(ANALOG_WRITE_VAL);
 }
 
+void Locomotion_Drive_Right(const uint8_t &val)
+{
+  BRFOR(val);
+  BLBACK(val);
+  FRBACK(val);
+  FLFOR(val);
+}
+
+
+void Locomotion_Drive_Forward()
+{
+  FLFOR(ANALOG_WRITE_VAL);
+  FRFOR(ANALOG_WRITE_VAL);
+  BLFOR(ANALOG_WRITE_VAL);
+  BRFOR(ANALOG_WRITE_VAL);
+}
+
+void Locomotion_Drive_Forward(const uint8_t &val)
+{
+  FLFOR(val);
+  FRFOR(val);
+  BLFOR(val);
+  BRFOR(val);
+}
+
+void Locomotion_Differential_Drive_Forward(const uint8_t &pwm_left, const uint8_t &pwm_right)
+{
+  FLFOR(pwm_left);
+  BLFOR(pwm_left);
+
+  FRFOR(pwm_right);
+  BRFOR(pwm_right);
+}
+
+void Locomotion_Drive_Backward()
+{
+  FLBACK(ANALOG_WRITE_VAL);
+  FRBACK(ANALOG_WRITE_VAL);
+  BLBACK(ANALOG_WRITE_VAL);
+  BRBACK(ANALOG_WRITE_VAL);
+}
+
+void Locomotion_Drive_Backward(const uint8_t &val)
+{
+  FLBACK(val);
+  FRBACK(val);
+  BLBACK(val);
+  BRBACK(val);
+}
+
 void Locomotion_Drive_Diag_FL()
 {
   FRFOR(ANALOG_WRITE_VAL);
   BLFOR(ANALOG_WRITE_VAL);
+}
+
+void Locomotion_Drive_Diag_FL(const uint8_t &val)
+{
+  FRFOR(val);
+  BLFOR(val);
 }
 
 void Locomotion_Drive_Diag_FR()
@@ -28,17 +92,34 @@ void Locomotion_Drive_Diag_FR()
   BRFOR(ANALOG_WRITE_VAL);
 }
 
+void Locomotion_Drive_Diag_FR(const uint8_t &val)
+{
+  FLFOR(val);
+  BRFOR(val);
+}
+
 void Locomotion_Drive_Diag_BL()
 {
   FLBACK(ANALOG_WRITE_VAL);
-  BRBACK(ANALOG_WRITE_VAL);
-  
+  BRBACK(ANALOG_WRITE_VAL); 
+}
+
+void Locomotion_Drive_Diag_BL(const uint8_t &val)
+{
+  FLBACK(val);
+  BRBACK(val); 
 }
 
 void Locomotion_Drive_Diag_BR()
 {
   FRBACK(ANALOG_WRITE_VAL);
   BLBACK(ANALOG_WRITE_VAL); 
+}
+
+void Locomotion_Drive_Diag_BR(const uint8_t &val)
+{
+  FRBACK(val);
+  BLBACK(val); 
 }
 
 void Locomotion_Lateral_Arc_CW()
@@ -60,6 +141,15 @@ void Locomotion_Rotate_CW()
   FRBACK(ANALOG_WRITE_VAL);
   BRBACK(ANALOG_WRITE_VAL);
 }
+
+void Locomotion_Rotate_CW(const uint8_t &val)
+{
+  FLFOR(val);
+  BLFOR(val);
+  FRBACK(val);
+  BRBACK(val);
+}
+
 void Locomotion_Rotate_CCW()
 {
   FRFOR(ANALOG_WRITE_VAL);
@@ -68,36 +158,12 @@ void Locomotion_Rotate_CCW()
   BLBACK(ANALOG_WRITE_VAL);
 }
 
-void Locomotion_Drive_Forward()
+void Locomotion_Rotate_CCW(const uint8_t &val)
 {
-  FLFOR(ANALOG_WRITE_VAL);
-  FRFOR(ANALOG_WRITE_VAL);
-  BLFOR(ANALOG_WRITE_VAL);
-  BRFOR(ANALOG_WRITE_VAL);
-}
-
-void Locomotion_Drive_Forward(const uint8_t &val)
-{
-  FLFOR(val);
   FRFOR(val);
-  BLFOR(val);
   BRFOR(val);
-}
-
-void Locomotion_Drive_Backward()
-{
-  FLBACK(ANALOG_WRITE_VAL);
-  FRBACK(ANALOG_WRITE_VAL);
-  BLBACK(ANALOG_WRITE_VAL);
-  BRBACK(ANALOG_WRITE_VAL);
-}
-
-void Locomotion_Drive_Backward(const uint8_t &val)
-{
   FLBACK(val);
-  FRBACK(val);
   BLBACK(val);
-  BRBACK(val);
 }
 
 void Locomotion_All_Axis_Off()

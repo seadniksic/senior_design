@@ -40,6 +40,7 @@ void Joystick_Print()
     Serial.print(" ");
     Serial.print(control_state.control.bits.drive_mode);
     Serial.print(control_state.control.bits.turn_off);
+    Serial.print(control_state.control.bits.center_cams);
     Serial.println("");
 
 }
@@ -66,26 +67,67 @@ void Joystick_Store_State(Joystick_Input &js_in)
         control_state.control.bits.drive_mode = !control_state.control.bits.drive_mode;
     }
 
+    // Capture on falling edge
     if(joy_state.prev_buttons.bits.BTN_X == 1 && \
         joy_state.buttons.bits.BTN_X == 0)
     {
         control_state.control.bits.turn_off = !control_state.control.bits.turn_off;
     }
 
+    // Capture on rising edge
+    if(joy_state.prev_buttons.bits.BTN_B == 0 && \
+        joy_state.buttons.bits.BTN_B == 1)
+    {
+        control_state.control.bits.center_cams = 1;
+    }
 
 }
 
 void Joystick_Run()
 {
+
+    // Check control and handle and pending actions first
+    if(CENTER_CAMS)
+    {
+        control_state.control.bits.center_cams = 0;
+        Serial.println("Centering cameras...");
+        //TODO: Finish
+    }
+
+    // Check for joystick input
     if(!Joystick_Input_Present() || IN_POWER_DOWN_MODE)
     {
         Locomotion_All_Axis_Off();
+
         return;
     }
 
+    // Handle joystick input
     if(IN_STRAIGHT_DRIVE_MODE)
     {
-        if(LJOY_UP)
+        if(LJOY_UP && RJOY_RIGHT)
+        {
+            const uint8_t mapped_right = Joystick_Map_Generic(Joystick_Map(joy_state.rjoy_x), 0, 255, 0, (OUT_MAX - OUT_MIN)/2);
+            const uint8_t pwm_left = OUT_MAX - OUT_MIN + mapped_right;  // left side should move faster
+            const uint8_t pwm_right = OUT_MAX - OUT_MIN - mapped_right;
+            Locomotion_Differential_Drive_Forward(pwm_left, pwm_right);
+        }
+        else if(LJOY_UP && RJOY_LEFT)
+        {
+            const uint8_t mapped_right = Joystick_Map_Generic(Joystick_Map(joy_state.rjoy_x), 0, 255, 0, (OUT_MAX - OUT_MIN)/2);
+            const uint8_t pwm_left = OUT_MAX - OUT_MIN - mapped_right; 
+            const uint8_t pwm_right = OUT_MAX - OUT_MIN + mapped_right; // right_side should move faster
+            Locomotion_Differential_Drive_Forward(pwm_left, pwm_right);
+        }
+        else if(RJOY_RIGHT)
+        {
+            Locomotion_Rotate_CW(Joystick_Map(joy_state.rjoy_x));
+        }
+        else if(RJOY_LEFT)
+        {
+            Locomotion_Rotate_CCW(Joystick_Map(joy_state.rjoy_x));
+        }
+        else if(LJOY_UP)
         {
             Locomotion_Drive_Forward(Joystick_Map(joy_state.ljoy_y));
         }
@@ -95,11 +137,11 @@ void Joystick_Run()
         }
         else if(LJOY_RIGHT)
         {
-            Locomotion_Drive_Right();
+            Locomotion_Drive_Right(Joystick_Map(joy_state.ljoy_x));
         }
         else if(LJOY_LEFT)
         {
-            Locomotion_Drive_Left();
+            Locomotion_Drive_Left(Joystick_Map(joy_state.ljoy_x));
         }
     }
     else
@@ -107,33 +149,39 @@ void Joystick_Run()
         if(LJOY_UR)
         {
             Locomotion_All_Axis_Off();
-            Locomotion_Drive_Diag_FR();
+            // Locomotion_Drive_Diag_FR();
+            Locomotion_Drive_Diag_FR(Joystick_Map(max(joy_state.ljoy_x, joy_state.rjoy_x)));
         }
         else if(LJOY_UL)
         {
             Locomotion_All_Axis_Off();
-            Locomotion_Drive_Diag_FL();
+            // Locomotion_Drive_Diag_FL();
+            Locomotion_Drive_Diag_FL(Joystick_Map(min(joy_state.ljoy_x, joy_state.rjoy_x)));
         }
         else if(LJOY_DR)
         {
             Locomotion_All_Axis_Off();
-            Locomotion_Drive_Diag_BR();
+            // Locomotion_Drive_Diag_BR();
+            Locomotion_Drive_Diag_BR(Joystick_Map(max(joy_state.ljoy_x, joy_state.rjoy_x)));
         }
         else if(LJOY_DL)
         {
             Locomotion_All_Axis_Off();
-            Locomotion_Drive_Diag_BL();
+            // Locomotion_Drive_Diag_BL();
+            Locomotion_Drive_Diag_BL(Joystick_Map(min(joy_state.ljoy_x, joy_state.rjoy_x)));
         }
     }
 
-    if(RJOY_LEFT)
-    {
-        Locomotion_Rotate_CCW();
-    }
-    else if(RJOY_RIGHT)
-    {
-        Locomotion_Rotate_CW();
-    }
+    // if(RJOY_LEFT)
+    // {
+    //     Locomotion_Rotate_CCW();
+    // }
+    // else if(RJOY_RIGHT)
+    // {
+    //     Locomotion_Rotate_CW();
+    // }
+
+
 }
 
 bool Joystick_Input_Present()
@@ -151,6 +199,18 @@ uint8_t Joystick_Map(const int32_t &val)
 {
     float temp = (float)abs(val);
     const uint8_t result = (uint8_t)((float)(temp - IN_MIN) * RATIO + OUT_MIN);
+    return result;
+}
+
+uint8_t Joystick_Map_Generic(const int32_t &val, \
+                             const int32_t &in_min, \
+                             const int32_t &in_max, \
+                             const int32_t &out_min, \
+                             const int32_t &out_max)
+{
+    float temp = (float)abs(val); 
+    float ratio = ((float)(out_max - out_min) / (float)(in_max - in_min));
+    const uint8_t result = (uint8_t)((float)(temp - in_min) * ratio + out_min);
     return result;
 }
 

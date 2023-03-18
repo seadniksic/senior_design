@@ -25,8 +25,9 @@ TRIGGERS (TILT):
 - RT -> Tilt Up
 - LT -> Tilt Down
 CONTROL BUTTONS: 
-- A to be used for switching driving modes
-- X to be used for turning all axis off.
+- A to be used for switching driving modes (toggle)
+- X to be used for turning all axis off (toggle)
+- B to be used for resetting cameras to mid position
 */
 
 /* digital inputs */
@@ -94,6 +95,7 @@ CONTROL BUTTONS:
 #define RUNNING_MODE 0 
 #define IN_POWER_DOWN_MODE (control_state.control.bits.turn_off == POWER_DOWN_MODE)
 #define IN_RUNNING_MODE (control_state.control.bits.turn_off == RUNNING_MODE)
+#define CENTER_CAMS (control_state.control.bits.center_cams)
 
 /* Mapping */
 #define IN_MIN JOY_HIGH
@@ -132,6 +134,7 @@ typedef struct
 {
     unsigned drive_mode : 1;
     unsigned turn_off : 1;
+    unsigned center_cams : 1;
 } control_t;
 
 typedef union
@@ -167,6 +170,10 @@ void Joystick_Run();
 void Joystick_Store_State(Joystick_Input &js_in);
 bool Joystick_Input_Present();
 uint8_t Joystick_Map(const int32_t &val);
-
+uint8_t Joystick_Map_Generic(const int32_t &val, \
+                             const int32_t &in_min, \
+                             const int32_t &in_max, \
+                             const int32_t &out_min, \
+                             const int32_t &out_max);
 
 #endif
