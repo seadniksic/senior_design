@@ -76,12 +76,28 @@ void Locomotion_Drive_Forward()
   BRFOR(ANALOG_WRITE_VAL);
 }
 
+void Locomotion_Drive_Forward(const uint8_t &val)
+{
+  FLFOR(val);
+  FRFOR(val);
+  BLFOR(val);
+  BRFOR(val);
+}
+
 void Locomotion_Drive_Backward()
 {
   FLBACK(ANALOG_WRITE_VAL);
   FRBACK(ANALOG_WRITE_VAL);
   BLBACK(ANALOG_WRITE_VAL);
   BRBACK(ANALOG_WRITE_VAL);
+}
+
+void Locomotion_Drive_Backward(const uint8_t &val)
+{
+  FLBACK(val);
+  FRBACK(val);
+  BLBACK(val);
+  BRBACK(val);
 }
 
 void Locomotion_All_Axis_Off()
@@ -118,8 +134,6 @@ void Locomotion_Init()
   analogWriteFrequency(BR_EN_PIN, FREQ);
   analogWriteFrequency(BL_EN_PIN, FREQ);
 
-  pinMode(FL_EN_PIN, OUTPUT);
-  digitalWrite(FL_EN_PIN, LOW);
 }
 
 void Locomotion_Run()

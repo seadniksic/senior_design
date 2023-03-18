@@ -3,32 +3,33 @@
 #include "Locomotion.h"
 
 static joy_state_t joy_state = {0};
+static control_state_t control_state = {0}; 
 
 
 void Joystick_Init()
 {
-    // Nothing to do
+    control_state.control.bits.turn_off = 1;
 }
 
 void Joystick_Print()
 {
-    Serial.print(joy_state.buttons.button_bits.BTN_A);
-    Serial.print(joy_state.buttons.button_bits.BTN_B);
-    Serial.print(joy_state.buttons.button_bits.BTN_X);
-    Serial.print(joy_state.buttons.button_bits.BTN_Y);
+    Serial.print(joy_state.buttons.bits.BTN_A);
+    Serial.print(joy_state.buttons.bits.BTN_B);
+    Serial.print(joy_state.buttons.bits.BTN_X);
+    Serial.print(joy_state.buttons.bits.BTN_Y);
     Serial.print(" ");
-    Serial.print(joy_state.buttons.button_bits.BTN_START);
-    Serial.print(joy_state.buttons.button_bits.BTN_SELECT);
-    Serial.print(joy_state.buttons.button_bits.DPAD_UP);
-    Serial.print(joy_state.buttons.button_bits.DPAD_DOWN);
+    Serial.print(joy_state.buttons.bits.BTN_START);
+    Serial.print(joy_state.buttons.bits.BTN_SELECT);
+    Serial.print(joy_state.buttons.bits.DPAD_UP);
+    Serial.print(joy_state.buttons.bits.DPAD_DOWN);
     Serial.print(" ");
-    Serial.print(joy_state.buttons.button_bits.DPAD_LEFT);
-    Serial.print(joy_state.buttons.button_bits.DPAD_RIGHT);
-    Serial.print(joy_state.buttons.button_bits.BTN_THUMBR);
-    Serial.print(joy_state.buttons.button_bits.BTN_THUMBL);
+    Serial.print(joy_state.buttons.bits.DPAD_LEFT);
+    Serial.print(joy_state.buttons.bits.DPAD_RIGHT);
+    Serial.print(joy_state.buttons.bits.BTN_THUMBR);
+    Serial.print(joy_state.buttons.bits.BTN_THUMBL);
     Serial.print(" ");
-    Serial.print(joy_state.buttons.button_bits.BTN_TR);
-    Serial.print(joy_state.buttons.button_bits.BTN_TL);
+    Serial.print(joy_state.buttons.bits.BTN_TR);
+    Serial.print(joy_state.buttons.bits.BTN_TL);
     Serial.print(" ");
     Serial.printf(", %d", joy_state.ljoy_x);
     Serial.printf(", %d", joy_state.ljoy_y);
@@ -36,47 +37,121 @@ void Joystick_Print()
     Serial.printf(", %d", joy_state.rjoy_y);
     Serial.printf(", %d", joy_state.tl);
     Serial.printf(", %d", joy_state.tr);
+    Serial.print(" ");
+    Serial.print(control_state.control.bits.drive_mode);
+    Serial.print(control_state.control.bits.turn_off);
     Serial.println("");
 
 }
 
 void Joystick_Store_State(Joystick_Input &js_in)
 {
-    uint32_t buttons_in = (uint32_t)js_in.get_button();
-    joy_state.buttons.button_state = buttons_in;
+    // Store the previous buttons states in prev_buttons
+    joy_state.prev_buttons.state = joy_state.buttons.state;
+    
+    // Store current state of the contoller
+    joy_state.buttons.state = (uint32_t)js_in.get_button();;
     joy_state.ljoy_x = js_in.get_LJOY_X();
     joy_state.ljoy_y = js_in.get_LJOY_Y();
     joy_state.rjoy_x = js_in.get_RJOY_X();
     joy_state.rjoy_y = js_in.get_RJOY_Y();
     joy_state.tl = js_in.get_TL();
     joy_state.tr = js_in.get_TR();
+
+    // Perform processing for control bits
+    // Capture on falling edge
+    if(joy_state.prev_buttons.bits.BTN_A == 1 && \
+        joy_state.buttons.bits.BTN_A == 0)
+    {
+        control_state.control.bits.drive_mode = !control_state.control.bits.drive_mode;
+    }
+
+    if(joy_state.prev_buttons.bits.BTN_X == 1 && \
+        joy_state.buttons.bits.BTN_X == 0)
+    {
+        control_state.control.bits.turn_off = !control_state.control.bits.turn_off;
+    }
+
+
 }
 
 void Joystick_Run()
 {
-    if(!Joystick_Input_Present())
+    if(!Joystick_Input_Present() || IN_POWER_DOWN_MODE)
     {
-        
+        Locomotion_All_Axis_Off();
         return;
     }
 
+    if(IN_STRAIGHT_DRIVE_MODE)
+    {
+        if(LJOY_UP)
+        {
+            Locomotion_Drive_Forward(Joystick_Map(joy_state.ljoy_y));
+        }
+        else if(LJOY_DOWN)
+        {
+            Locomotion_Drive_Backward(Joystick_Map(joy_state.ljoy_y));
+        }
+        else if(LJOY_RIGHT)
+        {
+            Locomotion_Drive_Right();
+        }
+        else if(LJOY_LEFT)
+        {
+            Locomotion_Drive_Left();
+        }
+    }
+    else
+    {
+        if(LJOY_UR)
+        {
+            Locomotion_All_Axis_Off();
+            Locomotion_Drive_Diag_FR();
+        }
+        else if(LJOY_UL)
+        {
+            Locomotion_All_Axis_Off();
+            Locomotion_Drive_Diag_FL();
+        }
+        else if(LJOY_DR)
+        {
+            Locomotion_All_Axis_Off();
+            Locomotion_Drive_Diag_BR();
+        }
+        else if(LJOY_DL)
+        {
+            Locomotion_All_Axis_Off();
+            Locomotion_Drive_Diag_BL();
+        }
+    }
 
-
-
-
-
-
+    if(RJOY_LEFT)
+    {
+        Locomotion_Rotate_CCW();
+    }
+    else if(RJOY_RIGHT)
+    {
+        Locomotion_Rotate_CW();
+    }
 }
 
 bool Joystick_Input_Present()
 {
-    return (
+    return !(
         BTN_NONE_PRESSED && \
         LJOY_DEADZONE_XY && \
         RJOY_DEADZONE_XY && \
         TRIGGER_LEFT_DEADZONE && \
         TRIGGER_RIGHT_DEADZONE
         );
+}
+
+uint8_t Joystick_Map(const int32_t &val)
+{
+    float temp = (float)abs(val);
+    const uint8_t result = (uint8_t)((float)(temp - IN_MIN) * RATIO + OUT_MIN);
+    return result;
 }
 
 

@@ -65,7 +65,7 @@ void main_prog()
     {
       Joystick_Store_State(js_in);
       joy_update_clock -= 100;
-      //Joystick_Run();
+      Joystick_Run();
     }
 
     // bno055::get_euler_ypr();

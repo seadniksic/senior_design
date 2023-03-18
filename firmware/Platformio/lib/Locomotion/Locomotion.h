@@ -54,7 +54,9 @@ void Locomotion_Rotate_CCW();
 void Locomotion_Lateral_Arc_CW();
 void Locomotion_Lateral_Arc_CCW();
 void Locomotion_Drive_Forward();
+void Locomotion_Drive_Forward(const uint8_t &val);
 void Locomotion_Drive_Backward();
+void Locomotion_Drive_Backward(const uint8_t &val);
 void Locomotion_All_Axis_Off();
 
 void Locomotion_Init();
