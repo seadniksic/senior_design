@@ -11,7 +11,7 @@ if __name__=='__main__':
     size = sys.getsizeof(data)
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    host = "127.0.0.1"
+    host = socket.gethostname()
 
     port = 8088
 

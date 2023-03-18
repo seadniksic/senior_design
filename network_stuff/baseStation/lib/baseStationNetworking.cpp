@@ -15,7 +15,7 @@ void initializeNetwork()
     imageServer = new ReceiveData(WIFI_IMAGE_PORT);
     slamServer = new ReceiveData(WIFI_SLAM_PORT);
     statusServer = new ReceiveData(WIFI_ROVER_STATUS_PORT);
-    commandsClient = new TransmitData(LOCAL_IP, WIFI_ROVER_COMMANDS_PORT);
+    commandsClient = new TransmitData(HOST_IP, WIFI_ROVER_COMMANDS_PORT);
     commandsServer = new ReceiveData(BASE_STATION_COMMANDS_PORT);
 }
 
