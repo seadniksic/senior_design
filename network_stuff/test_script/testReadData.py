@@ -17,7 +17,7 @@ if __name__=='__main__':
 
     client, addr = sock.accept()
 
-    msg = MyClass(client.recv(1400).decode())
+    msg = MyClass(client.recv(1400).decode('utf-8'))
 
     sock.close()
 
