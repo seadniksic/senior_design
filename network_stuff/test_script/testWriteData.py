@@ -9,9 +9,9 @@ class MyClass:
 if __name__=='__main__':
     data = MyClass("peter", 8)
     size = sys.getsizeof(data)
-    print(size)
+
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    host = socket.gethostname()
+    host = "127.0.0.1"
 
     port = 8088
 
