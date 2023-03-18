@@ -12,7 +12,7 @@ if __name__=='__main__':
 
     port = 8088
 
-    sock.bind((host, port))
+    sock.connect((host, port))
 
     data = MyClass("peter", 8)
     size = sys.getsizeof(data)
