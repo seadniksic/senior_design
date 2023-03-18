@@ -73,6 +73,7 @@ void getRoverCommands()
     size_t bufferSize = sizeof(buffer);
 
     while(commandsServer->getData(&buffer, bufferSize) == 0);
+    std::cout << "Received Rover COmmand" << std::endl;
     commandsPortClient->sendPayload(&buffer, bufferSize);
 }
 

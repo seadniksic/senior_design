@@ -51,7 +51,6 @@ void sendRoverCommands()
     size_t bufferSize = sizeof(buffer);
 
     while(commandsServer->getData(&buffer, bufferSize) == 0);
-    std::cout << "Receive rover command" << std::endl;
     commandsClient->sendPayload(&buffer, bufferSize);
 }
 
