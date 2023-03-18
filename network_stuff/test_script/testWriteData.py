@@ -17,7 +17,7 @@ if __name__=='__main__':
     data = MyClass("peter", 8)
     size = sys.getsizeof(data)
 
-    sock.sendall(size)
-    sock.sendall(data)
+    sock.sendall(size.encode())
+    sock.sendall(data.encode())
 
     sock.close()
