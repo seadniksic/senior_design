@@ -1,4 +1,4 @@
-import socket
+import socket, pickle
 
 class MyClass:
     def __init__(self, name, age):
@@ -17,10 +17,10 @@ if __name__=='__main__':
 
     client, addr = sock.accept()
 
-    print("Connected")
-
-    size = client.recv(1400).decode('utf-8')
-    msg = MyClass(client.recv(1400).decode('utf-8'))
+    size = client.recv(1400)
+    size = pickle.loads(size)
+    msg = client.recv(1400)
+    msg = pickle.loads(msg)
 
     print("Got data")
 
