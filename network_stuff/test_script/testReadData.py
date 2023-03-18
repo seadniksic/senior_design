@@ -18,6 +18,7 @@ if __name__=='__main__':
     client, addr = sock.accept()
 
     size = client.recv(1400)
+    size = int(size.decode('utf-8'))
     msg = client.recv(1400)
     msg = pickle.loads(msg)
 
