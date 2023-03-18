@@ -1,6 +1,7 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+#define LOCAL_IP "127.0.0.1"
 #define HOST_IP "10.42.0.1"
 #define CLIENT_IP "10.42.0.12"
 
@@ -22,7 +23,7 @@
 #define MAX_PACKET_SIZE 1400
 
 struct roverCommands{
-    uint8_t forward;
+    uint8_t data[48];
 };
 
 struct roverStatus{

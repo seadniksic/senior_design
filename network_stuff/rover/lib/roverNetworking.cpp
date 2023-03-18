@@ -24,7 +24,7 @@ void initializeNetwork()
     imagePortServer = new ReceiveData(JETSON_IMAGE_PORT);
     slamPortServer = new ReceiveData(JETSON_SLAM_PORT);
     statusPortServer = new ReceiveData(JETSON_STATUS_PORT);
-    commandsPortClient = new TransmitData(HOST_IP, JETSON_COMMANDS_PORT);
+    commandsPortClient = new TransmitData(LOCAL_IP, JETSON_COMMANDS_PORT);
 }
 
 void shutdownNetwork()
@@ -72,8 +72,7 @@ void getRoverCommands()
     commands_t buffer;
     size_t bufferSize = sizeof(buffer);
 
-    while(commandsServer->getData(&buffer, bufferSize) == 0);
-    std::cout << "Received Rover COmmand" << std::endl;
+    // while(commandsServer->getData(&buffer, bufferSize) == 0);
     commandsPortClient->sendPayload(&buffer, bufferSize);
 }
 
