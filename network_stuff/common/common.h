@@ -23,7 +23,7 @@
 #define MAX_PACKET_SIZE 1400
 
 struct roverCommands{
-    uint8_t data[48];
+    uint8_t data[1400];
 };
 
 struct roverStatus{
