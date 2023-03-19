@@ -4,6 +4,7 @@
 #include <Joystick.h>
 #include <bno055.h>
 #include <UartComms.h>
+#include <InternalTemperature.h>
 
 
 void main_prog()
@@ -38,6 +39,9 @@ void main_prog()
   Reply outgoing_reply;
   elapsedMillis rcv_clock;
 
+  // cpu temp
+  InternalTemperature.begin(TEMPERATURE_NO_ADC_SETTING_CHANGES);
+
   while(1)
   {
     if(LED_clock > 750 )
@@ -46,6 +50,11 @@ void main_prog()
       LED_state = !LED_state;
       digitalWrite(JOY_LED_PIN, LED_state);
       digitalWrite(13, LED_state);
+
+      // test joystick
+      float temp = InternalTemperature.readTemperatureF();
+      Serial.print("CPU TEMP");
+      Serial.println(temp);
     }
 
     if (print_clock > 100)
