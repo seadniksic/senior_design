@@ -39,10 +39,10 @@ int TransmitData::sendPayload(void *payLoad, size_t dataLength)
 
         char *inputPtr = const_cast<char*>(firstPacket);
         char *outputPtr = encodedFirstPacket;
-        inconv(cd, &inputPtr, &inputSize, &outputPtr, &outputSize);
+        iconv(cd, &inputPtr, &inputSize, &outputPtr, &outputSize);
 
         iconv_close(cd);
-        
+
         int sentBytes = 0, sendResult = send(sock, encodedFirstPacket, 1400, MSG_NOSIGNAL), bytesToSend = 0;
 
         while(sentBytes < dataLength)
