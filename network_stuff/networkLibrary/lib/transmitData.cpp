@@ -2,8 +2,7 @@
 #define TRANSMITDATA_CPP
 #include "transmitData.h"
 
-template <class PayloadType>
-TransmitData<PayloadType>::TransmitData(const char *ipAddress, uint16_t port)
+TransmitData::TransmitData(const char *ipAddress, uint16_t port)
 {
     //Create socket
     sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -18,8 +17,7 @@ TransmitData<PayloadType>::TransmitData(const char *ipAddress, uint16_t port)
     currentlyConnected = false;
 }
 
-template <class PayloadType>
-int TransmitData<PayloadType>::sendPayload(PayloadType *payLoad, size_t dataLength)
+int TransmitData::sendPayload(void *payLoad, size_t dataLength)
 {
     //Check to see if the socket is currently connected to anything
     if(!currentlyConnected)
@@ -32,12 +30,16 @@ int TransmitData<PayloadType>::sendPayload(PayloadType *payLoad, size_t dataLeng
     {
         //If it is conected send the data
         uint64_t sendDataSize = (uint64_t)dataLength;
-        int sentBytes = 0, sendResult = send(sock, &sendDataSize, sizeof(uint64_t), MSG_NOSIGNAL), bytesToSend = 0;
+        char firstPacket[1400];
+
+        sprintf(firstPacket, "%lu", sendDataSize);
+
+        int sentBytes = 0, sendResult = send(sock, firstPacket, 1400, MSG_NOSIGNAL), bytesToSend = 0;
 
         while(sentBytes < dataLength)
         {
             bytesToSend = min(MAX_PACKET_SIZE, dataLength - sentBytes);
-            sendResult = send(sock, &payLoad[sentBytes], bytesToSend, MSG_NOSIGNAL);
+            sendResult = send(sock, ((char *)payLoad + sentBytes * sizeof(char)), bytesToSend, MSG_NOSIGNAL);
             if(sendResult == -1)
             {
                 //If data failed to send due to connection failure, try and reconnect
@@ -59,14 +61,12 @@ int TransmitData<PayloadType>::sendPayload(PayloadType *payLoad, size_t dataLeng
     return 0;
 }
 
-template <class PayloadType>
-TransmitData<PayloadType>::~TransmitData()
+TransmitData::~TransmitData()
 {
     close(sock);
 }
 
-template <class PayloadType>
-size_t TransmitData<PayloadType>::min(size_t a, size_t b)
+size_t TransmitData::min(size_t a, size_t b)
 {
     if(a < b)
         return a;

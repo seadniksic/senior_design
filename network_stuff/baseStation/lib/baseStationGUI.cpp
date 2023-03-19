@@ -48,9 +48,6 @@ MainWindow::MainWindow(QWidget *parent)
     mainLayout->addWidget(tabWidget, 8);
     mainLayout->addWidget(roverStatus, 2);
     centralWidget->setLayout(mainLayout);
-
-    //Initialize the network
-    initializeNetwork();
 }
 
 MainWindow::~MainWindow()
@@ -59,8 +56,6 @@ MainWindow::~MainWindow()
     delete slamFeed;
     delete cameraTabLabel;
     delete slamTabLabel;
-
-    shutdownNetwork();
 }
 
 void MainWindow::timerUpdate()

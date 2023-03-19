@@ -4,7 +4,7 @@
 
 int main()
 {
-    ReceiveData<char> testReceive(8080);
+    ReceiveData testReceive(8080);
     char buffer[1024];
     int bytesReceived;
     while(1)
