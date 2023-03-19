@@ -34,7 +34,7 @@ message Joystick_Input
     optional int32 TL = 7;
 }
 
-message Reply
+message GUI_Data
 {
-    bool led_state = 1;
+    int32 cpu_temp = 1;   
 }
