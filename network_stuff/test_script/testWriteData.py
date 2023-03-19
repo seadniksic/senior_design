@@ -8,7 +8,6 @@ class MyClass:
 if __name__=='__main__':
     data = MyClass("peter", 8)
     sendData = pickle.dumps(data)
-    size = sys.getsizeof(sendData)
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     host = socket.gethostname()
@@ -17,7 +16,7 @@ if __name__=='__main__':
 
     sock.connect((host, port))
 
-    sock.sendall(bytes(str(size), 'utf-8'))
+    sock.sendall(bytes(str(1400), 'utf-8'))
     sock.sendall(sendData)
 
     sock.close()

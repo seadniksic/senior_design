@@ -30,20 +30,11 @@ int TransmitData::sendPayload(void *payLoad, size_t dataLength)
     {
         //If it is conected send the data
         uint64_t sendDataSize = (uint64_t)dataLength;
-        char firstPacket[1400], encodedFirstPacket[1400];
-        size_t inputSize = 1400, outputSize = 1400;
+        char firstPacket[1400];
 
         sprintf(firstPacket, "%lu", sendDataSize);
 
-        iconv_t cd = iconv_open("UTF-8", "ASCII");
-
-        char *inputPtr = const_cast<char*>(firstPacket);
-        char *outputPtr = encodedFirstPacket;
-        iconv(cd, &inputPtr, &inputSize, &outputPtr, &outputSize);
-
-        iconv_close(cd);
-
-        int sentBytes = 0, sendResult = send(sock, encodedFirstPacket, 1400, MSG_NOSIGNAL), bytesToSend = 0;
+        int sentBytes = 0, sendResult = send(sock, firstPacket, 1400, MSG_NOSIGNAL), bytesToSend = 0;
 
         while(sentBytes < dataLength)
         {
