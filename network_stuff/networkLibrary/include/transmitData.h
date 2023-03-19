@@ -9,6 +9,8 @@
 #include <errno.h>
 #include "common.h"
 #include <sys/select.h>
+#include <iconv.h>
+#include <cstring>
 
 class TransmitData{
     private:
