@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 
 import time
-from time import sleep
 import serial
 import uart_messages_pb2
 import evdev
@@ -9,6 +8,7 @@ import sys
 from evdev import categorize, ecodes
 from timeit import default_timer as timer
 import random
+import pickle, socket
 
 class g:
     update_rate = 20 # in hz
@@ -16,6 +16,7 @@ class g:
     joy_name = "Logitech Gamepad F710"
     test_input = False
     sync_byte = 100 #0x64
+    remote_joystick = False #if true, joystick is connected to base station laptop
 
 class Joystick:
     def __init__(self):
@@ -79,31 +80,43 @@ class Joystick:
 
 def handle_args():
     # handle args
-    if len(sys.argv) > 1: 
+    first_arg = ""
+    second_arg = ""
+    if len(sys.argv) == 3:
         first_arg = sys.argv[1].lower()
-        if first_arg == "true":
-            g.test_input = True
-            print("In testing mode, will just print controller inputs (no data will be sent)")
-        
-    if not g.test_input:
-        print("In normal operation mode.")
+        second_arg = sys.argv[2].lower()
+    elif len(sys.argv) == 2:
+        first_arg = sys.argv[1].lower()
 
-    sleep(1.5)
+    if second_arg == "true":
+        g.remote_joystick = True
+        print("Joystick inputs will not be read, joystick is connected to base station.")
+    if g.remote_joystick == False and first_arg == "true":
+        g.test_input = True
+        print("In testing mode, will just print controller inputs (no data will be sent)")
+        
+    if not g.test_input and not g.remote_joystick:
+        print("In normal operation mode with controller hooked up to the Jetson")
+    elif g.remote_joystick and not g.test_input:
+        print("In normal operation mode with controller hooked up to base station laptop")
+
+    time.sleep(1.5)
 
 
 if __name__ == "__main__":
 
-    # get joystick
-    joystick = Joystick()
-
-    if joystick.dev is None:
-        print("JOYSTICK NOT FOUND!! EXITING...")
-        exit()
-    joystick.print_dev_capabilities(False)
-    
-
     # handle script args and update g class with values
     handle_args()
+
+    # attach joystick
+    if not g.remote_joystick:
+        # get joystick
+        joystick = Joystick()
+
+        if joystick.dev is None:
+            print("JOYSTICK NOT FOUND!! EXITING...")
+            exit()
+        joystick.print_dev_capabilities(False)
 
     # create sp= serial port object
     # arduino defualt is 8 data bits, no parity, and one stop bit
@@ -117,8 +130,9 @@ if __name__ == "__main__":
 
     time.sleep(1)
 
-    if g.test_input:
+    if g.test_input and not g.remote_joystick:
         joystick.test_inputs()
+        # will not return from this loop
 
     # always update the struct
     # but send at 10hz
@@ -140,6 +154,34 @@ if __name__ == "__main__":
     end_time = None
     # end minus start gives time in sec
 
+    if g.remote_joystick:
+        print("Note: current service setup may cause networking to fail if it doesnt wait for it. Look into more.")
+        print("Setting up sockets...")
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        host = "127.0.0.1"
+        port = 8087
+
+        sock.bind((host, port))
+        sock.listen(1)
+        client, addr = sock.accept() 
+
+        while True: 
+            size = client.recv(1400)
+            newPickle = client.recv(1400)
+            try:
+                b = pickle.loads(newPickle)
+            except EOFError:
+                print("eof error occurred in pickle.load")
+            except: 
+                print("Something else went wrong in pickle.load")
+
+            # confirmed looked like serialized data came through and it is
+            # a byte array.
+            # print(type(b))
+            print(b)
+            sp.write(b)
+
+    # If its not a remote joystick, do the parsing here
     while True: 
         event = joystick.dev.read_one()
         if event != None:
@@ -238,37 +280,3 @@ if __name__ == "__main__":
             b.extend(proto_msg_serialized)
             # print(b)
             sp.write(b)
-    
-
-
-
-    while True:
-
-        # store joy message
-        proto_msg = uart_messages_pb2.Joystick_Input()
-
-        # create byte array for the data to send
-        b = bytearray()
-
-        # store the sync byte
-        # length is the number of bytes it will use when it converts count
-        b.extend(g.sync_byte.to_bytes(length=1, byteorder='little', signed=False))
-
-        #prepare the proto message to send
-        proto_msg.button = uart_messages_pb2.Joystick_Input.BTN_TR | uart_messages_pb2.Joystick_Input.DPAD_LEFT
-        # serialize the data
-        proto_msg_serialized = proto_msg.SerializeToString()
-
-        # store the length of the message and add it to be sent
-        msg_len = len(proto_msg_serialized)
-        print(proto_msg_serialized)
-        print(msg_len)
-        b.extend(msg_len.to_bytes(length=1, byteorder='little', signed = False))
-        
-        # add the proto data
-        b.extend(proto_msg_serialized)
-        sp.write(b)
-
-
-        time.sleep(1)
-

@@ -18,7 +18,7 @@ Description=4.1 Teensy Comms
 WorkingDirectory=/home/seniordesign
 ExecStart=/home/seniordesign/senior_design/firmware/desktop/comms.py
 Restart=always
-RestartSec=1
+RestartSec=5
 KillMode=process
 Environment="PYTHONPATH=$PYTHONPATH:/home/seniordesign/.local/lib/python3.8/site-packages
 
