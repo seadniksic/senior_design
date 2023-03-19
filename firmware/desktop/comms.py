@@ -280,3 +280,25 @@ if __name__ == "__main__":
             b.extend(proto_msg_serialized)
             # print(b)
             sp.write(b)
+
+            # check of reply
+            # look for sync byte
+            # sp.in_waiting returns the number of bytes in recieve buffer if you want to use that
+            if sp.in_waiting > 0:
+                first_byte = sp.read(1)[0] #index 0 of byte array to get the value
+                if first_byte == 70: # hex 0x46
+                    num_bytes = sp.read(1)[0]
+                    # print("here2")
+                    if num_bytes > 0:
+                        # print("here3")
+                        data = sp.read(num_bytes)
+                        # print(data)
+                        # check if received all of the data
+                        if len(data) == num_bytes:
+                            # print("here4")
+                            reply = uart_messages_pb2.GUI_Data()
+                            reply.ParseFromString(data)
+                            # print(reply.cpu_temp)
+
+                
+
