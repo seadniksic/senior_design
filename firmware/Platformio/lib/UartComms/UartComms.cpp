@@ -10,7 +10,7 @@ void UartComms_Init()
 #pragma message("should just put this into a struct and pass the struct.")
 
 void UartComms_Run(UartReadBuffer &read_buffer, UartWriteBuffer &write_buffer, \
-    Joystick_Input &js_in, Reply &outgoing_reply, elapsedMillis &rcv_clock)
+    Joystick_Input &js_in, GUI_Data &gui_data, elapsedMillis &rcv_clock)
 {
     // protobuf
     // now the first byte will be a special sync byte indicating start of message. 
@@ -117,6 +117,25 @@ void UartComms_Run(UartReadBuffer &read_buffer, UartWriteBuffer &write_buffer, \
 
         #endif
 
+        // only transmit if we have recieved a message, for now
+        #warning "we dont need to send data back at this rate, so split up this function"
+        auto serialization_status = gui_data.serialize(write_buffer);
+        if(::EmbeddedProto::Error::NO_ERRORS == serialization_status)
+        {
+          // Serial write docs
+          // https://cdn.arduino.cc/reference/en/language/functions/communication/serial/write/
+          // Serial.println("Writing data");
+          HWSERIAL.write(SYNC_BYTE_WRITE);
+
+
+          // first transmit the number of bytes in the message.
+          const uint8_t n_bytes = write_buffer.get_size();
+          HWSERIAL.write(n_bytes);
+
+          // Now transmit the actual data.
+          HWSERIAL.write(write_buffer.get_data(), write_buffer.get_size());
+        }
+
       }
       else
       {
@@ -125,6 +144,12 @@ void UartComms_Run(UartReadBuffer &read_buffer, UartWriteBuffer &write_buffer, \
 
       available_packet = false;
     }
+}
+
+void UartComms_PopulateReply(GUI_Data &gui_data, const float &cpu_temp)
+{
+    gui_data.clear();
+    gui_data.set_cpu_temp((int32_t)cpu_temp);
 }
 
 void UartComms_ClearBuffers(UartReadBuffer &read_buffer, UartWriteBuffer &write_buffer)

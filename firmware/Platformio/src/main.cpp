@@ -36,7 +36,7 @@ void main_prog()
   UartReadBuffer read_buffer;
   UartWriteBuffer write_buffer;
   Joystick_Input js_in;
-  Reply outgoing_reply;
+  GUI_Data gui_data;
   elapsedMillis rcv_clock;
 
   // cpu temp
@@ -54,6 +54,7 @@ void main_prog()
       // test joystick
       float temp = InternalTemperature.readTemperatureF();
       Serial.print("CPU TEMP");
+      UartComms_PopulateReply(gui_data, temp);
       Serial.println(temp);
     }
 
@@ -64,11 +65,7 @@ void main_prog()
     }
 
 
-    UartComms_Run(read_buffer, write_buffer, js_in, outgoing_reply, rcv_clock);
-    
-
-
-
+    UartComms_Run(read_buffer, write_buffer, js_in, gui_data, rcv_clock);
   
     if(joy_update_clock > 100)
     {
