@@ -16,7 +16,7 @@ if __name__=='__main__':
 
     sock.connect((host, port))
 
-    sock.sendall(bytes(str(1400), 'utf-8'))
+    sock.sendall(bytes(str(sys.getsizeof(sendData)), 'utf-8'))
     sock.sendall(sendData)
 
     sock.close()

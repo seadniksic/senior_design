@@ -92,6 +92,8 @@ int ReceiveData::getData(void *buffer, size_t bufferLength)
             int receiveValue = recv(clientSocket, firstPacket, 1400, 0);
 
             receivingPacketLength = atoi(firstPacket);
+
+            std::cout << receivingPacketLength << std::endl;
             
             if(receiveValue == 0)
             {

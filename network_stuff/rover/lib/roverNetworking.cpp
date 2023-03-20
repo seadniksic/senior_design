@@ -72,8 +72,12 @@ void getRoverCommands()
     commands_t buffer;
     size_t bufferSize = sizeof(buffer);
 
-    while(commandsServer->getData(&buffer, bufferSize) == 0);
-    commandsPortClient->sendPayload(&buffer, bufferSize);
+    int incomingSize = 0
+    while(incomingSize == 0)
+    {
+        incomingSize = commandsServer->getData(&buffer, bufferSize);
+    }
+    commandsPortClient->sendPayload(&buffer, incomingSize);
 }
 
 
