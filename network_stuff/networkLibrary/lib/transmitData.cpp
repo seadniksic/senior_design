@@ -57,10 +57,10 @@ int TransmitData::sendPayload(void *payLoad, size_t dataLength)
                 else
                     std::cerr << "Failed to send data." << std::endl;
             }
-            sentBytes += bytesToSend;
+            sentBytes += sendResult;
         }
     }
-    return 0;
+    return sentBytes;
 }
 
 TransmitData::~TransmitData()

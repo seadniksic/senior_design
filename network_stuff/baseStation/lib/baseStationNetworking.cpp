@@ -55,6 +55,7 @@ void sendRoverCommands()
     {
         incomingSize = commandsServer->getData(&buffer, bufferSize);
     }
+    std::cout << incomingSize << std::endl;
     commandsClient->sendPayload(&buffer, incomingSize);
 }
 
