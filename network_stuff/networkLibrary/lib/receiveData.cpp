@@ -100,7 +100,7 @@ int ReceiveData::getData(void *buffer, size_t bufferLength)
                 close(clientSocket);
                 clientSocket = -1;
             }
-
+            receiveValue = 0;
             while(receivedBytes < bufferLength && receivedBytes < receivingPacketLength)
             {
                 receiveValue = recv(clientSocket, ((char *)buffer + receivedBytes * sizeof(char)), min(MAX_PACKET_SIZE, bufferLength - receivedBytes), 0);
@@ -110,6 +110,7 @@ int ReceiveData::getData(void *buffer, size_t bufferLength)
                     clientSocket = -1;
                     break;
                 }
+                std::cout << receiveValue << std::endl;
                 receivedBytes += receiveValue;
             }
             return receivedBytes;
