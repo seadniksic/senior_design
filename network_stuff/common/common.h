@@ -1,6 +1,7 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+#define LOCAL_IP "127.0.0.1"
 #define HOST_IP "10.42.0.1"
 #define CLIENT_IP "10.42.0.12"
 
@@ -14,13 +15,15 @@
 #define JETSON_STATUS_PORT 8086
 #define JETSON_COMMANDS_PORT 8087
 
+#define BASE_STATION_COMMANDS_PORT 8088
+
 #define IMAGE_WIDTH 720
 #define IMAGE_HEIGHT 480
 
 #define MAX_PACKET_SIZE 1400
 
 struct roverCommands{
-    uint8_t forward;
+    uint8_t data[1400];
 };
 
 struct roverStatus{

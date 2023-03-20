@@ -75,4 +75,5 @@ void exitHandler(void)
     pthread_cancel(slamThread);
     pthread_cancel(statusThread);
     pthread_cancel(commandsThread);
+    shutdownNetwork();
 }

@@ -2,19 +2,21 @@
 #define BASESTATIONNETWORKING_CPP
 
 #include "baseStationNetworking.h"
+#include <iostream>
 
-
-ReceiveData<image_t> *imageServer;
-ReceiveData<slam_t> *slamServer;
-ReceiveData<status_t> *statusServer;
-TransmitData<commands_t> *commandsClient;
+ReceiveData *imageServer;
+ReceiveData *slamServer;
+ReceiveData *statusServer;
+TransmitData *commandsClient;
+ReceiveData *commandsServer;
 
 void initializeNetwork()
 {
-    imageServer = new ReceiveData<image_t>(WIFI_IMAGE_PORT);
-    slamServer = new ReceiveData<slam_t>(WIFI_SLAM_PORT);
-    statusServer = new ReceiveData<status_t>(WIFI_ROVER_STATUS_PORT);
-    commandsClient = new TransmitData<commands_t>(HOST_IP, WIFI_ROVER_COMMANDS_PORT);
+    imageServer = new ReceiveData(WIFI_IMAGE_PORT);
+    slamServer = new ReceiveData(WIFI_SLAM_PORT);
+    statusServer = new ReceiveData(WIFI_ROVER_STATUS_PORT);
+    commandsClient = new TransmitData(HOST_IP, WIFI_ROVER_COMMANDS_PORT);
+    commandsServer = new ReceiveData(BASE_STATION_COMMANDS_PORT);
 }
 
 void shutdownNetwork()
@@ -43,9 +45,14 @@ int getRoverStatus(status_t *buffer, size_t bufferSize)
     return returnVal;   
 }
 
-void sendRoverCommands(commands_t *commands, size_t bufferSize)
+void sendRoverCommands()
 {
-    commandsClient->sendPayload(commands, bufferSize);
+    commands_t buffer;
+    size_t bufferSize = sizeof(buffer);
+
+    while(commandsServer->getData(&buffer, bufferSize) == 0);
+    commandsClient->sendPayload(&buffer, bufferSize);
 }
+
 
 #endif

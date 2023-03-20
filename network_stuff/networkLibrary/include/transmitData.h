@@ -9,8 +9,9 @@
 #include <errno.h>
 #include "common.h"
 #include <sys/select.h>
+#include <iconv.h>
+#include <cstring>
 
-template <class PayloadType>
 class TransmitData{
     private:
         int sock;
@@ -19,13 +20,8 @@ class TransmitData{
         bool currentlyConnected;
     public:
         TransmitData(const char *ipAddress, uint16_t port);
-        int sendPayload(PayloadType *payLoad, size_t dataLength);
+        int sendPayload(void *payLoad, size_t dataLength);
         ~TransmitData();
 };
 
-template class TransmitData<image_t>;
-// template class TransmitData<slam_t>;
-template class TransmitData<status_t>;
-template class TransmitData<commands_t>;
-template class TransmitData<char>;
 #endif
