@@ -31,8 +31,9 @@ def detect_pose():
 
     # webcams -> V4L2, stereo -> gstreamer
     video_capture = cv2.VideoCapture(camera_id, cv2.CAP_V4L2)
-    video_capture.set(cv2.CAP_PROP_FRAME_WIDTH, capture_width)
-    video_capture.set(cv2.CAP_PROP_FRAME_HEIGHT, capture_height)
+    # video_capture.set(cv2.CAP_PROP_FRAME_WIDTH, capture_width)
+    # video_capture.set(cv2.CAP_PROP_FRAME_HEIGHT, capture_height)
+    video_capture.set(cv2.CAP_PROP_FPS, 30)
 
     rsum = 0
     count = 0
@@ -55,25 +56,25 @@ def detect_pose():
               # Check to see if the user closed the window
               # Under GTK+ (Jetson Default), WND_PROP_VISIBLE does not work correctly. Under Qt it does
               # GTK - Substitute WND_PROP_AUTOSIZE to detect if window has been closed by user
-              if cv2.getWindowProperty(window_title, cv2.WND_PROP_AUTOSIZE) >= 0:
-                  if not ret_val:
-                      continue
+            #   if cv2.getWindowProperty(window_title, cv2.WND_PROP_AUTOSIZE) >= 0:
+            #       if not ret_val:
+            #           continue
                       
-                  else:
+            #       else:
                       
-                      print(fps)
-                      #cv2.putText(frame, f"{fps:.4}", (int(frame.shape[1] * 5 / 6), int(frame.shape[0] * 5 / 6)), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)
-                      cv2.imshow(window_title, frame)
+              print(fps)
+            #           cv2.putText(frame, f"{fps:.4}", (int(frame.shape[1] * 5 / 6), int(frame.shape[0] * 5 / 6)), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)
+            #           cv2.imshow(window_title, frame)
                     
-              else:
-                  break
+            #   else:
+            #       break
               
               keyCode = cv2.waitKey(10) & 0xFF
               # Stop the program on the ESC key or 'q'
               if keyCode == 27 or keyCode == ord('q'):
                   break
               
-          print(f"Average FPS: {rsum / 150}")
+          print(f"Average FPS: {rsum / count}")
       finally:
           video_capture.release()
           cv2.destroyAllWindows()
