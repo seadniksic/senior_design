@@ -34,7 +34,7 @@ int TransmitData::sendPayload(void *payLoad, size_t dataLength)
 
         sprintf(firstPacket, "%lu", sendDataSize);
 
-        std::cout >> "Attempting to transmit: " << firstPacket << std::endl;
+        std::cout << "Attempting to transmit: " << firstPacket << std::endl;
 
         int sentBytes = 0, sendResult = send(sock, firstPacket, 1400, MSG_NOSIGNAL), bytesToSend = 0;
 

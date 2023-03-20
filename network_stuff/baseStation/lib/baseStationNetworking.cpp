@@ -51,7 +51,7 @@ void sendRoverCommands()
     size_t bufferSize = sizeof(buffer);
 
     int incomingSize = 0;
-    while(incoming == 0)
+    while(incomingSize == 0)
     {
         incomingSize = commandsServer->getData(&buffer, bufferSize);
     }
