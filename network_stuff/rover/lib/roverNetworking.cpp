@@ -72,7 +72,7 @@ void getRoverCommands()
     commands_t buffer;
     size_t bufferSize = sizeof(buffer);
 
-    int incomingSize = 0
+    int incomingSize = 0;
     while(incomingSize == 0)
     {
         incomingSize = commandsServer->getData(&buffer, bufferSize);
