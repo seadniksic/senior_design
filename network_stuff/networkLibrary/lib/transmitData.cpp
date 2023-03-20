@@ -19,6 +19,7 @@ TransmitData::TransmitData(const char *ipAddress, uint16_t port)
 
 int TransmitData::sendPayload(void *payLoad, size_t dataLength)
 {
+    int sentBytes = 0;
     //Check to see if the socket is currently connected to anything
     if(!currentlyConnected)
     {
@@ -36,7 +37,7 @@ int TransmitData::sendPayload(void *payLoad, size_t dataLength)
 
         std::cout << "Attempting to transmit: " << firstPacket << " which was derived from " << dataLength << std::endl;
 
-        int sentBytes = 0, sendResult = send(sock, firstPacket, 1400, MSG_NOSIGNAL), bytesToSend = 0;
+        int sendResult = send(sock, firstPacket, 1400, MSG_NOSIGNAL), bytesToSend = 0;
 
         while(sentBytes < dataLength)
         {
