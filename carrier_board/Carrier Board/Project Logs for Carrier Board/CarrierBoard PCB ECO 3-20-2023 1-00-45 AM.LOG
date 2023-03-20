@@ -1,0 +1,8 @@
+Change Component Designator: OldDesignator=F? NewDesignator=F1
+Change Component Designator: OldDesignator=F? NewDesignator=F2
+Change Component Designator: OldDesignator=J? NewDesignator=J9
+Add Pin To Net: Unknown Pin: Pin J8-1
+Change Net Name : Old Net Name=NetF?_1 New Net Name=NetF1_1
+Change Net Name : Old Net Name=NetF?_2 New Net Name=NetF2_2
+Added Member To Class: ClassName=ModuleInter Member=Component F1 0ZCJ0010FF2E
+Add Class Member: Failed to add class member : Component J8 Pin Header Jumper

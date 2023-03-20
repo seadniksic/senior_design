@@ -1,0 +1,6 @@
+Added Component: Designator=J8(Pin Header Jumper)
+Added Pin To Net: NetName=5V Pin=J8-1
+Added Pin To Net: NetName=NetC21_1 Pin=J8-2
+Added Member To Class: ClassName=ModuleInter Member=Component J8 Pin Header Jumper
+Added Room: Name=ModuleInter
+Added Room: Name=Power
