@@ -17,7 +17,7 @@ if __name__=='__main__':
     sock.connect((host, port))
     print(len(sendData))
 
-    sock.sendall(bytes(str(len(sendData) + 1), 'utf-8'))
+    sock.sendall(bytes(str(len(sendData)), 'utf-8'))
     sock.sendall(sendData)
 
     sock.close()

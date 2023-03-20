@@ -114,6 +114,9 @@ int ReceiveData::getData(void *buffer, size_t bufferLength)
                 receivedBytes += receiveValue;
                 std::cout << "After Read: " << receivedBytes << std::endl;
             }
+
+            receiveValue = recv(clientSocket, ((char *)buffer + receivedBytes * sizeof(char)), min(MAX_PACKET_SIZE, bufferLength - receivedBytes), 0);
+
             return receivedBytes;
         }
     }
