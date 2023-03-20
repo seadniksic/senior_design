@@ -93,7 +93,7 @@ int ReceiveData::getData(void *buffer, size_t bufferLength)
 
             receivingPacketLength = atoi(firstPacket);
 
-            std::cout << "Attempting to Recieve: " << receivingPacketLength << std::endl;
+            std::cout << "Attempting to Recieve: " << receivingPacketLength << " into " << bufferLength << std::endl;
             
             if(receiveValue == 0)
             {
