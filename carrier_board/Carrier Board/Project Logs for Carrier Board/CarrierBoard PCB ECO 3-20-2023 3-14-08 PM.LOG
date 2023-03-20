@@ -1,0 +1,16 @@
+Added Component: Designator=U13(SOIC_05WU-7_DIO)
+Add component (AddParameter): Name = "Copyright"; Value = "Copyright (C) 2023 Ultra Librarian. All rights reserved."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Digi-Key_Part_Number_1"; Value = "AP63205WU-7DITR-ND"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Digi-Key_Part_Number_2"; Value = "AP63205WU-7DICT-ND"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Digi-Key_Part_Number_3"; Value = "AP63205WU-7DIDKR-ND"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer_Part_Number"; Value = "AP63205WU-7"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Mfr_Name"; Value = "Diodes Inc"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "RefDes"; Value = "RefDes"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Type"; Value = "DEV"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=5V Pin=U13-1
+Added Pin To Net: NetName=12V Pin=U13-2
+Added Pin To Net: NetName=12V Pin=U13-3
+Added Pin To Net: NetName=GND Pin=U13-4
+Added Pin To Net: NetName=NetC9_1 Pin=U13-5
+Added Pin To Net: NetName=NetC9_2 Pin=U13-6
+Added Member To Class: ClassName=Power Member=Component U13 AP63205WU-7

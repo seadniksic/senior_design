@@ -1,0 +1,26 @@
+Removed Pin From Net: NetName=NetD7_1 Pin=J1-3
+Removed Pin From Net: NetName=GND Pin=J1-4
+Removed Pin From Net: NetName=5V Pin=J1-5
+Removed Pin From Net: NetName=NetD9_1 Pin=J2-3
+Removed Pin From Net: NetName=GND Pin=J2-4
+Removed Pin From Net: NetName=5V Pin=J2-5
+Removed Pin From Net: NetName=NetD11_1 Pin=J3-3
+Removed Pin From Net: NetName=GND Pin=J3-4
+Removed Pin From Net: NetName=5V Pin=J3-5
+Removed Pin From Net: NetName=NetD13_1 Pin=J4-3
+Removed Pin From Net: NetName=GND Pin=J4-4
+Removed Pin From Net: NetName=5V Pin=J4-5
+Added Pin To Net: NetName=GND Pin=J1-3
+Added Pin To Net: NetName=5V Pin=J1-4
+Added Pin To Net: NetName=NetD7_1 Pin=J1-5
+Added Pin To Net: NetName=GND Pin=J2-3
+Added Pin To Net: NetName=5V Pin=J2-4
+Added Pin To Net: NetName=NetD9_1 Pin=J2-5
+Added Pin To Net: NetName=GND Pin=J3-3
+Added Pin To Net: NetName=5V Pin=J3-4
+Added Pin To Net: NetName=NetD11_1 Pin=J3-5
+Added Pin To Net: NetName=GND Pin=J4-3
+Added Pin To Net: NetName=5V Pin=J4-4
+Added Pin To Net: NetName=NetD13_1 Pin=J4-5
+Added Room: Name=ModuleInter
+Added Room: Name=Power

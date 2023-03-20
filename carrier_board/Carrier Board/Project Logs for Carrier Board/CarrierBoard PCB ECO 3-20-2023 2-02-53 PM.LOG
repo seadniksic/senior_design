@@ -1,0 +1,30 @@
+Added Component: Designator=U7(SOP65P640X120-20N)
+Add component (AddParameter): Name = "Check_prices"; Value = "https://www.snapeda.com/parts/TXB0108PWR/Texas+Instruments/view-part/?ref=eda"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Digi-Key_Part_Number"; Value = "296-21527-2-ND"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MF"; Value = "Texas Instruments"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MP"; Value = "TXB0108PWR"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "TSSOP-20 Texas Instruments"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Purchase-URL"; Value = "https://pricing.snapeda.com/search/part/TXB0108PWR/?ref=eda"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "SnapEDA_Link"; Value = "https://www.snapeda.com/parts/TXB0108PWR/Texas+Instruments/view-part/?ref=snap"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Added Pin To Net: NetName=BR_PhaseA Pin=U7-1
+Added Pin To Net: NetName=3V3 Pin=U7-2
+Added Pin To Net: NetName=BR_PhaseB Pin=U7-3
+Added Pin To Net: NetName=BL_PhaseA Pin=U7-4
+Added Pin To Net: NetName=BL_PhaseB Pin=U7-5
+Added Pin To Net: NetName=FR_PhaseA Pin=U7-6
+Added Pin To Net: NetName=FR_PhaseB Pin=U7-7
+Added Pin To Net: NetName=FL_PhaseA Pin=U7-8
+Added Pin To Net: NetName=FL_PhaseB Pin=U7-9
+Added Pin To Net: NetName=NetR5_2 Pin=U7-10
+Added Pin To Net: NetName=GND Pin=U7-11
+Added Pin To Net: NetName=NetD14_1 Pin=U7-12
+Added Pin To Net: NetName=NetD13_1 Pin=U7-13
+Added Pin To Net: NetName=NetD12_1 Pin=U7-14
+Added Pin To Net: NetName=NetD11_1 Pin=U7-15
+Added Pin To Net: NetName=NetD10_1 Pin=U7-16
+Added Pin To Net: NetName=NetD9_1 Pin=U7-17
+Added Pin To Net: NetName=NetD8_1 Pin=U7-18
+Added Pin To Net: NetName=5V Pin=U7-19
+Added Pin To Net: NetName=NetD7_1 Pin=U7-20
+Added Member To Class: ClassName=ModuleInter Member=Component U7 TXB0108PWR
