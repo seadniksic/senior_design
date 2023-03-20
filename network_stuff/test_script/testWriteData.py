@@ -15,8 +15,8 @@ if __name__=='__main__':
     port = 8088
 
     sock.connect((host, port))
-    print(sys.getsizeof(sendData))
-    sock.sendall(bytes(str(sys.getsizeof(sendData)), 'utf-8'))
+
+    sock.sendall(bytes(str(len(sendData)), 'utf-8'))
     sock.sendall(sendData)
 
     sock.close()
