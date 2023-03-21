@@ -67,13 +67,14 @@ bool ReceiveData::availableDataClient()
 int ReceiveData::getData(void *buffer, size_t bufferLength)
 {
     int pollCount = poll(pollList, 1, 0);
+    if(pollCount < 0)
+        return 0;
     //Check to see if there is an active connection
     if(clientSocket < 0)
     {
         //If there is not an active connection, check to see if there are any in the queue and create connection if there is one
-        if(pollCount > 0 && pollList[0].revents & POLLIN)
+        if(pollList[0].revents & POLLIN)
         {
-            std::cout << "asdfh" << std::endl;
             struct sockaddr_in clientAddress;
             socklen_t clientAddressLength = sizeof(clientAddress);
             clientSocket = accept(serverSocket, (struct sockaddr*) &clientAddress, &clientAddressLength);
@@ -91,30 +92,31 @@ int ReceiveData::getData(void *buffer, size_t bufferLength)
     else
     {
         //If already connected, check to see if there is data waiting
-        if(pollCount > 0 && pollList[0].revents & POLLIN)
+        if(pollList[0].revents & POLLIN)
         {
             int receivedBytes = 0;
             uint64_t receivingPacketLength = 0;
 
-            char firstPacket[1400];
-            int receiveValue = recv(clientSocket, firstPacket, 1400, 0);
-            receivingPacketLength = atoi(firstPacket);
-
-            std::cout << "Attempting to Recieve: " << receivingPacketLength << " into " << bufferLength << std::endl;
+            int receiveValue = recv(clientSocket, &receivingPacketLength, sizeof(receivingPacketLength), 0);
             
             if(receiveValue == 0)
             {
-                std::cout << "Closing socket" << std::endl;
+                std::cout << "Closing socket due to bad size read" << std::endl;
                 close(clientSocket);
                 clientSocket = -1;
+                pollList[0].fd = serverSocket;
+                pollList[0].events = POLLIN;
+                return 0;
             }
+
+            std::cout << "Attempting to Receive: " << receivingPacketLength << " into " << bufferLength << std::endl;
 
             while(receivedBytes < bufferLength && receivedBytes < receivingPacketLength)
             {
                 receiveValue = recv(clientSocket, ((char *)buffer + receivedBytes * sizeof(char)), min(min(MAX_PACKET_SIZE, bufferLength - receivedBytes), receivingPacketLength - receivedBytes), 0);
                 if(receiveValue <= 0)
                 {
-                    std::cout << "Closing socket" << std::endl;
+                    std::cout << "Closing socket due to bad data read" << std::endl;
                     close(clientSocket);
                     clientSocket = -1;
                     pollList[0].fd = serverSocket;
@@ -123,7 +125,6 @@ int ReceiveData::getData(void *buffer, size_t bufferLength)
                 }
                 receivedBytes += receiveValue;
             }
-            std::cout << "bruh" << std::endl;
             return receivedBytes;
         }
     }
