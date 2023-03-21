@@ -29,6 +29,7 @@ ReceiveData::ReceiveData(uint16_t port)
     if(listen(serverSocket, 2) == -1)
         std::cerr << "Failed to set up listener." << std::endl;
     
+    memset(pollList, 0, sizeof(pollList));
     pollList[0].fd = serverSocket;
     pollList[0].events = POLLIN;
     
@@ -65,11 +66,12 @@ bool ReceiveData::availableDataClient()
 
 int ReceiveData::getData(void *buffer, size_t bufferLength)
 {
+    int pollCount = poll(pollList, 1, 0);
     //Check to see if there is an active connection
     if(clientSocket < 0)
     {
         //If there is not an active connection, check to see if there are any in the queue and create connection if there is one
-        if(pollList[0].revents && POLLIN)
+        if(pollCount > 0 && pollList[0].revents & POLLIN)
         {
             std::cout << "asdfh" << std::endl;
             struct sockaddr_in clientAddress;
@@ -89,7 +91,7 @@ int ReceiveData::getData(void *buffer, size_t bufferLength)
     else
     {
         //If already connected, check to see if there is data waiting
-        if(pollList[0].revents && POLLIN)
+        if(pollCount > 0 && pollList[0].revents & POLLIN)
         {
             int receivedBytes = 0;
             uint64_t receivingPacketLength = 0;
@@ -105,10 +107,9 @@ int ReceiveData::getData(void *buffer, size_t bufferLength)
                 close(clientSocket);
                 clientSocket = -1;
             }
-            receiveValue = 0;
+
             while(receivedBytes < bufferLength && receivedBytes < receivingPacketLength)
             {
-                std::cout << "Before Read: " << receivedBytes << std::endl; 
                 receiveValue = recv(clientSocket, ((char *)buffer + receivedBytes * sizeof(char)), min(MAX_PACKET_SIZE, bufferLength - receivedBytes), 0);
                 if(receiveValue < 0)
                 {
@@ -118,12 +119,11 @@ int ReceiveData::getData(void *buffer, size_t bufferLength)
                     pollList[0].events = POLLIN;
                     break;
                 }
+                else if(receiveValue > 0)
+                    std::cout << "here" << std::endl;
                 receivedBytes += receiveValue;
-                std::cout << "After Read: " << receivedBytes << std::endl;
             }
-            // std::cout << "bruh" << std::endl;
-            // std::cout << pollList[0].revents && POLLIN << std::endl;
-            // std::cout << recv(clientSocket, ((char *)buffer + receivedBytes * sizeof(char)), min(MAX_PACKET_SIZE, bufferLength - receivedBytes), 0) << std::endl;
+            std::cout << "bruh" << std::endl;
             return receivedBytes;
         }
     }

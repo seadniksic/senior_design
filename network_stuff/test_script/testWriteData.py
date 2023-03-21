@@ -1,4 +1,4 @@
-import socket, sys, pickle
+import socket, select, pickle
 
 class MyClass:
     def __init__(self, name, age):
@@ -16,7 +16,7 @@ if __name__=='__main__':
 
     sock.connect((host, port))
     print(len(sendData))
-
+    
     sock.sendall(bytes(str(len(sendData)), 'utf-8'))
     sock.sendall(sendData)
 
