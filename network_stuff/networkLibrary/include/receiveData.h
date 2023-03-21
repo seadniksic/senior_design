@@ -18,7 +18,7 @@ class ReceiveData{
         int serverSocket, clientSocket;
         struct sockaddr_in serverAddress;
         size_t min(size_t a, size_t b);
-        struct pollfd pollList[2];
+        struct pollfd pollList[1];
         bool availableDataServer();
         bool availableDataClient();
     public:

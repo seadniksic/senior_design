@@ -65,13 +65,13 @@ bool ReceiveData::availableDataClient()
 
 int ReceiveData::getData(void *buffer, size_t bufferLength)
 {
-    int ready_fd_count = poll(pollList, 1, -1);
     //Check to see if there is an active connection
     if(clientSocket < 0)
     {
         //If there is not an active connection, check to see if there are any in the queue and create connection if there is one
         if(pollList[0].revents && POLLIN)
         {
+            std::cout << "asdfh" << std::endl;
             struct sockaddr_in clientAddress;
             socklen_t clientAddressLength = sizeof(clientAddress);
             clientSocket = accept(serverSocket, (struct sockaddr*) &clientAddress, &clientAddressLength);
@@ -82,8 +82,8 @@ int ReceiveData::getData(void *buffer, size_t bufferLength)
             timeout.tv_sec = 5; 
             timeout.tv_usec = 0;
             setsockopt(clientSocket, SOL_SOCKET, SO_RCVTIMEO, (const char*)&timeout, sizeof(timeout));
-            pollList[1].fd = clientSocket;
-            pollList[1].events = POLLIN;
+            pollList[0].fd = clientSocket;
+            pollList[0].events = POLLIN;
         }
     }
     else
@@ -114,6 +114,8 @@ int ReceiveData::getData(void *buffer, size_t bufferLength)
                 {
                     close(clientSocket);
                     clientSocket = -1;
+                    pollList[0].fd = serverSocket;
+                    pollList[0].events = POLLIN;
                     break;
                 }
                 receivedBytes += receiveValue;
