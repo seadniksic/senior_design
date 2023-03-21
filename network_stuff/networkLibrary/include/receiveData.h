@@ -2,7 +2,7 @@
 #define RECEIVEDATA_H
 
 #include <iostream>
-#include <sys/select.h>
+#include <netinet/in.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <unistd.h>
@@ -18,6 +18,7 @@ class ReceiveData{
         int serverSocket, clientSocket;
         struct sockaddr_in serverAddress;
         size_t min(size_t a, size_t b);
+        struct pollfd pollList[2];
         bool availableDataServer();
         bool availableDataClient();
     public:

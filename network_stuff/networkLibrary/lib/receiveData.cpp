@@ -29,6 +29,9 @@ ReceiveData::ReceiveData(uint16_t port)
     if(listen(serverSocket, 2) == -1)
         std::cerr << "Failed to set up listener." << std::endl;
     
+    pollList[0].fd = serverSocket;
+    pollList[0].events = POLLIN;
+    
     clientSocket = -1;
 }
 
@@ -66,7 +69,7 @@ int ReceiveData::getData(void *buffer, size_t bufferLength)
     if(clientSocket < 0)
     {
         //If there is not an active connection, check to see if there are any in the queue and create connection if there is one
-        if(availableDataServer())
+        if(pollList[0].revents && POLLIN)
         {
             struct sockaddr_in clientAddress;
             socklen_t clientAddressLength = sizeof(clientAddress);
@@ -78,12 +81,14 @@ int ReceiveData::getData(void *buffer, size_t bufferLength)
             timeout.tv_sec = 5; 
             timeout.tv_usec = 0;
             setsockopt(clientSocket, SOL_SOCKET, SO_RCVTIMEO, (const char*)&timeout, sizeof(timeout));
+            pollList[1].fd = clientSocket;
+            pollList[1].events = POLLIN;
         }
     }
     else
     {
         //If already connected, check to see if there is data waiting
-        if(availableDataClient())
+        if(pollList[0].revents && POLLIN)
         {
             int receivedBytes = 0;
             uint64_t receivingPacketLength = 0;
@@ -113,9 +118,9 @@ int ReceiveData::getData(void *buffer, size_t bufferLength)
                 receivedBytes += receiveValue;
                 std::cout << "After Read: " << receivedBytes << std::endl;
             }
-            std::cout << "bruh" << std::endl;
-            std::cout << availableDataClient() << std::endl;
-            std::cout << recv(clientSocket, ((char *)buffer + receivedBytes * sizeof(char)), min(MAX_PACKET_SIZE, bufferLength - receivedBytes), 0) << std::endl;
+            // std::cout << "bruh" << std::endl;
+            // std::cout << pollList[0].revents && POLLIN << std::endl;
+            // std::cout << recv(clientSocket, ((char *)buffer + receivedBytes * sizeof(char)), min(MAX_PACKET_SIZE, bufferLength - receivedBytes), 0) << std::endl;
             return receivedBytes;
         }
     }
