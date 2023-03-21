@@ -65,6 +65,7 @@ bool ReceiveData::availableDataClient()
 
 int ReceiveData::getData(void *buffer, size_t bufferLength)
 {
+    int ready_fd_count = poll(pollList, 1, -1);
     //Check to see if there is an active connection
     if(clientSocket < 0)
     {
