@@ -88,10 +88,14 @@ int ReceiveData::getData(void *buffer, size_t bufferLength)
             int receivedBytes = 0;
             uint64_t receivingPacketLength = 0;
 
-            char firstPacket[1400];
-            int receiveValue = recv(clientSocket, firstPacket, 1400 + 1, 0);
-
+            char *firstPacket = new char[100];
+            for(int i = 0; i < 100; i++)
+                firstPacket[i] = 0;
+                
+            int receiveValue = recv(clientSocket, firstPacket, 100, 0);
             receivingPacketLength = atoi(firstPacket);
+
+            delete [] firstPacket;
 
             std::cout << "Attempting to Recieve: " << receivingPacketLength << " into " << bufferLength << std::endl;
             
@@ -104,7 +108,7 @@ int ReceiveData::getData(void *buffer, size_t bufferLength)
             while(receivedBytes < bufferLength && receivedBytes < receivingPacketLength)
             {
                 std::cout << "Before Read: " << receivedBytes << std::endl; 
-                receiveValue = recv(clientSocket, ((char *)buffer + receivedBytes * sizeof(char)), min(MAX_PACKET_SIZE, bufferLength - receivedBytes) + 1, 0);
+                receiveValue = recv(clientSocket, ((char *)buffer + receivedBytes * sizeof(char)), min(MAX_PACKET_SIZE, bufferLength - receivedBytes), 0);
                 if(receiveValue <= 0)
                 {
                     close(clientSocket);
