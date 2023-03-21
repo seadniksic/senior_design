@@ -2,7 +2,7 @@
 
 import cv2, socket
 import numpy as np
-import rospy
+import rclpy as rospy
 
 
 def publisher(data):
