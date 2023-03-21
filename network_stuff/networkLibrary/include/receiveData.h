@@ -10,8 +10,8 @@
 #include <sys/ioctl.h>
 #include <opencv2/opencv.hpp>
 #include "common.h"
-#include <iconv.h>
 #include <cstring>
+#include <poll.h>
 
 class ReceiveData{
     private:
