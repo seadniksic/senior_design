@@ -1,0 +1,13 @@
+Added Component: Designator=J10(Terminal Holes)
+Added Component: Designator=J12(Terminal Holes)
+Added Component: Designator=Q3(PWM Fet)
+Added Pin To Net: NetName=12V Pin=J10-0
+Added Pin To Net: NetName=GND Pin=J12-1
+Added Pin To Net: NetName=Headlight Pin=Q3-0
+Added Pin To Net: NetName=12V Pin=Q3-1
+Added Pin To Net: NetName=NetJ10_1 Pin=J10-1
+Added Pin To Net: NetName=NetJ10_1 Pin=Q3-2
+Added Net: Name=NetJ10_1
+Added Member To Class: ClassName=ModuleInter Member=Component J10 Terminal block
+Added Member To Class: ClassName=ModuleInter Member=Component J12 Terminal block
+Added Member To Class: ClassName=ModuleInter Member=Component Q3 Light Fet

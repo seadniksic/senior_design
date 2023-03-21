@@ -1,0 +1,56 @@
+Removed Pin From Net: NetName=GND Pin=C6-1
+Removed Pin From Net: NetName=12V Pin=C6-2
+Removed Pin From Net: NetName=GND Pin=D15-1
+Removed Pin From Net: NetName=12V Pin=L1-2
+Removed Pin From Net: NetName=PACK+ Pin=R13-2
+Removed Pin From Net: NetName=GND Pin=R16-1
+Removed Pin From Net: NetName=GND Pin=R27-1
+Removed Pin From Net: NetName=UART1_TX Pin=U4-8
+Removed Pin From Net: NetName=UART1_RX Pin=U4-10
+Removed Pin From Net: NetName=PACK+ Pin=U12-2
+Removed Pin From Net: NetName=PACK+ Pin=U12-3
+Removed Pin From Net: NetName=GND Pin=U12-4
+Removed Pin From Net: NetName=GND Pin=U12-7
+Removed Member From Class: ClassName=Power Member=C6
+Removed Member From Class: ClassName=Power Member=D15
+Removed Member From Class: ClassName=Power Member=L1
+Removed Member From Class: ClassName=Power Member=R13
+Removed Member From Class: ClassName=Power Member=R16
+Removed Member From Class: ClassName=Power Member=R27
+Removed Member From Class: ClassName=Power Member=U12
+Added Component: Designator=J10(MOLEX_5055680271)
+Add component (AddParameter): Name = "Availability"; Value = "In Stock"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Check_prices"; Value = "https://www.snapeda.com/parts/5055680271/Molex/view-part/?ref=eda"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MF"; Value = "Molex"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MP"; Value = "5055680271"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "None"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Price"; Value = "None"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Purchase-URL"; Value = "https://pricing.snapeda.com/search/part/5055680271/?ref=eda"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "SnapEDA_Link"; Value = "https://www.snapeda.com/parts/5055680271/Molex/view-part/?ref=snap"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Added Component: Designator=J11(MOLEX_5055680271)
+Add component (AddParameter): Name = "Availability"; Value = "In Stock"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Check_prices"; Value = "https://www.snapeda.com/parts/5055680271/Molex/view-part/?ref=eda"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MF"; Value = "Molex"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MP"; Value = "5055680271"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "None"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Price"; Value = "None"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Purchase-URL"; Value = "https://pricing.snapeda.com/search/part/5055680271/?ref=eda"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "SnapEDA_Link"; Value = "https://www.snapeda.com/parts/5055680271/Molex/view-part/?ref=snap"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Added Pin To Net: NetName=PACK+ Pin=J10-1
+Added Pin To Net: NetName=GND Pin=J10-2
+Added Pin To Net: NetName=GND Pin=J10-S1
+Added Pin To Net: NetName=GND Pin=J10-S2
+Added Pin To Net: NetName=GND Pin=J11-1
+Added Pin To Net: NetName=GND Pin=J11-2
+Added Pin To Net: NetName=GND Pin=J11-S1
+Added Pin To Net: NetName=12V Pin=J11-S2
+Added Pin To Net: NetName=UART1_RX Pin=U4-8
+Added Pin To Net: NetName=UART1_TX Pin=U4-10
+Added Pin To Net: NetName=Headlight Pin=U3-11
+Added Net: Name=Headlight
+Added Member To Class: ClassName=Power Member=Component J10 5055680271
+Added Member To Class: ClassName=Power Member=Component J11 5055680271
+Added Room: Name=ModuleInter
+Added Room: Name=Power

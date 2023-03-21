@@ -1,0 +1,8 @@
+Removed Pin From Net: NetName=12V Pin=J10-0
+Removed Pin From Net: NetName=GND Pin=J12-1
+Removed Member From Class: ClassName=ModuleInter Member=J12
+Change Component Comment : Designator=Q3 Old Comment=Light Fet New Comment=RFP30N06LE
+Added Pin To Net: NetName=GND Pin=J10-0
+Added Pin To Net: NetName=12V Pin=J10-1
+Added Pin To Net: NetName=NetJ10_2 Pin=Q3-2
+Added Net: Name=NetJ10_2

@@ -1,0 +1,5 @@
+Added Component: Designator=J10(Terminal Holes)
+Added Pin To Net: NetName=GND Pin=J10-0
+Added Pin To Net: NetName=12V Pin=J10-1
+Added Pin To Net: NetName=NetJ10_2 Pin=J10-2
+Added Member To Class: ClassName=ModuleInter Member=Component J10 Terminal block
