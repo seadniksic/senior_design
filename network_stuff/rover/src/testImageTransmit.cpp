@@ -20,7 +20,6 @@ int main()
     status_t *roverStatus = new status_t;
     roverStatus->battery = 0;
 
-
     while(1)
     {
         testTransmit.sendPayload(img.data, img.total() * img.elemSize());

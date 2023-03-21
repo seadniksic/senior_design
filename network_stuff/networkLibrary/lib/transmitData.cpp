@@ -32,7 +32,7 @@ int TransmitData::sendPayload(void *payLoad, size_t dataLength)
         //If it is conected send the data
         uint64_t sendDataSize = (uint64_t)dataLength;
 
-        int sendResult = send(sock, sendDataSize, sizeof(sendDataSize), MSG_NOSIGNAL), bytesToSend = 0;
+        int sendResult = send(sock, &sendDataSize, sizeof(sendDataSize), MSG_NOSIGNAL), bytesToSend = 0;
 
         while(sentBytes < dataLength)
         {

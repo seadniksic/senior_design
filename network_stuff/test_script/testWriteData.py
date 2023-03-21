@@ -1,4 +1,4 @@
-import socket, select, pickle, time
+import socket, pickle
 
 class MyClass:
     def __init__(self, name, age):
@@ -8,6 +8,7 @@ class MyClass:
 if __name__=='__main__':
     data = MyClass("peter", 8)
     sendData = pickle.dumps(data)
+    
     size = int(len(sendData)).to_bytes(8, byteorder='little', signed=False)
     print(size.hex())
 
