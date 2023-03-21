@@ -31,13 +31,8 @@ int TransmitData::sendPayload(void *payLoad, size_t dataLength)
     {
         //If it is conected send the data
         uint64_t sendDataSize = (uint64_t)dataLength;
-        char firstPacket[1400];
 
-        sprintf(firstPacket, "%lu", sendDataSize);
-
-        std::cout << "Attempting to transmit: " << firstPacket << " which was derived from " << dataLength << std::endl;
-
-        int sendResult = send(sock, firstPacket, 1400, MSG_NOSIGNAL), bytesToSend = 0;
+        int sendResult = send(sock, sendDataSize, sizeof(sendDataSize), MSG_NOSIGNAL), bytesToSend = 0;
 
         while(sentBytes < dataLength)
         {
