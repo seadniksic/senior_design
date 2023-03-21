@@ -55,7 +55,7 @@ bool ReceiveData::availableDataClient()
     tv.tv_sec = 0;
     tv.tv_usec = 0;
     int retval = select(clientSocket + 1, &rfds, NULL, NULL, &tv);
-    if(retval <= 0)
+    if(retval < 0)
         return false;
     return retval;
 }
@@ -113,7 +113,7 @@ int ReceiveData::getData(void *buffer, size_t bufferLength)
                 receivedBytes += receiveValue;
                 std::cout << "After Read: " << receivedBytes << std::endl;
             }
-
+            std::cout << availableDataClient() << std::endl;
             return receivedBytes;
         }
     }
