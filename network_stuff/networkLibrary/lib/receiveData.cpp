@@ -55,7 +55,7 @@ bool ReceiveData::availableDataClient()
     tv.tv_sec = 0;
     tv.tv_usec = 0;
     int retval = select(clientSocket + 1, &rfds, NULL, NULL, &tv);
-    if(retval < 0)
+    if(retval <= 0)
         return false;
     return retval;
 }
@@ -88,14 +88,9 @@ int ReceiveData::getData(void *buffer, size_t bufferLength)
             int receivedBytes = 0;
             uint64_t receivingPacketLength = 0;
 
-            char *firstPacket = new char[100];
-            for(int i = 0; i < 100; i++)
-                firstPacket[i] = 0;
-                
+            char firstPacket[100];
             int receiveValue = recv(clientSocket, firstPacket, 100, 0);
             receivingPacketLength = atoi(firstPacket);
-
-            delete [] firstPacket;
 
             std::cout << "Attempting to Recieve: " << receivingPacketLength << " into " << bufferLength << std::endl;
             
