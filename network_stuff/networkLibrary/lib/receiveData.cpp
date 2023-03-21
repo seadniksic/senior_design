@@ -96,31 +96,31 @@ int ReceiveData::getData(void *buffer, size_t bufferLength)
             int receivedBytes = 0;
             uint64_t receivingPacketLength = 0;
 
-            char firstPacket[100];
-            int receiveValue = recv(clientSocket, firstPacket, 100, 0);
+            char firstPacket[1400];
+            int receiveValue = recv(clientSocket, firstPacket, 1400, 0);
             receivingPacketLength = atoi(firstPacket);
 
             std::cout << "Attempting to Recieve: " << receivingPacketLength << " into " << bufferLength << std::endl;
             
             if(receiveValue == 0)
             {
+                std::cout << "Closing socket" << std::endl;
                 close(clientSocket);
                 clientSocket = -1;
             }
 
             while(receivedBytes < bufferLength && receivedBytes < receivingPacketLength)
             {
-                receiveValue = recv(clientSocket, ((char *)buffer + receivedBytes * sizeof(char)), min(MAX_PACKET_SIZE, bufferLength - receivedBytes), 0);
-                if(receiveValue < 0)
+                receiveValue = recv(clientSocket, ((char *)buffer + receivedBytes * sizeof(char)), min(min(MAX_PACKET_SIZE, bufferLength - receivedBytes), receivingPacketLength - receivedBytes), 0);
+                if(receiveValue <= 0)
                 {
+                    std::cout << "Closing socket" << std::endl;
                     close(clientSocket);
                     clientSocket = -1;
                     pollList[0].fd = serverSocket;
                     pollList[0].events = POLLIN;
                     break;
                 }
-                else if(receiveValue > 0)
-                    std::cout << "here" << std::endl;
                 receivedBytes += receiveValue;
             }
             std::cout << "bruh" << std::endl;
