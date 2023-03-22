@@ -8,9 +8,13 @@ ReceiveData *imageServer;
 ReceiveData *slamServer;
 ReceiveData *statusServer;
 TransmitData *commandsClient;
+
+TransmitData *imageClient;
+TransmitData *slamClient;
+TransmitData *statusClient;
 ReceiveData *commandsServer;
 
-char *commandsBuffer;
+char *cameraBuffer, *slamBuffer, *statusBuffer, *commandsBuffer;
 
 void initializeNetwork()
 {
@@ -18,9 +22,16 @@ void initializeNetwork()
     slamServer = new ReceiveData(WIFI_SLAM_PORT);
     statusServer = new ReceiveData(WIFI_ROVER_STATUS_PORT);
     commandsClient = new TransmitData(HOST_IP, WIFI_ROVER_COMMANDS_PORT);
+
+    imageClient = new TransmitData(LOCAL_IP, BASE_STATION_IMAGE_PORT);
+    slamClient = new TransmitData(LOCAL_IP, BASE_STATION_SLAM_PORT);
+    statusClient = new TransmitData(LOCAL_IP, BASE_STATION_STATUS_PORT);
     commandsServer = new ReceiveData(BASE_STATION_COMMANDS_PORT);
 
-    commandsBuffer = new char[150];
+    cameraBuffer = new char[IMAGE_HEIGHT * IMAGE_WIDTH * 3];
+    slamBuffer = new char[IMAGE_HEIGHT * IMAGE_WIDTH];
+    statusBuffer = new char[200];
+    commandsBuffer = new char[200];
 }
 
 void shutdownNetwork()
@@ -30,30 +41,47 @@ void shutdownNetwork()
     delete statusServer;
     delete commandsClient;
 
+    delete imageClient;
+    delete slamClient;
+    delete statusClient;
+    delete commandsServer;
+
+    delete [] cameraBuffer;
+    delete [] slamBuffer;
+    delete [] statusBuffer;
     delete [] commandsBuffer;
 }
 
-int getCameraData(image_t *buffer, size_t bufferSize)
+void getCameraData()
 {
-    int returnVal = imageServer->getData(buffer, bufferSize);
-    return returnVal; 
+    size_t bufferSize = IMAGE_HEIGHT * IMAGE_WIDTH * 3;
+    int returnVal = 0;
+    while(returnVal == 0)
+        returnVal = imageServer->getData(cameraBuffer, bufferSize);
+    imageClient->sendPayload(cameraBuffer, returnVal);
 }
 
-int getSlamData(slam_t *buffer, size_t bufferSize)
+void getSlamData()
 {
-    int returnVal = slamServer->getData(buffer, bufferSize);
-    return returnVal;   
+    size_t bufferSize = IMAGE_HEIGHT * IMAGE_WIDTH;
+    int returnVal = 0;
+    while(returnVal == 0)
+        returnVal = slamServer->getData(slamBuffer, bufferSize);
+    slamClient->sendPayload(slamBuffer, returnVal);
 }
 
-int getRoverStatus(status_t *buffer, size_t bufferSize)
+void getRoverStatus()
 {
-    int returnVal = statusServer->getData(buffer, bufferSize);
-    return returnVal;   
+    size_t bufferSize = sizeof(char) * 200;
+    int returnVal = 0;
+    while(returnVal == 0)
+        returnVal = statusServer->getData(statusBuffer, bufferSize);
+    statusClient->sendPayload(statusBuffer, returnVal); 
 }
 
 void sendRoverCommands()
 {
-    size_t bufferSize = sizeof(char) * 150;
+    size_t bufferSize = sizeof(char) * 200;
 
     int incomingSize = 0;
     while(incomingSize == 0)

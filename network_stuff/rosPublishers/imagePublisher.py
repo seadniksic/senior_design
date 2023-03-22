@@ -28,13 +28,13 @@ def publisher(data):
         rate.sleep()
 
 if __name__ == '__main__':
-    # sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    # host = "127.0.0.1"
-    # port = 8089
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    host = "127.0.0.1"
+    port = 8089
 
-    # sock.bind((host, port))
-    # sock.listen(1)
-    # client, addr = sock.accept()
+    sock.bind((host, port))
+    sock.listen(1)
+    client, addr = sock.accept()
 
     # while True:
     #     byteSize = client.recv(1400).from_bytes(8, byteorder='little', signed=False)

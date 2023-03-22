@@ -1,7 +1,7 @@
 #include "baseStationGUI.h"
 #include <iostream>
 #include "common.h"
-#include "baseStationNetworking.h"
+#include "baseStationGUINetworking.h"
 #include <pthread.h>
 
 pthread_t commandsThread;
