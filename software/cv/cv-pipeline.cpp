@@ -5,18 +5,18 @@
 #include <opencv2/opencv.hpp>
 #include <opencv2/dnn/dnn.hpp>
 
-using namespace cv;
-using namespace dnn;
+//using namespace cv;
+//using namespace dnn;
 
-using namespace std;
+//using namespace std;
 //using namespace tensorflow;
 
 int main() 
 {
     
 // Specify the paths for the 2 files
-string protoFile = "../models/pose/mpi/pose_deploy_linevec.prototxt";
-string weightsFile = "../models/pose/mpi/pose_iter_160000.caffemodel";
+//string protoFile = "../models/pose/mpi/pose_deploy_linevec.prototxt";
+//string weightsFile = "../models/pose/mpi/pose_iter_160000.caffemodel";
 
 // Read the network into Memory
 //Net net = readNetFromTensorflow("../models/movenet_multipose_lightning_1/saved_model.pb");
@@ -37,8 +37,9 @@ string weightsFile = "../models/pose/mpi/pose_iter_160000.caffemodel";
     {
 
 	//Executed for every frame
+	
 
-
+	std::cout << cam;
         Mat frame;
         cam >> frame;
         
@@ -113,8 +114,10 @@ string weightsFile = "../models/pose/mpi/pose_iter_160000.caffemodel";
 	
 	
         imshow("original",frame);
-        if((char)waitKey(30) == 27)
+        if((char)waitKey(30) == 27) {
+            cam.release();
             break;
+           }
     }
     
     return 0;
