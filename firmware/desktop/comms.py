@@ -121,7 +121,7 @@ if __name__ == "__main__":
     # create sp= serial port object
     # arduino defualt is 8 data bits, no parity, and one stop bit
     sp = serial.Serial(
-        port="/dev/ttyTHS1",
+        port="/dev/ttyTHS0",
         baudrate=115200,
         bytesize=serial.EIGHTBITS,
         parity=serial.PARITY_NONE,
@@ -164,22 +164,32 @@ if __name__ == "__main__":
         sock.bind((host, port))
         sock.listen(1)
         client, addr = sock.accept() 
+        sendtimer_start = timer()
+        sendtimer_end = timer()
 
         while True: 
+            start = timer()
             size = client.recv(1400)
             newPickle = client.recv(1400)
+            sendtimer_end = timer()
             try:
-                b = pickle.loads(newPickle)
+                if(sendtimer_end - sendtimer_start) > g.sleep_time:
+                    # b = pickle.loads(newPickle)
+                    b = newPickle
+                    print(b)
+                    sp.write(b)
+                    sendtimer_start = sendtimer_end
             except EOFError:
                 print("eof error occurred in pickle.load")
-            except: 
+            except Exception as e: 
                 print("Something else went wrong in pickle.load")
+                print(e)
 
             # confirmed looked like serialized data came through and it is
             # a byte array.
             # print(type(b))
-            print(b)
-            sp.write(b)
+            end = timer()
+            print(end-start)
 
     # If its not a remote joystick, do the parsing here
     while True: 
