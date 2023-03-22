@@ -61,9 +61,15 @@ MainWindow::~MainWindow()
 void MainWindow::timerUpdate()
 {
     if(getCameraData(cameraFeed->data, cameraFeed->total() * cameraFeed->elemSize()) > 0)
+    {
+        std::vector<uchar> data(cameraFeed->data, cameraFeed->data + cameraFeed->total() * cameraFeed->elemSize());
+        cv::imdecode(cv::Mat(data), cv::IMREAD_COLOR, cameraFeed);
         cameraTabLabel->setPixmap(QPixmap::fromImage(createQImage(*cameraFeed)));
+    }
     if(getSlamData(slamFeed->data, slamFeed->total() * slamFeed->elemSize()) > 0)
+    {
         slamTabLabel->setPixmap(QPixmap::fromImage(createQImage(*slamFeed)));
+    }
     if(getRoverStatus(currentRoverData, sizeof(status_t)) > 0)
         roverStatus->setText("Current Temperature: " + QString::number(currentRoverData->battery));
 }
