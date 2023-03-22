@@ -29,20 +29,20 @@ class MinimalPublisher(Node):
 
 
     def timer_callback(self):
-        readReady, writeReady, error = select.select(self.readSockets, [], [])
-        if len(readReady) > 0:
-            size = self.client.recv(1400)
-            size = int.from_bytes(size, 'little')
-            msg = self.client.recv(1400)
-            while len(msg) < size:
-                msg += self.client.recv(1400)
-            
+        size = self.client.recv(8)
+        size = int.from_bytes(size, 'little')
+        if size <= 0:
+            return
+        msg = self.client.recv(1400)
+        while len(msg) < size:
+            msg += self.client.recv(1400)
+        
 
-            bridge = CvBridge()
-            image = np.asarray(msg, dtype="uint8")
-            image = cv2.imdecode(image, cv2.IMREAD_COLOR)
-            rosMsg = bridge.cv2_to_imgmsg(image, encoding="passthrough")
-            self.publisher_.publish(rosMsg)
+        bridge = CvBridge()
+        image = np.frombuffer(msg, dtype="uint8")
+        image = cv2.imdecode(image, cv2.IMREAD_COLOR)
+        rosMsg = bridge.cv2_to_imgmsg(image, encoding="passthrough")
+        self.publisher_.publish(rosMsg)
 
 
 def main(args=None):
