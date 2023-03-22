@@ -35,12 +35,13 @@ class MinimalPublisher(Node):
             return
         msg = self.client.recv(1400)
         while len(msg) < size:
-            msg += self.client.recv(1400)
+            msg += self.client.recv(min(1400, size - len(msg)))
         
 
         bridge = CvBridge()
-        image = np.frombuffer(msg, dtype="uint8")
-        image = cv2.imdecode(image, cv2.IMREAD_COLOR)
+        buffer = np.frombuffer(msg, np.uint8)
+        image = cv2.imdecode(buffer, cv2.IMREAD_COLOR)
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         rosMsg = bridge.cv2_to_imgmsg(image, encoding="passthrough")
         self.publisher_.publish(rosMsg)
 

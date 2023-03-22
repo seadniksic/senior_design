@@ -57,7 +57,7 @@ void sendCameraData()
     size_t bufferSize = sizeof(char) * IMAGE_HEIGHT * IMAGE_WIDTH * 3;
 
     int incomingSize = 0;
-    while(incomingSize == 0);
+    while(incomingSize == 0)
     {
         incomingSize = imagePortServer->getData(imageBuffer, bufferSize);
     }
@@ -97,10 +97,6 @@ void getRoverCommands()
     {
         incomingSize = commandsServer->getData(commandsBuffer, bufferSize);
     }
-    std::cout << "Command byte string is: " << incomingSize << std::endl;
-    for(int i = 0; i < incomingSize; i++)
-        std::cout << std::hex << commandsBuffer[i] << ", ";
-    std::cout << std::endl;
     commandsPortClient->sendPayload(commandsBuffer, incomingSize);
 }
 
