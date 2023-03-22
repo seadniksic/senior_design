@@ -13,6 +13,10 @@ void main_prog()
   // init the LED
   pinMode(13, OUTPUT);
 
+  //lightbar
+  pinMode(10, OUTPUT);
+  uint8_t lightbar_pwm;
+
   // Setup serial
   Serial.begin(SERIAL_BAUD);
 
@@ -44,28 +48,38 @@ void main_prog()
 
   while(1)
   {
+
     if(LED_clock > 750 )
     {
       LED_clock -= 750;
       LED_state = !LED_state;
       digitalWrite(JOY_LED_PIN, LED_state);
       digitalWrite(13, LED_state);
+      // digitalWrite(10, LED_state);
 
       // test joystick
       float temp = InternalTemperature.readTemperatureF();
+      Serial.println(temp);
       Serial.print("CPU TEMP");
       UartComms_PopulateReply(gui_data, temp);
-      Serial.println(temp);
+
     }
 
     if (print_clock > 100)
     {
       Joystick_Print();
       print_clock -= 100;
+      
+      lightbar_pwm = 255;
+      analogWrite(10, lightbar_pwm);
     }
 
-
+    #define SERIAL_TIMEOUT 200
     UartComms_Run(read_buffer, write_buffer, js_in, gui_data, rcv_clock);
+    if((*UartComms_GetTimeSinceLastRead()) > SERIAL_TIMEOUT)
+    {
+      Joystick_Reset_State(js_in);
+    }
   
     if(joy_update_clock > 100)
     {

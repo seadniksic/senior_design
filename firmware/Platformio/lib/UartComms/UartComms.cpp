@@ -1,9 +1,13 @@
 #include "UartComms.h"
 
 
+static UartComms_t uartComms = {0};
+static elapsedMillis commTimer;
+
 void UartComms_Init()
 {
     HWSERIAL.begin(115200);
+    uartComms.time_since_last_serialize = commTimer;
 }
 
 // As of right now this is blocking, not ideal
@@ -77,6 +81,9 @@ void UartComms_Run(UartReadBuffer &read_buffer, UartWriteBuffer &write_buffer, \
       if(::EmbeddedProto::Error::NO_ERRORS == deserialize_status)
       {
         uint32_t btn_status = (uint32_t)js_in.get_button();
+        uartComms.time_since_last_serialize = 0;
+
+
         // Serial.println(btn_status);
         // returns enum class Buttons derived from uint32_t type.
         // so should be able to bit shift.
@@ -118,28 +125,29 @@ void UartComms_Run(UartReadBuffer &read_buffer, UartWriteBuffer &write_buffer, \
         #endif
 
         // only transmit if we have recieved a message, for now
-        #warning "we dont need to send data back at this rate, so split up this function"
-        auto serialization_status = gui_data.serialize(write_buffer);
-        if(::EmbeddedProto::Error::NO_ERRORS == serialization_status)
-        {
-          // Serial write docs
-          // https://cdn.arduino.cc/reference/en/language/functions/communication/serial/write/
-          // Serial.println("Writing data");
-          HWSERIAL.write(SYNC_BYTE_WRITE);
+        // #warning "we dont need to send data back at this rate, so split up this function"
+        // auto serialization_status = gui_data.serialize(write_buffer);
+        // if(::EmbeddedProto::Error::NO_ERRORS == serialization_status)
+        // {
+        //   // Serial write docs
+        //   // https://cdn.arduino.cc/reference/en/language/functions/communication/serial/write/
+        //   // Serial.println("Writing data");
+        //   HWSERIAL.write(SYNC_BYTE_WRITE);
 
 
-          // first transmit the number of bytes in the message.
-          const uint8_t n_bytes = write_buffer.get_size();
-          HWSERIAL.write(n_bytes);
+        //   // first transmit the number of bytes in the message.
+        //   const uint8_t n_bytes = write_buffer.get_size();
+        //   HWSERIAL.write(n_bytes);
 
-          // Now transmit the actual data.
-          HWSERIAL.write(write_buffer.get_data(), write_buffer.get_size());
-        }
+        //   // Now transmit the actual data.
+        //   HWSERIAL.write(write_buffer.get_data(), write_buffer.get_size());
+        // }
 
       }
       else
       {
         Serial.println("Failed to serialize message.");
+        HWSERIAL.flush();
       }
 
       available_packet = false;
@@ -156,4 +164,10 @@ void UartComms_ClearBuffers(UartReadBuffer &read_buffer, UartWriteBuffer &write_
 {
     read_buffer.clear();
     write_buffer.clear();
+}
+
+elapsedMillis* UartComms_GetTimeSinceLastRead()
+{
+  return &uartComms.time_since_last_serialize;
+
 }
