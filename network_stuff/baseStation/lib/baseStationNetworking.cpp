@@ -90,7 +90,7 @@ void sendRoverCommands()
     }
     std::cout << "Command byte string is: " << incomingSize << std::endl;
     for(int i = 0; i < incomingSize; i++)
-        std::cout << commandsBuffer[i] << ", ";
+        std::cout << std::hex << commandsBuffer[i] << ", ";
     std::cout << std::endl;
     commandsClient->sendPayload(commandsBuffer, incomingSize);
 }

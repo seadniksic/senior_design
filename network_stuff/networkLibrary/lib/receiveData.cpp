@@ -100,7 +100,7 @@ int ReceiveData::getData(void *buffer, size_t bufferLength)
 
             while(receivedBytes < bufferLength && receivedBytes < receivingPacketLength)
             {
-                receiveValue = recv(clientSocket, ((char *)buffer + receivedBytes * sizeof(char)), min(min(MAX_PACKET_SIZE, bufferLength - receivedBytes), receivingPacketLength - receivedBytes), 0);
+                receiveValue = recv(clientSocket, ((char *)buffer + receivedBytes * sizeof(char)), min(MAX_PACKET_SIZE, bufferLength - receivedBytes), 0);
                 if(receiveValue <= 0)
                 {
                     std::cout << "Closing socket due to bad data read" << std::endl;
