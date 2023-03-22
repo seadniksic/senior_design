@@ -10,6 +10,8 @@ ReceiveData *statusServer;
 TransmitData *commandsClient;
 ReceiveData *commandsServer;
 
+char *commandsBuffer;
+
 void initializeNetwork()
 {
     imageServer = new ReceiveData(WIFI_IMAGE_PORT);
@@ -17,6 +19,8 @@ void initializeNetwork()
     statusServer = new ReceiveData(WIFI_ROVER_STATUS_PORT);
     commandsClient = new TransmitData(HOST_IP, WIFI_ROVER_COMMANDS_PORT);
     commandsServer = new ReceiveData(BASE_STATION_COMMANDS_PORT);
+
+    commandsBuffer = new char[150];
 }
 
 void shutdownNetwork()
@@ -25,6 +29,8 @@ void shutdownNetwork()
     delete slamServer;
     delete statusServer;
     delete commandsClient;
+
+    delete [] commandsBuffer;
 }
 
 int getCameraData(image_t *buffer, size_t bufferSize)
@@ -47,16 +53,14 @@ int getRoverStatus(status_t *buffer, size_t bufferSize)
 
 void sendRoverCommands()
 {
-    commands_t buffer;
-    size_t bufferSize = sizeof(buffer);
+    size_t bufferSize = sizeof(char) * 150;
 
     int incomingSize = 0;
     while(incomingSize == 0)
     {
-        incomingSize = commandsServer->getData(&buffer, bufferSize);
+        incomingSize = commandsServer->getData(commandsBuffer, bufferSize);
     }
-    std::cout << incomingSize << std::endl;
-    // commandsClient->sendPayload(&buffer, incomingSize);
+    commandsClient->sendPayload(commandsBuffer, incomingSize);
 }
 
 

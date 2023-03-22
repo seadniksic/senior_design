@@ -25,6 +25,8 @@
 
 #define MAX_PACKET_SIZE 1400
 
+#define DEBUG_MACRO 1
+
 struct roverCommands{
     uint8_t data[200];
 };
