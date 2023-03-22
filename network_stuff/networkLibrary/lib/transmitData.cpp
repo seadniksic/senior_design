@@ -19,6 +19,7 @@ TransmitData::TransmitData(const char *ipAddress, uint16_t port)
 
 int TransmitData::sendPayload(void *payLoad, size_t dataLength)
 {
+    int sentBytes = 0;
     //Check to see if the socket is currently connected to anything
     if(!currentlyConnected)
     {
@@ -30,11 +31,8 @@ int TransmitData::sendPayload(void *payLoad, size_t dataLength)
     {
         //If it is conected send the data
         uint64_t sendDataSize = (uint64_t)dataLength;
-        char firstPacket[1400];
 
-        sprintf(firstPacket, "%lu", sendDataSize);
-
-        int sentBytes = 0, sendResult = send(sock, firstPacket, 1400, MSG_NOSIGNAL), bytesToSend = 0;
+        int sendResult = send(sock, &sendDataSize, sizeof(sendDataSize), MSG_NOSIGNAL), bytesToSend = 0;
 
         while(sentBytes < dataLength)
         {
@@ -55,10 +53,10 @@ int TransmitData::sendPayload(void *payLoad, size_t dataLength)
                 else
                     std::cerr << "Failed to send data." << std::endl;
             }
-            sentBytes += bytesToSend;
+            sentBytes += sendResult;
         }
     }
-    return 0;
+    return sentBytes;
 }
 
 TransmitData::~TransmitData()

@@ -88,22 +88,22 @@ int ReceiveData::getData(void *buffer, size_t bufferLength)
             int receivedBytes = 0;
             uint64_t receivingPacketLength = 0;
 
-            char firstPacket[1400];
-            int receiveValue = recv(clientSocket, firstPacket, 1400, 0);
-
-            receivingPacketLength = atoi(firstPacket);
+            int receiveValue = recv(clientSocket, &receivingPacketLength, sizeof(receivingPacketLength), 0);
             
-            if(receiveValue == 0)
+            if(receiveValue <= 0)
             {
+                std::cout << "Closing socket due to bad size read" << std::endl;
                 close(clientSocket);
                 clientSocket = -1;
+                return 0;
             }
 
             while(receivedBytes < bufferLength && receivedBytes < receivingPacketLength)
             {
-                receiveValue = recv(clientSocket, ((char *)buffer + receivedBytes * sizeof(char)), min(MAX_PACKET_SIZE, bufferLength - receivedBytes), 0);
-                if(receiveValue == 0)
+                receiveValue = recv(clientSocket, ((char *)buffer + receivedBytes * sizeof(char)), min(min(MAX_PACKET_SIZE, bufferLength - receivedBytes), receivingPacketLength - receivedBytes), 0);
+                if(receiveValue <= 0)
                 {
+                    std::cout << "Closing socket due to bad data read" << std::endl;
                     close(clientSocket);
                     clientSocket = -1;
                     break;

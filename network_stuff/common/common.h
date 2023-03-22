@@ -16,14 +16,19 @@
 #define JETSON_COMMANDS_PORT 8087
 
 #define BASE_STATION_COMMANDS_PORT 8088
+#define BASE_STATION_IMAGE_PORT 8089
+#define BASE_STATION_SLAM_PORT 8090
+#define BASE_STATION_STATUS_PORT 8091
 
-#define IMAGE_WIDTH 720
+#define IMAGE_WIDTH 640
 #define IMAGE_HEIGHT 480
 
 #define MAX_PACKET_SIZE 1400
 
+#define DEBUG_MACRO 1
+
 struct roverCommands{
-    uint8_t data[1400];
+    uint8_t data[200];
 };
 
 struct roverStatus{

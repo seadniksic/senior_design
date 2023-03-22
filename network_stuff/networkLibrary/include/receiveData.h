@@ -10,14 +10,15 @@
 #include <sys/ioctl.h>
 #include <opencv2/opencv.hpp>
 #include "common.h"
-#include <iconv.h>
 #include <cstring>
+#include <poll.h>
 
 class ReceiveData{
     private:
         int serverSocket, clientSocket;
         struct sockaddr_in serverAddress;
         size_t min(size_t a, size_t b);
+        struct pollfd pollList[1];
         bool availableDataServer();
         bool availableDataClient();
     public:

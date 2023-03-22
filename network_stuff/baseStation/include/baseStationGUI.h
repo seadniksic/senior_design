@@ -12,7 +12,7 @@
 #include <QObject> 
 #include <opencv2/opencv.hpp>
 #include "common.h"
-#include "baseStationNetworking.h"
+#include "baseStationGUINetworking.h"
 
 class MainWindow : public QMainWindow {
     private:

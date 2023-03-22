@@ -15,7 +15,7 @@ include_directories(../common/)
 
 set(GUI_SRC_FILES
     src/baseStationApp.cpp
-    lib/baseStationNetworking.cpp
+    lib/baseStationGUINetworking.cpp
     ../networkLibrary/lib/receiveData.cpp
     ../networkLibrary/lib/transmitData.cpp
     lib/baseStationGUI.cpp
@@ -26,6 +26,14 @@ set(BASE_STATION_TEST_TRANSMIT
     ../networkLibrary/lib/transmitData.cpp
 )
 
+set(BASE_STATION_CONNECTIONS_SRC
+    src/baseStationConnections.cpp
+    lib/baseStationNetworking.cpp
+    ../networkLibrary/lib/receiveData.cpp
+    ../networkLibrary/lib/transmitData.cpp
+)
+
 add_executable(baseStationApp ${GUI_SRC_FILES})
 add_executable(baseStationTest ${BASE_STATION_TEST_TRANSMIT})
+add_executable(baseStationConnections ${BASE_STATION_CONNECTIONS_SRC})
 target_link_libraries(baseStationApp PUBLIC ${OpenCV_LIBS} Qt5::Widgets)
