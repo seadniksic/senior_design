@@ -4,17 +4,19 @@
 #include "receiveData.h"
 #include <iostream>
 
-ReceiveData::ReceiveData(uint16_t port)
+ReceiveData::ReceiveData(uint16_t port, std::string name)
 {
+    this->name = name;
+
     //Create socket using TCP protocol
     serverSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (serverSocket == -1)
-        std::cerr << "Failed to create socket." << std::endl;
+        std::cerr << "Failed to create socket for " << name << "..." << std::endl;
 
     //Set socket buffer size to 1036800
     int recv_buff_size = 1036800; // in bytes
     if(setsockopt(serverSocket, SOL_SOCKET, SO_RCVBUF, &recv_buff_size, sizeof(recv_buff_size)) == -1)
-        std::cerr << "Failed to set socket buffer size" << std::endl;
+        std::cerr << "Failed to set socket buffer size for " << name << "..." << std::endl;
     
     //Set the IP and port 
     serverAddress.sin_family = AF_INET;
@@ -23,11 +25,11 @@ ReceiveData::ReceiveData(uint16_t port)
 
     //Bind the port to the socket
     if (bind(serverSocket, (struct sockaddr *) &serverAddress, sizeof(serverAddress)) == -1)
-        std::cerr << "Failed to bind socket to address." << std::endl;
+        std::cerr << "Failed to bind socket to address for " << name << "..." << std::endl;
 
     //Mark the socket as a listener
     if(listen(serverSocket, 2) == -1)
-        std::cerr << "Failed to set up listener." << std::endl;
+        std::cerr << "Failed to set up listener for " << name << "..." << std::endl;
     
     clientSocket = -1;
 }
@@ -68,7 +70,7 @@ int ReceiveData::getData(void *buffer, size_t bufferLength)
             socklen_t clientAddressLength = sizeof(clientAddress);
             clientSocket = accept(serverSocket, (struct sockaddr*) &clientAddress, &clientAddressLength);
             if(clientSocket == -1)
-                std::cerr << "Failed to accept socket connection." << std::endl;
+                std::cerr << "Failed to accept socket connection for " << name << "..." << std::endl;
             
             struct timeval timeout;
             timeout.tv_sec = 5; 
@@ -88,7 +90,7 @@ int ReceiveData::getData(void *buffer, size_t bufferLength)
             
             if(receiveValue <= 0)
             {
-                std::cout << "Closing socket due to bad size read" << std::endl;
+                std::cout << "Closing socket due to bad size read for " << name << "..." << std::endl;
                 close(clientSocket);
                 clientSocket = -1;
                 return 0;
@@ -99,7 +101,7 @@ int ReceiveData::getData(void *buffer, size_t bufferLength)
                 receiveValue = recv(clientSocket, ((char *)buffer + receivedBytes * sizeof(char)), min(min(MAX_PACKET_SIZE, bufferLength - receivedBytes), receivingPacketLength - receivedBytes), 0);
                 if(receiveValue <= 0)
                 {
-                    std::cout << "Closing socket due to bad data read" << std::endl;
+                    std::cout << "Closing socket due to bad data read for " << name << "..." <<std::endl;
                     close(clientSocket);
                     clientSocket = -1;
                     break;

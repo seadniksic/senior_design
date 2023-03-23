@@ -2,12 +2,13 @@
 #define TRANSMITDATA_CPP
 #include "transmitData.h"
 
-TransmitData::TransmitData(const char *ipAddress, uint16_t port)
+TransmitData::TransmitData(const char *ipAddress, uint16_t port, std::string name)
 {
+    this->name = name;
     //Create socket
     sock = socket(AF_INET, SOCK_STREAM, 0);
     if(sock == -1)
-        std::cerr << "Failed to create socket." << std::endl;
+        std::cerr << "Failed to create socket for " << name << "..." << std::endl;
 
     //Mark the IP address it should be connecting to
     serverAddress.sin_family = AF_INET;
@@ -47,11 +48,11 @@ int TransmitData::sendPayload(const void *payLoad, size_t dataLength)
                     close(sock);
                     sock = socket(AF_INET, SOCK_STREAM, 0);
                     if(sock == -1)
-                        std::cerr << "Failed to create socket." << std::endl;
+                        std::cerr << "Failed to create socket for " << name << "..." << std::endl;
                     break;
                 }
                 else
-                    std::cerr << "Failed to send data." << std::endl;
+                    std::cerr << "Failed to send data for " << name << "..." << std::endl;
             }
             sentBytes += sendResult;
         }

@@ -17,8 +17,9 @@ class TransmitData{
         struct sockaddr_in serverAddress;
         size_t min(size_t a, size_t b);
         bool currentlyConnected;
+        std::string name;
     public:
-        TransmitData(const char *ipAddress, uint16_t port);
+        TransmitData(const char *ipAddress, uint16_t port, std::string name);
         int sendPayload(const void *payLoad, size_t dataLength);
         ~TransmitData();
 };

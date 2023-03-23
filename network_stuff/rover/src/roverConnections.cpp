@@ -1,4 +1,4 @@
-#include "roverNetworking.h"
+#include "passThroughWire.h"
 #include <pthread.h>
 #include <iostream>
 #include <csignal>
@@ -28,11 +28,6 @@ int main()
     signal(SIGTERM, exitHandler);
     signal(SIGINT, exitHandler);
 
-    std::cout << "Initializing network..." << std::endl;
-
-    initializeNetwork();
-
-    std::cout << "Successfully initialized network..." << std::endl;
     std::cout << "Launching network threads..." << std::endl;
 
     pthread_create(&cameraThread, NULL, cameraThreadFunction, NULL);
@@ -54,35 +49,40 @@ int main()
 
 void* cameraThreadFunction(void* arg)
 {
+    PassThroughWire connection(JETSON_IMAGE_PORT, WIFI_IMAGE_PORT, CLIENT_IP, IMAGE_BUFFER_SIZE, "Camera Feed Wire");
     while(1)
-        sendCameraData();
+        connection.update();
     return NULL;
 }
 
 void* pointCloudThreadFunction(void* arg)
 {
+    PassThroughWire connection(JETSON_POINT_CLOUD_PORT, WIFI_POINT_CLOUD_PORT, CLIENT_IP, POINT_CLOUD_BUFFER_SIZE, "Point Cloud Wire");
     while(1)
-        sendPointCloudData();
+        connection.update();
     return NULL;
 }
 
 void* statusThreadFunction(void* arg)
 {
+    PassThroughWire connection(JETSON_STATUS_PORT, WIFI_ROVER_STATUS_PORT, CLIENT_IP, ROVER_STATUS_BUFFER_SIZE, "Rover Status Wire");
     while(1)
-        sendRoverStatus();
+        connection.update();
     return NULL;
 }
 
 void* commandsThreadFunction(void* arg)
 {
+    PassThroughWire connection(WIFI_ROVER_COMMANDS_PORT, JETSON_COMMANDS_PORT, LOCAL_IP, ROVER_COMMANDS_BUFFER_SIZE, "Rover Commands Wire");
     while(1)
-        getRoverCommands();
+        connection.update();
     return NULL;
 }
 
 void* cameraPositionThreadFunction(void *arg)
 {
+    PassThroughWire connection(JETSON_CAMERA_LOCATION_PORT, WIFI_CAMERA_LOCATION_PORT, CLIENT_IP, CAMERA_POSITION_BUFFER_SIZE, "Camera Position Wire");
     while(1)
-        sendCameraPosition();
+        connection.update();
     return NULL;
 }

@@ -20,8 +20,9 @@ class ReceiveData{
         struct pollfd pollList[1];
         bool availableDataServer();
         bool availableDataClient();
+        std::string name;
     public:
-        ReceiveData(uint16_t port);
+        ReceiveData(uint16_t port, std::string name);
         int getData(void *buffer, size_t bufferLength);
         ~ReceiveData();
 };
