@@ -24,8 +24,6 @@ int main()
     pthread_join(statusThread, NULL);
     pthread_join(commandsThread, NULL);
 
-    shutdownNetwork();
-
     return 0;
 }
 
@@ -75,5 +73,4 @@ void exitHandler(void)
     pthread_cancel(slamThread);
     pthread_cancel(statusThread);
     pthread_cancel(commandsThread);
-    shutdownNetwork();
 }
