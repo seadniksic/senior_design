@@ -1,28 +1,53 @@
 #include "roverNetworking.h"
 #include <pthread.h>
+#include <iostream>
+#include <csignal>
 
-pthread_t cameraThread, slamThread, statusThread, commandsThread;
+pthread_t cameraThread, pointCloudThread, statusThread, commandsThread, cameraPositionThread;
 
 void* cameraThreadFunction(void* arg);
-void* slamThreadFunction(void* arg);
+void* pointCloudThreadFunction(void* arg);
 void* statusThreadFunction(void* arg);
 void* commandsThreadFunction(void* arg);
-void exitHandler(void);
+void* cameraPositionThreadFunction(void* arg);
+void exitHandler(int signal_number)
+{
+    std::cout << "\nExit signal received, shutting down threads..." << std::endl;
+    pthread_cancel(cameraThread);
+    pthread_cancel(pointCloudThread);
+    pthread_cancel(statusThread);
+    pthread_cancel(commandsThread);
+    pthread_cancel(cameraPositionThread);
+    std::cout << "All threads closed, exiting program..." << std::endl; 
+    exit(0);
+}
 
 int main()
 {
-    atexit(exitHandler);
+    signal(SIGABRT, exitHandler);
+    signal(SIGTERM, exitHandler);
+    signal(SIGINT, exitHandler);
+
+    std::cout << "Initializing network..." << std::endl;
+
     initializeNetwork();
 
+    std::cout << "Successfully initialized network..." << std::endl;
+    std::cout << "Launching network threads..." << std::endl;
+
     pthread_create(&cameraThread, NULL, cameraThreadFunction, NULL);
-    pthread_create(&slamThread, NULL, slamThreadFunction, NULL);
+    pthread_create(&pointCloudThread, NULL, pointCloudThreadFunction, NULL);
     pthread_create(&statusThread, NULL, statusThreadFunction, NULL);
     pthread_create(&commandsThread, NULL, commandsThreadFunction, NULL);
+    pthread_create(&cameraPositionThread, NULL, cameraPositionThreadFunction, NULL);
+
+    std::cout << "Successfully launched network threads..." << std::endl;
 
     pthread_join(cameraThread, NULL);
-    pthread_join(slamThread, NULL);
+    pthread_join(pointCloudThread, NULL);
     pthread_join(statusThread, NULL);
     pthread_join(commandsThread, NULL);
+    pthread_join(cameraPositionThread, NULL);
 
     return 0;
 }
@@ -30,47 +55,34 @@ int main()
 void* cameraThreadFunction(void* arg)
 {
     while(1)
-    {
         sendCameraData();
-    }
-
     return NULL;
 }
 
-void* slamThreadFunction(void* arg)
+void* pointCloudThreadFunction(void* arg)
 {
     while(1)
-    {
-        sendSlamData();
-    }
-
+        sendPointCloudData();
     return NULL;
 }
 
 void* statusThreadFunction(void* arg)
 {
     while(1)
-    {
         sendRoverStatus();
-    }
-
     return NULL;
 }
 
 void* commandsThreadFunction(void* arg)
 {
     while(1)
-    {
         getRoverCommands();
-    }
-
     return NULL;
 }
 
-void exitHandler(void)
+void* cameraPositionThreadFunction(void *arg)
 {
-    pthread_cancel(cameraThread);
-    pthread_cancel(slamThread);
-    pthread_cancel(statusThread);
-    pthread_cancel(commandsThread);
+    while(1)
+        sendCameraPosition();
+    return NULL;
 }

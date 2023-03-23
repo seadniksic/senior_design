@@ -10,8 +10,9 @@ void initializeNetwork(void);
 void shutdownNetwork(void);
 
 void getCameraData(void);
-void getSlamData(void);
+void getPointCloudData(void);
 void getRoverStatus(void);
 void sendRoverCommands(void);
+void getCameraPosition(void);
 
 #endif
