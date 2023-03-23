@@ -10,6 +10,7 @@
 #include <sys/select.h>
 #include <iconv.h>
 #include <cstring>
+#include <iostream>
 
 class TransmitData{
     private:

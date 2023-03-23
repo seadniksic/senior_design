@@ -120,6 +120,7 @@ ReceiveData::~ReceiveData()
     close(serverSocket);
     if(clientSocket > 0)
         close(clientSocket);
+    std::cout << "Successfully closed receive of " << name << "..." << std::endl;
 }
 
 size_t ReceiveData::min(size_t a, size_t b)

@@ -64,6 +64,7 @@ TransmitData::~TransmitData()
 {
     if(sock > -1)
         close(sock);
+    std::cout << "Successfully closed transmit of " << name << "..." << std::endl;
 }
 
 size_t TransmitData::min(size_t a, size_t b)
