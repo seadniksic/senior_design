@@ -20,7 +20,7 @@ class TransmitData{
         bool currentlyConnected;
     public:
         TransmitData(const char *ipAddress, uint16_t port);
-        int sendPayload(void *payLoad, size_t dataLength);
+        int sendPayload(const void *payLoad, size_t dataLength);
         ~TransmitData();
 };
 

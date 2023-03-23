@@ -41,9 +41,7 @@ bool ReceiveData::availableDataServer()
     tv.tv_sec = 0;
     tv.tv_usec = 0;
     int retval = select(serverSocket + 1, &rfds, NULL, NULL, &tv);
-    if(retval < 0)
-        return false;
-    return retval;
+    return retval >= 0;
 }
 
 bool ReceiveData::availableDataClient()
@@ -55,9 +53,7 @@ bool ReceiveData::availableDataClient()
     tv.tv_sec = 0;
     tv.tv_usec = 0;
     int retval = select(clientSocket + 1, &rfds, NULL, NULL, &tv);
-    if(retval < 0)
-        return false;
-    return retval;
+    return retval >= 0;
 }
 
 int ReceiveData::getData(void *buffer, size_t bufferLength)
@@ -120,7 +116,8 @@ int ReceiveData::getData(void *buffer, size_t bufferLength)
 ReceiveData::~ReceiveData()
 {
     close(serverSocket);
-    close(clientSocket);
+    if(clientSocket > 0)
+        close(clientSocket);
 }
 
 size_t ReceiveData::min(size_t a, size_t b)

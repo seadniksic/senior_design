@@ -17,7 +17,7 @@ TransmitData::TransmitData(const char *ipAddress, uint16_t port)
     currentlyConnected = false;
 }
 
-int TransmitData::sendPayload(void *payLoad, size_t dataLength)
+int TransmitData::sendPayload(const void *payLoad, size_t dataLength)
 {
     int sentBytes = 0;
     //Check to see if the socket is currently connected to anything
@@ -61,7 +61,8 @@ int TransmitData::sendPayload(void *payLoad, size_t dataLength)
 
 TransmitData::~TransmitData()
 {
-    close(sock);
+    if(sock > -1)
+        close(sock);
 }
 
 size_t TransmitData::min(size_t a, size_t b)
