@@ -3,7 +3,9 @@
 
 #include "receiveData.h"
 #include <iostream>
-
+/*
+This is the constructor function that creates a new instance of the ReceiveData class with the specified port and name.
+*/
 ReceiveData::ReceiveData(uint16_t port, std::string name)
 {
     this->name = name;
@@ -33,7 +35,9 @@ ReceiveData::ReceiveData(uint16_t port, std::string name)
     
     clientSocket = -1;
 }
-
+/*
+This function checks whether there is data available to be read from the server socket. If there is data available, it returns true, otherwise, it returns false.
+*/
 bool ReceiveData::availableDataServer()
 {
     fd_set rfds;
@@ -45,7 +49,9 @@ bool ReceiveData::availableDataServer()
     int retval = select(serverSocket + 1, &rfds, NULL, NULL, &tv);
     return retval >= 0;
 }
-
+/*
+This function checks whether there is data available to be read from the client socket. If there is data available, it returns true, otherwise, it returns false.
+*/
 bool ReceiveData::availableDataClient()
 {
     fd_set rfds;
@@ -57,7 +63,9 @@ bool ReceiveData::availableDataClient()
     int retval = select(clientSocket + 1, &rfds, NULL, NULL, &tv);
     return retval >= 0;
 }
-
+/*
+This function reads data from the client socket and returns the received data to the caller. If there is no data available to be read, it returns 0.
+*/
 int ReceiveData::getData(void *buffer, size_t bufferLength)
 {
     //Check to see if there is an active connection
@@ -114,7 +122,9 @@ int ReceiveData::getData(void *buffer, size_t bufferLength)
 
     return 0;
 }
-
+/*
+This is the destructor function that closes the server and client sockets.
+*/
 ReceiveData::~ReceiveData()
 {
     close(serverSocket);
@@ -122,7 +132,9 @@ ReceiveData::~ReceiveData()
         close(clientSocket);
     std::cout << "Successfully closed receive of " << name << "..." << std::endl;
 }
-
+/*
+This function returns the minimum value between a and b.
+*/
 size_t ReceiveData::min(size_t a, size_t b)
 {
     if(a < b)
