@@ -8,7 +8,6 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/ioctl.h>
-#include <opencv2/opencv.hpp>
 #include "common.h"
 #include <cstring>
 #include <poll.h>

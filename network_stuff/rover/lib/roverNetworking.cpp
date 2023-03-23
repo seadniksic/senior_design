@@ -19,57 +19,41 @@ void initializeNetwork()
     statusPortServer = std::make_unique<ReceiveData>(JETSON_STATUS_PORT);
     commandsPortClient = std::make_unique<TransmitData>(LOCAL_IP, JETSON_COMMANDS_PORT);
 
-    cameraBuffer = std::make_unique<char[]>(IMAGE_HEIGHT * IMAGE_WIDTH * 3);
-    slamBuffer = std::make_unique<char[]>(IMAGE_HEIGHT * IMAGE_WIDTH);
-    statusBuffer = std::make_unique<char[]>(200);
-    commandsBuffer = std::make_unique<char[]>(200); 
+    cameraBuffer = std::make_unique<char[]>(IMAGE_BUFFER_SIZE);
+    slamBuffer = std::make_unique<char[]>(POINT_CLOUD_BUFFER_SIZE);
+    statusBuffer = std::make_unique<char[]>(ROVER_STATUS_BUFFER_SIZE);
+    commandsBuffer = std::make_unique<char[]>(ROVER_COMMANDS_BUFFER_SIZE); 
 }   
 
 void sendCameraData()
 {
-    size_t bufferSize = sizeof(char) * IMAGE_HEIGHT * IMAGE_WIDTH * 3;
-
     int incomingSize = 0;
     while(incomingSize == 0)
-    {
-        incomingSize = imagePortServer->getData(static_cast<void*>(cameraBuffer.get()), bufferSize);
-    }
+        incomingSize = imagePortServer->getData(static_cast<void*>(cameraBuffer.get()), IMAGE_BUFFER_SIZE);
     imageClient->sendPayload(static_cast<void*>(cameraBuffer.get()), incomingSize);
 }
 
 void sendSlamData()
 {
-    size_t bufferSize = sizeof(char) * IMAGE_HEIGHT * IMAGE_WIDTH;
-
     int incomingSize = 0;
     while(incomingSize == 0)
-    {
-        incomingSize = slamPortServer->getData(static_cast<void*>(slamBuffer.get()), bufferSize);
-    }
+        incomingSize = slamPortServer->getData(static_cast<void*>(slamBuffer.get()), POINT_CLOUD_BUFFER_SIZE);
     slamClient->sendPayload(static_cast<void*>(slamBuffer.get()), incomingSize);
 }
 
 void sendRoverStatus()
 {
-    size_t bufferSize = sizeof(char) * 200;
-
     int incomingSize = 0;
     while(incomingSize == 0)
-    {
-        incomingSize = statusPortServer->getData(static_cast<void*>(statusBuffer.get()), bufferSize);
-    }
+        incomingSize = statusPortServer->getData(static_cast<void*>(statusBuffer.get()), ROVER_STATUS_BUFFER_SIZE);
     statusClient->sendPayload(static_cast<void*>(statusBuffer.get()), incomingSize);
 }
 
 void getRoverCommands()
 {
-    size_t bufferSize = sizeof(char) * 200;
-
     int incomingSize = 0;
     while(incomingSize == 0)
-    {
-        incomingSize = commandsServer->getData(static_cast<void*>(commandsBuffer.get()), bufferSize);
-    }
+        incomingSize = commandsServer->getData(static_cast<void*>(commandsBuffer.get()), ROVER_COMMANDS_BUFFER_SIZE);
     commandsPortClient->sendPayload(static_cast<void*>(commandsBuffer.get()), incomingSize);
 }
 

@@ -5,7 +5,6 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <unistd.h>
-#include <opencv2/opencv.hpp>
 #include <errno.h>
 #include "common.h"
 #include <sys/select.h>

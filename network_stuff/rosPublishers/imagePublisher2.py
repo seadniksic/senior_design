@@ -7,6 +7,7 @@ from sensor_msgs.msg import Image
 from std_msgs.msg import String
 import socket
 import numpy as np
+import time
 
 
 class MinimalPublisher(Node):

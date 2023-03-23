@@ -4,6 +4,7 @@
 #include "receiveData.h"
 #include "transmitData.h"
 #include "common.h"
+#include <memory>
 
 void initializeNetwork(void);
 void shutdownNetwork(void);
