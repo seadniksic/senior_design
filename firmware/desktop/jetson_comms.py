@@ -7,12 +7,11 @@ import evdev
 import sys
 from evdev import categorize, ecodes
 from timeit import default_timer as timer
-import random
 import pickle, socket
 
 class g:
-    update_rate = 20 # in hz
-    sleep_time = 1/ update_rate
+    update_rate = 30 # in hz
+    sleep_time = 1 / update_rate
     joy_name = "Logitech Gamepad F710"
     test_input = False
     sync_byte = 100 #0x64
@@ -121,7 +120,7 @@ if __name__ == "__main__":
     # create sp= serial port object
     # arduino defualt is 8 data bits, no parity, and one stop bit
     sp = serial.Serial(
-        port="/dev/ttyTHS1",
+        port="/dev/ttyTHS0",
         baudrate=115200,
         bytesize=serial.EIGHTBITS,
         parity=serial.PARITY_NONE,
@@ -164,22 +163,46 @@ if __name__ == "__main__":
         sock.bind((host, port))
         sock.listen(1)
         client, addr = sock.accept() 
+        sendtimer_start = timer()
+        sendtimer_end = timer()
 
         while True: 
-            size = client.recv(1400)
-            newPickle = client.recv(1400)
+            start = timer()
+            # size = client.recv(1400)
+            # newPickle = client.recv(1400)
+            size = client.recv(8)
+            expected_length = int.from_bytes(size, byteorder="little")
+            print(expected_length)
+            newPickle = client.recv(expected_length)
+            # while(newPickle[0] != 100):
+            #     size = client.recv(1400)
+            #     newPickle = client.recv(1400)
+            sendtimer_end = timer()
             try:
-                b = pickle.loads(newPickle)
+                if(sendtimer_end - sendtimer_start) > g.sleep_time:
+                    # b = pickle.loads(newPickle)
+                    b = newPickle
+                    if(b[0] == 100):
+                        print(b)
+                        sp.write(b)
+                    else:
+                        print("BAD B")
+                        print(b)
+                        client.close()
+                        client, addr = sock.accept()
+
+                    sendtimer_start = sendtimer_end
             except EOFError:
                 print("eof error occurred in pickle.load")
-            except: 
+            except Exception as e: 
                 print("Something else went wrong in pickle.load")
+                print(e)
 
             # confirmed looked like serialized data came through and it is
             # a byte array.
             # print(type(b))
-            print(b)
-            sp.write(b)
+            end = timer()
+            print(end-start)
 
     # If its not a remote joystick, do the parsing here
     while True: 
