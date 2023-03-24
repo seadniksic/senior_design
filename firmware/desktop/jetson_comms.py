@@ -14,7 +14,7 @@ import pickle, socket
 ############################
 
 class g:
-    update_rate_serial = = 20 # in hz
+    update_rate_serial = 20 # in hz
     sleep_time_serial = 1 / update_rate_serial
     update_rate_readsocket = 30
     sleep_time_readsocket = 1 / update_rate_readsocket
@@ -101,17 +101,21 @@ def handle_args():
     elif len(sys.argv) == 2:
         first_arg = sys.argv[1].lower()
 
-    if second_arg == "true":
+    # first arg is local or remote. if remote theres no testing mode
+    # if local, then 2nd arg can be testing moding
+
+    if first_arg == "remote":
         g.remote_joystick = True
-        print("Joystick inputs will not be read, joystick is connected to base station.")
-    if g.remote_joystick == False and first_arg == "true":
-        g.test_input = True
-        print("In testing mode, will just print controller inputs (no data will be sent)")
-        
-    if not g.test_input and not g.remote_joystick:
-        print("In normal operation mode with controller hooked up to the Jetson")
-    elif g.remote_joystick and not g.test_input:
-        print("In normal operation mode with controller hooked up to base station laptop")
+        g.test_input = False
+        print("Joystick is connected to base station, starting up networking to receive data.")
+    elif first_arg == "local":
+        g.remote_joystick = False
+        if second_arg == "test":
+            g.test_input = True
+            print("In testing mode, will just print controller inputs (no data will be sent)")
+        else:
+            g.test_input = False
+            print("In normal operation mode with joystick connected to the Jetson")
 
     time.sleep(1.5)
 
@@ -298,7 +302,7 @@ if __name__ == "__main__":
         
         #check if its time to send data
         end_time = timer()
-        if (end_time - start_time) > g.sleep_time:
+        if (end_time - start_time) > g.sleep_time_serial:
             # print(bin(btn_data))
             start_time = end_time
             # send the data
