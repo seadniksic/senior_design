@@ -9,13 +9,23 @@ from evdev import categorize, ecodes
 from timeit import default_timer as timer
 import pickle, socket
 
+############################
+####      GLOBALS     ######
+############################
+
 class g:
-    update_rate = 30 # in hz
-    sleep_time = 1 / update_rate
+    update_rate_serial = = 20 # in hz
+    sleep_time_serial = 1 / update_rate_serial
+    update_rate_readsocket = 30
+    sleep_time_readsocket = 1 / update_rate_readsocket
     joy_name = "Logitech Gamepad F710"
     test_input = False
     sync_byte = 100 #0x64
     remote_joystick = False #if true, joystick is connected to base station laptop
+
+############################
+####     JOYSTICK     ######
+############################
 
 class Joystick:
     def __init__(self):
@@ -77,6 +87,10 @@ class Joystick:
                     print(categorize(event))
 
 
+############################
+#### GLOBAL FUNCTIONS ######
+############################
+
 def handle_args():
     # handle args
     first_arg = ""
@@ -101,6 +115,9 @@ def handle_args():
 
     time.sleep(1.5)
 
+############################
+####     MAIN CODE    ######
+############################
 
 if __name__ == "__main__":
 
@@ -129,18 +146,12 @@ if __name__ == "__main__":
 
     time.sleep(1)
 
+    # check for testing mode
     if g.test_input and not g.remote_joystick:
         joystick.test_inputs()
         # will not return from this loop
 
-    # always update the struct
-    # but send at 10hz
-    # if struct doesnt update, no need to send data!
-    # read device inputs
-
-    # H means unsigned short so uint16_t
-    # data = struct.pack("H", 0)
-
+    # joystick data
     btn_data = 0
     ljoy_x_data = 0
     ljoy_y_data = 0
@@ -149,60 +160,84 @@ if __name__ == "__main__":
     tr_data = 0
     tl_data = 0
 
-    start_time = timer()
-    end_time = None
-    # end minus start gives time in sec
-
+    ################################
+    #### REMOTE JOYSTICK CODE ######
+    ################################
     if g.remote_joystick:
-        print("Note: current service setup may cause networking to fail if it doesnt wait for it. Look into more.")
         print("Setting up sockets...")
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         host = "127.0.0.1"
         port = 8087
-
         sock.bind((host, port))
         sock.listen(1)
+        print("Runing socket accept()")
         client, addr = sock.accept() 
+        print("Socket accepted.")
+
+        readtimer_start = timer()
+        readtimer_end = timer()
         sendtimer_start = timer()
         sendtimer_end = timer()
 
+        sendData = bytearray()
+
         while True: 
+            #loop timer
             start = timer()
-            # size = client.recv(1400)
-            # newPickle = client.recv(1400)
-            size = client.recv(8)
-            expected_length = int.from_bytes(size, byteorder="little")
-            print(expected_length)
-            newPickle = client.recv(expected_length)
-            # while(newPickle[0] != 100):
-            #     size = client.recv(1400)
-            #     newPickle = client.recv(1400)
-            sendtimer_end = timer()
-            try:
-                if(sendtimer_end - sendtimer_start) > g.sleep_time:
-                    # b = pickle.loads(newPickle)
-                    b = newPickle
-                    if(b[0] == 100):
-                        print(b)
-                        sp.write(b)
+
+            # check if its time to recieve data from the socket
+            readtimer_end = timer()
+            if(readtimer_end - readtimer_start) > g.sleep_time_readsocket:
+                # update timer
+                readtimer_start = readtimer_end
+                
+                # receive the data
+                size = client.recv(8)
+                expected_length = int.from_bytes(size, byteorder="little")
+                sendData = client.recv(expected_length)
+
+                try:
+                    if(sendData[0] == 100):
+                        # print(sendData)
+                        pass
                     else:
-                        print("BAD B")
-                        print(b)
+                        print("BAD DATA!!")
+                        print(sendData)
+                        print("Resetting socket..")
                         client.close()
                         client, addr = sock.accept()
+                        
+                except Exception as e: 
+                    print("Exception in receiving data over WiFi")
+                    print(e)
 
-                    sendtimer_start = sendtimer_end
-            except EOFError:
-                print("eof error occurred in pickle.load")
-            except Exception as e: 
-                print("Something else went wrong in pickle.load")
-                print(e)
+            # check if its time to send data to teensy
+            if (sendtimer_end - sendtimer_start) > g.sleep_time_serial:
+                # update timer
+                sendtimer_start = sendtimer_end
 
-            # confirmed looked like serialized data came through and it is
-            # a byte array.
-            # print(type(b))
+                # send it
+                print(sendData)
+                try:
+                    sp.write(sendData)
+                except Exception as e:
+                    print("Exception occurred in sp.write()")
+                    print(e)
+                
+
+            # loop timer
             end = timer()
-            print(end-start)
+            print("looptimer: ", (end-start))
+
+
+    ################################
+    #### LOCAL JOYSTICK CODE #######
+    ################################
+
+    # timers
+    # end minus start gives time in sec
+    start_time = timer()
+    end_time = None
 
     # If its not a remote joystick, do the parsing here
     while True: 
