@@ -76,9 +76,14 @@ void main_prog()
 
     #define SERIAL_TIMEOUT 200
     UartComms_Run(read_buffer, write_buffer, js_in, gui_data, rcv_clock);
+    // Serial.println((uint32_t)*UartComms_GetTimeSinceLastRead());
     if((*UartComms_GetTimeSinceLastRead()) > SERIAL_TIMEOUT)
     {
-      Joystick_Reset_State(js_in);
+      Serial.println("Resetting comms, lost communication");
+      js_in.clear();
+
+      //this is wrong thing
+      // Joystick_Reset_State(js_in);
     }
   
     if(joy_update_clock > 100)

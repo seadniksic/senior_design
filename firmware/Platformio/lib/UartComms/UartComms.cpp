@@ -8,6 +8,7 @@ void UartComms_Init()
 {
     HWSERIAL.begin(115200);
     uartComms.time_since_last_serialize = commTimer;
+    uartComms.commsNeedReset = false;
 }
 
 // As of right now this is blocking, not ideal

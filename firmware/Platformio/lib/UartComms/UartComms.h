@@ -18,6 +18,7 @@
 
 typedef struct {
     elapsedMillis time_since_last_serialize;
+    bool commsNeedReset;
 } UartComms_t;
 
 // #define PRINT_MSG 
