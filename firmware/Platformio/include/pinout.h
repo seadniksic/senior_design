@@ -171,6 +171,9 @@
     /* ONBOARD LED */
     #define ONBOARD_LED_PIN 13
 
+    /* SERVOS */
+    #define PAN_SERVO_PIN 4
+    #define TILT_SERVO_PIN 5
 
 #endif
 

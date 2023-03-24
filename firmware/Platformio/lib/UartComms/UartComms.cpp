@@ -151,7 +151,6 @@ void UartComms_Run(UartReadBuffer &read_buffer, UartWriteBuffer &write_buffer, \
         HWSERIAL.flush();
       }
 
-      available_packet = false;
     }
 }
 

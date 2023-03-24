@@ -39,6 +39,7 @@ void main_prog()
   elapsedMillis print_clock;
   elapsedMillis joy_update_clock;
   elapsedMillis cpu_temp_clock;
+  elapsedMillis comms_clock;
 
   //protobuf
   UartReadBuffer read_buffer;
@@ -49,6 +50,34 @@ void main_prog()
 
   // pre while loop code
   LightBar_State(true);
+
+  /* serovs */
+  pinMode(PAN_SERVO_PIN, OUTPUT);
+  pinMode(TILT_SERVO_PIN, OUTPUT);
+  uint8_t servo_pan = 0;
+  uint8_t servo_tilt = 0;
+
+  // analogWrite(PAN_SERVO_PIN, 255);
+  // analogWrite(TILT_SERVO_PIN, 255);
+
+  for(uint8_t i = 0; i <= 255/5; i++)
+  {
+    analogWrite(PAN_SERVO_PIN, servo_pan);
+    delay(100);
+    servo_pan+=5;
+  }
+
+  // while(1)
+  // {
+
+  //   analogWrite(PAN_SERVO_PIN, 0);
+  //   delay(1000);
+  //   analogWrite(PAN_SERVO_PIN, 90);
+  //   delay(1000);
+  //   analogWrite(PAN_SERVO_PIN, 180);
+  //   delay(1000);
+  // }
+
 
   while(1)
   {
@@ -62,10 +91,26 @@ void main_prog()
     // test sending data back to the jetson
     if(cpu_temp_clock > 1000)
     {
+      cpu_temp_clock -= 1000;
       float temp = InternalTemperature.readTemperatureF();
       Serial.print("CPU TEMP: ");
       Serial.println(temp);
       UartComms_PopulateReply(gui_data, temp);
+    }
+
+    if(comms_clock > 1)
+    {
+      comms_clock -= 1;
+      // Run serial comms to get in the data from the Jetson
+      UartComms_Run(read_buffer, write_buffer, js_in, gui_data, rcv_clock);
+
+      if((*UartComms_GetTimeSinceLastRead()) > SERIAL_COMMS_RECEIVE_TIMEOUT)
+      {
+        // Serial.println("Resetting comms, lost communication!");
+        js_in.clear();
+      }
+
+      UartComms_ClearBuffers(read_buffer, write_buffer);
     }
 
     if (print_clock > 100)
@@ -73,28 +118,20 @@ void main_prog()
       Joystick_Print();
       print_clock -= 100;
     }
-
-    // Run serial comms to get in the data from the Jetson
-    UartComms_Run(read_buffer, write_buffer, js_in, gui_data, rcv_clock);
-
-    if((*UartComms_GetTimeSinceLastRead()) > SERIAL_COMMS_RECEIVE_TIMEOUT)
-    {
-      Serial.println("Resetting comms, lost communication!");
-      js_in.clear();
-    }
   
     // Run joystick at 20hz 
     if(joy_update_clock > 50)
     {
-      Joystick_Store_State(js_in);
       joy_update_clock -= 50;
+      Joystick_Store_State(js_in);
       Joystick_Run();
     }
 
     // bno055::get_euler_ypr();
     // bno055::print_calibration();
 
-    UartComms_ClearBuffers(read_buffer, write_buffer);
+
+    
 
   }  
 }
