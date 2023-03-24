@@ -5,22 +5,21 @@
 #include <bno055.h>
 #include <UartComms.h>
 #include <InternalTemperature.h>
+#include <Lightbar.h>
+#include "pinout.h"
+#include "config.h"
 
 
 void main_prog()
 {
 
-  // init the LED
-  pinMode(13, OUTPUT);
-
-  //lightbar
-  pinMode(10, OUTPUT);
-  uint8_t lightbar_pwm;
+  // init the onboard LED
+  pinMode(ONBOARD_LED_PIN, OUTPUT);
 
   // Setup serial
   Serial.begin(SERIAL_BAUD);
 
-  // delay to allow for serial monitor setup and what not
+  // delay to allow for serial monitor connection
   delay(2000);
 
   // setup
@@ -28,68 +27,67 @@ void main_prog()
   Locomotion_Init();
   // bno055::init();
   UartComms_Init();
+  LightBar_Init();
+  InternalTemperature.begin(TEMPERATURE_NO_ADC_SETTING_CHANGES);
 
   // variables
+  uint8_t lightbar_pwm;
+
   elapsedMillis LED_clock;
   uint8_t LED_state = HIGH;
 
   elapsedMillis print_clock;
   elapsedMillis joy_update_clock;
+  elapsedMillis cpu_temp_clock;
 
-  //protobuf shit
+  //protobuf
   UartReadBuffer read_buffer;
   UartWriteBuffer write_buffer;
   Joystick_Input js_in;
   GUI_Data gui_data;
   elapsedMillis rcv_clock;
 
-  // cpu temp
-  InternalTemperature.begin(TEMPERATURE_NO_ADC_SETTING_CHANGES);
+  // pre while loop code
+  LightBar_State(true);
 
   while(1)
   {
-
     if(LED_clock > 750 )
     {
       LED_clock -= 750;
       LED_state = !LED_state;
-      digitalWrite(JOY_LED_PIN, LED_state);
-      digitalWrite(13, LED_state);
-      // digitalWrite(10, LED_state);
+      digitalWrite(ONBOARD_LED_PIN, LED_state);
+    }
 
-      // test joystick
+    // test sending data back to the jetson
+    if(cpu_temp_clock > 1000)
+    {
       float temp = InternalTemperature.readTemperatureF();
+      Serial.print("CPU TEMP: ");
       Serial.println(temp);
-      Serial.print("CPU TEMP");
       UartComms_PopulateReply(gui_data, temp);
-
     }
 
     if (print_clock > 100)
     {
       Joystick_Print();
       print_clock -= 100;
-      
-      lightbar_pwm = 255;
-      analogWrite(10, lightbar_pwm);
     }
 
-    #define SERIAL_TIMEOUT 200
+    // Run serial comms to get in the data from the Jetson
     UartComms_Run(read_buffer, write_buffer, js_in, gui_data, rcv_clock);
-    // Serial.println((uint32_t)*UartComms_GetTimeSinceLastRead());
-    if((*UartComms_GetTimeSinceLastRead()) > SERIAL_TIMEOUT)
-    {
-      Serial.println("Resetting comms, lost communication");
-      js_in.clear();
 
-      //this is wrong thing
-      // Joystick_Reset_State(js_in);
+    if((*UartComms_GetTimeSinceLastRead()) > SERIAL_COMMS_RECEIVE_TIMEOUT)
+    {
+      Serial.println("Resetting comms, lost communication!");
+      js_in.clear();
     }
   
-    if(joy_update_clock > 100)
+    // Run joystick at 20hz 
+    if(joy_update_clock > 50)
     {
       Joystick_Store_State(js_in);
-      joy_update_clock -= 100;
+      joy_update_clock -= 50;
       Joystick_Run();
     }
 
@@ -98,11 +96,7 @@ void main_prog()
 
     UartComms_ClearBuffers(read_buffer, write_buffer);
 
-
-    delay(10);
-
-  }
-  
+  }  
 }
 
 

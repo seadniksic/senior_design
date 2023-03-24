@@ -81,6 +81,11 @@
 #define UART3_CTS_PIN 19
 #define UART3_TX_EN_PIN  //can be any, not needed this is for enabling RS 485 transceiver chips
 
+/* LIGHTBAR*/
+#define LIGHTBAR_PIN 10
+
+/* ONBOARD LED */
+#define ONBOARD_LED_PIN 13
 
 /* pins for battery monitoring / control */
 #pragma message("complete these pins battery control")
@@ -88,6 +93,11 @@
 
 /* pins for interacting with jetson? */
 #pragma message("complete these pins for jetson")
+
+
+
+
+
 
 #endif
 
@@ -154,7 +164,12 @@
     // using uart1
     #define RX2_PIN 7
     #define TX2_PIN 8
-    
+
+    // LIGHTBAR
+    #define LIGHTBAR_PIN 10
+
+    /* ONBOARD LED */
+    #define ONBOARD_LED_PIN 13
 
 
 #endif

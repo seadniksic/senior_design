@@ -170,5 +170,4 @@ void UartComms_ClearBuffers(UartReadBuffer &read_buffer, UartWriteBuffer &write_
 elapsedMillis* UartComms_GetTimeSinceLastRead()
 {
   return &uartComms.time_since_last_serialize;
-
 }
