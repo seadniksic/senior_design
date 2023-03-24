@@ -80,7 +80,21 @@ void Joystick_Store_State(Joystick_Input &js_in)
     {
         control_state.control.bits.center_cams = 1;
     }
+}
 
+void Joystick_Reset_State(Joystick_Input &js_in)
+{
+    // Store the previous buttons states in prev_buttons
+    joy_state.prev_buttons.state = (uint32_t)0;
+    
+    // Store current state of the contoller
+    joy_state.buttons.state = (uint32_t)0;
+    joy_state.ljoy_x = 0;
+    joy_state.ljoy_y = 0;
+    joy_state.rjoy_x = 0;
+    joy_state.rjoy_y = 0;
+    joy_state.tl = 0;
+    joy_state.tr = 0;
 }
 
 void Joystick_Run()
