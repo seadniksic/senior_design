@@ -2,6 +2,7 @@
 #define ROVERNETWORKING_CPP
 
 #include "roverNetworking.h"
+#include <time.h>
 
 
 TransmitData *imageClient;
@@ -54,14 +55,21 @@ void shutdownNetwork()
 
 void sendCameraData()
 {
+    clock_t begin, end;
     size_t bufferSize = sizeof(char) * IMAGE_HEIGHT * IMAGE_WIDTH * 3;
 
     int incomingSize = 0;
+    begin = clock();
     while(incomingSize == 0)
     {
         incomingSize = imagePortServer->getData(imageBuffer, bufferSize);
     }
+    end = clock();
+    std::cout << "Receive time: " << (double)(end - begin) / CLOCKS_PER_SEC << std::endl;
+    begin = clock();
     imageClient->sendPayload(imageBuffer, incomingSize);
+    end = clock();
+    std::cout << "Transmit time: " <<  (double)(end - begin) / CLOCKS_PER_SEC << std::endl;
 }
 
 void sendSlamData()
