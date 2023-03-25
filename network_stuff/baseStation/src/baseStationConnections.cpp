@@ -71,7 +71,7 @@ void* statusThreadFunction(void* arg)
 
 void* commandsThreadFunction(void* arg)
 {
-    PassThroughWire connection(BASE_STATION_COMMANDS_PORT, WIFI_ROVER_COMMANDS_PORT, HOST_IP, ROVER_COMMANDS_BUFFER_SIZE, "Rover Commands Wire");
+    PassThroughWire connection(BASE_STATION_COMMANDS_PORT, WIFI_ROVER_COMMANDS_PORT, HOST_IP, ROVER_COMMANDS_BUFFER_SIZE, "Rover Commands Wire", COMMANDS_DEBUG);
     while(1)
         connection.update();
     return NULL;
