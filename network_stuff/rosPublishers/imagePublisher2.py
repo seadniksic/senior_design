@@ -3,11 +3,7 @@ from rclpy.node import Node
 import cv2
 from cv_bridge import CvBridge
 from sensor_msgs.msg import Image
-
-from std_msgs.msg import String
 import socket
-import numpy as np
-import time
 
 
 class MinimalPublisher(Node):
@@ -26,7 +22,6 @@ class MinimalPublisher(Node):
         self.sock.listen(1)
         self.client, addr = self.sock.accept()
         self.readSockets = [self.client]
-        self.oldImage = np.zeros((480, 640, 3), np.uint8)
 
 
     def timer_callback(self):
