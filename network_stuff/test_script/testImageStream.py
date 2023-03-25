@@ -27,6 +27,7 @@ while True:
     size = int(len(sendData)).to_bytes(8, byteorder="little", signed=False)
     sock.sendall(size)
     sock.sendall(sendData)
+    print(size)
     elapsed_time = time.time() - startTime
     if elapsed_time < delay:
         time.sleep(delay - elapsed_time)
