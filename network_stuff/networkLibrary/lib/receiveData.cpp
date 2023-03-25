@@ -47,7 +47,7 @@ bool ReceiveData::availableDataServer()
     tv.tv_sec = 0;
     tv.tv_usec = 0;
     int retval = select(serverSocket + 1, &rfds, NULL, NULL, &tv);
-    return retval >= 0;
+    return retval > 0;
 }
 /*
 This function checks whether there is data available to be read from the client socket. If there is data available, it returns true, otherwise, it returns false.
@@ -61,7 +61,7 @@ bool ReceiveData::availableDataClient()
     tv.tv_sec = 0;
     tv.tv_usec = 0;
     int retval = select(clientSocket + 1, &rfds, NULL, NULL, &tv);
-    return retval >= 0;
+    return retval > 0;
 }
 /*
 This function reads data from the client socket and returns the received data to the caller. If there is no data available to be read, it returns 0.
