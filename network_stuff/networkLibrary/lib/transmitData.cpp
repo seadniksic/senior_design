@@ -24,7 +24,6 @@ int TransmitData::sendPayload(const void *payLoad, size_t dataLength)
     //Check to see if the socket is currently connected to anything
     while(!currentlyConnected)
     {
-        std::cout << "Still waiting to connect" << std::endl;
         //If not try to connect
         if(connect(sock, (struct sockaddr *)&serverAddress, sizeof(serverAddress)) != -1)
             currentlyConnected = true;
