@@ -28,34 +28,32 @@ int TransmitData::sendPayload(const void *payLoad, size_t dataLength)
         if(connect(sock, (struct sockaddr *)&serverAddress, sizeof(serverAddress)) != -1)
             currentlyConnected = true;
     }
-    if(currentlyConnected)
+    //If it is conected send the data
+    uint64_t sendDataSize = (uint64_t)dataLength;
+
+    int sendResult = send(sock, &sendDataSize, sizeof(sendDataSize), MSG_NOSIGNAL), bytesToSend = 0;
+
+    while(sentBytes < dataLength)
     {
-        //If it is conected send the data
-        uint64_t sendDataSize = (uint64_t)dataLength;
-
-        int sendResult = send(sock, &sendDataSize, sizeof(sendDataSize), MSG_NOSIGNAL), bytesToSend = 0;
-
-        while(sentBytes < dataLength)
+        bytesToSend = min(MAX_PACKET_SIZE, dataLength - sentBytes);
+        sendResult = send(sock, ((char *)payLoad + sentBytes * sizeof(char)), bytesToSend, MSG_NOSIGNAL);
+        if(sendResult == -1)
         {
-            bytesToSend = min(MAX_PACKET_SIZE, dataLength - sentBytes);
-            sendResult = send(sock, ((char *)payLoad + sentBytes * sizeof(char)), bytesToSend, MSG_NOSIGNAL);
-            if(sendResult == -1)
+            //If data failed to send due to connection failure, try and reconnect
+            if(errno == EPIPE || errno == ENOTCONN)
             {
-                //If data failed to send due to connection failure, try and reconnect
-                if(errno == EPIPE || errno == ENOTCONN)
-                {
-                    currentlyConnected = false;
-                    close(sock);
-                    sock = socket(AF_INET, SOCK_STREAM, 0);
-                    if(sock == -1)
-                        std::cerr << "Failed to create socket for " << name << "..." << std::endl;
-                    break;
-                }
-                else
-                    std::cerr << "Failed to send data for " << name << "..." << std::endl;
+                std::cout << "Connection for " << name << " has failed, attempting to reconnect..." << std::endl;
+                currentlyConnected = false;
+                close(sock);
+                sock = socket(AF_INET, SOCK_STREAM, 0);
+                if(sock == -1)
+                    std::cerr << "Failed to create socket for " << name << "..." << std::endl;
+                break;
             }
-            sentBytes += sendResult;
+            else
+                std::cerr << "Failed to send data for " << name << "..." << std::endl;
         }
+        sentBytes += sendResult;
     }
     return sentBytes;
 }
