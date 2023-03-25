@@ -38,7 +38,7 @@ ReceiveData::ReceiveData(uint16_t port, std::string name)
 /*
 This function checks whether there is data available to be read from the server socket. If there is data available, it returns true, otherwise, it returns false.
 */
-bool ReceiveData::availableDataServer()
+int ReceiveData::availableDataServer()
 {
     fd_set rfds;
     FD_ZERO(&rfds);
@@ -47,12 +47,12 @@ bool ReceiveData::availableDataServer()
     tv.tv_sec = 0;
     tv.tv_usec = 0;
     int retval = select(serverSocket + 1, &rfds, NULL, NULL, &tv);
-    return retval > 0;
+    return retval;
 }
 /*
 This function checks whether there is data available to be read from the client socket. If there is data available, it returns true, otherwise, it returns false.
 */
-bool ReceiveData::availableDataClient()
+int ReceiveData::availableDataClient()
 {
     fd_set rfds;
     FD_ZERO(&rfds);
@@ -61,7 +61,7 @@ bool ReceiveData::availableDataClient()
     tv.tv_sec = 0;
     tv.tv_usec = 0;
     int retval = select(clientSocket + 1, &rfds, NULL, NULL, &tv);
-    return retval > 0;
+    return retval;
 }
 /*
 This function reads data from the client socket and returns the received data to the caller. If there is no data available to be read, it returns 0.
@@ -71,8 +71,9 @@ int ReceiveData::getData(void *buffer, size_t bufferLength)
     //Check to see if there is an active connection
     if(clientSocket < 0)
     {
+        int socketState = availableDataServer();
         //If there is not an active connection, check to see if there are any in the queue and create connection if there is one
-        if(availableDataServer())
+        if(socketState > 0)
         {
             struct sockaddr_in clientAddress;
             socklen_t clientAddressLength = sizeof(clientAddress);
@@ -88,8 +89,9 @@ int ReceiveData::getData(void *buffer, size_t bufferLength)
     }
     else
     {
+        int socketState = availableDataServer();
         //If already connected, check to see if there is data waiting
-        if(availableDataClient())
+        if(socketState > 0)
         {
             int receivedBytes = 0;
             uint64_t receivingPacketLength = 0;
@@ -112,11 +114,18 @@ int ReceiveData::getData(void *buffer, size_t bufferLength)
                     std::cout << "Closing socket due to bad data read for " << name << "..." <<std::endl;
                     close(clientSocket);
                     clientSocket = -1;
-                    break;
+                    return 0;
                 }
                 receivedBytes += receiveValue;
             }
             return receivedBytes;
+        }
+        else if(socketState < 0)
+        {
+            std::cout << "Closing connection due to error for " << name << "..." << std::endl;
+            close(clientSocket);
+            clientSocket = -1;
+            return 0;
         }
     }
 

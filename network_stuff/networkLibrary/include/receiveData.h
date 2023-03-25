@@ -18,8 +18,8 @@ class ReceiveData{
         struct sockaddr_in serverAddress;
         size_t min(size_t a, size_t b);
         struct pollfd pollList[1];
-        bool availableDataServer();
-        bool availableDataClient();
+        int availableDataServer();
+        int availableDataClient();
         std::string name;
     public:
         ReceiveData(uint16_t port, std::string name);
