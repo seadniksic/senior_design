@@ -19,32 +19,36 @@ class MinimalPublisher(Node):
         self.timer = self.create_timer(timer_period, self.timer_callback)
 
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        host = "127.0.0.1"
-        port = 8089
+        self.host = "127.0.0.1"
+        self.port = 8089
 
-        self.sock.bind((host, port))
+        self.sock.bind((self.host, self.port))
         self.sock.listen(1)
         self.client, addr = self.sock.accept()
         self.readSockets = [self.client]
+        self.oldImage = np.zeros((480, 640, 3), np.uint8)
 
 
     def timer_callback(self):
-        size = self.client.recv(8)
-        size = int.from_bytes(size, 'little')
-        if size <= 0:
-            return
-        msg = self.client.recv(1400)
-        while len(msg) < size:
-            msg += self.client.recv(min(1400, size - len(msg)))
-        
+        try:
+            size = self.client.recv(8)
+            size = int.from_bytes(size, 'little')
+            print(size)
+            if size <= 0:
+                return
+            msg = self.client.recv(size)
+            while len(msg) < size:
+                msg += self.client.recv(size - len(msg))
+            
+            bridge = CvBridge()
+            buffer = np.frombuffer(msg, np.uint8)
+            image = cv2.imdecode(buffer, cv2.IMREAD_COLOR)
 
-        bridge = CvBridge()
-        buffer = np.frombuffer(msg, np.uint8)
-        image = cv2.imdecode(buffer, cv2.IMREAD_COLOR)
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        rosMsg = bridge.cv2_to_imgmsg(image, encoding="passthrough")
-        self.publisher_.publish(rosMsg)
-
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+            rosMsg = bridge.cv2_to_imgmsg(image, encoding="passthrough")
+            self.publisher_.publish(rosMsg)
+        except Exception as e:
+            print("ran into " + str(e))
 
 def main(args=None):
     rclpy.init(args=args)
