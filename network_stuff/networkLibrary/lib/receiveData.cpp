@@ -95,9 +95,8 @@ int ReceiveData::getData(void *buffer, size_t bufferLength)
             uint64_t receivingPacketLength = 0;
 
             int receiveValue = recv(clientSocket, &receivingPacketLength, sizeof(receivingPacketLength), 0);
-            std::cout << receivingPacketLength << std::endl;
             
-            if(receiveValue <= 0)
+            if(receiveValue <= 0 || receivingPacketLength > bufferLength)
             {
                 std::cout << "Closing socket due to bad size read for " << name << "..." << std::endl;
                 close(clientSocket);

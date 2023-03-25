@@ -48,7 +48,7 @@ int TransmitData::sendPayload(const void *payLoad, size_t dataLength)
                 sock = socket(AF_INET, SOCK_STREAM, 0);
                 if(sock == -1)
                     std::cerr << "Failed to create socket for " << name << "..." << std::endl;
-                break;
+                return sentBytes;
             }
             else
                 std::cerr << "Failed to send data for " << name << "..." << std::endl;
