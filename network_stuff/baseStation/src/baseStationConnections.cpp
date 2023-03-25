@@ -47,7 +47,7 @@ int main()
 
 void* cameraThreadFunction(void* arg)
 {
-    PassThroughWire connection(WIFI_IMAGE_PORT, BASE_STATION_IMAGE_PORT, LOCAL_IP, IMAGE_BUFFER_SIZE, "Image Feed Wire");
+    PassThroughWire connection(WIFI_IMAGE_PORT, BASE_STATION_IMAGE_PORT, LOCAL_IP, IMAGE_BUFFER_SIZE, "Image Feed Wire", IMAGE_DEBUG);
     while(1)
         connection.update();
     return NULL;
@@ -55,7 +55,7 @@ void* cameraThreadFunction(void* arg)
 
 void* pointCloudThreadFunction(void* arg)
 {
-    PassThroughWire connection(WIFI_POINT_CLOUD_PORT, BASE_STATION_POINT_CLOUD_PORT, LOCAL_IP, POINT_CLOUD_BUFFER_SIZE, "Point Cloud Wire");
+    PassThroughWire connection(WIFI_POINT_CLOUD_PORT, BASE_STATION_POINT_CLOUD_PORT, LOCAL_IP, POINT_CLOUD_BUFFER_SIZE, "Point Cloud Wire", POINT_CLOUD_DEBUG);
     while(1)
         connection.update();
     return NULL;
@@ -63,7 +63,7 @@ void* pointCloudThreadFunction(void* arg)
 
 void* statusThreadFunction(void* arg)
 {
-    PassThroughWire connection(WIFI_ROVER_STATUS_PORT, BASE_STATION_STATUS_PORT, LOCAL_IP, ROVER_STATUS_BUFFER_SIZE, "Rover Status Wire");
+    PassThroughWire connection(WIFI_ROVER_STATUS_PORT, BASE_STATION_STATUS_PORT, LOCAL_IP, ROVER_STATUS_BUFFER_SIZE, "Rover Status Wire", STATUS_DEBUG);
     while(1)
         connection.update();
     return NULL;
@@ -71,7 +71,7 @@ void* statusThreadFunction(void* arg)
 
 void* commandsThreadFunction(void* arg)
 {
-    PassThroughWire connection(WIFI_ROVER_COMMANDS_PORT, BASE_STATION_COMMANDS_PORT, HOST_IP, ROVER_COMMANDS_BUFFER_SIZE, "Rover Commands Wire");
+    PassThroughWire connection(WIFI_ROVER_COMMANDS_PORT, BASE_STATION_COMMANDS_PORT, HOST_IP, ROVER_COMMANDS_BUFFER_SIZE, "Rover Commands Wire", COMMANDS_DEBUG);
     while(1)
         connection.update();
     return NULL;
@@ -79,7 +79,7 @@ void* commandsThreadFunction(void* arg)
 
 void* cameraPositionThreadFunction(void* arg)
 {
-    PassThroughWire connection(WIFI_CAMERA_LOCATION_PORT, BASE_STATION_CAMERA_LOCATION_PORT, LOCAL_IP, CAMERA_POSITION_BUFFER_SIZE, "Camera Position Wire");
+    PassThroughWire connection(WIFI_CAMERA_LOCATION_PORT, BASE_STATION_CAMERA_LOCATION_PORT, LOCAL_IP, CAMERA_POSITION_BUFFER_SIZE, "Camera Position Wire", POISITON_DEBUG);
     while(1)
         connection.update();
     return NULL;
