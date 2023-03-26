@@ -2,26 +2,22 @@
 
 import rclpy
 from rclpy.node import Node
-import cv2
-from cv_bridge import CvBridge
-from sensor_msgs.msg import Image
+from std_msgs.msg import String
 import socket, select
-import numpy as np
 
-class ImagePublisher(Node):
+class RoverStatusPublisher(Node):
     def __init__(self):
-        super().__init__('imageFeedPublisher')
-        self.imagePublisher = self.create_publisher(Image, 'imageFeedStream', 10)
+        super().__init__('roverStatusPublisher')
+        self.roverStatusPublisher = self.create_publisher(String, 'roverStatusStream', 10)
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.socket.bind(("127.0.0.1", 8089))
+        self.socket.bind(("127.0.0.1", 8091))
         self.socket.listen(1)
 
         timerPeriod = 1 / 60
-        self.create_timer(timerPeriod, self.imageTimerCallBack)
+        self.create_timer(timerPeriod, self.roverStatusTimerCallBack)
         self.client = None
-        self.bridge = CvBridge()
     
-    def imageTimerCallBack(self):
+    def roverStatusTimerCallBack(self):
         try:
             if self.client is None:
                 readSocket, writeSocket, errorSocket = select.select([self.socket], [], [], 0)
@@ -39,15 +35,11 @@ class ImagePublisher(Node):
             while len(msg) < size:
                 msg += self.client.recv(size - len(msg))
             
-            buffer = np.frombuffer(msg, np.uint8)
-            image = cv2.imdecode(buffer, cv2.IMREAD_COLOR)
 
-            image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-            rosMsg = self.bridge.cv2_to_imgmsg(image, encoding="passthrough")
-            self.imagePublisher.publish(rosMsg)
+            self.roverStatusPublisher.publish(msg)
 
         except Exception as e:
-            print("Image Publisher ran into " + str(e))
+            print("Rover Status Publisher ran into " + str(e))
     
     def shutdownNode(self):
         if self.socket is not None:
@@ -58,13 +50,13 @@ class ImagePublisher(Node):
 if __name__ == '__main__':
     try:
         rclpy.init()
-        imageNode = ImagePublisher()
-        rclpy.spin(imageNode)
-        imageNode.shutdownNode()
-        imageNode.destroy_node()
+        roverStatusNode = RoverStatusPublisher()
+        rclpy.spin(roverStatusNode)
+        roverStatusNode.shutdownNode()
+        roverStatusNode.destroy_node()
         rclpy.shutdown()
     except KeyboardInterrupt:
         pass
 
     finally:
-        imageNode.shutdownNode()
+        roverStatusNode.shutdownNode()
