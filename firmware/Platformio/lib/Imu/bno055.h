@@ -5,7 +5,7 @@
 
 #warning "recall that the sensor can only output data so fast, don't need to read it every loop cause the data woun't be fresh."
 
-#define BNO_RUN_MODE OPR_MODE_M4G
+#define BNO_RUN_MODE BNO_OPR_MODE_NDOF
 
 #define BNO_I2C_ADDRESS 0x28
 #define NUM_ID_REG (size_t)(4)
@@ -41,9 +41,10 @@
 #define BNO_OPR_MODE_NDOF 0x0C
 
 #define BNO_UNIT_SEL 0x3B
-#define TEMP_UNIT_F 0b10000
-#define EULER_ANG_UNIT_RAD 0b100
+#define TEMP_UNIT_F 0x10
+#define EULER_ANG_UNIT_RAD 0x04
 #define ANDRIOD_ORIENTATION 0x80
+#define LIA_MG_UNIT 0x01
 
 #define BNO_SYS_STATUS_REG 0x39
 #define BNO_SYS_ERR 0x3A
@@ -72,6 +73,13 @@
 #define BNO_EUL_HEADING_MSB 0x1B
 #define BNO_EUL_HEADING_LSB 0x1A
 
+#define BNO_LIA_Z_MSB 0x2D
+#define BNO_LIA_Z_LSB 0x2C
+#define BNO_LIA_Y_MSB 0x2B
+#define BNO_LIA_Y_LSB 0x2A
+#define BNO_LIA_X_MSB 0x29
+#define BNO_LIA_X_LSB 0x28
+
 #define REG_DATA_TO_VAL_S16(msbyte, lsbyte) ((((int16_t)(msbyte)) << 8) | ((int16_t)(lsbyte)))
 
 
@@ -93,6 +101,8 @@ typedef enum opr_mode
 
 } opr_mode_e;
 
+#warning "switch convention to what the other files have, prefix bno055 and capital for funcs"
+
 
 namespace bno055
 {
@@ -102,6 +112,7 @@ namespace bno055
     void get_temp();
     bool get_sys_status();
     void get_euler_ypr();
+    void get_lia_xyz();
     bool reset_sys();
     void set_mode(opr_mode_e mode);
     opr_mode_e get_mode();

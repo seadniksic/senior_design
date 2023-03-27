@@ -4,8 +4,8 @@
 
 // which master you pick will depend on the pins
 // Master1 is defined in imx_rt1060_i2c_driver.cpp
-I2CMaster & master1 = Master1; //pins 16 and 17 on teensy 4.1
-I2CDevice bno = I2CDevice(master1, BNO_I2C_ADDRESS, _LITTLE_ENDIAN); //confirmed its big endian
+static I2CMaster & master1 = Master1; //pins 16 and 17 on teensy 4.1
+static I2CDevice bno = I2CDevice(master1, BNO_I2C_ADDRESS, _LITTLE_ENDIAN); //confirmed its big endian
 
 bool bno055::init()
 {
@@ -46,7 +46,8 @@ bool bno055::init()
     }
 
     // change temp output to be F
-    set_units(TEMP_UNIT_F | ANDRIOD_ORIENTATION);   
+    #warning "need to update get data functions cause LSB changes when u update units"
+    set_units(TEMP_UNIT_F | ANDRIOD_ORIENTATION | EULER_ANG_UNIT_RAD);   
     // uint8_t result; 
     // bno.read(BNO_UNIT_SEL, &result, true);
     // Serial.printf("the value of unit sel reg is : 0x%X\n", result);
@@ -58,11 +59,13 @@ bool bno055::init()
         return false;
     }
 
+    #warning "why did i remove this?"
+    // looks like i did while trying to fix it, maybe i thought ths was one of the problems. we definitely want to set the clock source to be an output tho
     // Set clock to external
-    // if(!set_clock_source(BNO_CLK_SRC_EXTERNAL))
-    // {
-    //     return false;
-    // }
+    if(!set_clock_source(BNO_CLK_SRC_EXTERNAL))
+    {
+        return false;
+    }
 
     // set out of config mode
     opr_mode_e desired_mode = BNO_RUN_MODE;
@@ -131,7 +134,8 @@ void bno055::calibrate(uint8_t mode)
             BNO_GET_GYR_CAL(target_calib), BNO_GET_ACC_CAL(target_calib), BNO_GET_MAG_CAL(target_calib), \
             result, target_calib);
         delay(100);
-    }while(result != target_calib && (result & BNO_SYS_CALIBRATED) != BNO_SYS_CALIBRATED );
+        // there was some weird shit with M4G where bno full sys calibration was set but it wasnt actually done  
+    } while(result != target_calib && (result & BNO_SYS_CALIBRATED) != BNO_SYS_CALIBRATED );
 
     delay(2000);
     Serial.println("[BNO055]: finished calibrating");
@@ -210,49 +214,45 @@ bool bno055::get_sys_status()
 
 void bno055::get_euler_ypr()
 {
+    // Initialize to some random values so we know if they not being overwritten
     uint8_t ypr_data[6] = {0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA}; //in that order exactly, yaw is array 0 and 1
     // register is automatically incremented when reading multiple bytes
     if(!bno.read(BNO_EUL_HEADING_LSB, ypr_data, (size_t)6, true))
     {
-        Serial.println("read failing");
-    }
-    // 1 degree = 16 LSB, so need to divide by 16 which is same as right shifting 4
-
-    int16_t heading = REG_DATA_TO_VAL_S16(ypr_data[1], ypr_data[0]);
-    int16_t pitch = REG_DATA_TO_VAL_S16(ypr_data[3], ypr_data[2]);
-    int16_t roll = REG_DATA_TO_VAL_S16(ypr_data[5], ypr_data[4]);
-
-    // int16_t heading = (((int16_t)ypr_data[0]) | ((int16_t)ypr_data[1]) << 8);
-    // int16_t pitch = 0;
-    // int16_t roll = 0;
-
-    // Serial.printf("Y:%d \tP:%d \tR:%d\n", heading, pitch, roll);
-
-    double dheading = ((double)heading) / 16.0;
-    double dpitch = ((double)pitch) / 16.0;
-    double droll = ((double)roll) / 16.0;
-
-    double dheading2 = ((double)(heading)) / 16.0;
-    double dpitch2 = ((double)(pitch)) / 16.0;
-    double droll2 = ((double)(roll)) / 16.0;
-
-    if (dheading != dheading2 || dpitch != dpitch2 || droll != droll2)
-    {
-        Serial.println("WRONG");
+        Serial.println("euler ypr read failing");
     }
 
+    const int16_t heading = REG_DATA_TO_VAL_S16(ypr_data[1], ypr_data[0]);
+    const int16_t pitch = REG_DATA_TO_VAL_S16(ypr_data[3], ypr_data[2]);
+    const int16_t roll = REG_DATA_TO_VAL_S16(ypr_data[5], ypr_data[4]);
 
-
-
-
-    // perform adjustments on the angles. zero them out
-    // heading = heading - (int16_t)(70 << 4);
-    // pitch = pitch - (5 << 4);
-    // #warning "implement something to zero out heading on start"
+    const double dheading = ((double)heading) / 900.0;
+    const double dpitch = ((double)pitch) / 900.0;
+    const double droll = ((double)roll) / 900.0;
 
     Serial.printf("Y:%lf \tP:%lf \tR:%lf\n", dheading, dpitch, droll);
-
 }
+
+void bno055::get_lia_xyz()
+{
+    uint8_t xyz_data[6] = {0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA};
+    if(!bno.read(BNO_LIA_X_LSB, xyz_data, (size_t)6, true))
+    {
+        Serial.println("lia xyz read failing");
+    }
+
+    const int16_t lia_x = REG_DATA_TO_VAL_S16(xyz_data[1], xyz_data[0]);
+    const int16_t lia_y = REG_DATA_TO_VAL_S16(xyz_data[3], xyz_data[2]);
+    const int16_t lia_z = REG_DATA_TO_VAL_S16(xyz_data[5], xyz_data[4]);
+
+    const double dlia_x = ((double)lia_x) / 100.0;
+    const double dlia_y = ((double)lia_y) / 100.0;
+    const double dlia_z = ((double)lia_z) / 100.0;
+
+    Serial.printf("X:%lf \tY:%lf \tZ:%lf\n", dlia_x, dlia_y, dlia_z);
+}
+
+
 
 opr_mode_e bno055::get_mode()
 {

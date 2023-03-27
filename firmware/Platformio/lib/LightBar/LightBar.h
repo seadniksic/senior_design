@@ -5,6 +5,8 @@
 #include "pinout.h"
 #include <Arduino.h>
 
+#define BRIGHTNESS_STEP 10
+
 inline void LightBar_Init()
 {
     pinMode(LIGHTBAR_PIN, OUTPUT);

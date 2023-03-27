@@ -161,6 +161,7 @@ typedef struct
     control_u control;
     uint16_t pan_pos;
     uint16_t tilt_pos;
+    uint8_t headlight_brightness;
 } control_state_t;
 
 

@@ -8,7 +8,9 @@
 #include <Lightbar.h>
 #include "pinout.h"
 #include "config.h"
+#include <Servo.h>
 
+#warning "it would be cool if could do like y to enter imu calib mode and then use led patterns to give the status on that"
 
 void main_prog()
 {
@@ -25,7 +27,7 @@ void main_prog()
   // setup
   Joystick_Init();
   Locomotion_Init();
-  // bno055::init();
+  bno055::init();
   UartComms_Init();
   LightBar_Init();
   InternalTemperature.begin(TEMPERATURE_NO_ADC_SETTING_CHANGES);
@@ -40,6 +42,8 @@ void main_prog()
   elapsedMillis joy_update_clock;
   elapsedMillis cpu_temp_clock;
   elapsedMillis comms_clock;
+  elapsedMillis imu_data;
+  elapsedMillis servo_clock;
 
   //protobuf
   UartReadBuffer read_buffer;
@@ -49,33 +53,61 @@ void main_prog()
   elapsedMillis rcv_clock;
 
   // pre while loop code
-  LightBar_State(true);
+  // LightBar_State(true);
 
   /* serovs */
-  pinMode(PAN_SERVO_PIN, OUTPUT);
-  pinMode(TILT_SERVO_PIN, OUTPUT);
+  // pinMode(PAN_SERVO_PIN, OUTPUT);
+  // pinMode(TILT_SERVO_PIN, OUTPUT);
+  // analogWriteFrequency(PAN_SERVO_PIN, 50);
+  // analogWriteFrequency(TILT_SERVO_PIN, 50);
+
+  Servo pan;
+  Servo tilt;
+  pan.attach(PAN_SERVO_PIN);
+  tilt.attach(TILT_SERVO_PIN);
+  
   uint8_t servo_pan = 0;
   uint8_t servo_tilt = 0;
 
-  // analogWrite(PAN_SERVO_PIN, 255);
-  // analogWrite(TILT_SERVO_PIN, 255);
+  // analogWrite(PAN_SERVO_PIN, 125);
+  // analogWrite(TILT_SERVO_PIN, 125);
 
-  for(uint8_t i = 0; i <= 255/5; i++)
-  {
-    analogWrite(PAN_SERVO_PIN, servo_pan);
-    delay(100);
-    servo_pan+=5;
-  }
+  // starts at 5 pwm
+  // ends at 33 pwm
+
+  
 
   // while(1)
   // {
+  //   for(uint8_t i = 0; i <= 180; i++)
+  //   {
+  //     servo_pan=i;
+  //     servo_tilt=i;
+  //     pan.write(servo_tilt);
+  //     tilt.write(servo_pan);
+  //     delay(100);
+  //     Serial.println(i);
+      
+  //   }
+  // }
 
+
+
+  // while(1)
+  // {
   //   analogWrite(PAN_SERVO_PIN, 0);
-  //   delay(1000);
+  //   analogWrite(TILT_SERVO_PIN, 0);
+  //   delay(2000);
   //   analogWrite(PAN_SERVO_PIN, 90);
-  //   delay(1000);
-  //   analogWrite(PAN_SERVO_PIN, 180);
-  //   delay(1000);
+  //   analogWrite(TILT_SERVO_PIN, 90);
+  //   delay(2000);
+  //   analogWrite(PAN_SERVO_PIN, 255);
+  //   analogWrite(TILT_SERVO_PIN, 255);
+
+  //   digitalWrite(13, HIGH);
+  //   delay(2000);
+  //   digitalWrite(13, LOW);
+  //   Serial.println("running");
   // }
 
 
@@ -88,13 +120,26 @@ void main_prog()
       digitalWrite(ONBOARD_LED_PIN, LED_state);
     }
 
+    if(servo_clock > 100)
+    {
+      servo_clock -= 100;
+      servo_pan +=1;
+      servo_tilt += 1;
+      if(servo_pan > 180 || servo_tilt > 180)
+      {
+        servo_pan = servo_tilt = 0;
+      }
+      pan.write(servo_tilt);
+      tilt.write(servo_pan);
+    }
+
     // test sending data back to the jetson
     if(cpu_temp_clock > 1000)
     {
       cpu_temp_clock -= 1000;
       float temp = InternalTemperature.readTemperatureF();
-      Serial.print("CPU TEMP: ");
-      Serial.println(temp);
+      // Serial.print("CPU TEMP: ");
+      // Serial.println(temp);
       UartComms_PopulateReply(gui_data, temp);
     }
 
@@ -115,7 +160,7 @@ void main_prog()
 
     if (print_clock > 100)
     {
-      Joystick_Print();
+      // Joystick_Print();
       print_clock -= 100;
     }
   
@@ -127,15 +172,17 @@ void main_prog()
       Joystick_Run();
     }
 
-    // bno055::get_euler_ypr();
-    // bno055::print_calibration();
+    if (imu_data > 50)
+    {
+      imu_data -= 50;
+      bno055::get_euler_ypr();
+      // bno055::get_lia_xyz();
 
-
-    
+      // bno055::print_calibration();
+    }
 
   }  
 }
-
 
 void setup() {
   // do not use this function, write setup code in main_prog

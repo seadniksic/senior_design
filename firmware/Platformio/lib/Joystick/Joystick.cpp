@@ -1,6 +1,7 @@
 #include "Joystick.h"
 #include <string.h>
 #include "Locomotion.h"
+#include <LightBar.h>
 
 static joy_state_t joy_state = {0};
 static control_state_t control_state = {0}; 
@@ -9,6 +10,7 @@ static control_state_t control_state = {0};
 void Joystick_Init()
 {
     control_state.control.bits.turn_off = 1;
+    control_state.headlight_brightness = BRIGHTNESS_STEP;
 }
 
 void Joystick_Print()
@@ -114,6 +116,32 @@ void Joystick_Run()
         Locomotion_All_Axis_Off();
 
         return;
+    }
+
+    // Handle LightBar
+    if(DPAD_LEFT_PRESSED)
+    {
+        LightBar_Brightness(0);
+    }
+    else if(DPAD_RIGHT_PRESSED)
+    {
+        LightBar_Brightness(control_state.headlight_brightness);
+    }
+    else if(DPAD_UP_PRESSED)
+    {
+        if(control_state.headlight_brightness <= (255 - BRIGHTNESS_STEP))
+        {
+            control_state.headlight_brightness += BRIGHTNESS_STEP;
+            LightBar_Brightness(control_state.headlight_brightness);
+        }
+    }
+    else if(DPAD_DOWN_PRESSED)
+    {
+        if(control_state.headlight_brightness >= (BRIGHTNESS_STEP))
+        {
+            control_state.headlight_brightness -= BRIGHTNESS_STEP;
+            LightBar_Brightness(control_state.headlight_brightness);
+        }
     }
 
     // Handle joystick input
