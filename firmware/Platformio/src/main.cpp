@@ -6,9 +6,9 @@
 #include <UartComms.h>
 #include <InternalTemperature.h>
 #include <Lightbar.h>
+#include <CameraGimbal.h>
 #include "pinout.h"
 #include "config.h"
-#include <Servo.h>
 
 #warning "it would be cool if could do like y to enter imu calib mode and then use led patterns to give the status on that"
 
@@ -27,9 +27,11 @@ void main_prog()
   // setup
   Joystick_Init();
   Locomotion_Init();
-  bno055::init();
+  // bno055::init();
   UartComms_Init();
   LightBar_Init();
+  CameraGimbal_Init();
+
   InternalTemperature.begin(TEMPERATURE_NO_ADC_SETTING_CHANGES);
 
   // variables
@@ -54,61 +56,7 @@ void main_prog()
 
   // pre while loop code
   // LightBar_State(true);
-
-  /* serovs */
-  // pinMode(PAN_SERVO_PIN, OUTPUT);
-  // pinMode(TILT_SERVO_PIN, OUTPUT);
-  // analogWriteFrequency(PAN_SERVO_PIN, 50);
-  // analogWriteFrequency(TILT_SERVO_PIN, 50);
-
-  Servo pan;
-  Servo tilt;
-  pan.attach(PAN_SERVO_PIN);
-  tilt.attach(TILT_SERVO_PIN);
-  
-  uint8_t servo_pan = 0;
-  uint8_t servo_tilt = 0;
-
-  // analogWrite(PAN_SERVO_PIN, 125);
-  // analogWrite(TILT_SERVO_PIN, 125);
-
-  // starts at 5 pwm
-  // ends at 33 pwm
-
-  
-
-  // while(1)
-  // {
-  //   for(uint8_t i = 0; i <= 180; i++)
-  //   {
-  //     servo_pan=i;
-  //     servo_tilt=i;
-  //     pan.write(servo_tilt);
-  //     tilt.write(servo_pan);
-  //     delay(100);
-  //     Serial.println(i);
-      
-  //   }
-  // }
-
-
-
-  // while(1)
-  // {
-  //   analogWrite(PAN_SERVO_PIN, 0);
-  //   analogWrite(TILT_SERVO_PIN, 0);
-  //   delay(2000);
-  //   analogWrite(PAN_SERVO_PIN, 90);
-  //   analogWrite(TILT_SERVO_PIN, 90);
-  //   delay(2000);
-  //   analogWrite(PAN_SERVO_PIN, 255);
-  //   analogWrite(TILT_SERVO_PIN, 255);
-
-  //   digitalWrite(13, HIGH);
-  //   delay(2000);
-  //   digitalWrite(13, LOW);
-  //   Serial.println("running");
-  // }
+  uint8_t count = 0;
 
 
   while(1)
@@ -123,14 +71,14 @@ void main_prog()
     if(servo_clock > 100)
     {
       servo_clock -= 100;
-      servo_pan +=1;
-      servo_tilt += 1;
-      if(servo_pan > 180 || servo_tilt > 180)
+      count+=1;
+      
+
+      if(count > 180 || count > 180)
       {
-        servo_pan = servo_tilt = 0;
+        count = 0;
       }
-      pan.write(servo_tilt);
-      tilt.write(servo_pan);
+      CameraGimbal_Set_PanTilt(count);
     }
 
     // test sending data back to the jetson
@@ -175,7 +123,7 @@ void main_prog()
     if (imu_data > 50)
     {
       imu_data -= 50;
-      bno055::get_euler_ypr();
+      // bno055::get_euler_ypr();
       // bno055::get_lia_xyz();
 
       // bno055::print_calibration();
