@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
-import rclpy
+import launch
+import launch_ros.actions
 from imageFeedPublisherNode import ImagePublisher
 from pointCloudPublisherNode import PointCloudPublisher
 from cameraPositionPublisher import CameraPositionPublisher
@@ -35,3 +36,4 @@ if __name__ == '__main__':
     finally:
         for node in nodeList:
             node.shutdownNode()
+
