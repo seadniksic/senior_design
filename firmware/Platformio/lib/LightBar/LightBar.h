@@ -19,7 +19,7 @@ inline void LightBar_Brightness(const uint8_t &val)
 
 inline void LightBar_State(const bool &state)
 {
-    digitalWrite(LIGHTBAR_PIN, state);
+    analogWrite(LIGHTBAR_PIN, state == true ? 255 : 0);
 }
 
 #endif
