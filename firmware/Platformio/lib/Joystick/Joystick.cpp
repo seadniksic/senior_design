@@ -48,19 +48,19 @@ void Joystick_Print()
 
 }
 
-void Joystick_Store_State(Joystick_Input &js_in)
+void Joystick_Store_State(Joystick_Input *js_in)
 {
     // Store the previous buttons states in prev_buttons
     joy_state.prev_buttons.state = joy_state.buttons.state;
     
     // Store current state of the contoller
-    joy_state.buttons.state = (uint32_t)js_in.get_button();;
-    joy_state.ljoy_x = js_in.get_LJOY_X();
-    joy_state.ljoy_y = js_in.get_LJOY_Y();
-    joy_state.rjoy_x = js_in.get_RJOY_X();
-    joy_state.rjoy_y = js_in.get_RJOY_Y();
-    joy_state.tl = js_in.get_TL();
-    joy_state.tr = js_in.get_TR();
+    joy_state.buttons.state = (uint32_t)(js_in->get_button());
+    joy_state.ljoy_x = js_in->get_LJOY_X();
+    joy_state.ljoy_y = js_in->get_LJOY_Y();
+    joy_state.rjoy_x = js_in->get_RJOY_X();
+    joy_state.rjoy_y = js_in->get_RJOY_Y();
+    joy_state.tl = js_in->get_TL();
+    joy_state.tr = js_in->get_TR();
 
     // Perform processing for control bits
     // Capture on falling edge
@@ -108,7 +108,7 @@ void Joystick_Store_State(Joystick_Input &js_in)
 
 }
 
-void Joystick_Reset_State(Joystick_Input &js_in)
+void Joystick_Reset_State()
 {
     // Store the previous buttons states in prev_buttons
     joy_state.prev_buttons.state = (uint32_t)0;

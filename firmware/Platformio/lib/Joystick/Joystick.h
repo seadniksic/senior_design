@@ -172,8 +172,8 @@ typedef struct
 void Joystick_Init();
 void Joystick_Print(); //serial port must be initialized before using
 void Joystick_Run(); 
-void Joystick_Store_State(Joystick_Input &js_in);
-void Joystick_Reset_State(Joystick_Input &js_in);
+void Joystick_Store_State(Joystick_Input *js_in);
+void Joystick_Reset_State();
 bool Joystick_Input_Present();
 uint8_t Joystick_Map(const int32_t &val);
 uint8_t Joystick_Map_Generic(const int32_t &val, \

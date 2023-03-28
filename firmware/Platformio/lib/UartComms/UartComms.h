@@ -17,6 +17,12 @@
 #define TIMEOUT_NUMBYTES 10
 
 typedef struct {
+    UartReadBuffer *read_buffer;
+    UartWriteBuffer *write_buffer;
+    Joystick_Input *js_in;
+    GUI_Data *gui_data;
+    IMU_Data *imu_data;
+    elapsedMillis rcv_clock;
     elapsedMillis time_since_last_serialize;
     bool commsNeedReset;
 } UartComms_t;
@@ -25,10 +31,11 @@ typedef struct {
 
 
 void UartComms_Init();
-void UartComms_Run(UartReadBuffer &read_buffer, UartWriteBuffer &write_buffer, \
-    Joystick_Input &js_in, GUI_Data &gui_data, elapsedMillis &rcv_clock);
-void UartComms_PopulateReply(GUI_Data &gui_data, const float &cpu_temp);
-void UartComms_ClearBuffers(UartReadBuffer &read_buffer, UartWriteBuffer &write_buffer);
+void UartComms_RcvControls();
+void UartComms_PopulateGUIReply(const float &cpu_temp);
+void UartComms_ClearBuffers();
 elapsedMillis* UartComms_GetTimeSinceLastRead();
+void UartComms_ClearJoystick();
+Joystick_Input* UartComms_GetJoystick();
 
 #endif

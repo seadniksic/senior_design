@@ -1,12 +1,25 @@
 #include "UartComms.h"
 
 
-static UartComms_t uartComms = {0};
+static UartReadBuffer read_buffer;
+static UartWriteBuffer write_buffer;
+static Joystick_Input js_in;
+static GUI_Data gui_data;
+static IMU_Data imu_data;
+static elapsedMillis rcv_clock;
 static elapsedMillis commTimer;
+
+static UartComms_t uartComms = {0};
 
 void UartComms_Init()
 {
     HWSERIAL.begin(115200);
+
+    uartComms.read_buffer= &read_buffer;
+    uartComms.write_buffer= &write_buffer;
+    uartComms.js_in = &js_in;
+    uartComms.gui_data = &gui_data;
+    uartComms.rcv_clock = rcv_clock;
     uartComms.time_since_last_serialize = commTimer;
     uartComms.commsNeedReset = false;
 }
@@ -14,8 +27,7 @@ void UartComms_Init()
 // As of right now this is blocking, not ideal
 #pragma message("should just put this into a struct and pass the struct.")
 
-void UartComms_Run(UartReadBuffer &read_buffer, UartWriteBuffer &write_buffer, \
-    Joystick_Input &js_in, GUI_Data &gui_data, elapsedMillis &rcv_clock)
+void UartComms_RcvControls()
 {
     // protobuf
     // now the first byte will be a special sync byte indicating start of message. 
@@ -32,11 +44,11 @@ void UartComms_Run(UartReadBuffer &read_buffer, UartWriteBuffer &write_buffer, \
       {
         // found start of message
         // read number of bytes to read
-        rcv_clock = 0; //reset elaspedmillis
+        uartComms.rcv_clock = 0; //reset elaspedmillis
         while(HWSERIAL.available() < 0)
         {
           //stall till the next byte comes in
-          if(rcv_clock > TIMEOUT_NUMBYTES)
+          if(uartComms.rcv_clock > TIMEOUT_NUMBYTES)
           {
             Serial.println("Message timeout while waiting for num_bytes!");
             return;
@@ -46,11 +58,11 @@ void UartComms_Run(UartReadBuffer &read_buffer, UartWriteBuffer &write_buffer, \
         // read the number of bytes
         num_bytes = HWSERIAL.read();
 
-        rcv_clock = 0; //reset elaspedmillis
+        uartComms.rcv_clock = 0; //reset elaspedmillis
         while(1)
         {
           // check for timeout.
-          if(rcv_clock > TIMEOUT_DATA)
+          if(uartComms.rcv_clock > TIMEOUT_DATA)
           {
             Serial.println("Message timeout while waiting for data!");
             return;
@@ -61,7 +73,7 @@ void UartComms_Run(UartReadBuffer &read_buffer, UartWriteBuffer &write_buffer, \
           if(num_bytes != 0 && HWSERIAL.available() > 0)
           {
             data = HWSERIAL.read();
-            read_buffer.push(data);
+            uartComms.read_buffer->push(data);
             if(--num_bytes == 0)
             {
               available_packet = true;
@@ -78,10 +90,10 @@ void UartComms_Run(UartReadBuffer &read_buffer, UartWriteBuffer &write_buffer, \
 
     if(available_packet)
     {
-      auto deserialize_status = js_in.deserialize(read_buffer);
+      auto deserialize_status = js_in.deserialize(*uartComms.read_buffer);
       if(::EmbeddedProto::Error::NO_ERRORS == deserialize_status)
       {
-        uint32_t btn_status = (uint32_t)js_in.get_button();
+        uint32_t btn_status = (uint32_t)uartComms.js_in->get_button();
         uartComms.time_since_last_serialize = 0;
 
 
@@ -154,16 +166,26 @@ void UartComms_Run(UartReadBuffer &read_buffer, UartWriteBuffer &write_buffer, \
     }
 }
 
-void UartComms_PopulateReply(GUI_Data &gui_data, const float &cpu_temp)
+void UartComms_PopulateGUIReply(const float &cpu_temp)
 {
-    gui_data.clear();
-    gui_data.set_cpu_temp((int32_t)cpu_temp);
+    uartComms.gui_data->clear();
+    uartComms.gui_data->set_cpu_temp((int32_t)cpu_temp);
 }
 
-void UartComms_ClearBuffers(UartReadBuffer &read_buffer, UartWriteBuffer &write_buffer)
+void UartComms_ClearBuffers()
 {
-    read_buffer.clear();
-    write_buffer.clear();
+    uartComms.read_buffer->clear();
+    uartComms.write_buffer->clear();
+}
+
+void UartComms_ClearJoystick()
+{
+  uartComms.js_in->clear();
+}
+
+Joystick_Input* UartComms_GetJoystick()
+{
+  return uartComms.js_in;
 }
 
 elapsedMillis* UartComms_GetTimeSinceLastRead()

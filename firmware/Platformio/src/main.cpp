@@ -5,7 +5,7 @@
 #include <bno055.h>
 #include <UartComms.h>
 #include <InternalTemperature.h>
-#include <Lightbar.h>
+#include <LightBar.h>
 #include <CameraGimbal.h>
 #include "pinout.h"
 #include "config.h"
@@ -34,9 +34,7 @@ void main_prog()
 
   InternalTemperature.begin(TEMPERATURE_NO_ADC_SETTING_CHANGES);
 
-  // variables
-  uint8_t lightbar_pwm;
-
+  // Clocks
   elapsedMillis LED_clock;
   uint8_t LED_state = HIGH;
 
@@ -46,13 +44,6 @@ void main_prog()
   elapsedMillis comms_clock;
   elapsedMillis imu_data;
   elapsedMillis servo_clock;
-
-  //protobuf
-  UartReadBuffer read_buffer;
-  UartWriteBuffer write_buffer;
-  Joystick_Input js_in;
-  GUI_Data gui_data;
-  elapsedMillis rcv_clock;
 
   // pre while loop code
   // LightBar_State(true);
@@ -81,22 +72,22 @@ void main_prog()
       float temp = InternalTemperature.readTemperatureF();
       // Serial.print("CPU TEMP: ");
       // Serial.println(temp);
-      UartComms_PopulateReply(gui_data, temp);
+      UartComms_PopulateGUIReply(temp);
     }
 
     if(comms_clock > 1)
     {
       comms_clock -= 1;
       // Run serial comms to get in the data from the Jetson
-      UartComms_Run(read_buffer, write_buffer, js_in, gui_data, rcv_clock);
+      UartComms_RcvControls();
 
       if((*UartComms_GetTimeSinceLastRead()) > SERIAL_COMMS_RECEIVE_TIMEOUT)
       {
-        // Serial.println("Resetting comms, lost communication!");
-        js_in.clear();
+        Serial.println("Resetting comms, lost communication!");
+        UartComms_ClearJoystick();
       }
 
-      UartComms_ClearBuffers(read_buffer, write_buffer);
+      UartComms_ClearBuffers();
     }
 
     if (print_clock > 100)
@@ -109,7 +100,7 @@ void main_prog()
     if(joy_update_clock > 50)
     {
       joy_update_clock -= 50;
-      Joystick_Store_State(js_in);
+      Joystick_Store_State(UartComms_GetJoystick());
       Joystick_Run();
     }
 
