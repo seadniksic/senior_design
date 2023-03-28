@@ -33,6 +33,9 @@ typedef struct {
 void UartComms_Init();
 void UartComms_RcvControls();
 void UartComms_PopulateGUIReply(const float &cpu_temp);
+void UartComms_SendGUIData();
+void UartComms_ClearWriteBuffer();
+void UartComms_ClearReadBuffer();
 void UartComms_ClearBuffers();
 elapsedMillis* UartComms_GetTimeSinceLastRead();
 void UartComms_ClearJoystick();

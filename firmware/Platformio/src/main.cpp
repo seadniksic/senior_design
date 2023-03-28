@@ -40,10 +40,10 @@ void main_prog()
 
   elapsedMillis print_clock;
   elapsedMillis joy_update_clock;
-  elapsedMillis cpu_temp_clock;
-  elapsedMillis comms_clock;
+  elapsedMillis joy_comms_clock;
   elapsedMillis imu_data;
   elapsedMillis servo_clock;
+  elapsedMillis gui_data_clock;
 
   // pre while loop code
   // LightBar_State(true);
@@ -65,19 +65,9 @@ void main_prog()
 
     }
 
-    // test sending data back to the jetson
-    if(cpu_temp_clock > 1000)
+    if(joy_comms_clock > 1)
     {
-      cpu_temp_clock -= 1000;
-      float temp = InternalTemperature.readTemperatureF();
-      // Serial.print("CPU TEMP: ");
-      // Serial.println(temp);
-      UartComms_PopulateGUIReply(temp);
-    }
-
-    if(comms_clock > 1)
-    {
-      comms_clock -= 1;
+      joy_comms_clock -= 1;
       // Run serial comms to get in the data from the Jetson
       UartComms_RcvControls();
 
@@ -87,7 +77,7 @@ void main_prog()
         UartComms_ClearJoystick();
       }
 
-      UartComms_ClearBuffers();
+      UartComms_ClearReadBuffer();
     }
 
     if (print_clock > 100)
@@ -111,6 +101,19 @@ void main_prog()
       // bno055::get_lia_xyz();
 
       // bno055::print_calibration();
+    }
+
+    if(gui_data_clock > 1000)
+    {
+      gui_data_clock -= 1000;
+      // this stuff can just be in uartcomms? the temp reading?
+      // new joystick angles to be sent!
+      float temp = InternalTemperature.readTemperatureF();
+      Serial.print("CPU TEMP: ");
+      Serial.println(temp);
+      UartComms_PopulateGUIReply(temp);
+      UartComms_SendGUIData();
+      UartComms_ClearWriteBuffer();
     }
 
   }  

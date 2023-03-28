@@ -137,25 +137,6 @@ void UartComms_RcvControls()
 
         #endif
 
-        // only transmit if we have recieved a message, for now
-        // #warning "we dont need to send data back at this rate, so split up this function"
-        // auto serialization_status = gui_data.serialize(write_buffer);
-        // if(::EmbeddedProto::Error::NO_ERRORS == serialization_status)
-        // {
-        //   // Serial write docs
-        //   // https://cdn.arduino.cc/reference/en/language/functions/communication/serial/write/
-        //   // Serial.println("Writing data");
-        //   HWSERIAL.write(SYNC_BYTE_WRITE);
-
-
-        //   // first transmit the number of bytes in the message.
-        //   const uint8_t n_bytes = write_buffer.get_size();
-        //   HWSERIAL.write(n_bytes);
-
-        //   // Now transmit the actual data.
-        //   HWSERIAL.write(write_buffer.get_data(), write_buffer.get_size());
-        // }
-
       }
       else
       {
@@ -172,10 +153,40 @@ void UartComms_PopulateGUIReply(const float &cpu_temp)
     uartComms.gui_data->set_cpu_temp((int32_t)cpu_temp);
 }
 
+void UartComms_SendGUIData()
+{
+  // do i need a seperate read buffer? 
+  auto serialization_status = gui_data.serialize(*uartComms.write_buffer);
+  if(::EmbeddedProto::Error::NO_ERRORS == serialization_status)
+  {
+    // Serial write docs
+    // https://cdn.arduino.cc/reference/en/language/functions/communication/serial/write/
+    // Serial.println("Writing data");
+    HWSERIAL.write(SYNC_BYTE_WRITE);
+
+    // first transmit the number of bytes in the message.
+    const uint8_t n_bytes = uartComms.write_buffer->get_size();
+    HWSERIAL.write(n_bytes);
+
+    // Now transmit the actual data.
+    HWSERIAL.write(uartComms.write_buffer->get_data(), uartComms.write_buffer->get_size());
+  }
+}
+
 void UartComms_ClearBuffers()
 {
-    uartComms.read_buffer->clear();
-    uartComms.write_buffer->clear();
+  uartComms.read_buffer->clear();
+  uartComms.write_buffer->clear();
+}
+
+void UartComms_ClearWriteBuffer()
+{
+  uartComms.write_buffer->clear();
+}
+
+void UartComms_ClearReadBuffer()
+{
+  uartComms.read_buffer->clear();
 }
 
 void UartComms_ClearJoystick()
