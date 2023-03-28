@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(centralWidget);
 
     //Create a QTimer is runs at 30 FPS to handle updating the GUI
-    updateTimer.setInterval(33);
+    updateTimer.setInterval(15);
     connect(&updateTimer, &QTimer::timeout, this, &MainWindow::timerUpdate);
     updateTimer.start();
 
@@ -35,7 +35,7 @@ MainWindow::MainWindow(QWidget *parent)
     QHBoxLayout *slamTabLayout = new QHBoxLayout(slamTab);
     slamTabLabel = new QLabel(slamTab);
     slamTabLayout->addWidget(slamTabLabel);
-    slamFeed = new cv::Mat(IMAGE_HEIGHT, IMAGE_WIDTH, CV_8UC3, cv::Scalar(0, 0, 0));
+    slamFeed = new cv::Mat(IMAGE_HEIGHT, IMAGE_WIDTH, CV_8UC1, cv::Scalar(0, 0, 0));
     slamTabLabel->setPixmap(QPixmap::fromImage(createQImage(*slamFeed)));
 
     tabWidget->addTab(slamTab, "Slam Feed");
@@ -48,9 +48,6 @@ MainWindow::MainWindow(QWidget *parent)
     mainLayout->addWidget(tabWidget, 8);
     mainLayout->addWidget(roverStatus, 2);
     centralWidget->setLayout(mainLayout);
-
-    //Initialize the network
-    initializeNetwork();
 }
 
 MainWindow::~MainWindow()
@@ -59,8 +56,6 @@ MainWindow::~MainWindow()
     delete slamFeed;
     delete cameraTabLabel;
     delete slamTabLabel;
-
-    shutdownNetwork();
 }
 
 void MainWindow::timerUpdate()

@@ -6,9 +6,9 @@
 
 int main()
 {
-    TransmitData<image_t> testTransmit(HOST_IP, JETSON_IMAGE_PORT);
-    TransmitData<slam_t> testSlamTransmit(HOST_IP, JETSON_SLAM_PORT);
-    TransmitData<status_t> testStatusTransmit(HOST_IP, JETSON_STATUS_PORT);
+    TransmitData testTransmit(HOST_IP, JETSON_IMAGE_PORT);
+    TransmitData testSlamTransmit(HOST_IP, JETSON_SLAM_PORT);
+    TransmitData testStatusTransmit(HOST_IP, JETSON_STATUS_PORT);
 
     cv::Mat img = cv::imread("/home/joeyblack/Documents/School/ECE1896/senior_design/network_stuff/rover/src/testSources/testImage.jpg", cv::IMREAD_COLOR);
     img.convertTo(img, CV_8UC3);
@@ -19,7 +19,6 @@ int main()
 
     status_t *roverStatus = new status_t;
     roverStatus->battery = 0;
-
 
     while(1)
     {

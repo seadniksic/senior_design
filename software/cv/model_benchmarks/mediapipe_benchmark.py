@@ -19,10 +19,10 @@ window_title = "Stream"
 
 def show_camera():
 
-    camera_id = "/dev/video0"
+    # camera_id = "/dev/video0"
 
     # webcams -> V4L2, stereo -> gstreamer
-    video_capture = cv2.VideoCapture(camera_id, cv2.CAP_V4L2)
+    video_capture = cv2.VideoCapture("benchmark.mp4")
     rsum = 0
     count = 0
     with mp_pose.Pose(

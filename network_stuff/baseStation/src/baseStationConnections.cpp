@@ -1,4 +1,4 @@
-#include "roverNetworking.h"
+#include "baseStationNetworking.h"
 #include <pthread.h>
 
 pthread_t cameraThread, slamThread, statusThread, commandsThread;
@@ -33,7 +33,7 @@ void* cameraThreadFunction(void* arg)
 {
     while(1)
     {
-        sendCameraData();
+        getCameraData();
     }
 
     return NULL;
@@ -43,7 +43,7 @@ void* slamThreadFunction(void* arg)
 {
     while(1)
     {
-        sendSlamData();
+        getSlamData();
     }
 
     return NULL;
@@ -53,7 +53,7 @@ void* statusThreadFunction(void* arg)
 {
     while(1)
     {
-        sendRoverStatus();
+        getRoverStatus();
     }
 
     return NULL;
@@ -63,7 +63,7 @@ void* commandsThreadFunction(void* arg)
 {
     while(1)
     {
-        getRoverCommands();
+        sendRoverCommands();
     }
 
     return NULL;

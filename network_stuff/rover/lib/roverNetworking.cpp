@@ -4,28 +4,35 @@
 #include "roverNetworking.h"
 
 
-TransmitData<image_t> *imageClient;
-TransmitData<slam_t> *slamClient;
-TransmitData<status_t> *statusClient;
-ReceiveData<commands_t> *commandsServer;
+TransmitData *imageClient;
+TransmitData *slamClient;
+TransmitData *statusClient;
+ReceiveData *commandsServer;
 
-ReceiveData<image_t> *imagePortServer;
-ReceiveData<slam_t> *slamPortServer;
-ReceiveData<status_t> *statusPortServer;
-TransmitData<commands_t> *commandsPortClient;
+ReceiveData *imagePortServer;
+ReceiveData *slamPortServer;
+ReceiveData *statusPortServer;
+TransmitData *commandsPortClient;
+
+char *imageBuffer, *slamBuffer, *statusBuffer, *commandsBuffer;
 
 void initializeNetwork()
 {
-    imageClient = new TransmitData<image_t>(CLIENT_IP, WIFI_IMAGE_PORT);
-    slamClient = new TransmitData<slam_t>(CLIENT_IP, WIFI_SLAM_PORT);
-    statusClient = new TransmitData<status_t>(CLIENT_IP, WIFI_ROVER_STATUS_PORT);
-    commandsServer = new ReceiveData<commands_t>(WIFI_ROVER_COMMANDS_PORT);
+    imageClient = new TransmitData(CLIENT_IP, WIFI_IMAGE_PORT);
+    slamClient = new TransmitData(CLIENT_IP, WIFI_SLAM_PORT);
+    statusClient = new TransmitData(CLIENT_IP, WIFI_ROVER_STATUS_PORT);
+    commandsServer = new ReceiveData(WIFI_ROVER_COMMANDS_PORT);
 
-    imagePortServer = new ReceiveData<image_t>(JETSON_IMAGE_PORT);
-    slamPortServer = new ReceiveData<slam_t>(JETSON_SLAM_PORT);
-    statusPortServer = new ReceiveData<status_t>(JETSON_STATUS_PORT);
-    commandsPortClient = new TransmitData<commands_t>(HOST_IP, JETSON_COMMANDS_PORT);
-}
+    imagePortServer = new ReceiveData(JETSON_IMAGE_PORT);
+    slamPortServer = new ReceiveData(JETSON_SLAM_PORT);
+    statusPortServer = new ReceiveData(JETSON_STATUS_PORT);
+    commandsPortClient = new TransmitData(LOCAL_IP, JETSON_COMMANDS_PORT);
+
+    imageBuffer = new char[IMAGE_HEIGHT * IMAGE_WIDTH * 3];
+    slamBuffer = new char[IMAGE_HEIGHT * IMAGE_WIDTH];
+    statusBuffer = new char[200];
+    commandsBuffer = new char[200];
+}   
 
 void shutdownNetwork()
 {
@@ -38,42 +45,59 @@ void shutdownNetwork()
     delete slamPortServer;
     delete statusPortServer;
     delete commandsPortClient;
+
+    delete [] imageBuffer;
+    delete [] slamBuffer;
+    delete [] statusBuffer;
+    delete [] commandsBuffer;
 }
 
 void sendCameraData()
 {
-    cv::Mat buffer(IMAGE_HEIGHT, IMAGE_WIDTH, CV_8UC3, cv::Scalar(0, 0, 0));
-    size_t bufferSize = buffer.total() * buffer.elemSize();
+    size_t bufferSize = sizeof(char) * IMAGE_HEIGHT * IMAGE_WIDTH * 3;
 
-    while(imagePortServer->getData(buffer.data, bufferSize) == 0);
-    imageClient->sendPayload(buffer.data, bufferSize);
+    int incomingSize = 0;
+    while(incomingSize == 0)
+    {
+        incomingSize = imagePortServer->getData(imageBuffer, bufferSize);
+    }
+    imageClient->sendPayload(imageBuffer, incomingSize);
 }
 
 void sendSlamData()
 {
-    cv::Mat buffer(IMAGE_HEIGHT, IMAGE_WIDTH, CV_8UC3, cv::Scalar(0, 0, 0));
-    size_t bufferSize = buffer.total() * buffer.elemSize();
+    size_t bufferSize = sizeof(char) * IMAGE_HEIGHT * IMAGE_WIDTH;
 
-    while(slamPortServer->getData(buffer.data, bufferSize) == 0);
-    slamClient->sendPayload(buffer.data, bufferSize);
+    int incomingSize = 0;
+    while(incomingSize == 0)
+    {
+        incomingSize = slamPortServer->getData(slamBuffer, bufferSize);
+    }
+    slamClient->sendPayload(slamBuffer, incomingSize);
 }
 
 void sendRoverStatus()
 {
-    status_t buffer;
-    size_t bufferSize = sizeof(buffer);
+    size_t bufferSize = sizeof(char) * 200;
 
-    while(statusPortServer->getData(&buffer, bufferSize) == 0);
-    statusClient->sendPayload(&buffer, bufferSize);
+    int incomingSize = 0;
+    while(incomingSize == 0)
+    {
+        incomingSize = statusPortServer->getData(statusBuffer, bufferSize);
+    }
+    statusClient->sendPayload(statusBuffer, incomingSize);
 }
 
 void getRoverCommands()
 {
-    commands_t buffer;
-    size_t bufferSize = sizeof(buffer);
+    size_t bufferSize = sizeof(char) * 200;
 
-    while(commandsServer->getData(&buffer, bufferSize) == 0);
-    commandsPortClient->sendPayload(&buffer, bufferSize);
+    int incomingSize = 0;
+    while(incomingSize == 0)
+    {
+        incomingSize = commandsServer->getData(commandsBuffer, bufferSize);
+    }
+    commandsPortClient->sendPayload(commandsBuffer, incomingSize);
 }
 
 

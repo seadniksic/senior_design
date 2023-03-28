@@ -16,9 +16,9 @@ import math
 
 
 window_title = "Stream"
-model_save_path = "models"
+model_save_path = "../models/movenet_single"
 model = tf.saved_model.load(model_save_path)
-tf.debugging.set_log_device_placement(True)
+#tf.debugging.set_log_device_placement(True)
 movenet = model.signatures['serving_default']
 
 input_size = 256
@@ -60,12 +60,13 @@ def detect_pose():
     camera_id = "/dev/video0"
 
     # webcams -> V4L2, stereo -> gstreamer
-    video_capture = cv2.VideoCapture(camera_id, cv2.CAP_V4L2)
-    video_capture.set(cv2.CAP_PROP_FRAME_WIDTH, capture_width)
-    video_capture.set(cv2.CAP_PROP_FRAME_HEIGHT, capture_height)
+    video_capture = cv2.VideoCapture("benchmark.mp4")
+    # video_capture.set(cv2.CAP_PROP_FRAME_WIDTH, capture_width)
+    # video_capture.set(cv2.CAP_PROP_FRAME_HEIGHT, capture_height)
 
     rsum = 0
     count = 0
+    fps = 0.0
     if video_capture.isOpened():
       try:
           window_handle = cv2.namedWindow(window_title, cv2.WINDOW_AUTOSIZE )
@@ -73,8 +74,10 @@ def detect_pose():
           now = time.time()
           while count < 600:
               count += 1
-              fps = 1 / (time.time() - now)
+              
               if count != 1:
+                  fps = 1 / (time.time() - now)
+                  print(fps)
                   rsum += fps
 
               now = time.time()
@@ -92,9 +95,9 @@ def detect_pose():
                       
                       # #shape = frame.shape
                       # with tf.device('/GPU:0'):
-                      prepared_frame = tf.convert_to_tensor(np.reshape(frame, (1, *frame.shape)), dtype=tf.uint8)
-                      resized_image, image_shape = keep_aspect_ratio_resizer(prepared_frame, input_size)
-                      image_tensor = tf.cast(resized_image, dtype=tf.int32)
+                    #   prepared_frame = tf.convert_to_tensor(np.reshape(frame, (1, *frame.shape)), dtype=tf.uint8)
+                    #   resized_image, image_shape = keep_aspect_ratio_resizer(prepared_frame, input_size)
+                      image_tensor = tf.cast(tf.image.resize_with_pad(np.expand_dims(frame, axis=0), 192, 192), dtype=tf.int32)
 
                       # # Output: [1, 6, 56] tensor that contains keypoints/bbox/scores.
                       keypoints_with_scores = movenet(image_tensor)["output_0"]
@@ -125,28 +128,28 @@ def detect_pose():
 
 
 def draw_pose(keypoints, frame):
-  keypoints = keypoints[:, :, :51].reshape((6, 17,3))
+  #keypoints = keypoints[:, :, :51].reshape((6, 17,3))
   
-  for index,person in enumerate(keypoints):
+  #for index,person in enumerate(keypoints):
 
     y,x,c = frame.shape
-    shaped = np.squeeze(np.multiply(person,[y,x,1]))
+    shaped = np.squeeze(np.multiply(keypoints,[y,x,1]))
 
     running_sum = 0
     for kp in shaped:
-      running_sum += kp[2]
+        running_sum += kp[2]
     avg_score = running_sum / shaped.shape[0]
 
     if avg_score > confidence_threshold:
-      for kp in shaped:
-        ky,kx,kp_conf = kp
-        cv2.circle(frame, (int(kx), int(ky)), 4, color=colors[index], thickness=-1)
-      for edge, color in EDGES.items():
-        p1, p2 = edge
-        y1, x1, c1 = shaped[p1]
-        y2, x2, c2 = shaped[p2] 
-            
-        cv2.line(frame, (int(x1), int(y1)), (int(x2), int(y2)), (0,0,255), 4)
+        for kp in shaped:
+            ky,kx,kp_conf = kp
+            cv2.circle(frame, (int(kx), int(ky)), 4, color=(255,0,0), thickness=-1)
+        for edge, color in EDGES.items():
+            p1, p2 = edge
+            y1, x1, c1 = shaped[p1]
+            y2, x2, c2 = shaped[p2] 
+                
+            cv2.line(frame, (int(x1), int(y1)), (int(x2), int(y2)), (0,0,255), 4)
 
 
 
@@ -180,3 +183,5 @@ def keep_aspect_ratio_resizer(image, target_size):
 if __name__ == "__main__":
 
     detect_pose()
+
+    

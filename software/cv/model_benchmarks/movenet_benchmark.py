@@ -16,10 +16,14 @@ import math
 
 
 window_title = "Stream"
-model_save_path = "models"
+model_save_path = "../models"
 model = tf.saved_model.load(model_save_path)
-tf.debugging.set_log_device_placement(True)
+#tf.debugging.set_log_device_placement(True)
 movenet = model.signatures['serving_default']
+
+# print("Num gpus:", len(tf.config.list_physical_devices('GPU')))
+
+
 
 input_size = 256
 capture_width = 1280
@@ -57,12 +61,11 @@ colors = {0: (0,0,255),
 
 def detect_pose():
 
-    camera_id = "/dev/video0"
 
     # webcams -> V4L2, stereo -> gstreamer
-    video_capture = cv2.VideoCapture(camera_id, cv2.CAP_V4L2)
-    video_capture.set(cv2.CAP_PROP_FRAME_WIDTH, capture_width)
-    video_capture.set(cv2.CAP_PROP_FRAME_HEIGHT, capture_height)
+    video_capture = cv2.VideoCapture("benchmark.mp4")
+    # video_capture.set(cv2.CAP_PROP_FRAME_WIDTH, capture_width)
+    # video_capture.set(cv2.CAP_PROP_FRAME_HEIGHT, capture_height)
 
     rsum = 0
     count = 0
@@ -73,9 +76,11 @@ def detect_pose():
           now = time.time()
           while count < 600:
               count += 1
-              fps = 1 / (time.time() - now)
+              
               if count != 1:
+                  fps = 1 / (time.time() - now)
                   rsum += fps
+                  print(fps)
 
               now = time.time()
                   
@@ -90,21 +95,21 @@ def detect_pose():
                       
                   else:
                       
-                      # #shape = frame.shape
-                      # with tf.device('/GPU:0'):
-                      prepared_frame = tf.convert_to_tensor(np.reshape(frame, (1, *frame.shape)), dtype=tf.uint8)
-                      resized_image, image_shape = keep_aspect_ratio_resizer(prepared_frame, input_size)
-                      image_tensor = tf.cast(resized_image, dtype=tf.int32)
+                      #shape = frame.shape
+                      with tf.device('/GPU:0'):
+                        prepared_frame = tf.convert_to_tensor(np.reshape(frame, (1, *frame.shape)), dtype=tf.uint8)
+                        resized_image, image_shape = keep_aspect_ratio_resizer(prepared_frame, input_size)
+                        image_tensor = tf.cast(resized_image, dtype=tf.int32)
 
                       # # Output: [1, 6, 56] tensor that contains keypoints/bbox/scores.
                       keypoints_with_scores = movenet(image_tensor)["output_0"]
 
                       # # print(keypoints_with_scores)
                       # # print(type(keypoints_with_scores))
-
+                      
                       draw_pose(keypoints_with_scores.numpy(), frame)
                       
-                      cv2.putText(frame, f"{fps:.2}", (int(frame.shape[1] * 5 / 6), int(frame.shape[0] * 5 / 6)), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)
+                    #   cv2.putText(frame, f"{fps:.2}", (int(frame.shape[1] * 5 / 6), int(frame.shape[0] * 5 / 6)), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)
                       cv2.imshow(window_title, frame)
                     
               else:

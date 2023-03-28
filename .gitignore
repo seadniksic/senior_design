@@ -1,2 +1,4 @@
 build/
 software/cv/models/
+*.mp4
+__pycache__
