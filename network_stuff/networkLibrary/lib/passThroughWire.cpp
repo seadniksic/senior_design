@@ -14,12 +14,14 @@ The code is also wrapped in an include guard, which prevents the header file fro
 Overall, this code defines a class that can be used to pass data through a network connection using receive and transmit ports, as well as a buffer for storing data.
 */
 
-PassThroughWire::PassThroughWire(const int receivePort, const int transmitPort, const char *transmitIP, const int bufferSize, std::string name)
+PassThroughWire::PassThroughWire(const int receivePort, const int transmitPort, const char *transmitIP, const int bufferSize, std::string name, int debugMode)
 {
     this->server = std::make_unique<ReceiveData>(receivePort, name);
     this->client = std::make_unique<TransmitData>(transmitIP, transmitPort, name);
     this->buffer = std::make_unique<char[]>(bufferSize);
     this->bufferSize = bufferSize;
+    this->name = name;
+    debug = debugMode;
 }
 
 void PassThroughWire::update()
@@ -27,7 +29,11 @@ void PassThroughWire::update()
     int returnValue = 0;
     while(returnValue == 0)
         returnValue = this->server->getData(static_cast<void*>(this->buffer.get()), this->bufferSize);
+    if(debug)
+        std::cout << name << " has received " << returnValue << " bytes..." << std::endl;
     client->sendPayload(static_cast<void*>(this->buffer.get()), returnValue);
+    if(debug)
+        std::cout << name << " has sent " << returnValue << " bytes..." << std::endl;
 }
 
 #endif
