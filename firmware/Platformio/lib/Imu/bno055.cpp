@@ -6,6 +6,8 @@
 // Master1 is defined in imx_rt1060_i2c_driver.cpp
 static I2CMaster & master1 = Master1; //pins 16 and 17 on teensy 4.1
 static I2CDevice bno = I2CDevice(master1, BNO_I2C_ADDRESS, _LITTLE_ENDIAN); //confirmed its big endian
+static uint8_t Data_Buffer[6] ={0};
+static Vec3_Data_t vec3_data = {0};
 
 bool bno055::init()
 {
@@ -78,7 +80,8 @@ bool bno055::init()
     }
 
     // Sensor calibration
-    calibrate(desired_mode);
+    #warning "commented out calibration!!"
+    // calibrate(desired_mode);
 
     // check state of the system at this point, if all is good proceed.
     if(!get_sys_status())
@@ -212,44 +215,41 @@ bool bno055::get_sys_status()
 
 }
 
-void bno055::get_euler_ypr()
+void bno055::get_euler_ypr(SLAM_Data * sd)
 {
-    // Initialize to some random values so we know if they not being overwritten
-    uint8_t ypr_data[6] = {0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA}; //in that order exactly, yaw is array 0 and 1
     // register is automatically incremented when reading multiple bytes
-    if(!bno.read(BNO_EUL_HEADING_LSB, ypr_data, (size_t)6, true))
+    if(!bno.read(BNO_EUL_HEADING_LSB, Data_Buffer, (size_t)6, true))
     {
         Serial.println("euler ypr read failing");
     }
 
-    const int16_t heading = REG_DATA_TO_VAL_S16(ypr_data[1], ypr_data[0]);
-    const int16_t pitch = REG_DATA_TO_VAL_S16(ypr_data[3], ypr_data[2]);
-    const int16_t roll = REG_DATA_TO_VAL_S16(ypr_data[5], ypr_data[4]);
+    vec3_data.v1.s_16 = REG_DATA_TO_VAL_S16(Data_Buffer[1], Data_Buffer[0]); //yaw
+    vec3_data.v2.s_16 = REG_DATA_TO_VAL_S16(Data_Buffer[3], Data_Buffer[2]); //pitch
+    vec3_data.v3.s_16 = REG_DATA_TO_VAL_S16(Data_Buffer[5], Data_Buffer[4]); //roll
 
-    const double dheading = ((double)heading) / 900.0;
-    const double dpitch = ((double)pitch) / 900.0;
-    const double droll = ((double)roll) / 900.0;
+    sd->set_eul_y((float)vec3_data.v1.s_16 / 900.0f);
+    sd->set_eul_p((float)vec3_data.v2.s_16 / 900.0f);
+    sd->set_eul_r((float)vec3_data.v3.s_16 / 900.0f);
 
-    Serial.printf("Y:%lf \tP:%lf \tR:%lf\n", dheading, dpitch, droll);
+    // Serial.printf("Y:%f \tP:%f \tR:%f\n", sd->get_eul_y(), sd->get_eul_p(), sd->get_eul_r());
 }
 
-void bno055::get_lia_xyz()
+void bno055::get_lia_xyz(SLAM_Data * sd)
 {
-    uint8_t xyz_data[6] = {0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA};
-    if(!bno.read(BNO_LIA_X_LSB, xyz_data, (size_t)6, true))
+    if(!bno.read(BNO_LIA_X_LSB, Data_Buffer, (size_t)6, true))
     {
         Serial.println("lia xyz read failing");
     }
 
-    const int16_t lia_x = REG_DATA_TO_VAL_S16(xyz_data[1], xyz_data[0]);
-    const int16_t lia_y = REG_DATA_TO_VAL_S16(xyz_data[3], xyz_data[2]);
-    const int16_t lia_z = REG_DATA_TO_VAL_S16(xyz_data[5], xyz_data[4]);
+    vec3_data.v1.s_16 = REG_DATA_TO_VAL_S16(Data_Buffer[1], Data_Buffer[0]); //x
+    vec3_data.v2.s_16 = REG_DATA_TO_VAL_S16(Data_Buffer[3], Data_Buffer[2]); //y
+    vec3_data.v3.s_16 = REG_DATA_TO_VAL_S16(Data_Buffer[5], Data_Buffer[4]); //z
 
-    const double dlia_x = ((double)lia_x) / 100.0;
-    const double dlia_y = ((double)lia_y) / 100.0;
-    const double dlia_z = ((double)lia_z) / 100.0;
+    sd->set_lia_x((float)vec3_data.v1.s_16 / 100.0f);
+    sd->set_lia_y((float)vec3_data.v2.s_16 / 100.0f);
+    sd->set_lia_z((float)vec3_data.v3.s_16 / 100.0f);
 
-    Serial.printf("X:%lf \tY:%lf \tZ:%lf\n", dlia_x, dlia_y, dlia_z);
+    // Serial.printf("X:%f \tY:%f \tZ:%f\n", sd->get_lia_x(), sd->get_lia_y(), sd->get_lia_z());
 }
 
 

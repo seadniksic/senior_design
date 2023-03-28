@@ -109,3 +109,9 @@ void CameraGimbal_SetHome()
     cameraGimbal.pan_home_pos = cameraGimbal.pan_pos;
     cameraGimbal.tilt_home_pos = cameraGimbal.tilt_pos;
 }
+
+void CameraGimbal_StoreAngles(SLAM_Data * sd)
+{
+    sd->set_pan(cameraGimbal.pan_pos);
+    sd->set_tilt(cameraGimbal.tilt_pos);
+}

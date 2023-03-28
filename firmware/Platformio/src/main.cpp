@@ -28,7 +28,7 @@ void main_prog()
   CameraGimbal_Init();
   Joystick_Init();
   Locomotion_Init();
-  // bno055::init();
+  bno055::init();
   UartComms_Init();
   LightBar_Init();
 
@@ -41,16 +41,27 @@ void main_prog()
   elapsedMillis print_clock;
   elapsedMillis joy_update_clock;
   elapsedMillis joy_comms_clock;
-  elapsedMillis imu_data;
+  elapsedMillis slam_data;
   elapsedMillis servo_clock;
   elapsedMillis gui_data_clock;
 
   // pre while loop code
   // LightBar_State(true);
 
+  SLAM_Data * sd_local = UartComms_GetSLAMData();
+  Joystick_Input * joy_local = UartComms_GetJoystick();
+
+  uint16_t count = 0;
+
+
+
 
   while(1)
   {
+
+    // loop_time = 0;
+
+
     if(LED_clock > 750 )
     {
       LED_clock -= 750;
@@ -61,8 +72,7 @@ void main_prog()
     if(servo_clock > 300)
     {
       servo_clock -= 300;
-      Serial.printf("P: %u, T:%u, S:%u\n", CameraGimbal_Get_Pan(), CameraGimbal_Get_Tilt(), CameraGimbal_Get_Speed());
-
+      // Serial.printf("P: %u, T:%u, S:%u\n", CameraGimbal_Get_Pan(), CameraGimbal_Get_Tilt(), CameraGimbal_Get_Speed());
     }
 
     if(joy_comms_clock > 1)
@@ -90,16 +100,23 @@ void main_prog()
     if(joy_update_clock > 50)
     {
       joy_update_clock -= 50;
-      Joystick_Store_State(UartComms_GetJoystick());
+      Joystick_Store_State(joy_local);
       Joystick_Run();
     }
 
-    if (imu_data > 50)
+    if (slam_data > 10)
     {
-      imu_data -= 50;
-      // bno055::get_euler_ypr();
-      // bno055::get_lia_xyz();
+      slam_data -= 10;
+      // Serial.println("running slam loop");
 
+      //store all the data
+      bno055::get_euler_ypr(sd_local);
+      bno055::get_lia_xyz(sd_local);
+      CameraGimbal_StoreAngles(sd_local);
+
+      // end
+      UartComms_SendSLAMData();
+      UartComms_ClearWriteBuffer();
       // bno055::print_calibration();
     }
 
@@ -111,9 +128,11 @@ void main_prog()
       float temp = InternalTemperature.readTemperatureF();
       Serial.print("CPU TEMP: ");
       Serial.println(temp);
-      UartComms_PopulateGUIReply(temp);
+      // UartComms_PopulateGUIReply(temp);
+      UartComms_PopulateGUIReply((float)++count);
       UartComms_SendGUIData();
       UartComms_ClearWriteBuffer();
+
     }
 
   }  

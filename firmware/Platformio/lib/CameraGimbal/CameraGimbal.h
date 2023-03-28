@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include <Servo.h>
+#include <UartComms.h>
 
 #define ANGLE_MAX 180
 #define ANGLE_MIN 0
@@ -39,6 +40,7 @@ void CameraGimbal_Decrement_Speed();
 uint8_t CameraGimbal_Get_Speed();
 void CameraGimbal_Home();
 void CameraGimbal_SetHome();
+void CameraGimbal_StoreAngles(SLAM_Data * sd);
 
 
 

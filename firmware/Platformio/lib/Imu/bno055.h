@@ -2,8 +2,7 @@
 #define BNO055_H_
 
 #include <stdint.h>
-
-#warning "recall that the sensor can only output data so fast, don't need to read it every loop cause the data woun't be fresh."
+#include <UartComms.h>
 
 #define BNO_RUN_MODE BNO_OPR_MODE_NDOF
 
@@ -101,6 +100,23 @@ typedef enum opr_mode
 
 } opr_mode_e;
 
+#define DATA_MSB 1
+#define DATA_LSB 0
+
+typedef union
+{
+    int16_t s_16;
+    uint8_t us_8[2];
+} data_field_u;
+
+typedef struct
+{
+    data_field_u v1;
+    data_field_u v2;
+    data_field_u v3;
+} Vec3_Data_t;
+
+
 #warning "switch convention to what the other files have, prefix bno055 and capital for funcs"
 
 
@@ -111,8 +127,8 @@ namespace bno055
     bool check_IDs();
     void get_temp();
     bool get_sys_status();
-    void get_euler_ypr();
-    void get_lia_xyz();
+    void get_euler_ypr(SLAM_Data * sd);
+    void get_lia_xyz(SLAM_Data * sd);
     bool reset_sys();
     void set_mode(opr_mode_e mode);
     opr_mode_e get_mode();

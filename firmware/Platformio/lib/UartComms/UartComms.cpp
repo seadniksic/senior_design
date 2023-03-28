@@ -5,7 +5,7 @@ static UartReadBuffer read_buffer;
 static UartWriteBuffer write_buffer;
 static Joystick_Input js_in;
 static GUI_Data gui_data;
-static IMU_Data imu_data;
+static SLAM_Data slam_data;
 static elapsedMillis rcv_clock;
 static elapsedMillis commTimer;
 
@@ -13,12 +13,13 @@ static UartComms_t uartComms = {0};
 
 void UartComms_Init()
 {
-    HWSERIAL.begin(115200);
+    HWSERIAL.begin(500000);
 
     uartComms.read_buffer= &read_buffer;
     uartComms.write_buffer= &write_buffer;
     uartComms.js_in = &js_in;
     uartComms.gui_data = &gui_data;
+    uartComms.slam_data = &slam_data;
     uartComms.rcv_clock = rcv_clock;
     uartComms.time_since_last_serialize = commTimer;
     uartComms.commsNeedReset = false;
@@ -40,7 +41,7 @@ void UartComms_RcvControls()
     if(HWSERIAL.available() > 0)
     {
       data = HWSERIAL.read();
-      if(data == SYNC_BYTE)
+      if(data == SYNC_BYTE_READ)
       {
         // found start of message
         // read number of bytes to read
@@ -155,8 +156,8 @@ void UartComms_PopulateGUIReply(const float &cpu_temp)
 
 void UartComms_SendGUIData()
 {
-  // do i need a seperate read buffer? 
-  auto serialization_status = gui_data.serialize(*uartComms.write_buffer);
+  // do i need a seperate write buffer? no they can share as long as I clear.
+  auto serialization_status = uartComms.gui_data->serialize(*uartComms.write_buffer);
   if(::EmbeddedProto::Error::NO_ERRORS == serialization_status)
   {
     // Serial write docs
@@ -164,7 +165,26 @@ void UartComms_SendGUIData()
     // Serial.println("Writing data");
     HWSERIAL.write(SYNC_BYTE_WRITE);
 
+    // send gui msg
+    HWSERIAL.write(MSG_GUI_DATA);
+
     // first transmit the number of bytes in the message.
+    const uint8_t n_bytes = uartComms.write_buffer->get_size();
+    HWSERIAL.write(n_bytes);
+
+    // Now transmit the actual data.
+    HWSERIAL.write(uartComms.write_buffer->get_data(), uartComms.write_buffer->get_size());
+  }
+}
+
+void UartComms_SendSLAMData()
+{
+  auto serialization_status = uartComms.slam_data->serialize(*uartComms.write_buffer);
+  if(::EmbeddedProto::Error::NO_ERRORS == serialization_status)
+  {
+    HWSERIAL.write(SYNC_BYTE_WRITE);
+    HWSERIAL.write(MSG_SLAM_DATA);
+
     const uint8_t n_bytes = uartComms.write_buffer->get_size();
     HWSERIAL.write(n_bytes);
 
@@ -202,4 +222,9 @@ Joystick_Input* UartComms_GetJoystick()
 elapsedMillis* UartComms_GetTimeSinceLastRead()
 {
   return &uartComms.time_since_last_serialize;
+}
+
+SLAM_Data* UartComms_GetSLAMData()
+{
+  return uartComms.slam_data;
 }
