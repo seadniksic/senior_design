@@ -6,8 +6,10 @@
 
 #define SERIAL_BAUD 115200
 
+#define SERIAL_COMMS_RECEIVE_TIMEOUT 350
+
 #if USE_TEST_ROVER_PINS && USE_PRODUCTION_PINS
     #error "CANNOT USE BOTH PIN LAYOUTS"
-#endif
+#endif 
 
 #endif

@@ -1,59 +1,142 @@
 #include <Arduino.h>
-
-#include <locomotion.h>
+#include <Locomotion.h>
 #include <elapsedMillis.h>
-#include <joystick.h>
+#include <Joystick.h>
 #include <bno055.h>
+#include <UartComms.h>
+#include <InternalTemperature.h>
+#include <LightBar.h>
+#include <CameraGimbal.h>
+#include "pinout.h"
+#include "config.h"
+
+#warning "it would be cool if could do like y to enter imu calib mode and then use led patterns to give the status on that"
 
 void main_prog()
 {
 
-  // init the LED
-  pinMode(13, OUTPUT);
+  // init the onboard LED
+  pinMode(ONBOARD_LED_PIN, OUTPUT);
 
-  // Setup serial.
+  // Setup serial
   Serial.begin(SERIAL_BAUD);
 
-  // delay to allow for serial monitor setup and what not
-  delay(5000);
+  // delay to allow for serial monitor connection
+  delay(2000);
 
   // setup
-  // joystick_init();
-  // locomotion_init();
+  CameraGimbal_Init();
+  Joystick_Init();
+  Locomotion_Init();
   bno055::init();
+  UartComms_Init();
+  LightBar_Init();
 
-  // variables
+  InternalTemperature.begin(TEMPERATURE_NO_ADC_SETTING_CHANGES);
+
+  // Clocks
   elapsedMillis LED_clock;
   uint8_t LED_state = HIGH;
 
   elapsedMillis print_clock;
-  
+  elapsedMillis joy_update_clock;
+  elapsedMillis joy_comms_clock;
+  elapsedMillis slam_data;
+  elapsedMillis servo_clock;
+  elapsedMillis gui_data_clock;
+
+  // pre while loop code
+  // LightBar_State(true);
+
+  SLAM_Data * sd_local = UartComms_GetSLAMData();
+  Joystick_Input * joy_local = UartComms_GetJoystick();
+
+  uint16_t count = 0;
+
+
+
 
   while(1)
   {
+
+    // loop_time = 0;
+
+
     if(LED_clock > 750 )
     {
       LED_clock -= 750;
       LED_state = !LED_state;
-      // digitalWrite(JOY_LED_PIN, LED_state);
-      digitalWrite(13, LED_state);
+      digitalWrite(ONBOARD_LED_PIN, LED_state);
     }
 
-    // if (print_clock > 200)
-    // {
-    //   joystick_print();
-    //   print_clock -= 200;
-    // }
+    if(servo_clock > 300)
+    {
+      servo_clock -= 300;
+      // Serial.printf("P: %u, T:%u, S:%u\n", CameraGimbal_Get_Pan(), CameraGimbal_Get_Tilt(), CameraGimbal_Get_Speed());
+    }
 
-    delay(100);
-    bno055::getTemp();
+    if(joy_comms_clock > 1)
+    {
+      joy_comms_clock -= 1;
+      // Run serial comms to get in the data from the Jetson
+      UartComms_RcvControls();
 
-    // joystick_run();
+      if((*UartComms_GetTimeSinceLastRead()) > SERIAL_COMMS_RECEIVE_TIMEOUT)
+      {
+        Serial.println("Resetting comms, lost communication!");
+        UartComms_ClearJoystick();
+      }
 
-  }
+      UartComms_ClearReadBuffer();
+    }
+
+    if (print_clock > 100)
+    {
+      // Joystick_Print();
+      print_clock -= 100;
+    }
   
-}
+    // Run joystick at 20hz 
+    if(joy_update_clock > 50)
+    {
+      joy_update_clock -= 50;
+      Joystick_Store_State(joy_local);
+      Joystick_Run();
+    }
 
+    if (slam_data > 10)
+    {
+      slam_data -= 10;
+      // Serial.println("running slam loop");
+
+      //store all the data
+      bno055::get_euler_ypr(sd_local);
+      bno055::get_lia_xyz(sd_local);
+      CameraGimbal_StoreAngles(sd_local);
+
+      // end
+      UartComms_SendSLAMData();
+      UartComms_ClearWriteBuffer();
+      // bno055::print_calibration();
+    }
+
+    if(gui_data_clock > 1000)
+    {
+      gui_data_clock -= 1000;
+      // this stuff can just be in uartcomms? the temp reading?
+      // new joystick angles to be sent!
+      float temp = InternalTemperature.readTemperatureF();
+      Serial.print("CPU TEMP: ");
+      Serial.println(temp);
+      // UartComms_PopulateGUIReply(temp);
+      UartComms_PopulateGUIReply((float)++count);
+      UartComms_SendGUIData();
+      UartComms_ClearWriteBuffer();
+
+    }
+
+  }  
+}
 
 void setup() {
   // do not use this function, write setup code in main_prog
@@ -62,8 +145,8 @@ void setup() {
 
 void loop() {
   // implement all code in main
-  // main should never return
-  main_prog();
+  
+  main_prog(); // main_prog should never return
 }
 
 

@@ -48,10 +48,11 @@
 //#define Front_SLEEP_PIN 9 //Combining both FR and FL enable pins for new motor driver IC, this frees up pin 28
 
 /* i2c buses */
-#define I2C_SCL_GYRO_PIN 19
-#define I2C_SDA_GYRO_PIN 18
-#define I2C_SCL1_JETSON_PIN 24 //backup bus
+#define I2C_SCL_GYRO_PIN 16
+#define I2C_SDA_GYRO_PIN 17
+#define I2C_SCL1_JETSON_PIN 24 //backup bus 
 #define I2C_SDA1_JETSON_PIN 25
+#define I2C_BNO055_INT_PIN 39
 
 /* LEDs */
 //using the WS2812 library https://www.pjrc.com/non-blocking-ws2812-led-library/
@@ -92,6 +93,11 @@
 #define UART3_CTS_PIN 19
 #define UART3_TX_EN_PIN  //can be any, not needed this is for enabling RS 485 transceiver chips
 
+/* LIGHTBAR*/
+#define LIGHTBAR_PIN 10
+
+/* ONBOARD LED */
+#define ONBOARD_LED_PIN 13
 
 /* pins for battery monitoring / control */
 #pragma message("complete these pins battery control")
@@ -99,6 +105,11 @@
 
 /* pins for interacting with jetson? */
 #pragma message("complete these pins for jetson")
+
+
+
+
+
 
 #endif
 
@@ -138,7 +149,7 @@
     #define JOY_RX_PIN 40
     #define JOY_RY_PIN 41
     #define JOY_LED_PIN 33
-    #define JOY_HOMEBTN_PIN 39  
+    #define JOY_FNCBTN_PIN 39  
 
     /* Motor Driver pinout  */
     // BR = Back Right
@@ -160,6 +171,21 @@
     #define FR_IN3_PIN 34
     #define FR_IN4_PIN 35 
     #define FR_EN_PIN 29 
+
+    // UART
+    // using uart1
+    #define RX2_PIN 7
+    #define TX2_PIN 8
+
+    // LIGHTBAR
+    #define LIGHTBAR_PIN 10
+
+    /* ONBOARD LED */
+    #define ONBOARD_LED_PIN 13
+
+    /* SERVOS */
+    #define PAN_SERVO_PIN 4
+    #define TILT_SERVO_PIN 5
 
 #endif
 
