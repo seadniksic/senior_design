@@ -25,12 +25,12 @@ void main_prog()
   delay(2000);
 
   // setup
+  CameraGimbal_Init();
   Joystick_Init();
   Locomotion_Init();
   // bno055::init();
   UartComms_Init();
   LightBar_Init();
-  CameraGimbal_Init();
 
   InternalTemperature.begin(TEMPERATURE_NO_ADC_SETTING_CHANGES);
 
@@ -56,7 +56,6 @@ void main_prog()
 
   // pre while loop code
   // LightBar_State(true);
-  uint8_t count = 0;
 
 
   while(1)
@@ -68,17 +67,11 @@ void main_prog()
       digitalWrite(ONBOARD_LED_PIN, LED_state);
     }
 
-    if(servo_clock > 100)
+    if(servo_clock > 300)
     {
-      servo_clock -= 100;
-      count+=1;
-      
+      servo_clock -= 300;
+      Serial.printf("P: %u, T:%u, S:%u\n", CameraGimbal_Get_Pan(), CameraGimbal_Get_Tilt(), CameraGimbal_Get_Speed());
 
-      if(count > 180 || count > 180)
-      {
-        count = 0;
-      }
-      CameraGimbal_Set_PanTilt(count);
     }
 
     // test sending data back to the jetson

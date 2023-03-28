@@ -5,6 +5,7 @@
 #include <MessageInterface.h>
 #include "uart_messages.h"
 #include <elapsedMillis.h>
+#include <CameraGimbal.h>
 
 /* 
 /// JOYSTICK CONTROLS ///
@@ -136,6 +137,9 @@ typedef struct
     unsigned drive_mode : 1;
     unsigned turn_off : 1;
     unsigned center_cams : 1;
+    unsigned inc_servo_speed : 1;
+    unsigned dec_servo_speed :1 ;
+    unsigned reset_home_pos : 1;
 } control_t;
 
 typedef union
@@ -159,9 +163,8 @@ typedef struct
 typedef struct
 {
     control_u control;
-    uint16_t pan_pos;
-    uint16_t tilt_pos;
     uint8_t headlight_brightness;
+
 } control_state_t;
 
 

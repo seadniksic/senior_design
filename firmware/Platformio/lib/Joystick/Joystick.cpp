@@ -1,6 +1,7 @@
 #include "Joystick.h"
 #include <string.h>
-#include "Locomotion.h"
+#include <Locomotion.h>
+#include <CameraGimbal.h>
 #include <LightBar.h>
 
 static joy_state_t joy_state = {0};
@@ -82,6 +83,29 @@ void Joystick_Store_State(Joystick_Input &js_in)
     {
         control_state.control.bits.center_cams = 1;
     }
+
+    // capture on rising edge
+    if(joy_state.prev_buttons.bits.BTN_START == 0 && \
+        joy_state.buttons.bits.BTN_START)
+    {
+        control_state.control.bits.inc_servo_speed = 1;
+    }
+
+    // capture on rising edge
+    if(joy_state.prev_buttons.bits.BTN_SELECT == 0 && \
+        joy_state.buttons.bits.BTN_SELECT)
+    {
+        control_state.control.bits.dec_servo_speed = 1;
+    }
+
+    // capture on rising edge
+    if(joy_state.prev_buttons.bits.BTN_Y == 0 && \
+        joy_state.buttons.bits.BTN_Y)
+    {
+        control_state.control.bits.reset_home_pos = 1;
+    }
+
+
 }
 
 void Joystick_Reset_State(Joystick_Input &js_in)
@@ -101,15 +125,35 @@ void Joystick_Reset_State(Joystick_Input &js_in)
 
 void Joystick_Run()
 {
-
     // Check control and handle and pending actions first
-    if(CENTER_CAMS)
+    if(!IN_POWER_DOWN_MODE)
     {
-        control_state.control.bits.center_cams = 0;
-        Serial.println("Centering cameras...");
-        //TODO: Finish
+        if(CENTER_CAMS)
+        {
+            control_state.control.bits.center_cams = 0;
+            Serial.println("Centering cameras...");
+            CameraGimbal_Home();
+        }
+        if(control_state.control.bits.inc_servo_speed)
+        {
+            control_state.control.bits.inc_servo_speed = 0;
+            CameraGimbal_Increment_Speed();
+        }
+        if(control_state.control.bits.dec_servo_speed)
+        {
+            control_state.control.bits.dec_servo_speed = 0;
+            CameraGimbal_Decrement_Speed();
+        }
+        if(control_state.control.bits.reset_home_pos)
+        {
+            Serial.println("setting new home pos");
+            CameraGimbal_SetHome();
+            control_state.control.bits.reset_home_pos = 0;
+        }
     }
+    
 
+    
     // Check for joystick input
     if(!Joystick_Input_Present() || IN_POWER_DOWN_MODE)
     {
@@ -228,6 +272,26 @@ void Joystick_Run()
             Locomotion_Drive_Diag_BL(Joystick_Map(min(joy_state.ljoy_x, joy_state.rjoy_x)));
         }
     }
+
+    // Handle Camera Gimbal
+    if(BTN_TR_PRESSED)
+    {
+        CameraGimbal_Decrement_Pan();
+    }
+    else if(BTN_TL_PRESSED)
+    {
+        CameraGimbal_Increment_Pan();
+    }
+
+    if(TRIGGER_RIGHT)
+    {
+        CameraGimbal_Increment_Tilt();
+    }
+    else if(TRIGGER_LEFT)
+    {
+        CameraGimbal_Decrement_Tilt();
+    }
+
 
 }
 
