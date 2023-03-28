@@ -8,7 +8,7 @@ Code inspired by: https://github.com/jetsonhacks/USB-Camera/blob/main/usb-camera
 '''
 
 import sys
-import cv2
+import cv2  
 import numpy as np
 import time
 
@@ -20,22 +20,23 @@ window_title = "Stream"
 
 
 input_size = 256
-capture_width = 320
-capture_height = 240
+capture_width = 1920
+capture_height = 1080
 
 
 
 def detect_pose():
 
-    camera_id = "/dev/video0"
+    #camera_id = "/dev/video0"
 
     # webcams -> V4L2, stereo -> gstreamer
-    video_capture = cv2.VideoCapture(camera_id, cv2.CAP_V4L2)
+    video_capture = cv2.VideoCapture(0)
     video_capture.set(cv2.CAP_PROP_FRAME_WIDTH, capture_width)
     video_capture.set(cv2.CAP_PROP_FRAME_HEIGHT, capture_height)
 
     rsum = 0
     count = 0
+    fps = 0
     if video_capture.isOpened():
       try:
           window_handle = cv2.namedWindow(window_title, cv2.WINDOW_AUTOSIZE )
@@ -43,9 +44,9 @@ def detect_pose():
           now = time.time()
           while count < 150:
               count += 1
-              fps = 1 / (time.time() - now)
               if count != 1:
                   rsum += fps
+                  fps = 1 / (time.time() - now)
 
               now = time.time()
                   
@@ -61,7 +62,7 @@ def detect_pose():
                       
                   else:
                       
-                      print(fps)
+                      #print(fps)
                       #cv2.putText(frame, f"{fps:.4}", (int(frame.shape[1] * 5 / 6), int(frame.shape[0] * 5 / 6)), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)
                       cv2.imshow(window_title, frame)
                     
