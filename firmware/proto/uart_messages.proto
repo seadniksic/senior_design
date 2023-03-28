@@ -34,19 +34,23 @@ message Joystick_Input
     optional int32 TL = 7;
 }
 
-message IMU_Data
+message SLAM_Data
 {
     // all fields are int16_t
 
     // linear acceleration 
-    optional int32 lia_x = 1;
-    optional int32 lia_y = 2;
-    optional int32 lia_z = 3;
+    optional float lia_x = 1;
+    optional float lia_y = 2;
+    optional float lia_z = 3;
 
     // euler angles yaw, pitch, roll
-    optional int32 eul_y = 4;
-    optional int32 eul_p = 5;
-    optional int32 eul_r = 6;
+    optional float eul_y = 4;
+    optional float eul_p = 5;
+    optional float eul_r = 6;
+
+    // angles
+    optional int32 pan = 7;
+    optional int32 tilt = 8;
 }
 
 message GUI_Data
