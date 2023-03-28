@@ -8,6 +8,8 @@ import sys
 from evdev import categorize, ecodes
 from timeit import default_timer as timer
 import pickle, socket
+import matplotlib.pyplot as plt
+import numpy as np
 
 ############################
 ####      GLOBALS     ######
@@ -86,6 +88,44 @@ class Joystick:
                 if event.type == ecodes.EV_REL:
                     print(categorize(event))
 
+############################
+#####  SERIAL WRAPPER  #####
+############################
+
+class Serial_Wrapper:
+    def __init__(self):
+        # create sp= serial port object
+        # arduino defualt is 8 data bits, no parity, and one stop bit
+        self.sp = serial.Serial(
+            port="/dev/ttyTHS0",
+            baudrate=500000,
+            bytesize=serial.EIGHTBITS,
+            parity=serial.PARITY_NONE,
+            stopbits=serial.STOPBITS_ONE,
+        )
+
+    def read(self, numbytes=1) -> bytearray:
+        b = bytearray
+        try:
+            return self.sp.read(numbytes)
+        except e as Exception:
+            print("Exception occured in read")
+            print(e)
+        return b
+            
+
+
+    def write(self, b : bytearray):
+        try:
+            self.sp.write(b)
+        except e as Exception:
+            print("Exception occured in write")
+            print(e)
+
+    def in_waiting(self) -> int:
+        return self.sp.in_waiting
+    
+
 
 ############################
 #### GLOBAL FUNCTIONS ######
@@ -117,6 +157,7 @@ def handle_args():
             g.test_input = False
             print("In normal operation mode with joystick connected to the Jetson")
 
+    print("WAS ttyTHS0 configured with chmod to 0666??")
     time.sleep(1.5)
 
 ############################
@@ -140,13 +181,7 @@ if __name__ == "__main__":
 
     # create sp= serial port object
     # arduino defualt is 8 data bits, no parity, and one stop bit
-    sp = serial.Serial(
-        port="/dev/ttyTHS0",
-        baudrate=115200,
-        bytesize=serial.EIGHTBITS,
-        parity=serial.PARITY_NONE,
-        stopbits=serial.STOPBITS_ONE,
-    )
+    sp = Serial_Wrapper()
 
     time.sleep(1)
 
@@ -243,8 +278,31 @@ if __name__ == "__main__":
     start_time = timer()
     end_time = None
 
+    # plotting
+    # sample = np.linspace(0, 200, 200, dtype = int)
+    # lin_x = np.zeros(sample.size, dtype = float)
+    # lin_y = np.zeros(sample.size, dtype = float)
+    # lin_z = np.zeros(sample.size, dtype = float)
+    # eul_y = np.zeros(sample.size, dtype = float)
+    # eul_p = np.zeros(sample.size, dtype = float)
+    # eul_r = np.zeros(sample.size, dtype = float)
+
+    # plt.ion()
+    # fig = plt.figure()
+    # ax = fig.add_subplot(111)
+    # line1, = ax.plot(sample, lin_x, 'b-')
+    # line2, = ax.plot(sample, lin_y, 'b-')
+
+    start_slam_timer = timer()
+    end_slam_timer = timer()
+
+    start_loop_timer = timer()
+    end_loop_timer = timer()
+
+
     # If its not a remote joystick, do the parsing here
     while True: 
+        start_loop_timer = timer()
         event = joystick.dev.read_one()
         if event != None:
             if event.type == ecodes.EV_KEY:
@@ -343,24 +401,66 @@ if __name__ == "__main__":
             # print(b)
             sp.write(b)
 
-            # check of reply
-            # look for sync byte
-            # sp.in_waiting returns the number of bytes in recieve buffer if you want to use that
-            if sp.in_waiting > 0:
-                first_byte = sp.read(1)[0] #index 0 of byte array to get the value
-                if first_byte == 70: # hex 0x46
-                    num_bytes = sp.read(1)[0]
-                    # print("here2")
-                    if num_bytes > 0:
-                        # print("here3")
-                        data = sp.read(num_bytes)
-                        # print(data)
-                        # check if received all of the data
-                        if len(data) == num_bytes:
-                            # print("here4")
-                            reply = uart_messages_pb2.GUI_Data()
-                            reply.ParseFromString(data)
-                            # print(reply.cpu_temp)
+
+        # HANDLE RECIEVING DATA
+        # Read as fast as possible
+
+
+        # check if data available
+        if sp.in_waiting() < 1:
+            continue
+
+        # check for sync byte
+        first_byte = sp.read(1)[0]
+        if first_byte != 70: #hex 0x46
+            continue
+
+        # check for msg type
+        second_byte = sp.read(1)[0]
+        if second_byte == 102: #hex 0x66
+            # check if msg length is nonzero
+            num_bytes = sp.read(1)[0]
+            if num_bytes < 1:
+                continue
+            
+            # read data
+            data = sp.read(num_bytes)
+
+            # check if received all of the data
+            if len(data) == num_bytes:
+                reply = uart_messages_pb2.GUI_Data()
+                reply.ParseFromString(data)
+                print("cpu temp", reply.cpu_temp)
+
+
+        elif second_byte == 68: # hex 0x44
+            # check length
+            num_bytes = sp.read(1)[0]
+            if num_bytes < 1:
+                continue
+            
+            # read data
+            data = sp.read(num_bytes)
+            
+
+            # check if received all of the data
+            if len(data) == num_bytes:
+                end_slam_timer = timer()
+                reply = uart_messages_pb2.SLAM_Data()
+                reply.ParseFromString(data)
+                print(end_slam_timer-start_slam_timer,num_bytes ,reply.lia_x, reply.lia_y, reply.lia_z, reply.eul_y, reply.eul_p,reply.eul_r, reply.pan, reply.tilt)
+                # print(end_slam_timer-start_slam_timer)
+                # np.append(lin_x,reply.lia_x)
+                # line1, = ax.plot(sample,lin_x, 'r') 
+                # line1.set_ydata(lin_x)
+                # fig.canvas.draw()
+                # fig.canvas.flush_events()
+                start_slam_timer = timer()
+
+        end_loop_timer = timer()
+        # print("LOOP_TIME: ", end_loop_timer-start_loop_timer)
+            
+            
 
                 
 
