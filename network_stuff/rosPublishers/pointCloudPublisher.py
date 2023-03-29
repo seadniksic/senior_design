@@ -1,9 +1,10 @@
 import rclpy
 from rclpy.node import Node
-from sensor_msgs.msg import PointCloud2, PointField
+from sensor_msgs.msg import PointCloud2, PointField, Image
 import numpy as np
 import cv2, socket
 import struct
+from cv_bridge import CvBridge
 
 def merge_rgb_fields(cloud_arr):
     '''Takes an array with named np.uint8 fields 'r', 'g', and 'b', and returns an array in
@@ -44,6 +45,7 @@ class MinimalPublisher(Node):
     def __init__(self):
         super().__init__('minimal_publisher')
         self.publisher_ = self.create_publisher(PointCloud2, 'pointCloudStream', 10)
+        self.imagePub = self.create_publisher(Image, 'pointCloudImageStream', 10)
         timer_period = 0.016666  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
 
@@ -78,6 +80,11 @@ class MinimalPublisher(Node):
         buffer = np.frombuffer(msg, np.uint8)
         xyzArray = cv2.imdecode(buffer[:xyzSize], cv2.IMREAD_COLOR)
         rgbArray = cv2.imdecode(buffer[xyzSize:], cv2.IMREAD_COLOR)
+
+        bridge = CvBridge()
+        rosMsg = bridge.cv2_to_imgmsg(rgbArray, encoding="passthrough")
+        self.imagePub.publish(rosMsg)
+
         xyzArray = xyzArray.astype(np.float32)
         rgbSingleField = merge_rgb_fields(rgbArray)
         # pointCloudArray = np.append(xyzArray, rgbSingleField)
