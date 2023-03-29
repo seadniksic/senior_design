@@ -1,3 +1,4 @@
+firmware/desktop/__pycache__
 build/
 software/cv/models/
 *.mp4

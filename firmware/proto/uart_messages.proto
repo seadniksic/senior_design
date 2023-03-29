@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+message Joystick_Input
+{
+    // fields that are set to its defualt value (0) are not
+    // serialized over the wire!!
+    // solution?
+    // https://embeddedproto.com/documentation/using-a-message/optional-fields/
+    enum Buttons
+    {
+        NONE = 0; // first entry required to be zero
+        BTN_A = 1;
+        BTN_B = 2;
+        BTN_X = 4;
+        BTN_Y = 8;
+        BTN_START = 16;
+        BTN_SELECT = 32;
+        DPAD_UP = 64;
+        DPAD_DOWN = 128;
+        DPAD_LEFT = 256;
+        DPAD_RIGHT = 512;
+        BTN_THUMBR = 1024;
+        BTN_THUMBL = 2048;
+        BTN_TR = 4096;
+        BTN_TL = 8192;
+    }
+
+    optional Buttons button = 1; // bit per button
+    optional int32 LJOY_X = 2; // int16_t
+    optional int32 LJOY_Y = 3;
+    optional int32 RJOY_X = 4;
+    optional int32 RJOY_Y = 5;
+    optional int32 TR = 6; //uint8_t
+    optional int32 TL = 7;
+}
+
+message SLAM_Data
+{
+    // all fields are int16_t
+
+    // linear acceleration 
+    optional float lia_x = 1;
+    optional float lia_y = 2;
+    optional float lia_z = 3;
+
+    // euler angles yaw, pitch, roll
+    optional float eul_y = 4;
+    optional float eul_p = 5;
+    optional float eul_r = 6;
+
+    // angles
+    optional int32 pan = 7;
+    optional int32 tilt = 8;
+}
+
+message GUI_Data
+{
+    int32 cpu_temp = 1;   
+}
