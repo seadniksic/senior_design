@@ -108,22 +108,25 @@ class Serial_Wrapper:
         b = bytearray
         try:
             return self.sp.read(numbytes)
-        except e as Exception:
+        except Exception as e:
             print("Exception occured in read")
             print(e)
         return b
-            
-
 
     def write(self, b : bytearray):
         try:
             self.sp.write(b)
-        except e as Exception:
+        except Exception as e:
             print("Exception occured in write")
             print(e)
 
     def in_waiting(self) -> int:
-        return self.sp.in_waiting
+        try:
+            return self.sp.in_waiting
+        except Exception as e:
+            print("Exception occured in in_waiting")
+            print(e)
+            return 0
     
 
 
