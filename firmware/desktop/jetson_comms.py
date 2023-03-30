@@ -432,8 +432,13 @@ if __name__ == "__main__":
             # check if received all of the data
             if len(data) == num_bytes:
                 reply = uart_messages_pb2.GUI_Data()
-                reply.ParseFromString(data)
-                print("cpu temp", reply.cpu_temp)
+                try: 
+                    reply.ParseFromString(data)
+                    print("cpu temp", reply.cpu_temp)
+                except Exception as e:
+                    print("corrupt message, failed to serialize GUI_DATA");
+                    print(e)
+                    
 
 
         elif second_byte == 68: # hex 0x44
@@ -450,8 +455,14 @@ if __name__ == "__main__":
             if len(data) == num_bytes:
                 end_slam_timer = timer()
                 reply = uart_messages_pb2.SLAM_Data()
-                reply.ParseFromString(data)
-                print(end_slam_timer-start_slam_timer,num_bytes ,reply.lia_x, reply.lia_y, reply.lia_z, reply.eul_y, reply.eul_p,reply.eul_r, reply.pan, reply.tilt)
+                try: 
+                    reply.ParseFromString(data)
+                    print(end_slam_timer-start_slam_timer,num_bytes ,reply.lia_x, reply.lia_y, reply.lia_z, reply.eul_y, reply.eul_p,reply.eul_r, reply.pan, reply.tilt)
+                except Exception as e:
+                    print("corrupt message, failed to serialize SLAM_DATA")
+                    print(e)
+
+                
                 # print(end_slam_timer-start_slam_timer)
                 # np.append(lin_x,reply.lia_x)
                 # line1, = ax.plot(sample,lin_x, 'r') 
