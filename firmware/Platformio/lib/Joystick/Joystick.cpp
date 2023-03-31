@@ -64,61 +64,65 @@ void Joystick_Store_State(Joystick_Input *js_in)
     joy_state.tr = js_in->get_TR();
 
     // Perform processing for control bits
-    // Capture on falling edge
-    if(joy_state.prev_buttons.bits.BTN_THUMBL == 1 && \
-        joy_state.buttons.bits.BTN_THUMBL == 0)
-    {
-        control_state.control.bits.drive_mode = !control_state.control.bits.drive_mode;
-    }
-
-    // Capture on falling edge
-    if(joy_state.prev_buttons.bits.BTN_X == 1 && \
-        joy_state.buttons.bits.BTN_X == 0)
+    // Capture on rising edge
+    if(joy_state.prev_buttons.bits.BTN_X == 00&& \
+        joy_state.buttons.bits.BTN_X == 1)
     {
         control_state.control.bits.turn_off = !control_state.control.bits.turn_off;
     }
 
-    // Capture on rising edge
-    if(joy_state.prev_buttons.bits.BTN_B == 0 && \
-        joy_state.buttons.bits.BTN_B == 1)
+    if(!IN_POWER_DOWN_MODE)
     {
-        control_state.control.bits.center_cams = 1;
+        // Capture on rising edge
+        if(joy_state.prev_buttons.bits.BTN_THUMBL == 0 && \
+            joy_state.buttons.bits.BTN_THUMBL == 1)
+        {
+            control_state.control.bits.drive_mode = !control_state.control.bits.drive_mode;
+        }
+
+        // Capture on rising edge
+        if(joy_state.prev_buttons.bits.BTN_B == 0 && \
+            joy_state.buttons.bits.BTN_B == 1)
+        {
+            control_state.control.bits.center_cams = 1;
+        }
+
+        // capture on rising edge
+        if(joy_state.prev_buttons.bits.BTN_START == 0 && \
+            joy_state.buttons.bits.BTN_START == 1)
+        {
+            control_state.control.bits.inc_servo_speed = 1;
+        }
+
+        // capture on rising edge
+        if(joy_state.prev_buttons.bits.BTN_SELECT == 0 && \
+            joy_state.buttons.bits.BTN_SELECT == 1)
+        {
+            control_state.control.bits.dec_servo_speed = 1;
+        }
+
+        // capture on rising edge
+        if(joy_state.prev_buttons.bits.BTN_Y == 0 && \
+            joy_state.buttons.bits.BTN_Y == 1)
+        {
+            control_state.control.bits.reset_home_pos = 1;
+        }
+
+        // capture on rising edge
+        if(joy_state.prev_buttons.bits.BTN_A == 0 && \
+            joy_state.buttons.bits.BTN_A == 1)
+        {
+            control_state.control.bits.print_imu_calib = 1;
+        }
+
+        // capture on rising edge
+        if(joy_state.prev_buttons.bits.BTN_THUMBR == 0 && \
+            joy_state.buttons.bits.BTN_THUMBR == 1)
+        {
+            control_state.control.bits.write_calib_profile = 1;
+        }
     }
 
-    // capture on rising edge
-    if(joy_state.prev_buttons.bits.BTN_START == 0 && \
-        joy_state.buttons.bits.BTN_START)
-    {
-        control_state.control.bits.inc_servo_speed = 1;
-    }
-
-    // capture on rising edge
-    if(joy_state.prev_buttons.bits.BTN_SELECT == 0 && \
-        joy_state.buttons.bits.BTN_SELECT)
-    {
-        control_state.control.bits.dec_servo_speed = 1;
-    }
-
-    // capture on rising edge
-    if(joy_state.prev_buttons.bits.BTN_Y == 0 && \
-        joy_state.buttons.bits.BTN_Y)
-    {
-        control_state.control.bits.reset_home_pos = 1;
-    }
-
-    // capture on rising edge
-    if(joy_state.prev_buttons.bits.BTN_A == 0 && \
-        joy_state.buttons.bits.BTN_A)
-    {
-        control_state.control.bits.print_imu_calib = 1;
-    }
-
-    // capture on rising edge
-    if(joy_state.prev_buttons.bits.BTN_THUMBR == 0 && \
-        joy_state.buttons.bits.BTN_THUMBR)
-    {
-        control_state.control.bits.write_calib_profile = 1;
-    }
 
 
 }
