@@ -3,6 +3,7 @@
 #include <Locomotion.h>
 #include <CameraGimbal.h>
 #include <LightBar.h>
+#include <bno055.h>
 
 static joy_state_t joy_state = {0};
 static control_state_t control_state = {0}; 
@@ -64,8 +65,8 @@ void Joystick_Store_State(Joystick_Input *js_in)
 
     // Perform processing for control bits
     // Capture on falling edge
-    if(joy_state.prev_buttons.bits.BTN_A == 1 && \
-        joy_state.buttons.bits.BTN_A == 0)
+    if(joy_state.prev_buttons.bits.BTN_THUMBL == 1 && \
+        joy_state.buttons.bits.BTN_THUMBL == 0)
     {
         control_state.control.bits.drive_mode = !control_state.control.bits.drive_mode;
     }
@@ -105,6 +106,20 @@ void Joystick_Store_State(Joystick_Input *js_in)
         control_state.control.bits.reset_home_pos = 1;
     }
 
+    // capture on rising edge
+    if(joy_state.prev_buttons.bits.BTN_A == 0 && \
+        joy_state.buttons.bits.BTN_A)
+    {
+        control_state.control.bits.print_imu_calib = 1;
+    }
+
+    // capture on rising edge
+    if(joy_state.prev_buttons.bits.BTN_THUMBR == 0 && \
+        joy_state.buttons.bits.BTN_THUMBR)
+    {
+        control_state.control.bits.write_calib_profile = 1;
+    }
+
 
 }
 
@@ -128,6 +143,7 @@ void Joystick_Run()
     // Check control and handle and pending actions first
     if(!IN_POWER_DOWN_MODE)
     {
+        // Camera gimbal
         if(CENTER_CAMS)
         {
             control_state.control.bits.center_cams = 0;
@@ -146,10 +162,38 @@ void Joystick_Run()
         }
         if(control_state.control.bits.reset_home_pos)
         {
+            control_state.control.bits.reset_home_pos = 0;
             Serial.println("setting new home pos");
             CameraGimbal_SetHome();
-            control_state.control.bits.reset_home_pos = 0;
         }
+
+        // imu stuff
+        if(control_state.control.bits.print_imu_calib)
+        {
+            control_state.control.bits.print_imu_calib = 0;
+            bno055::print_calibration();
+            if(bno055::get_calib_profile())
+            {
+                bno055::print_calib_profile();
+            }
+        }
+
+        if(control_state.control.bits.write_calib_profile)
+        {
+            control_state.control.bits.write_calib_profile = 0;
+            if(bno055::write_calib_profile(ACTUAL_CALIB_DATA))
+            {
+                Serial.println("successfully wrote calib profile");
+            }
+            else
+            {
+                Serial.println("FAILED TO WRITE CALIB PROFILE");
+            }
+
+        }
+
+        
+
     }
     
 

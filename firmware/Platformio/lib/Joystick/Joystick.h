@@ -140,6 +140,9 @@ typedef struct
     unsigned inc_servo_speed : 1;
     unsigned dec_servo_speed :1 ;
     unsigned reset_home_pos : 1;
+    unsigned print_imu_calib : 1;
+    unsigned write_calib_profile : 1;
+
 } control_t;
 
 typedef union

@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <UartComms.h>
 
-#define BNO_RUN_MODE BNO_OPR_MODE_NDOF
+#define BNO_RUN_MODE BNO_OPR_MODE_NDOF_FMC_OFF
 
 #define BNO_I2C_ADDRESS 0x28
 #define NUM_ID_REG (size_t)(4)
@@ -60,10 +60,10 @@
 #define BNO_GYR_CALIBRATED 0x30
 #define BNO_ACC_CALIBRATED 0x0C
 #define BNO_MAG_CALIBRATED 0x03 
+#define BNO_GET_SYS_CAL(cal_reg) (((cal_reg) & BNO_SYS_CALIBRATED) >> 6)
 #define BNO_GET_GYR_CAL(cal_reg) (((cal_reg) & BNO_GYR_CALIBRATED) >> 4)
 #define BNO_GET_ACC_CAL(cal_reg) (((cal_reg) & BNO_ACC_CALIBRATED) >> 2)
 #define BNO_GET_MAG_CAL(cal_reg) ((cal_reg) & BNO_MAG_CALIBRATED)
-
 
 #define BNO_EUL_PITCH_MSB 0x1F
 #define BNO_EUL_PITCH_LSB 0x1E
@@ -79,6 +79,36 @@
 #define BNO_LIA_X_MSB 0x29
 #define BNO_LIA_X_LSB 0x28
 
+// CALIB 
+#define ACC_OFFSET_X_LSB 0x55 // 6 bytes after
+#define ACC_OFFSET_X_MSB 0x56
+#define ACC_OFFSET_Y_LSB 0x57
+#define ACC_OFFSET_Y_MSB 0x58
+#define ACC_OFFSET_Z_LSB 0x59
+#define ACC_OFFSET_Z_MSB 0x5A
+
+#define MAG_OFFSET_X_LSB 0x5B // 6 bytes after
+#define MAG_OFFSET_X_MSB 0x5C
+#define MAG_OFFSET_Y_LSB 0x5D
+#define MAG_OFFSET_Y_MSB 0x5E
+#define MAG_OFFSET_Z_LSB 0x5F
+#define MAG_OFFSET_Z_MSB 0x60
+
+#define GYR_OFFSET_X_LSB 0x61 // 6 bytes after
+#define GYR_OFFSET_X_MSB 0x62
+#define GYR_OFFSET_Y_LSB 0x63
+#define GYR_OFFSET_Y_MSB 0x64
+#define GYR_OFFSET_Z_LSB 0x65
+#define GYR_OFFSET_Z_MSB 0x66
+
+#define ACC_RADIUS_LSB 0x67 // 2 bytes total
+#define ACC_RADIUS_MSB 0x68
+
+#define MAG_RADIUS_LSB 0x69 // 2 bytes total
+#define MAG_RADIUS_MSB 0x6A
+
+
+// Util
 #define REG_DATA_TO_VAL_S16(msbyte, lsbyte) ((((int16_t)(msbyte)) << 8) | ((int16_t)(lsbyte)))
 
 
@@ -116,13 +146,30 @@ typedef struct
     data_field_u v3;
 } Vec3_Data_t;
 
+typedef struct
+{
+    data_field_u x;
+    data_field_u y;
+    data_field_u z;
+} Offset_t;
+
+typedef struct
+{
+    Offset_t acc;
+    Offset_t mag;
+    Offset_t gyr;
+    int16_t acc_rad;
+    int16_t mag_rad;
+} Calib_Data_t;
+
 
 #warning "switch convention to what the other files have, prefix bno055 and capital for funcs"
+#warning "it would be cool if could do like y to enter imu calib mode and then use led patterns to give the status on that"
 
 
 namespace bno055
 {
-    bool init();
+    bool init(bool run_calib);
     bool establish_comms();
     bool check_IDs();
     void get_temp();
@@ -131,15 +178,24 @@ namespace bno055
     void get_lia_xyz(SLAM_Data * sd);
     bool reset_sys();
     void set_mode(opr_mode_e mode);
+    bool enter_config_mode();
+    bool enter_run_mode();
     opr_mode_e get_mode();
     bool self_test();
     void set_units(uint8_t units);
     bool set_clock_source(uint8_t clk_source);
     void calibrate(uint8_t mode);
     void print_calibration();
+    bool get_calib_profile();
+    void print_calib_profile();
+    bool write_calib_profile(const Calib_Data_t & cal_data);
+    bool write_sensor_offsets(const Offset_t & data, uint8_t start_reg);
+    bool write_sensor_radius(const int16_t & data, uint8_t start_reg);
+    void initialize_calib_profile(Calib_Data_t & cal_data);
 }
 
-
+extern Calib_Data_t calib_data;
+extern Calib_Data_t ACTUAL_CALIB_DATA;
 
 
 

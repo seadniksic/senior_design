@@ -10,7 +10,6 @@
 #include "pinout.h"
 #include "config.h"
 
-#warning "it would be cool if could do like y to enter imu calib mode and then use led patterns to give the status on that"
 
 void main_prog()
 {
@@ -28,7 +27,7 @@ void main_prog()
   CameraGimbal_Init();
   Joystick_Init();
   Locomotion_Init();
-  bno055::init();
+  bno055::init(false);
   UartComms_Init();
   LightBar_Init();
 
@@ -53,6 +52,7 @@ void main_prog()
 
   uint16_t count = 0;
 
+  bool reset_comms_status = false;
 
 
 
@@ -83,9 +83,14 @@ void main_prog()
 
       if((*UartComms_GetTimeSinceLastRead()) > SERIAL_COMMS_RECEIVE_TIMEOUT)
       {
-        Serial.println("Resetting comms, lost communication!");
+        reset_comms_status = true;
         UartComms_ClearJoystick();
       }
+      else
+      {
+        reset_comms_status = false;
+      }
+
 
       UartComms_ClearReadBuffer();
     }
@@ -93,6 +98,10 @@ void main_prog()
     if (print_clock > 100)
     {
       // Joystick_Print();
+      if(reset_comms_status)
+      {
+        Serial.println("Resetting comms, lost communication!");
+      }
       print_clock -= 100;
     }
   
@@ -120,16 +129,17 @@ void main_prog()
       // bno055::print_calibration();
     }
 
-    if(gui_data_clock > 1000)
+    if(gui_data_clock > 200)
     {
-      gui_data_clock -= 1000;
+      gui_data_clock -= 200;
       // this stuff can just be in uartcomms? the temp reading?
       // new joystick angles to be sent!
       float temp = InternalTemperature.readTemperatureF();
-      Serial.print("CPU TEMP: ");
-      Serial.println(temp);
+      // Serial.print("CPU TEMP: ");
+      // Serial.println(temp);
       // UartComms_PopulateGUIReply(temp);
-      UartComms_PopulateGUIReply((float)++count);
+      // UartComms_PopulateGUIReply((float)++count);
+      UartComms_PopulateGUIReply(temp);
       UartComms_SendGUIData();
       UartComms_ClearWriteBuffer();
 

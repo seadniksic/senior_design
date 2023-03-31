@@ -8,10 +8,31 @@ static I2CMaster & master1 = Master1; //pins 16 and 17 on teensy 4.1
 static I2CDevice bno = I2CDevice(master1, BNO_I2C_ADDRESS, _LITTLE_ENDIAN); //confirmed its big endian
 static uint8_t Data_Buffer[6] ={0};
 static Vec3_Data_t vec3_data = {0};
+Calib_Data_t calib_data = {0};
+Calib_Data_t ACTUAL_CALIB_DATA = {0};
 
-bool bno055::init()
+void bno055::initialize_calib_profile(Calib_Data_t & cal_data)
+{
+    // const int16_t temp = 0x0000;
+    cal_data.acc.x.s_16 = 400;
+    cal_data.acc.y.s_16 = -400;
+    cal_data.acc.z.s_16 = 403;
+    cal_data.mag.x.s_16 = -403;
+    cal_data.mag.y.s_16 = 412;
+    cal_data.mag.z.s_16 = -412;
+    cal_data.gyr.x.s_16 = 212;
+    cal_data.gyr.y.s_16 = -212;
+    cal_data.gyr.z.s_16 = 300;
+    cal_data.acc_rad = -480; // working!!
+    cal_data.mag_rad = 480; //for some reason this wont go to zero but it works when u write other values
+}
+
+bool bno055::init(bool run_calib)
 {
     master1.begin(400000); //start the i2c master at 400khz
+
+    // Initialize calibration profile (for testing)
+    initialize_calib_profile(ACTUAL_CALIB_DATA);
     
     // return false;
     // return false;
@@ -28,11 +49,10 @@ bool bno055::init()
     }
 
     // change to config mode (although it should already be in config mode because of the reset)
-    set_mode(OPR_MODE_CONFIG);
-    while(get_mode() != OPR_MODE_CONFIG)
+    if(!enter_config_mode())
     {
-        Serial.println("[BNO055]: Failed to set mode, retrying..");
-        set_mode(OPR_MODE_CONFIG);
+        Serial.println("Failed to enter the config mode");
+        return false;
     }
 
     // set to normal power mode
@@ -61,7 +81,7 @@ bool bno055::init()
         return false;
     }
 
-    #warning "why did i remove this?"
+    // #warning "why did i remove this?"
     // looks like i did while trying to fix it, maybe i thought ths was one of the problems. we definitely want to set the clock source to be an output tho
     // Set clock to external
     if(!set_clock_source(BNO_CLK_SRC_EXTERNAL))
@@ -70,18 +90,37 @@ bool bno055::init()
     }
 
     // set out of config mode
-    opr_mode_e desired_mode = BNO_RUN_MODE;
+    opr_mode_e desired_mode = (opr_mode_e)BNO_RUN_MODE;
 
-    set_mode(desired_mode);
-    while(get_mode() == OPR_MODE_CONFIG)
+    if(!enter_run_mode())
     {
-        Serial.println("[BNO055]: Failed to set mode, retrying..");
-        set_mode(desired_mode);
+        Serial.println("Failed to enter run mode");
+        return false;
     }
 
     // Sensor calibration
-    #warning "commented out calibration!!"
-    // calibrate(desired_mode);
+    if(run_calib)
+    {
+        
+        calibrate(desired_mode);
+    }
+    else
+    {
+        Serial.println("-----------------------------");
+        delay(1);
+        Serial.println("-----------------------------");
+        delay(1);
+        Serial.println("-----------------------------");
+        delay(1);
+        Serial.println("WARNING: OMITTING CALIBRATION");
+        delay(1);
+        Serial.println("-----------------------------");
+        delay(1);
+        Serial.println("-----------------------------");
+        delay(1);
+        Serial.println("-----------------------------");
+
+    }
 
     // check state of the system at this point, if all is good proceed.
     if(!get_sys_status())
@@ -127,21 +166,37 @@ void bno055::calibrate(uint8_t mode)
     }   
 
     Serial.println("[BNO055]: Waiting for calibration...");
+    uint8_t count = 0;
+    bool run = true;
     do
     {
         // Serial.printf("[BNO055]: attempting to calibrate: result = 0x%X, target = 0x%X\n", result, target_calib);
         bno.read(BNO_CALIB_STAT, &result, true);
         // bits 5 and 4 are gyr stat, bits 3 and 2 are acc stat, bits 1 and 0 are mag stat
-        Serial.printf("[BNO055]: Calibrating... (0 = uncal, 3 = cal):  gyr:%u  acc:%u  mag:%u; Desired:%u,%u,%u; current: 0x%X, Desired 0x%X\n", \
-            BNO_GET_GYR_CAL(result), BNO_GET_ACC_CAL(result), BNO_GET_MAG_CAL(result), \
-            BNO_GET_GYR_CAL(target_calib), BNO_GET_ACC_CAL(target_calib), BNO_GET_MAG_CAL(target_calib), \
-            result, target_calib);
+        // 0 is uncal, 2 = cal
+        Serial.printf("[BNO055]: Calibrating...: g:%u a:%u m:%u s:%u; Desired:%u,%u,%u,%u; current: 0x%X, Desired 0x%X\n", \
+            BNO_GET_GYR_CAL(result), BNO_GET_ACC_CAL(result), BNO_GET_MAG_CAL(result), BNO_GET_SYS_CAL(result), \
+            BNO_GET_GYR_CAL(target_calib), BNO_GET_ACC_CAL(target_calib), BNO_GET_MAG_CAL(target_calib), BNO_GET_SYS_CAL(target_calib), \
+            result, target_calib | BNO_SYS_CALIBRATED);
+        
+        if(result == (target_calib | BNO_SYS_CALIBRATED))
+        {
+            if(++count > 30)
+            {
+                run = false;
+            }
+        }
+        else
+        {
+            count = 0;
+        }
+        
         delay(100);
-        // there was some weird shit with M4G where bno full sys calibration was set but it wasnt actually done  
-    } while(result != target_calib && (result & BNO_SYS_CALIBRATED) != BNO_SYS_CALIBRATED );
 
-    delay(2000);
+    } while(run);
+
     Serial.println("[BNO055]: finished calibrating");
+    delay(2000);
 }
 
 void bno055::print_calibration()
@@ -150,9 +205,233 @@ void bno055::print_calibration()
     // Serial.printf("[BNO055]: attempting to calibrate: result = 0x%X, target = 0x%X\n", result, target_calib);
     bno.read(BNO_CALIB_STAT, &result, true);
         // bits 5 and 4 are gyr stat, bits 3 and 2 are acc stat, bits 1 and 0 are mag stat
-    Serial.printf("gyr_cal=%u \t acc_cal=%u \t mag_cal=%u\n", \
-        BNO_GET_GYR_CAL(result), BNO_GET_ACC_CAL(result), BNO_GET_MAG_CAL(result));
+    Serial.printf("gyr_cal=%u \t acc_cal=%u \t mag_cal=%u \t sys_cal=%u\n", \
+        BNO_GET_GYR_CAL(result), BNO_GET_ACC_CAL(result), BNO_GET_MAG_CAL(result), BNO_GET_SYS_CAL(result));
     
+}
+
+
+bool bno055::get_calib_profile()
+{
+
+    /*
+    The calibration profile includes sensor offsets and sensor radius. Host system can read the
+    offsets and radius only after a full calibration is achieved and the operation mode is switched
+    to CONFIG_MODE. Refer to sensor offsets and sensor radius registers.
+    */
+
+    // need to switch to config mode to read calibration data
+    // if any of the reads fails and the function returns false, need to ensure we are back in run mode
+    if(!enter_config_mode())
+    {
+        return false;
+    }
+
+    // Serial.println("Getting offsets1");
+    if(!bno.read(ACC_OFFSET_X_LSB, Data_Buffer, (size_t)6,true))
+    {
+        Serial.println("Failed to get ACC_OFFSETs");
+        enter_run_mode();
+        return false;
+    }
+
+    calib_data.acc.x.s_16 = REG_DATA_TO_VAL_S16(Data_Buffer[1], Data_Buffer[0]);
+    calib_data.acc.y.s_16 = REG_DATA_TO_VAL_S16(Data_Buffer[3], Data_Buffer[2]);
+    calib_data.acc.z.s_16 = REG_DATA_TO_VAL_S16(Data_Buffer[5], Data_Buffer[4]);
+
+    // Serial.println("Getting offsets2");
+    if(!bno.read(MAG_OFFSET_X_LSB, Data_Buffer, (size_t)6,true))
+    {
+        Serial.println("Failed to get MAG_OFFSETS");
+        enter_run_mode();
+        return false;
+    }
+
+    calib_data.mag.x.s_16 = REG_DATA_TO_VAL_S16(Data_Buffer[1], Data_Buffer[0]);
+    calib_data.mag.y.s_16 = REG_DATA_TO_VAL_S16(Data_Buffer[3], Data_Buffer[2]);
+    calib_data.mag.z.s_16 = REG_DATA_TO_VAL_S16(Data_Buffer[5], Data_Buffer[4]);
+
+    // Serial.println("Getting offsets3");
+    if(!bno.read(GYR_OFFSET_X_LSB, Data_Buffer, (size_t)6,true))
+    {
+        Serial.println("Failed to get GYR_OFFSETS");
+        enter_run_mode();
+        return false;
+    }
+
+    calib_data.gyr.x.s_16 = REG_DATA_TO_VAL_S16(Data_Buffer[1], Data_Buffer[0]);
+    calib_data.gyr.y.s_16 = REG_DATA_TO_VAL_S16(Data_Buffer[3], Data_Buffer[2]);
+    calib_data.gyr.z.s_16 = REG_DATA_TO_VAL_S16(Data_Buffer[5], Data_Buffer[4]);
+
+    // Serial.println("Getting offsets4");
+    if(!bno.read(ACC_RADIUS_LSB, Data_Buffer, (size_t)2,true))
+    {
+        Serial.println("Failed to get ACC_RADIUS");
+        enter_run_mode();
+        return false;
+    }
+
+    calib_data.acc_rad = REG_DATA_TO_VAL_S16(Data_Buffer[1], Data_Buffer[0]);
+
+    // Serial.println("Getting offsets5");
+    if(!bno.read(MAG_RADIUS_LSB, Data_Buffer, (size_t)2,true))
+    {
+        Serial.println("Failed to get MAG_RADIUS");
+        enter_run_mode();
+        return false;
+    }
+
+    calib_data.mag_rad = REG_DATA_TO_VAL_S16(Data_Buffer[1], Data_Buffer[0]);
+
+
+    // Serial.println("Reach here");
+
+    if(!enter_run_mode())
+    {
+        Serial.println("failed to enter back into run mode");
+        return false;
+    }
+    else
+    {
+        Serial.println("successfully back in run mode");
+    }
+
+    // Serial.println("returning true");
+
+    return true;
+}
+
+bool bno055::write_sensor_offsets(const Offset_t & data, uint8_t start_reg)
+{
+    bool status = true;
+    // Serial.printf("%u ", data.x.us_8[DATA_LSB]);
+    // Serial.printf("%u ", data.x.us_8[DATA_MSB]);
+    // Serial.printf("%u ", data.y.us_8[DATA_LSB]);
+    // Serial.printf("%u ", data.y.us_8[DATA_MSB]);
+    // Serial.printf("%u ", data.z.us_8[DATA_LSB]);
+    // Serial.printf("%u ", data.z.us_8[DATA_MSB]);
+    // Serial.println("");
+    status = status && bno.write(start_reg++, data.x.us_8[DATA_LSB], true);
+    status = status && bno.write(start_reg++, data.x.us_8[DATA_MSB], true);
+    status = status && bno.write(start_reg++, data.y.us_8[DATA_LSB], true);
+    status = status && bno.write(start_reg++, data.y.us_8[DATA_MSB], true);
+    status = status && bno.write(start_reg++, data.z.us_8[DATA_LSB], true);
+    status = status && bno.write(start_reg++, data.z.us_8[DATA_MSB], true);
+    return status;
+}
+
+bool bno055::write_sensor_radius(const int16_t & data, uint8_t start_reg)
+{
+    /*
+    There are 4 bytes (2 bytes for each accelerometer and magnetometer) to configure the
+    radius. Configuration will take place only when user writes to the last byte (i.e.,
+    ACC_RADIUS_MSB and MAG_RADIUS_MSB). Therefore the last byte must be written
+    whenever the user wants to changes the configuration. The range of the radius for
+    accelerometer is +/-1000, magnetometer is +/-960 and Gyroscope is NA.
+    */
+
+    bool status = true;
+    // Serial.printf("radius data: %X", data);
+    // Serial.printf("msb: %X", (uint8_t)((data & (int16_t)0xFF00) >> 8));
+    // Serial.printf("lsb: %X", (uint8_t)(data & (int16_t)0x00FF));
+    status = status && bno.write(++start_reg, (uint8_t)((data & (int16_t)0xFF00) >> 8), true); //write MSB, ++ start_reg because lsb is passed in
+    status = status && bno.write(--start_reg, (uint8_t)(data & (int16_t)0x00FF), true); //write LSB, -- to get back down to lsb byte
+    return status;
+}
+
+bool bno055::write_calib_profile(const Calib_Data_t & cal_data)
+{
+    /*
+    Setting Calibration profile
+    It is important that the correct offsets and corresponding sensor radius are used. Incorrect
+    offsets may result in unreliable orientation data even at calibration accuracy level 3. To set
+    the calibration profile the following steps need to be taken
+    1. Select the operation mode to CONFIG_MODE
+    2. Write the corresponding sensor offsets and radius data
+    3. Change operation mode to fusion mode
+    */
+
+    if(!enter_config_mode())
+    {
+        return false;
+    }
+
+    if(!write_sensor_offsets(cal_data.acc, ACC_OFFSET_X_LSB))
+    {
+        Serial.println("Failled at writing ACC offsets");
+        return false;
+    }
+
+    if(!write_sensor_offsets(cal_data.mag, MAG_OFFSET_X_LSB))
+    {
+        Serial.println("Failled at writing MAG offsets");
+        return false;
+    }
+
+    if(!write_sensor_offsets(cal_data.gyr, GYR_OFFSET_X_LSB))
+    {
+        Serial.println("Failled at writing GYR offsets");
+        return false;
+    }
+
+    if(!write_sensor_radius(cal_data.mag_rad, MAG_RADIUS_LSB))
+    {
+        Serial.println("Failled at writing MAG radius");
+        return false;
+    }
+
+    if(!write_sensor_radius(cal_data.acc_rad, ACC_RADIUS_LSB))
+    {
+        Serial.println("Failled at writing ACC radius");
+        return false;
+    }
+
+    get_calib_profile();
+    print_calib_profile();
+
+
+
+
+
+    if(!enter_run_mode())
+    {
+        return false;
+    }
+
+    return true;
+}
+
+
+
+void bno055::print_calib_profile()
+{
+
+    const uint8_t delay_time = 1;
+
+    Serial.printf("ACC OFFSETS__");
+    delay(delay_time);
+    Serial.printf("X: %d, Y: %d, Z: %d\n",calib_data.acc.x.s_16, calib_data.acc.y.s_16, calib_data.acc.z.s_16);
+    delay(delay_time);
+
+    Serial.printf("MAG OFFSETS__");
+    delay(delay_time);
+    Serial.printf("X: %d, Y: %d, Z: %d\n",calib_data.mag.x.s_16, calib_data.mag.y.s_16, calib_data.mag.z.s_16);
+    delay(delay_time);
+
+    Serial.printf("GYR OFFSETS__");
+    delay(delay_time);
+    Serial.printf("X: %d, Y: %d, Z: %d\n",calib_data.gyr.x.s_16, calib_data.gyr.y.s_16, calib_data.gyr.z.s_16);
+    delay(delay_time);
+
+    Serial.printf("ACC RAD__");
+    delay(delay_time);
+    Serial.printf("rad: %d \n",calib_data.acc_rad);
+    delay(delay_time);
+
+    Serial.printf("MAG RAD__");
+    delay(delay_time);
+    Serial.printf("rad: %d \n",calib_data.mag_rad);
+    delay(delay_time);
 }
 
 bool bno055::check_IDs()
@@ -281,14 +560,45 @@ bool bno055::reset_sys()
 
 void bno055::set_mode(opr_mode_e mode)
 {
-    uint8_t result = 0;
     Serial.println("[BNO055]: Changing operation modes.. ");
-    // bno.read(BNO_OPR_MODE_REG, &result, true);
-    // delay(1);
-    // bno.write(BNO_OPR_MODE_REG, (uint8_t)((result & 0xF0) | mode), true);
-    Serial.printf("[BNO055]: writing mode 0x%X\n", (uint8_t)(mode));
+    // Serial.printf("[BNO055]: writing mode 0x%X\n", (uint8_t)(mode));
     bno.write(BNO_OPR_MODE_REG, (uint8_t)(mode), true);
+    Serial.println("Done writing mode");
     delay(30); // at most needs, about 20ms to switch modes 
+}
+
+bool bno055::enter_config_mode()
+{
+    uint8_t error_count = 0;
+    set_mode(OPR_MODE_CONFIG);
+    while(get_mode() != OPR_MODE_CONFIG)
+    {
+        Serial.println("[BNO055]: Failed to enter config mode, retrying..");
+        set_mode(OPR_MODE_CONFIG);
+        if(++error_count > 5)
+        {
+            return false;
+        }
+    }
+    Serial.println("Succesfully entered config mode");
+    return true;
+}
+
+bool bno055::enter_run_mode()
+{
+    uint8_t error_count = 0;
+    set_mode((opr_mode_e)BNO_RUN_MODE);
+    while(get_mode() != (opr_mode_e)BNO_RUN_MODE)
+    {
+        Serial.println("[BNO055]: Failed to set mode, retrying..");
+        set_mode((opr_mode_e)BNO_RUN_MODE);
+        if(++error_count > 5)
+        {
+            return false;
+        }
+    }
+    Serial.println("Entered run mode");
+    return true;
 }
 
 bool bno055::self_test()
