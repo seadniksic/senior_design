@@ -127,6 +127,7 @@ class Serial_Wrapper:
             print("Exception occured in in_waiting")
             print(e)
             return 0
+
     
 
 
@@ -212,6 +213,10 @@ if __name__ == "__main__":
         port = 8087
         sock.bind((host, port))
         sock.listen(1)
+
+        sendSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sendSock = ((host, 8086))
+
         print("Runing socket accept()")
         client, addr = sock.accept() 
         print("Socket accepted.")
@@ -265,6 +270,65 @@ if __name__ == "__main__":
                 except Exception as e:
                     print("Exception occurred in sp.write()")
                     print(e)
+
+            # Read serial port as fast as possible:
+            # check if data available
+            if sp.in_waiting() < 1:
+                continue
+
+            # check for sync byte
+            first_byte = sp.read(1)[0]
+            if first_byte != 70: #hex 0x46
+                continue
+
+            # check for msg type
+            second_byte = sp.read(1)[0]
+            if second_byte == 102: #hex 0x66
+                # check if msg length is nonzero
+                num_bytes = sp.read(1)[0]
+                if num_bytes < 1:
+                    continue
+                
+                # read data
+                data = sp.read(num_bytes)
+                print(type(data))
+                sendDataLength = int(len(data)).to_bytes(8, byteorder='little', signed=False)
+                sendSock.sendall(sendDataLength)
+                sendSock.sendall(data)
+
+
+            elif second_byte == 68: # hex 0x44
+                # check length
+                num_bytes = sp.read(1)[0]
+                if num_bytes < 1:
+                    continue
+                
+                # read data
+                data = sp.read(num_bytes)
+                
+
+                # check if received all of the data
+                if len(data) == num_bytes:
+                    end_slam_timer = timer()
+                    reply = uart_messages_pb2.SLAM_Data()
+                    try: 
+                        reply.ParseFromString(data)
+                        print(end_slam_timer-start_slam_timer,num_bytes ,reply.lia_x, reply.lia_y, reply.lia_z, reply.eul_y, reply.eul_p,reply.eul_r, reply.pan, reply.tilt)
+                    except Exception as e:
+                        print("corrupt message, failed to serialize SLAM_DATA")
+                        print(e)
+
+                    
+                    # print(end_slam_timer-start_slam_timer)
+                    # np.append(lin_x,reply.lia_x)
+                    # line1, = ax.plot(sample,lin_x, 'r') 
+                    # line1.set_ydata(lin_x)
+                    # fig.canvas.draw()
+                    # fig.canvas.flush_events()
+                    start_slam_timer = timer()
+
+            end_loop_timer = timer()
+            # print("LOOP_TIME: ", end_loop_timer-start_loop_timer)
                 
 
             # loop timer
@@ -436,7 +500,7 @@ if __name__ == "__main__":
                     reply.ParseFromString(data)
                     print("cpu temp", reply.cpu_temp)
                 except Exception as e:
-                    print("corrupt message, failed to serialize GUI_DATA");
+                    print("corrupt message, failed to serialize GUI_DATA")
                     print(e)
                     
 
