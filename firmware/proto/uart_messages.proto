@@ -55,13 +55,22 @@ message SLAM_Data
 
 message GUI_Data
 {
-    int32 cpu_temp = 1;   
-    // calib status of the bno? 
-    // servo angles? 
-    // temp and humidity
-    // battery temp
-    // driving mode
-    // and if safety is on for joystick
-    // camera home position
+    enum Locomotion_Status
+    {
+        NONE = 0;
+        CONTROLS_INHIBIT = 1;
+        NORMAL_DRIVING_MODE = 2;
+    }
+
+    optional int32 cpu_temp = 1;   
+    optional int32 calib_status = 2;
+    optional int32 hts_temp = 3;
+    optional int32 hts_humidity = 4;
+    optional int32 batt_temp = 5;
+    optional int32 curr_servo_pan = 6;
+    optional int32 curr_servo_tilt = 7;
+    optional int32 home_servo_pan = 8;
+    optional int32 home_servo_tilt = 9;
+    optional Locomotion_Status loco_status = 10;
     
 }
