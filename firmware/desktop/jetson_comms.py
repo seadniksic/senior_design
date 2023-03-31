@@ -215,7 +215,7 @@ if __name__ == "__main__":
         sock.listen(1)
 
         sendSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sendSock = ((host, 8086))
+        sendSock.connect((host, 8086))
 
         print("Runing socket accept()")
         client, addr = sock.accept() 
@@ -259,6 +259,7 @@ if __name__ == "__main__":
                     print(e)
 
             # check if its time to send data to teensy
+            sendtimer_end = timer()
             if (sendtimer_end - sendtimer_start) > g.sleep_time_serial:
                 # update timer
                 sendtimer_start = sendtimer_end
@@ -291,7 +292,6 @@ if __name__ == "__main__":
                 
                 # read data
                 data = sp.read(num_bytes)
-                print(type(data))
                 sendDataLength = int(len(data)).to_bytes(8, byteorder='little', signed=False)
                 sendSock.sendall(sendDataLength)
                 sendSock.sendall(data)
@@ -313,7 +313,7 @@ if __name__ == "__main__":
                     reply = uart_messages_pb2.SLAM_Data()
                     try: 
                         reply.ParseFromString(data)
-                        print(end_slam_timer-start_slam_timer,num_bytes ,reply.lia_x, reply.lia_y, reply.lia_z, reply.eul_y, reply.eul_p,reply.eul_r, reply.pan, reply.tilt)
+                        # print(end_slam_timer-start_slam_timer,num_bytes ,reply.lia_x, reply.lia_y, reply.lia_z, reply.eul_y, reply.eul_p,reply.eul_r, reply.pan, reply.tilt)
                     except Exception as e:
                         print("corrupt message, failed to serialize SLAM_DATA")
                         print(e)
@@ -333,7 +333,7 @@ if __name__ == "__main__":
 
             # loop timer
             end = timer()
-            print("looptimer: ", (end-start))
+            # print("looptimer: ", (end-start))
 
 
     ################################
