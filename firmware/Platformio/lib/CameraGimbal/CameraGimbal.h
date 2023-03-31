@@ -9,7 +9,7 @@
 #define ANGLE_MIN 0
 #define ANGLE_CENTER 90
 
-#define MIN_TILT 40
+#define MIN_TILT 65
 
 #define START_SPEED 4
 #define MAX_SERVO_SPEED 15

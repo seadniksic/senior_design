@@ -27,6 +27,7 @@ typedef struct {
     elapsedMillis rcv_clock;
     elapsedMillis time_since_last_serialize;
     bool commsNeedReset;
+    bool syncByteStatus;
 } UartComms_t;
 
 // #define PRINT_MSG 

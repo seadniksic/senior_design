@@ -98,7 +98,9 @@ uint8_t CameraGimbal_Get_Speed()
 void CameraGimbal_Home()
 {
     Serial.println("thing!!");
+    Serial.print("PAN: ");
     Serial.println(cameraGimbal.pan_home_pos);
+    Serial.print("TILT: ");
     Serial.println(cameraGimbal.tilt_home_pos);
     CameraGimbal_Set_Pan(cameraGimbal.pan_home_pos);
     CameraGimbal_Set_Tilt(cameraGimbal.tilt_home_pos);

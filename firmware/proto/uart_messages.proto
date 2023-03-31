@@ -56,4 +56,12 @@ message SLAM_Data
 message GUI_Data
 {
     int32 cpu_temp = 1;   
+    // calib status of the bno? 
+    // servo angles? 
+    // temp and humidity
+    // battery temp
+    // driving mode
+    // and if safety is on for joystick
+    // camera home position
+    
 }
