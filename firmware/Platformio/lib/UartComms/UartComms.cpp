@@ -23,6 +23,7 @@ void UartComms_Init()
     uartComms.rcv_clock = rcv_clock;
     uartComms.time_since_last_serialize = commTimer;
     uartComms.commsNeedReset = false;
+    uartComms.syncByteStatus = false;
 }
 
 // As of right now this is blocking, not ideal
@@ -43,6 +44,12 @@ void UartComms_RcvControls()
       data = HWSERIAL.read();
       if(data == SYNC_BYTE_READ)
       {
+        if(uartComms.syncByteStatus == true)
+        {
+          Serial.println("sync byte found");
+          uartComms.syncByteStatus = false;
+        }
+        
         // found start of message
         // read number of bytes to read
         uartComms.rcv_clock = 0; //reset elaspedmillis
@@ -85,7 +92,11 @@ void UartComms_RcvControls()
       }
       else
       {
-        Serial.println("sync byte not found yet.");
+        if(uartComms.syncByteStatus == false)
+        {
+          Serial.println("sync byte not found yet.");
+          uartComms.syncByteStatus = true;
+        }
       }
     }
 
