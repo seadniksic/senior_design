@@ -62,15 +62,15 @@ message GUI_Data
         NORMAL_DRIVING_MODE = 2;
     }
 
-    optional int32 cpu_temp = 1;   
-    optional int32 calib_status = 2;
-    optional int32 hts_temp = 3;
+    optional int32 cpu_temp = 1;   // done
+    optional int32 calib_status = 2; // done (needs parsing on jetson side)
+    optional int32 hts_temp = 3; 
     optional int32 hts_humidity = 4;
     optional int32 batt_temp = 5;
-    optional int32 curr_servo_pan = 6;
-    optional int32 curr_servo_tilt = 7;
-    optional int32 home_servo_pan = 8;
-    optional int32 home_servo_tilt = 9;
+    optional int32 curr_servo_pan = 6; //done
+    optional int32 curr_servo_tilt = 7; // done
+    optional int32 home_servo_pan = 8; // done
+    optional int32 home_servo_tilt = 9; // done
     optional Locomotion_Status loco_status = 10;
     
 }

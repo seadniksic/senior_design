@@ -41,11 +41,14 @@ void main_prog()
   elapsedMillis gui_data_clock;
 
   // Variables
-  SLAM_Data * sd_local = UartComms_GetSLAMData();
+  SLAM_Data * slam_local = UartComms_GetSLAMData();
   Joystick_Input * joy_local = UartComms_GetJoystick();
+  GUI_Data * gui_local = UartComms_GetGUIData();
+
   bool reset_comms_status = false;
   uint8_t LED_state = HIGH;
 
+  // Main while loop
   while(1)
   {
 
@@ -57,7 +60,7 @@ void main_prog()
       digitalWrite(ONBOARD_LED_PIN, LED_state);
     }
 
-    #error "Updated Joy Comms Read Rate to 40 Hz, Verify!!"
+    // #warning "Updated Joy Comms Read Rate to 40 Hz, Verify!!" //verified works like normal
     if(joy_comms_clock > TS_JOY_COMMS)
     {
       joy_comms_clock -= TS_JOY_COMMS;
@@ -103,9 +106,9 @@ void main_prog()
       // Serial.println("running slam loop");
 
       //Store all the data
-      bno055::get_euler_ypr(sd_local);
-      bno055::get_lia_xyz(sd_local);
-      CameraGimbal_StoreAngles(sd_local);
+      bno055::get_euler_ypr(slam_local);
+      bno055::get_lia_xyz(slam_local);
+      CameraGimbal_StoreAngles(slam_local);
 
       // Send the data 
       UartComms_SendSLAMData();
@@ -119,8 +122,11 @@ void main_prog()
       gui_data_clock -= TS_GUI_DATA;
 
       // Populate the Data
-      // this stuff can just be in uartcomms? the temp reading?
-      UartComms_PopulateGUIReply(InternalTemperature.readTemperatureF());
+      UartComms_PopulateGUITempCPU(InternalTemperature.readTemperatureF());
+      CameraGimbal_StoreAngles(gui_local);
+      CameraGimbal_StoreHomeAngles(gui_local);
+      bno055::store_calib_status(gui_local);
+      // NEXT DO LOCOMATION STATUS      
       
       // Send the data
       UartComms_SendGUIData();

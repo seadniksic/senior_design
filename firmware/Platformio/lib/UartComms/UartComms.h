@@ -35,7 +35,7 @@ typedef struct {
 
 void UartComms_Init();
 void UartComms_RcvControls();
-void UartComms_PopulateGUIReply(const float &cpu_temp);
+void UartComms_PopulateGUITempCPU(const float &cpu_temp);
 void UartComms_SendGUIData();
 void UartComms_SendSLAMData();
 void UartComms_ClearWriteBuffer();
@@ -45,5 +45,6 @@ elapsedMillis* UartComms_GetTimeSinceLastRead();
 void UartComms_ClearJoystick();
 Joystick_Input* UartComms_GetJoystick();
 SLAM_Data* UartComms_GetSLAMData();
+GUI_Data* UartComms_GetGUIData();
 
 #endif

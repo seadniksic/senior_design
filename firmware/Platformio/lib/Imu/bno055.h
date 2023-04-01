@@ -164,8 +164,6 @@ typedef struct
 
 
 #warning "switch convention to what the other files have, prefix bno055 and capital for funcs"
-#warning "it would be cool if could do like y to enter imu calib mode and then use led patterns to give the status on that"
-
 
 namespace bno055
 {
@@ -186,12 +184,14 @@ namespace bno055
     bool set_clock_source(uint8_t clk_source);
     void calibrate(uint8_t mode);
     void print_calibration();
+    void get_calib_stat(uint8_t & status);
     bool get_calib_profile();
     void print_calib_profile();
     bool write_calib_profile(const Calib_Data_t & cal_data);
     bool write_sensor_offsets(const Offset_t & data, uint8_t start_reg);
     bool write_sensor_radius(const int16_t & data, uint8_t start_reg);
     void initialize_calib_profile(Calib_Data_t & cal_data);
+    void store_calib_status(GUI_Data * gd);
 }
 
 extern Calib_Data_t calib_data;

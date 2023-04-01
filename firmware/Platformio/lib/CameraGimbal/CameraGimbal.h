@@ -41,6 +41,8 @@ uint8_t CameraGimbal_Get_Speed();
 void CameraGimbal_Home();
 void CameraGimbal_SetHome();
 void CameraGimbal_StoreAngles(SLAM_Data * sd);
+void CameraGimbal_StoreAngles(GUI_Data * gd);
+void CameraGimbal_StoreHomeAngles(GUI_Data * gd);
 
 
 

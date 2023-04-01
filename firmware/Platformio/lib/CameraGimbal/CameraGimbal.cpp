@@ -117,3 +117,15 @@ void CameraGimbal_StoreAngles(SLAM_Data * sd)
     sd->set_pan(cameraGimbal.pan_pos);
     sd->set_tilt(cameraGimbal.tilt_pos);
 }
+
+void CameraGimbal_StoreAngles(GUI_Data * gd)
+{
+    gd->set_curr_servo_pan(cameraGimbal.pan_pos);
+    gd->set_curr_servo_tilt(cameraGimbal.tilt_pos);
+}
+
+void CameraGimbal_StoreHomeAngles(GUI_Data * gd)
+{
+    gd->set_home_servo_pan(cameraGimbal.pan_home_pos);
+    gd->set_home_servo_tilt(cameraGimbal.tilt_home_pos);
+}
