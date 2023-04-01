@@ -102,11 +102,13 @@ void UartComms_RcvControls()
 
     if(available_packet)
     {
-      auto deserialize_status = js_in.deserialize(*uartComms.read_buffer);
+      auto deserialize_status = uartComms.js_in->deserialize(*uartComms.read_buffer);
       if(::EmbeddedProto::Error::NO_ERRORS == deserialize_status)
       {
-        uint32_t btn_status = (uint32_t)uartComms.js_in->get_button();
+        // uint32_t btn_status = (uint32_t)uartComms.js_in->get_button();
         uartComms.time_since_last_serialize = 0;
+        UartComms_SendControls();
+        UartComms_ClearWriteBuffer();
 
 
         // Serial.println(btn_status);
@@ -168,6 +170,9 @@ void UartComms_SendControls()
     const uint8_t n_bytes = uartComms.write_buffer->get_size();
     HWSERIAL.write(n_bytes);
     HWSERIAL.write(uartComms.write_buffer->get_data(), uartComms.write_buffer->get_size());
+  }
+  else{
+    Serial.println("UNABLE TO SERIALIZE");
   }
 }
 

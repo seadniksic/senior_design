@@ -79,9 +79,12 @@ void main_prog()
 
       UartComms_ClearReadBuffer();
 
-      
-      UartComms_SendControls();
-      UartComms_ClearWriteBuffer();
+      delay(1);
+      // delayMicroseconds(100);
+
+
+      // UartComms_SendControls();
+      // UartComms_ClearWriteBuffer();
 
       
     // }

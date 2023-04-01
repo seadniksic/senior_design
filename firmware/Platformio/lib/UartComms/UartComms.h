@@ -14,7 +14,7 @@
 #define SYNC_BYTE_READ 0x64 // read
 #define SYNC_BYTE_WRITE 0x46
 #define TIMEOUT_DATA 20 //ms
-#define TIMEOUT_NUMBYTES 10
+#define TIMEOUT_NUMBYTES 50
 #define MSG_SLAM_DATA 0x44
 #define MSG_GUI_DATA 0x66
 
