@@ -1,4 +1,4 @@
-.vscode/
+.vscode/*
 firmware/desktop/__pycache__
 build/
 software/cv/models/
