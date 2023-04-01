@@ -5,12 +5,12 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <unistd.h>
-#include <opencv2/opencv.hpp>
 #include <errno.h>
 #include "common.h"
 #include <sys/select.h>
 #include <iconv.h>
 #include <cstring>
+#include <iostream>
 
 class TransmitData{
     private:
@@ -18,9 +18,10 @@ class TransmitData{
         struct sockaddr_in serverAddress;
         size_t min(size_t a, size_t b);
         bool currentlyConnected;
+        std::string name;
     public:
-        TransmitData(const char *ipAddress, uint16_t port);
-        int sendPayload(void *payLoad, size_t dataLength);
+        TransmitData(const char *ipAddress, uint16_t port, std::string name);
+        int sendPayload(const void *payLoad, size_t dataLength);
         ~TransmitData();
 };
 
