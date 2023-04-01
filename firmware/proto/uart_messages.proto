@@ -71,6 +71,6 @@ message GUI_Data
     optional int32 curr_servo_tilt = 7; // done
     optional int32 home_servo_pan = 8; // done
     optional int32 home_servo_tilt = 9; // done
-    optional Locomotion_Status loco_status = 10;
+    optional Locomotion_Status loco_status = 10; //done
     
 }

@@ -126,7 +126,8 @@ void main_prog()
       CameraGimbal_StoreAngles(gui_local);
       CameraGimbal_StoreHomeAngles(gui_local);
       bno055::store_calib_status(gui_local);
-      // NEXT DO LOCOMATION STATUS      
+      Joystick_Store_Control_State(gui_local);
+      
       
       // Send the data
       UartComms_SendGUIData();

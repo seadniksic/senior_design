@@ -193,11 +193,7 @@ void Joystick_Run()
             {
                 Serial.println("FAILED TO WRITE CALIB PROFILE");
             }
-
         }
-
-        
-
     }
     
 
@@ -373,126 +369,9 @@ uint8_t Joystick_Map_Generic(const int32_t &val, \
     return result;
 }
 
-
-
-
-#if 0
-
-    //check for controller input
-    if(ljoy_deadzone() && !joy_state.dpad_up && !joy_state.dpad_left && !joy_state.dpad_right && !joy_state.dpad_down && !joy_state.fnc_btn)
-    {
-        Locomotion_All_Axis_Off();
-        return;
-    }
-
-    /* check left joystick */
-
-    // check for compound motions first
-    if(joy_state.drive_mode == DIAG_DRIVE_MODE)
-    {
-        if(ljoy_up() && ljoy_right())
-        {
-            Serial.println("diag fr");
-            Locomotion_Drive_Diag_FR();
-            return;
-        }
-        else if(ljoy_up() && ljoy_left())
-        {
-            Serial.println("diag fl");
-            Locomotion_Drive_Diag_FL();
-            return;
-        }
-        else if(ljoy_down() && ljoy_right())
-        {
-            Serial.println("diag br");
-            Locomotion_Drive_Diag_BR();
-            return;
-        }
-        else if(ljoy_down() && ljoy_left())
-        {
-            Serial.println("diag bl");
-            Locomotion_Drive_Diag_BL();
-            return;
-        }
-    }
-
-
-    if(joy_state.drive_mode == STRAIGHT_DRIVE_MODE)
-    {
-        // check for simple motions next
-        if(ljoy_up())
-        {
-            Serial.println("forward");
-            Locomotion_Drive_Forward();
-        }
-        else if(ljoy_down())
-        {
-            Serial.println("back");
-            Locomotion_Drive_Backward();
-        }
-        else if(ljoy_right())
-        {
-            Serial.println("right");
-            Locomotion_Drive_Right();
-        }
-        else if(ljoy_left())
-        {
-            Serial.println("left");
-            Locomotion_Drive_Left();
-        }
-    }
-    
-
-    /* D-PAD */
-
-    // check for no motion
-
-    // complex motions must go first
-    if(joy_state.dpad_right && ljoy_up())
-    {
-        Serial.println("drive forward and turn right");
-        FLFOR(ANALOG_WRITE_VAL);
-        BLFOR(ANALOG_WRITE_VAL);
-        FRFOR(ANALOG_WRITE_VAL - 100);
-        BRFOR(ANALOG_WRITE_VAL - 100);
-
-    }
-    else if(joy_state.dpad_left && ljoy_up())
-    {
-        Serial.println("drive forward and turn right");
-        FLFOR(ANALOG_WRITE_VAL - 100);
-        BLFOR(ANALOG_WRITE_VAL - 100);
-        FRFOR(ANALOG_WRITE_VAL);
-        BRFOR(ANALOG_WRITE_VAL);
-    }
-    else if(joy_state.dpad_right)
-    {
-        Serial.println("CW");
-        Locomotion_Rotate_CW();
-    }
-    else if(joy_state.dpad_left)
-    {
-        Serial.println("CWW");
-        Locomotion_Rotate_CCW();
-    }
-
-    // check function inputs
-    // need some additional logic to only detect edge changes
-    if(joy_state.dpad_down && (joy_state.dpad_down_prev == false))
-    {
-        Serial.println("changing drive modes");
-        joy_state.drive_mode = joy_state.drive_mode == \
-                STRAIGHT_DRIVE_MODE ? DIAG_DRIVE_MODE : STRAIGHT_DRIVE_MODE;
-    }
-
-    if(joy_state.fnc_btn && (joy_state.fnc_btn_prev == false))
-    {
-        Serial.println("resetting camera pos");
-        //TODO: reset camera pos
-    }
-    
-
-
-#endif
-
-
+void Joystick_Store_Control_State(GUI_Data *gd)
+{
+    uint32_t status = ((uint32_t)control_state.control.bits.turn_off | \
+                       (uint32_t)(control_state.control.bits.drive_mode << 1));
+    gd->set_loco_status((GUI_Data::Locomotion_Status)status);
+}

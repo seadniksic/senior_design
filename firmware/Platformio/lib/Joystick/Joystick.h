@@ -178,11 +178,13 @@ void Joystick_Run();
 void Joystick_Store_State(Joystick_Input *js_in);
 void Joystick_Reset_State();
 bool Joystick_Input_Present();
+void Joystick_Store_Control_State(GUI_Data *gd);
 uint8_t Joystick_Map(const int32_t &val);
 uint8_t Joystick_Map_Generic(const int32_t &val, \
                              const int32_t &in_min, \
                              const int32_t &in_max, \
                              const int32_t &out_min, \
                              const int32_t &out_max);
+
 
 #endif
