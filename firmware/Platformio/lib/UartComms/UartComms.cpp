@@ -159,6 +159,18 @@ void UartComms_RcvControls()
     }
 }
 
+void UartComms_SendControls()
+{
+  auto serialization_status = uartComms.js_in->serialize(*uartComms.write_buffer);
+  if(::EmbeddedProto::Error::NO_ERRORS == serialization_status)
+  {
+    HWSERIAL.write(SYNC_BYTE_WRITE);
+    const uint8_t n_bytes = uartComms.write_buffer->get_size();
+    HWSERIAL.write(n_bytes);
+    HWSERIAL.write(uartComms.write_buffer->get_data(), uartComms.write_buffer->get_size());
+  }
+}
+
 void UartComms_PopulateGUITempCPU(const float &cpu_temp)
 {
     uartComms.gui_data->set_cpu_temp((int32_t)cpu_temp);

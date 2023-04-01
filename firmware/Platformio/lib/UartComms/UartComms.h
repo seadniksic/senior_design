@@ -35,6 +35,7 @@ typedef struct {
 
 void UartComms_Init();
 void UartComms_RcvControls();
+void UartComms_SendControls();
 void UartComms_PopulateGUITempCPU(const float &cpu_temp);
 void UartComms_SendGUIData();
 void UartComms_SendSLAMData();

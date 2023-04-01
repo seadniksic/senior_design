@@ -52,89 +52,95 @@ void main_prog()
   while(1)
   {
 
-    if(heartbeat > TS_HEARTBEAT )
-    {
-      heartbeat -= TS_HEARTBEAT;
+    // if(heartbeat > TS_HEARTBEAT )
+    // {
+    //   heartbeat -= TS_HEARTBEAT;
 
-      LED_state = !LED_state;
-      digitalWrite(ONBOARD_LED_PIN, LED_state);
-    }
+    //   LED_state = !LED_state;
+    //   digitalWrite(ONBOARD_LED_PIN, LED_state);
+    // }
 
     // #warning "Updated Joy Comms Read Rate to 40 Hz, Verify!!" //verified works like normal
-    if(joy_comms_clock > TS_JOY_COMMS)
-    {
-      joy_comms_clock -= TS_JOY_COMMS;
+    // if(joy_comms_clock > TS_JOY_COMMS)
+    // {
+    //   joy_comms_clock -= TS_JOY_COMMS;
 
       UartComms_RcvControls();
 
-      if((*UartComms_GetTimeSinceLastRead()) > SERIAL_COMMS_RECEIVE_TIMEOUT)
-      {
-        reset_comms_status = true;
-        UartComms_ClearJoystick();
-      }
-      else
-      {
-        reset_comms_status = false;
-      }
+      // if((*UartComms_GetTimeSinceLastRead()) > SERIAL_COMMS_RECEIVE_TIMEOUT)
+      // {
+      //   reset_comms_status = true;
+      //   UartComms_ClearJoystick();
+      // }
+      // else
+      // {
+      //   reset_comms_status = false;
+      // }
 
       UartComms_ClearReadBuffer();
-    }
 
-    if (print_clock > TS_PRINT_1)
-    {
-      print_clock -= TS_PRINT_1;
+      
+      UartComms_SendControls();
+      UartComms_ClearWriteBuffer();
 
-      // Joystick_Print();
+      
+    // }
 
-      if(reset_comms_status)
-      {
-        Serial.println("Resetting comms, lost communication!");
-      }
-    }
+  //   if (print_clock > TS_PRINT_1)
+  //   {
+  //     print_clock -= TS_PRINT_1;
+
+  //     // Joystick_Print();
+
+  //     if(reset_comms_status)
+  //     {
+  //       Serial.println("Resetting comms, lost communication!");
+  //     }
+  //   }
   
-    if(joy_update_clock > TS_JOY_UPDATE)
-    {
-      joy_update_clock -= TS_JOY_UPDATE;
+  //   if(joy_update_clock > TS_JOY_UPDATE)
+  //   {
+  //     joy_update_clock -= TS_JOY_UPDATE;
 
-      Joystick_Store_State(joy_local);
-      Joystick_Run();
-    }
+  //     Joystick_Store_State(joy_local);
+  //     Joystick_Run();
+  //   }
 
-    if (slam_data > TS_SLAM_COMMS)
-    {
-      slam_data -= TS_SLAM_COMMS;
-      // Serial.println("running slam loop");
+  //   if (slam_data > TS_SLAM_COMMS)
+  //   {
+  //     slam_data -= TS_SLAM_COMMS;
+  //     // Serial.println("running slam loop");
 
-      //Store all the data
-      bno055::get_euler_ypr(slam_local);
-      bno055::get_lia_xyz(slam_local);
-      CameraGimbal_StoreAngles(slam_local);
+  //     //Store all the data
+  //     bno055::get_euler_ypr(slam_local);
+  //     bno055::get_lia_xyz(slam_local);
+  //     CameraGimbal_StoreAngles(slam_local);
 
-      // Send the data 
-      UartComms_SendSLAMData();
+  //     // Send the data 
+  //     UartComms_SendSLAMData();
 
-      // Clear the write buffers
-      UartComms_ClearWriteBuffer();
-    }
+  //     // Clear the write buffers
+  //     UartComms_ClearWriteBuffer();
+  //   }
 
-    if(gui_data_clock > TS_GUI_DATA)
-    {
-      gui_data_clock -= TS_GUI_DATA;
+  //   if(gui_data_clock > TS_GUI_DATA)
+  //   {
+  //     gui_data_clock -= TS_GUI_DATA;
 
-      // Populate the Data
-      UartComms_PopulateGUITempCPU(InternalTemperature.readTemperatureF());
-      CameraGimbal_StoreAngles(gui_local);
-      CameraGimbal_StoreHomeAngles(gui_local);
-      bno055::store_calib_status(gui_local);
-      Joystick_Store_Control_State(gui_local);
+  //     // Populate the Data
+  //     UartComms_PopulateGUITempCPU(InternalTemperature.readTemperatureF());
+  //     CameraGimbal_StoreAngles(gui_local);
+  //     CameraGimbal_StoreHomeAngles(gui_local);
+  //     bno055::store_calib_status(gui_local);
+  //     Joystick_Store_Control_State(gui_local);
       
       
-      // Send the data
-      UartComms_SendGUIData();
+  //     // Send the data
+  //     UartComms_SendGUIData();
 
-      // Clear the buffer
-      UartComms_ClearWriteBuffer();
-    }
+  //     // Clear the buffer
+  //     UartComms_ClearWriteBuffer();
+  //   }
   }  
 }
 
