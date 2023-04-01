@@ -210,10 +210,17 @@ void bno055::print_calibration()
     
 }
 
+void bno055::get_calib_stat(uint8_t & status)
+{
+    if(!bno.read(BNO_CALIB_STAT, &status, true))
+    {
+        status = 0;
+    }
+}
+
 
 bool bno055::get_calib_profile()
 {
-
     /*
     The calibration profile includes sensor offsets and sensor radius. Host system can read the
     offsets and radius only after a full calibration is achieved and the operation mode is switched
@@ -665,5 +672,12 @@ bool bno055::set_clock_source(uint8_t clk_source)
     return false;
 
     // theres no way to check whether the clock config was sucessful or not i dont think.
+}
+
+void bno055::store_calib_status(GUI_Data * gd)
+{
+    uint8_t status;
+    get_calib_stat(status);
+    gd->set_calib_status(status);
 }
 

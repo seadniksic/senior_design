@@ -9,34 +9,30 @@
 #include <CameraGimbal.h>
 #include "pinout.h"
 #include "config.h"
-
+#include "main.h"
 
 void main_prog()
 {
-
-  // init the onboard LED
+  // Initialize the onboard LED
   pinMode(ONBOARD_LED_PIN, OUTPUT);
 
-  // Setup serial
+  // Setup Serial Monitor
   Serial.begin(SERIAL_BAUD);
 
-  // delay to allow for serial monitor connection
+  // Delay to allow for serial monitor connection and monitoring
   delay(2000);
 
-  // setup
+  // Initialize Modules
   CameraGimbal_Init();
   Joystick_Init();
   Locomotion_Init();
   bno055::init(false);
   UartComms_Init();
   LightBar_Init();
+  CPUTemp_Init();
 
-  InternalTemperature.begin(TEMPERATURE_NO_ADC_SETTING_CHANGES);
-
-  // Clocks
-  elapsedMillis LED_clock;
-  uint8_t LED_state = HIGH;
-
+  // Task Scheduling
+  elapsedMillis heartbeat;
   elapsedMillis print_clock;
   elapsedMillis joy_update_clock;
   elapsedMillis joy_comms_clock;
@@ -44,41 +40,31 @@ void main_prog()
   elapsedMillis servo_clock;
   elapsedMillis gui_data_clock;
 
-  // pre while loop code
-  // LightBar_State(true);
-
-  SLAM_Data * sd_local = UartComms_GetSLAMData();
+  // Variables
+  SLAM_Data * slam_local = UartComms_GetSLAMData();
   Joystick_Input * joy_local = UartComms_GetJoystick();
-
-  uint16_t count = 0;
+  GUI_Data * gui_local = UartComms_GetGUIData();
 
   bool reset_comms_status = false;
+  uint8_t LED_state = HIGH;
 
-
-
+  // Main while loop
   while(1)
   {
 
-    // loop_time = 0;
-
-
-    if(LED_clock > 750 )
+    if(heartbeat > TS_HEARTBEAT )
     {
-      LED_clock -= 750;
+      heartbeat -= TS_HEARTBEAT;
+
       LED_state = !LED_state;
       digitalWrite(ONBOARD_LED_PIN, LED_state);
     }
 
-    if(servo_clock > 300)
+    // #warning "Updated Joy Comms Read Rate to 40 Hz, Verify!!" //verified works like normal
+    if(joy_comms_clock > TS_JOY_COMMS)
     {
-      servo_clock -= 300;
-      // Serial.printf("P: %u, T:%u, S:%u\n", CameraGimbal_Get_Pan(), CameraGimbal_Get_Tilt(), CameraGimbal_Get_Speed());
-    }
+      joy_comms_clock -= TS_JOY_COMMS;
 
-    if(joy_comms_clock > 1)
-    {
-      joy_comms_clock -= 1;
-      // Run serial comms to get in the data from the Jetson
       UartComms_RcvControls();
 
       if((*UartComms_GetTimeSinceLastRead()) > SERIAL_COMMS_RECEIVE_TIMEOUT)
@@ -91,60 +77,64 @@ void main_prog()
         reset_comms_status = false;
       }
 
-
       UartComms_ClearReadBuffer();
     }
 
-    if (print_clock > 100)
+    if (print_clock > TS_PRINT_1)
     {
+      print_clock -= TS_PRINT_1;
+
       // Joystick_Print();
+
       if(reset_comms_status)
       {
         Serial.println("Resetting comms, lost communication!");
       }
-      print_clock -= 100;
     }
   
-    // Run joystick at 20hz 
-    if(joy_update_clock > 50)
+    if(joy_update_clock > TS_JOY_UPDATE)
     {
-      joy_update_clock -= 50;
+      joy_update_clock -= TS_JOY_UPDATE;
+
       Joystick_Store_State(joy_local);
       Joystick_Run();
     }
 
-    if (slam_data > 10)
+    if (slam_data > TS_SLAM_COMMS)
     {
-      slam_data -= 10;
+      slam_data -= TS_SLAM_COMMS;
       // Serial.println("running slam loop");
 
-      //store all the data
-      bno055::get_euler_ypr(sd_local);
-      bno055::get_lia_xyz(sd_local);
-      CameraGimbal_StoreAngles(sd_local);
+      //Store all the data
+      bno055::get_euler_ypr(slam_local);
+      bno055::get_lia_xyz(slam_local);
+      CameraGimbal_StoreAngles(slam_local);
 
-      // end
+      // Send the data 
       UartComms_SendSLAMData();
+
+      // Clear the write buffers
       UartComms_ClearWriteBuffer();
-      // bno055::print_calibration();
     }
 
-    if(gui_data_clock > 200)
+    if(gui_data_clock > TS_GUI_DATA)
     {
-      gui_data_clock -= 200;
-      // this stuff can just be in uartcomms? the temp reading?
-      // new joystick angles to be sent!
-      float temp = InternalTemperature.readTemperatureF();
-      // Serial.print("CPU TEMP: ");
-      // Serial.println(temp);
-      // UartComms_PopulateGUIReply(temp);
-      // UartComms_PopulateGUIReply((float)++count);
-      UartComms_PopulateGUIReply(temp);
+      gui_data_clock -= TS_GUI_DATA;
+
+      // Populate the Data
+      UartComms_PopulateGUITempCPU(InternalTemperature.readTemperatureF());
+      CameraGimbal_StoreAngles(gui_local);
+      CameraGimbal_StoreHomeAngles(gui_local);
+      bno055::store_calib_status(gui_local);
+      Joystick_Store_Control_State(gui_local);
+      
+      
+      // Send the data
       UartComms_SendGUIData();
+
+      // Clear the buffer
       UartComms_ClearWriteBuffer();
-
     }
-
   }  
 }
 

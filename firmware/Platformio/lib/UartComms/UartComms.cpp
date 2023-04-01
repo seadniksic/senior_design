@@ -159,9 +159,8 @@ void UartComms_RcvControls()
     }
 }
 
-void UartComms_PopulateGUIReply(const float &cpu_temp)
+void UartComms_PopulateGUITempCPU(const float &cpu_temp)
 {
-    uartComms.gui_data->clear();
     uartComms.gui_data->set_cpu_temp((int32_t)cpu_temp);
 }
 
@@ -238,4 +237,9 @@ elapsedMillis* UartComms_GetTimeSinceLastRead()
 SLAM_Data* UartComms_GetSLAMData()
 {
   return uartComms.slam_data;
+}
+
+GUI_Data* UartComms_GetGUIData()
+{
+  return uartComms.gui_data;
 }

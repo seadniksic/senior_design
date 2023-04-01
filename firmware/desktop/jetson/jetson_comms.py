@@ -496,12 +496,15 @@ if __name__ == "__main__":
             # check if received all of the data
             if len(data) == num_bytes:
                 reply = uart_messages_pb2.GUI_Data()
-                try: 
-                    reply.ParseFromString(data)
-                    print("cpu temp", reply.cpu_temp)
-                except Exception as e:
-                    print("corrupt message, failed to serialize GUI_DATA")
-                    print(e)
+                # try: 
+                reply.ParseFromString(data)
+                calib_stat_str = bin(reply.calib_status)
+                local_stat = bin(reply.loco_status)
+                print(f"cpu_temp={reply.cpu_temp}, calib_stat={calib_stat_str}, servo_pan={reply.curr_servo_pan}, servo_tilt={reply.curr_servo_tilt}, servo_pan_home={reply.home_servo_pan}, servo_tilt_home={reply.home_servo_tilt}, loco_status={local_stat}")
+                    
+                # except Exception as e:
+                    # print("corrupt message, failed to serialize GUI_DATA")
+                    # print(e)
                     
 
 
@@ -521,7 +524,7 @@ if __name__ == "__main__":
                 reply = uart_messages_pb2.SLAM_Data()
                 try: 
                     reply.ParseFromString(data)
-                    print(end_slam_timer-start_slam_timer,num_bytes ,reply.lia_x, reply.lia_y, reply.lia_z, reply.eul_y, reply.eul_p,reply.eul_r, reply.pan, reply.tilt)
+                    # print(end_slam_timer-start_slam_timer,num_bytes ,reply.lia_x, reply.lia_y, reply.lia_z, reply.eul_y, reply.eul_p,reply.eul_r, reply.pan, reply.tilt)
                 except Exception as e:
                     print("corrupt message, failed to serialize SLAM_DATA")
                     print(e)

@@ -53,50 +53,734 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
     GUI_Data() = default;
     GUI_Data(const GUI_Data& rhs )
     {
-      set_cpu_temp(rhs.get_cpu_temp());
+      if(rhs.has_cpu_temp())
+      {
+        set_cpu_temp(rhs.get_cpu_temp());
+      }
+      else
+      {
+        clear_cpu_temp();
+      }
+
+      if(rhs.has_calib_status())
+      {
+        set_calib_status(rhs.get_calib_status());
+      }
+      else
+      {
+        clear_calib_status();
+      }
+
+      if(rhs.has_hts_temp())
+      {
+        set_hts_temp(rhs.get_hts_temp());
+      }
+      else
+      {
+        clear_hts_temp();
+      }
+
+      if(rhs.has_hts_humidity())
+      {
+        set_hts_humidity(rhs.get_hts_humidity());
+      }
+      else
+      {
+        clear_hts_humidity();
+      }
+
+      if(rhs.has_batt_temp())
+      {
+        set_batt_temp(rhs.get_batt_temp());
+      }
+      else
+      {
+        clear_batt_temp();
+      }
+
+      if(rhs.has_curr_servo_pan())
+      {
+        set_curr_servo_pan(rhs.get_curr_servo_pan());
+      }
+      else
+      {
+        clear_curr_servo_pan();
+      }
+
+      if(rhs.has_curr_servo_tilt())
+      {
+        set_curr_servo_tilt(rhs.get_curr_servo_tilt());
+      }
+      else
+      {
+        clear_curr_servo_tilt();
+      }
+
+      if(rhs.has_home_servo_pan())
+      {
+        set_home_servo_pan(rhs.get_home_servo_pan());
+      }
+      else
+      {
+        clear_home_servo_pan();
+      }
+
+      if(rhs.has_home_servo_tilt())
+      {
+        set_home_servo_tilt(rhs.get_home_servo_tilt());
+      }
+      else
+      {
+        clear_home_servo_tilt();
+      }
+
+      if(rhs.has_loco_status())
+      {
+        set_loco_status(rhs.get_loco_status());
+      }
+      else
+      {
+        clear_loco_status();
+      }
+
     }
 
     GUI_Data(const GUI_Data&& rhs ) noexcept
     {
-      set_cpu_temp(rhs.get_cpu_temp());
+      if(rhs.has_cpu_temp())
+      {
+        set_cpu_temp(rhs.get_cpu_temp());
+      }
+      else
+      {
+        clear_cpu_temp();
+      }
+
+      if(rhs.has_calib_status())
+      {
+        set_calib_status(rhs.get_calib_status());
+      }
+      else
+      {
+        clear_calib_status();
+      }
+
+      if(rhs.has_hts_temp())
+      {
+        set_hts_temp(rhs.get_hts_temp());
+      }
+      else
+      {
+        clear_hts_temp();
+      }
+
+      if(rhs.has_hts_humidity())
+      {
+        set_hts_humidity(rhs.get_hts_humidity());
+      }
+      else
+      {
+        clear_hts_humidity();
+      }
+
+      if(rhs.has_batt_temp())
+      {
+        set_batt_temp(rhs.get_batt_temp());
+      }
+      else
+      {
+        clear_batt_temp();
+      }
+
+      if(rhs.has_curr_servo_pan())
+      {
+        set_curr_servo_pan(rhs.get_curr_servo_pan());
+      }
+      else
+      {
+        clear_curr_servo_pan();
+      }
+
+      if(rhs.has_curr_servo_tilt())
+      {
+        set_curr_servo_tilt(rhs.get_curr_servo_tilt());
+      }
+      else
+      {
+        clear_curr_servo_tilt();
+      }
+
+      if(rhs.has_home_servo_pan())
+      {
+        set_home_servo_pan(rhs.get_home_servo_pan());
+      }
+      else
+      {
+        clear_home_servo_pan();
+      }
+
+      if(rhs.has_home_servo_tilt())
+      {
+        set_home_servo_tilt(rhs.get_home_servo_tilt());
+      }
+      else
+      {
+        clear_home_servo_tilt();
+      }
+
+      if(rhs.has_loco_status())
+      {
+        set_loco_status(rhs.get_loco_status());
+      }
+      else
+      {
+        clear_loco_status();
+      }
+
     }
 
     ~GUI_Data() override = default;
 
+    enum class Locomotion_Status : uint32_t
+    {
+      NONE = 0,
+      CONTROLS_INHIBIT = 1,
+      NORMAL_DRIVING_MODE = 2
+    };
+
     enum class FieldNumber : uint32_t
     {
       NOT_SET = 0,
-      CPU_TEMP = 1
+      CPU_TEMP = 1,
+      CALIB_STATUS = 2,
+      HTS_TEMP = 3,
+      HTS_HUMIDITY = 4,
+      BATT_TEMP = 5,
+      CURR_SERVO_PAN = 6,
+      CURR_SERVO_TILT = 7,
+      HOME_SERVO_PAN = 8,
+      HOME_SERVO_TILT = 9,
+      LOCO_STATUS = 10
     };
 
     GUI_Data& operator=(const GUI_Data& rhs)
     {
-      set_cpu_temp(rhs.get_cpu_temp());
+      if(rhs.has_cpu_temp())
+      {
+        set_cpu_temp(rhs.get_cpu_temp());
+      }
+      else
+      {
+        clear_cpu_temp();
+      }
+
+      if(rhs.has_calib_status())
+      {
+        set_calib_status(rhs.get_calib_status());
+      }
+      else
+      {
+        clear_calib_status();
+      }
+
+      if(rhs.has_hts_temp())
+      {
+        set_hts_temp(rhs.get_hts_temp());
+      }
+      else
+      {
+        clear_hts_temp();
+      }
+
+      if(rhs.has_hts_humidity())
+      {
+        set_hts_humidity(rhs.get_hts_humidity());
+      }
+      else
+      {
+        clear_hts_humidity();
+      }
+
+      if(rhs.has_batt_temp())
+      {
+        set_batt_temp(rhs.get_batt_temp());
+      }
+      else
+      {
+        clear_batt_temp();
+      }
+
+      if(rhs.has_curr_servo_pan())
+      {
+        set_curr_servo_pan(rhs.get_curr_servo_pan());
+      }
+      else
+      {
+        clear_curr_servo_pan();
+      }
+
+      if(rhs.has_curr_servo_tilt())
+      {
+        set_curr_servo_tilt(rhs.get_curr_servo_tilt());
+      }
+      else
+      {
+        clear_curr_servo_tilt();
+      }
+
+      if(rhs.has_home_servo_pan())
+      {
+        set_home_servo_pan(rhs.get_home_servo_pan());
+      }
+      else
+      {
+        clear_home_servo_pan();
+      }
+
+      if(rhs.has_home_servo_tilt())
+      {
+        set_home_servo_tilt(rhs.get_home_servo_tilt());
+      }
+      else
+      {
+        clear_home_servo_tilt();
+      }
+
+      if(rhs.has_loco_status())
+      {
+        set_loco_status(rhs.get_loco_status());
+      }
+      else
+      {
+        clear_loco_status();
+      }
+
       return *this;
     }
 
     GUI_Data& operator=(const GUI_Data&& rhs) noexcept
     {
-      set_cpu_temp(rhs.get_cpu_temp());
+      if(rhs.has_cpu_temp())
+      {
+        set_cpu_temp(rhs.get_cpu_temp());
+      }
+      else
+      {
+        clear_cpu_temp();
+      }
+      
+      if(rhs.has_calib_status())
+      {
+        set_calib_status(rhs.get_calib_status());
+      }
+      else
+      {
+        clear_calib_status();
+      }
+      
+      if(rhs.has_hts_temp())
+      {
+        set_hts_temp(rhs.get_hts_temp());
+      }
+      else
+      {
+        clear_hts_temp();
+      }
+      
+      if(rhs.has_hts_humidity())
+      {
+        set_hts_humidity(rhs.get_hts_humidity());
+      }
+      else
+      {
+        clear_hts_humidity();
+      }
+      
+      if(rhs.has_batt_temp())
+      {
+        set_batt_temp(rhs.get_batt_temp());
+      }
+      else
+      {
+        clear_batt_temp();
+      }
+      
+      if(rhs.has_curr_servo_pan())
+      {
+        set_curr_servo_pan(rhs.get_curr_servo_pan());
+      }
+      else
+      {
+        clear_curr_servo_pan();
+      }
+      
+      if(rhs.has_curr_servo_tilt())
+      {
+        set_curr_servo_tilt(rhs.get_curr_servo_tilt());
+      }
+      else
+      {
+        clear_curr_servo_tilt();
+      }
+      
+      if(rhs.has_home_servo_pan())
+      {
+        set_home_servo_pan(rhs.get_home_servo_pan());
+      }
+      else
+      {
+        clear_home_servo_pan();
+      }
+      
+      if(rhs.has_home_servo_tilt())
+      {
+        set_home_servo_tilt(rhs.get_home_servo_tilt());
+      }
+      else
+      {
+        clear_home_servo_tilt();
+      }
+      
+      if(rhs.has_loco_status())
+      {
+        set_loco_status(rhs.get_loco_status());
+      }
+      else
+      {
+        clear_loco_status();
+      }
+      
       return *this;
     }
 
     static constexpr char const* CPU_TEMP_NAME = "cpu_temp";
-    inline void clear_cpu_temp() { cpu_temp_.clear(); }
-    inline void set_cpu_temp(const int32_t& value) { cpu_temp_ = value; }
-    inline void set_cpu_temp(const int32_t&& value) { cpu_temp_ = value; }
-    inline int32_t& mutable_cpu_temp() { return cpu_temp_.get(); }
+    inline bool has_cpu_temp() const
+    {
+      return 0 != (presence::mask(presence::fields::CPU_TEMP) & presence_[presence::index(presence::fields::CPU_TEMP)]);
+    }
+    inline void clear_cpu_temp()
+    {
+      presence_[presence::index(presence::fields::CPU_TEMP)] &= ~(presence::mask(presence::fields::CPU_TEMP));
+      cpu_temp_.clear();
+    }
+    inline void set_cpu_temp(const int32_t& value)
+    {
+      presence_[presence::index(presence::fields::CPU_TEMP)] |= presence::mask(presence::fields::CPU_TEMP);
+      cpu_temp_ = value;
+    }
+    inline void set_cpu_temp(const int32_t&& value)
+    {
+      presence_[presence::index(presence::fields::CPU_TEMP)] |= presence::mask(presence::fields::CPU_TEMP);
+      cpu_temp_ = value;
+    }
+    inline int32_t& mutable_cpu_temp()
+    {
+      presence_[presence::index(presence::fields::CPU_TEMP)] |= presence::mask(presence::fields::CPU_TEMP);
+      return cpu_temp_.get();
+    }
     inline const int32_t& get_cpu_temp() const { return cpu_temp_.get(); }
     inline int32_t cpu_temp() const { return cpu_temp_.get(); }
+
+    static constexpr char const* CALIB_STATUS_NAME = "calib_status";
+    inline bool has_calib_status() const
+    {
+      return 0 != (presence::mask(presence::fields::CALIB_STATUS) & presence_[presence::index(presence::fields::CALIB_STATUS)]);
+    }
+    inline void clear_calib_status()
+    {
+      presence_[presence::index(presence::fields::CALIB_STATUS)] &= ~(presence::mask(presence::fields::CALIB_STATUS));
+      calib_status_.clear();
+    }
+    inline void set_calib_status(const int32_t& value)
+    {
+      presence_[presence::index(presence::fields::CALIB_STATUS)] |= presence::mask(presence::fields::CALIB_STATUS);
+      calib_status_ = value;
+    }
+    inline void set_calib_status(const int32_t&& value)
+    {
+      presence_[presence::index(presence::fields::CALIB_STATUS)] |= presence::mask(presence::fields::CALIB_STATUS);
+      calib_status_ = value;
+    }
+    inline int32_t& mutable_calib_status()
+    {
+      presence_[presence::index(presence::fields::CALIB_STATUS)] |= presence::mask(presence::fields::CALIB_STATUS);
+      return calib_status_.get();
+    }
+    inline const int32_t& get_calib_status() const { return calib_status_.get(); }
+    inline int32_t calib_status() const { return calib_status_.get(); }
+
+    static constexpr char const* HTS_TEMP_NAME = "hts_temp";
+    inline bool has_hts_temp() const
+    {
+      return 0 != (presence::mask(presence::fields::HTS_TEMP) & presence_[presence::index(presence::fields::HTS_TEMP)]);
+    }
+    inline void clear_hts_temp()
+    {
+      presence_[presence::index(presence::fields::HTS_TEMP)] &= ~(presence::mask(presence::fields::HTS_TEMP));
+      hts_temp_.clear();
+    }
+    inline void set_hts_temp(const int32_t& value)
+    {
+      presence_[presence::index(presence::fields::HTS_TEMP)] |= presence::mask(presence::fields::HTS_TEMP);
+      hts_temp_ = value;
+    }
+    inline void set_hts_temp(const int32_t&& value)
+    {
+      presence_[presence::index(presence::fields::HTS_TEMP)] |= presence::mask(presence::fields::HTS_TEMP);
+      hts_temp_ = value;
+    }
+    inline int32_t& mutable_hts_temp()
+    {
+      presence_[presence::index(presence::fields::HTS_TEMP)] |= presence::mask(presence::fields::HTS_TEMP);
+      return hts_temp_.get();
+    }
+    inline const int32_t& get_hts_temp() const { return hts_temp_.get(); }
+    inline int32_t hts_temp() const { return hts_temp_.get(); }
+
+    static constexpr char const* HTS_HUMIDITY_NAME = "hts_humidity";
+    inline bool has_hts_humidity() const
+    {
+      return 0 != (presence::mask(presence::fields::HTS_HUMIDITY) & presence_[presence::index(presence::fields::HTS_HUMIDITY)]);
+    }
+    inline void clear_hts_humidity()
+    {
+      presence_[presence::index(presence::fields::HTS_HUMIDITY)] &= ~(presence::mask(presence::fields::HTS_HUMIDITY));
+      hts_humidity_.clear();
+    }
+    inline void set_hts_humidity(const int32_t& value)
+    {
+      presence_[presence::index(presence::fields::HTS_HUMIDITY)] |= presence::mask(presence::fields::HTS_HUMIDITY);
+      hts_humidity_ = value;
+    }
+    inline void set_hts_humidity(const int32_t&& value)
+    {
+      presence_[presence::index(presence::fields::HTS_HUMIDITY)] |= presence::mask(presence::fields::HTS_HUMIDITY);
+      hts_humidity_ = value;
+    }
+    inline int32_t& mutable_hts_humidity()
+    {
+      presence_[presence::index(presence::fields::HTS_HUMIDITY)] |= presence::mask(presence::fields::HTS_HUMIDITY);
+      return hts_humidity_.get();
+    }
+    inline const int32_t& get_hts_humidity() const { return hts_humidity_.get(); }
+    inline int32_t hts_humidity() const { return hts_humidity_.get(); }
+
+    static constexpr char const* BATT_TEMP_NAME = "batt_temp";
+    inline bool has_batt_temp() const
+    {
+      return 0 != (presence::mask(presence::fields::BATT_TEMP) & presence_[presence::index(presence::fields::BATT_TEMP)]);
+    }
+    inline void clear_batt_temp()
+    {
+      presence_[presence::index(presence::fields::BATT_TEMP)] &= ~(presence::mask(presence::fields::BATT_TEMP));
+      batt_temp_.clear();
+    }
+    inline void set_batt_temp(const int32_t& value)
+    {
+      presence_[presence::index(presence::fields::BATT_TEMP)] |= presence::mask(presence::fields::BATT_TEMP);
+      batt_temp_ = value;
+    }
+    inline void set_batt_temp(const int32_t&& value)
+    {
+      presence_[presence::index(presence::fields::BATT_TEMP)] |= presence::mask(presence::fields::BATT_TEMP);
+      batt_temp_ = value;
+    }
+    inline int32_t& mutable_batt_temp()
+    {
+      presence_[presence::index(presence::fields::BATT_TEMP)] |= presence::mask(presence::fields::BATT_TEMP);
+      return batt_temp_.get();
+    }
+    inline const int32_t& get_batt_temp() const { return batt_temp_.get(); }
+    inline int32_t batt_temp() const { return batt_temp_.get(); }
+
+    static constexpr char const* CURR_SERVO_PAN_NAME = "curr_servo_pan";
+    inline bool has_curr_servo_pan() const
+    {
+      return 0 != (presence::mask(presence::fields::CURR_SERVO_PAN) & presence_[presence::index(presence::fields::CURR_SERVO_PAN)]);
+    }
+    inline void clear_curr_servo_pan()
+    {
+      presence_[presence::index(presence::fields::CURR_SERVO_PAN)] &= ~(presence::mask(presence::fields::CURR_SERVO_PAN));
+      curr_servo_pan_.clear();
+    }
+    inline void set_curr_servo_pan(const int32_t& value)
+    {
+      presence_[presence::index(presence::fields::CURR_SERVO_PAN)] |= presence::mask(presence::fields::CURR_SERVO_PAN);
+      curr_servo_pan_ = value;
+    }
+    inline void set_curr_servo_pan(const int32_t&& value)
+    {
+      presence_[presence::index(presence::fields::CURR_SERVO_PAN)] |= presence::mask(presence::fields::CURR_SERVO_PAN);
+      curr_servo_pan_ = value;
+    }
+    inline int32_t& mutable_curr_servo_pan()
+    {
+      presence_[presence::index(presence::fields::CURR_SERVO_PAN)] |= presence::mask(presence::fields::CURR_SERVO_PAN);
+      return curr_servo_pan_.get();
+    }
+    inline const int32_t& get_curr_servo_pan() const { return curr_servo_pan_.get(); }
+    inline int32_t curr_servo_pan() const { return curr_servo_pan_.get(); }
+
+    static constexpr char const* CURR_SERVO_TILT_NAME = "curr_servo_tilt";
+    inline bool has_curr_servo_tilt() const
+    {
+      return 0 != (presence::mask(presence::fields::CURR_SERVO_TILT) & presence_[presence::index(presence::fields::CURR_SERVO_TILT)]);
+    }
+    inline void clear_curr_servo_tilt()
+    {
+      presence_[presence::index(presence::fields::CURR_SERVO_TILT)] &= ~(presence::mask(presence::fields::CURR_SERVO_TILT));
+      curr_servo_tilt_.clear();
+    }
+    inline void set_curr_servo_tilt(const int32_t& value)
+    {
+      presence_[presence::index(presence::fields::CURR_SERVO_TILT)] |= presence::mask(presence::fields::CURR_SERVO_TILT);
+      curr_servo_tilt_ = value;
+    }
+    inline void set_curr_servo_tilt(const int32_t&& value)
+    {
+      presence_[presence::index(presence::fields::CURR_SERVO_TILT)] |= presence::mask(presence::fields::CURR_SERVO_TILT);
+      curr_servo_tilt_ = value;
+    }
+    inline int32_t& mutable_curr_servo_tilt()
+    {
+      presence_[presence::index(presence::fields::CURR_SERVO_TILT)] |= presence::mask(presence::fields::CURR_SERVO_TILT);
+      return curr_servo_tilt_.get();
+    }
+    inline const int32_t& get_curr_servo_tilt() const { return curr_servo_tilt_.get(); }
+    inline int32_t curr_servo_tilt() const { return curr_servo_tilt_.get(); }
+
+    static constexpr char const* HOME_SERVO_PAN_NAME = "home_servo_pan";
+    inline bool has_home_servo_pan() const
+    {
+      return 0 != (presence::mask(presence::fields::HOME_SERVO_PAN) & presence_[presence::index(presence::fields::HOME_SERVO_PAN)]);
+    }
+    inline void clear_home_servo_pan()
+    {
+      presence_[presence::index(presence::fields::HOME_SERVO_PAN)] &= ~(presence::mask(presence::fields::HOME_SERVO_PAN));
+      home_servo_pan_.clear();
+    }
+    inline void set_home_servo_pan(const int32_t& value)
+    {
+      presence_[presence::index(presence::fields::HOME_SERVO_PAN)] |= presence::mask(presence::fields::HOME_SERVO_PAN);
+      home_servo_pan_ = value;
+    }
+    inline void set_home_servo_pan(const int32_t&& value)
+    {
+      presence_[presence::index(presence::fields::HOME_SERVO_PAN)] |= presence::mask(presence::fields::HOME_SERVO_PAN);
+      home_servo_pan_ = value;
+    }
+    inline int32_t& mutable_home_servo_pan()
+    {
+      presence_[presence::index(presence::fields::HOME_SERVO_PAN)] |= presence::mask(presence::fields::HOME_SERVO_PAN);
+      return home_servo_pan_.get();
+    }
+    inline const int32_t& get_home_servo_pan() const { return home_servo_pan_.get(); }
+    inline int32_t home_servo_pan() const { return home_servo_pan_.get(); }
+
+    static constexpr char const* HOME_SERVO_TILT_NAME = "home_servo_tilt";
+    inline bool has_home_servo_tilt() const
+    {
+      return 0 != (presence::mask(presence::fields::HOME_SERVO_TILT) & presence_[presence::index(presence::fields::HOME_SERVO_TILT)]);
+    }
+    inline void clear_home_servo_tilt()
+    {
+      presence_[presence::index(presence::fields::HOME_SERVO_TILT)] &= ~(presence::mask(presence::fields::HOME_SERVO_TILT));
+      home_servo_tilt_.clear();
+    }
+    inline void set_home_servo_tilt(const int32_t& value)
+    {
+      presence_[presence::index(presence::fields::HOME_SERVO_TILT)] |= presence::mask(presence::fields::HOME_SERVO_TILT);
+      home_servo_tilt_ = value;
+    }
+    inline void set_home_servo_tilt(const int32_t&& value)
+    {
+      presence_[presence::index(presence::fields::HOME_SERVO_TILT)] |= presence::mask(presence::fields::HOME_SERVO_TILT);
+      home_servo_tilt_ = value;
+    }
+    inline int32_t& mutable_home_servo_tilt()
+    {
+      presence_[presence::index(presence::fields::HOME_SERVO_TILT)] |= presence::mask(presence::fields::HOME_SERVO_TILT);
+      return home_servo_tilt_.get();
+    }
+    inline const int32_t& get_home_servo_tilt() const { return home_servo_tilt_.get(); }
+    inline int32_t home_servo_tilt() const { return home_servo_tilt_.get(); }
+
+    static constexpr char const* LOCO_STATUS_NAME = "loco_status";
+    inline bool has_loco_status() const
+    {
+      return 0 != (presence::mask(presence::fields::LOCO_STATUS) & presence_[presence::index(presence::fields::LOCO_STATUS)]);
+    }
+    inline void clear_loco_status()
+    {
+      presence_[presence::index(presence::fields::LOCO_STATUS)] &= ~(presence::mask(presence::fields::LOCO_STATUS));
+      loco_status_.clear();
+    }
+    inline void set_loco_status(const Locomotion_Status& value)
+    {
+      presence_[presence::index(presence::fields::LOCO_STATUS)] |= presence::mask(presence::fields::LOCO_STATUS);
+      loco_status_ = value;
+    }
+    inline void set_loco_status(const Locomotion_Status&& value)
+    {
+      presence_[presence::index(presence::fields::LOCO_STATUS)] |= presence::mask(presence::fields::LOCO_STATUS);
+      loco_status_ = value;
+    }
+    inline const Locomotion_Status& get_loco_status() const { return loco_status_.get(); }
+    inline Locomotion_Status loco_status() const { return loco_status_.get(); }
 
 
     ::EmbeddedProto::Error serialize(::EmbeddedProto::WriteBufferInterface& buffer) const override
     {
       ::EmbeddedProto::Error return_value = ::EmbeddedProto::Error::NO_ERRORS;
 
-      if((0 != cpu_temp_.get()) && (::EmbeddedProto::Error::NO_ERRORS == return_value))
+      if(has_cpu_temp() && (::EmbeddedProto::Error::NO_ERRORS == return_value))
       {
-        return_value = cpu_temp_.serialize_with_id(static_cast<uint32_t>(FieldNumber::CPU_TEMP), buffer, false);
+        return_value = cpu_temp_.serialize_with_id(static_cast<uint32_t>(FieldNumber::CPU_TEMP), buffer, true);
+      }
+
+      if(has_calib_status() && (::EmbeddedProto::Error::NO_ERRORS == return_value))
+      {
+        return_value = calib_status_.serialize_with_id(static_cast<uint32_t>(FieldNumber::CALIB_STATUS), buffer, true);
+      }
+
+      if(has_hts_temp() && (::EmbeddedProto::Error::NO_ERRORS == return_value))
+      {
+        return_value = hts_temp_.serialize_with_id(static_cast<uint32_t>(FieldNumber::HTS_TEMP), buffer, true);
+      }
+
+      if(has_hts_humidity() && (::EmbeddedProto::Error::NO_ERRORS == return_value))
+      {
+        return_value = hts_humidity_.serialize_with_id(static_cast<uint32_t>(FieldNumber::HTS_HUMIDITY), buffer, true);
+      }
+
+      if(has_batt_temp() && (::EmbeddedProto::Error::NO_ERRORS == return_value))
+      {
+        return_value = batt_temp_.serialize_with_id(static_cast<uint32_t>(FieldNumber::BATT_TEMP), buffer, true);
+      }
+
+      if(has_curr_servo_pan() && (::EmbeddedProto::Error::NO_ERRORS == return_value))
+      {
+        return_value = curr_servo_pan_.serialize_with_id(static_cast<uint32_t>(FieldNumber::CURR_SERVO_PAN), buffer, true);
+      }
+
+      if(has_curr_servo_tilt() && (::EmbeddedProto::Error::NO_ERRORS == return_value))
+      {
+        return_value = curr_servo_tilt_.serialize_with_id(static_cast<uint32_t>(FieldNumber::CURR_SERVO_TILT), buffer, true);
+      }
+
+      if(has_home_servo_pan() && (::EmbeddedProto::Error::NO_ERRORS == return_value))
+      {
+        return_value = home_servo_pan_.serialize_with_id(static_cast<uint32_t>(FieldNumber::HOME_SERVO_PAN), buffer, true);
+      }
+
+      if(has_home_servo_tilt() && (::EmbeddedProto::Error::NO_ERRORS == return_value))
+      {
+        return_value = home_servo_tilt_.serialize_with_id(static_cast<uint32_t>(FieldNumber::HOME_SERVO_TILT), buffer, true);
+      }
+
+      if(has_loco_status() && (::EmbeddedProto::Error::NO_ERRORS == return_value))
+      {
+        return_value = loco_status_.serialize_with_id(static_cast<uint32_t>(FieldNumber::LOCO_STATUS), buffer, true);
       }
 
       return return_value;
@@ -116,7 +800,53 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
         switch(id_tag)
         {
           case FieldNumber::CPU_TEMP:
+            presence_[presence::index(presence::fields::CPU_TEMP)] |= presence::mask(presence::fields::CPU_TEMP);
             return_value = cpu_temp_.deserialize_check_type(buffer, wire_type);
+            break;
+
+          case FieldNumber::CALIB_STATUS:
+            presence_[presence::index(presence::fields::CALIB_STATUS)] |= presence::mask(presence::fields::CALIB_STATUS);
+            return_value = calib_status_.deserialize_check_type(buffer, wire_type);
+            break;
+
+          case FieldNumber::HTS_TEMP:
+            presence_[presence::index(presence::fields::HTS_TEMP)] |= presence::mask(presence::fields::HTS_TEMP);
+            return_value = hts_temp_.deserialize_check_type(buffer, wire_type);
+            break;
+
+          case FieldNumber::HTS_HUMIDITY:
+            presence_[presence::index(presence::fields::HTS_HUMIDITY)] |= presence::mask(presence::fields::HTS_HUMIDITY);
+            return_value = hts_humidity_.deserialize_check_type(buffer, wire_type);
+            break;
+
+          case FieldNumber::BATT_TEMP:
+            presence_[presence::index(presence::fields::BATT_TEMP)] |= presence::mask(presence::fields::BATT_TEMP);
+            return_value = batt_temp_.deserialize_check_type(buffer, wire_type);
+            break;
+
+          case FieldNumber::CURR_SERVO_PAN:
+            presence_[presence::index(presence::fields::CURR_SERVO_PAN)] |= presence::mask(presence::fields::CURR_SERVO_PAN);
+            return_value = curr_servo_pan_.deserialize_check_type(buffer, wire_type);
+            break;
+
+          case FieldNumber::CURR_SERVO_TILT:
+            presence_[presence::index(presence::fields::CURR_SERVO_TILT)] |= presence::mask(presence::fields::CURR_SERVO_TILT);
+            return_value = curr_servo_tilt_.deserialize_check_type(buffer, wire_type);
+            break;
+
+          case FieldNumber::HOME_SERVO_PAN:
+            presence_[presence::index(presence::fields::HOME_SERVO_PAN)] |= presence::mask(presence::fields::HOME_SERVO_PAN);
+            return_value = home_servo_pan_.deserialize_check_type(buffer, wire_type);
+            break;
+
+          case FieldNumber::HOME_SERVO_TILT:
+            presence_[presence::index(presence::fields::HOME_SERVO_TILT)] |= presence::mask(presence::fields::HOME_SERVO_TILT);
+            return_value = home_servo_tilt_.deserialize_check_type(buffer, wire_type);
+            break;
+
+          case FieldNumber::LOCO_STATUS:
+            presence_[presence::index(presence::fields::LOCO_STATUS)] |= presence::mask(presence::fields::LOCO_STATUS);
+            return_value = loco_status_.deserialize_check_type(buffer, wire_type);
             break;
 
           case FieldNumber::NOT_SET:
@@ -149,6 +879,15 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
     void clear() override
     {
       clear_cpu_temp();
+      clear_calib_status();
+      clear_hts_temp();
+      clear_hts_humidity();
+      clear_batt_temp();
+      clear_curr_servo_pan();
+      clear_curr_servo_tilt();
+      clear_home_servo_pan();
+      clear_home_servo_tilt();
+      clear_loco_status();
 
     }
 
@@ -159,6 +898,33 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
       {
         case FieldNumber::CPU_TEMP:
           name = CPU_TEMP_NAME;
+          break;
+        case FieldNumber::CALIB_STATUS:
+          name = CALIB_STATUS_NAME;
+          break;
+        case FieldNumber::HTS_TEMP:
+          name = HTS_TEMP_NAME;
+          break;
+        case FieldNumber::HTS_HUMIDITY:
+          name = HTS_HUMIDITY_NAME;
+          break;
+        case FieldNumber::BATT_TEMP:
+          name = BATT_TEMP_NAME;
+          break;
+        case FieldNumber::CURR_SERVO_PAN:
+          name = CURR_SERVO_PAN_NAME;
+          break;
+        case FieldNumber::CURR_SERVO_TILT:
+          name = CURR_SERVO_TILT_NAME;
+          break;
+        case FieldNumber::HOME_SERVO_PAN:
+          name = HOME_SERVO_PAN_NAME;
+          break;
+        case FieldNumber::HOME_SERVO_TILT:
+          name = HOME_SERVO_TILT_NAME;
+          break;
+        case FieldNumber::LOCO_STATUS:
+          name = LOCO_STATUS_NAME;
           break;
         default:
           name = "Invalid FieldNumber";
@@ -221,6 +987,15 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
       }
 
       left_chars = cpu_temp_.to_string(left_chars, indent_level + 2, CPU_TEMP_NAME, true);
+      left_chars = calib_status_.to_string(left_chars, indent_level + 2, CALIB_STATUS_NAME, false);
+      left_chars = hts_temp_.to_string(left_chars, indent_level + 2, HTS_TEMP_NAME, false);
+      left_chars = hts_humidity_.to_string(left_chars, indent_level + 2, HTS_HUMIDITY_NAME, false);
+      left_chars = batt_temp_.to_string(left_chars, indent_level + 2, BATT_TEMP_NAME, false);
+      left_chars = curr_servo_pan_.to_string(left_chars, indent_level + 2, CURR_SERVO_PAN_NAME, false);
+      left_chars = curr_servo_tilt_.to_string(left_chars, indent_level + 2, CURR_SERVO_TILT_NAME, false);
+      left_chars = home_servo_pan_.to_string(left_chars, indent_level + 2, HOME_SERVO_PAN_NAME, false);
+      left_chars = home_servo_tilt_.to_string(left_chars, indent_level + 2, HOME_SERVO_TILT_NAME, false);
+      left_chars = loco_status_.to_string(left_chars, indent_level + 2, LOCO_STATUS_NAME, false);
   
       if( 0 == indent_level) 
       {
@@ -244,8 +1019,60 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
 
   private:
 
+      // Define constants for tracking the presence of fields.
+      // Use a struct to scope the variables from user fields as namespaces are not allowed within classes.
+      struct presence
+      {
+        // An enumeration with all the fields for which presence has to be tracked.
+        enum class fields : uint32_t
+        {
+          CPU_TEMP,
+          CALIB_STATUS,
+          HTS_TEMP,
+          HTS_HUMIDITY,
+          BATT_TEMP,
+          CURR_SERVO_PAN,
+          CURR_SERVO_TILT,
+          HOME_SERVO_PAN,
+          HOME_SERVO_TILT,
+          LOCO_STATUS
+        };
+
+        // The number of fields for which presence has to be tracked.
+        static constexpr uint32_t N_FIELDS = 10;
+
+        // Which type are we using to track presence.
+        using TYPE = uint32_t;
+
+        // How many bits are there in the presence type.
+        static constexpr uint32_t N_BITS = std::numeric_limits<TYPE>::digits;
+
+        // How many variables of TYPE do we need to bit mask all presence fields.
+        static constexpr uint32_t SIZE = (N_FIELDS / N_BITS) + ((N_FIELDS % N_BITS) > 0 ? 1 : 0);
+
+        // Obtain the index of a given field in the presence array.
+        static constexpr uint32_t index(const fields& field) { return static_cast<uint32_t>(field) / N_BITS; }
+
+        // Obtain the bit mask for the given field assuming we are at the correct index in the presence array.
+        static constexpr TYPE mask(const fields& field)
+        {
+          return static_cast<uint32_t>(0x01) << (static_cast<uint32_t>(field) % N_BITS);
+        }
+      };
+
+      // Create an array in which the presence flags are stored.
+      typename presence::TYPE presence_[presence::SIZE] = {0};
 
       EmbeddedProto::int32 cpu_temp_ = 0;
+      EmbeddedProto::int32 calib_status_ = 0;
+      EmbeddedProto::int32 hts_temp_ = 0;
+      EmbeddedProto::int32 hts_humidity_ = 0;
+      EmbeddedProto::int32 batt_temp_ = 0;
+      EmbeddedProto::int32 curr_servo_pan_ = 0;
+      EmbeddedProto::int32 curr_servo_tilt_ = 0;
+      EmbeddedProto::int32 home_servo_pan_ = 0;
+      EmbeddedProto::int32 home_servo_tilt_ = 0;
+      EmbeddedProto::enumeration<Locomotion_Status> loco_status_ = static_cast<Locomotion_Status>(0);
 
 };
 
