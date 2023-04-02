@@ -496,15 +496,15 @@ if __name__ == "__main__":
             # check if received all of the data
             if len(data) == num_bytes:
                 reply = uart_messages_pb2.GUI_Data()
-                # try: 
-                reply.ParseFromString(data)
-                calib_stat_str = bin(reply.calib_status)
-                local_stat = bin(reply.loco_status)
-                print(f"cpu_temp={reply.cpu_temp}, calib_stat={calib_stat_str}, servo_pan={reply.curr_servo_pan}, servo_tilt={reply.curr_servo_tilt}, servo_pan_home={reply.home_servo_pan}, servo_tilt_home={reply.home_servo_tilt}, loco_status={local_stat}")
+                try: 
+                    reply.ParseFromString(data)
+                    calib_stat_str = bin(reply.calib_status)
+                    local_stat = bin(reply.loco_status)
+                    print(f"cpu_temp={reply.cpu_temp}, calib_stat={calib_stat_str}, servo_pan={reply.curr_servo_pan}, servo_tilt={reply.curr_servo_tilt}, servo_pan_home={reply.home_servo_pan}, servo_tilt_home={reply.home_servo_tilt}, loco_status={local_stat}")
                     
-                # except Exception as e:
-                    # print("corrupt message, failed to serialize GUI_DATA")
-                    # print(e)
+                except Exception as e:
+                    print("corrupt message, failed to serialize GUI_DATA")
+                    print(e)
                     
 
 
