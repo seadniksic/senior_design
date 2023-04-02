@@ -464,7 +464,8 @@ if __name__ == "__main__":
             # store the length of the message and add it to be sent
             msg_len = len(proto_msg_serialized)
 
-            og_size = 28
+            og_size = 3 + 6*5   # int32's could take up to 10 bytes to encode if it is negative
+                                # something about forward compatibility with int64's
             print(f"msg_len = {msg_len}, og_size={og_size}")
             print(f"COMPRESSION: {(msg_len*100 / og_size)}")
 
@@ -516,7 +517,9 @@ if __name__ == "__main__":
         if len(data) == num_bytes:
             reply = uart_messages_pb2.Joystick_Input()
             reply.ParseFromString(data)
-            print(reply)
+            # print(reply)
+            print("----DATA PARSED----")
+            
 
 
 
