@@ -463,6 +463,11 @@ if __name__ == "__main__":
 
             # store the length of the message and add it to be sent
             msg_len = len(proto_msg_serialized)
+
+            og_size = 28
+            print(f"msg_len = {msg_len}, og_size={og_size}")
+            print(f"COMPRESSION: {(msg_len*100 / og_size)}")
+
             
             # print("proto msg", proto_msg_serialized)
             # print("msg length",msg_len)
