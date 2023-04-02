@@ -1063,15 +1063,15 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
       // Create an array in which the presence flags are stored.
       typename presence::TYPE presence_[presence::SIZE] = {0};
 
-      EmbeddedProto::int32 cpu_temp_ = 0;
-      EmbeddedProto::int32 calib_status_ = 0;
-      EmbeddedProto::int32 hts_temp_ = 0;
-      EmbeddedProto::int32 hts_humidity_ = 0;
-      EmbeddedProto::int32 batt_temp_ = 0;
-      EmbeddedProto::int32 curr_servo_pan_ = 0;
-      EmbeddedProto::int32 curr_servo_tilt_ = 0;
-      EmbeddedProto::int32 home_servo_pan_ = 0;
-      EmbeddedProto::int32 home_servo_tilt_ = 0;
+      EmbeddedProto::sint32 cpu_temp_ = 0;
+      EmbeddedProto::sint32 calib_status_ = 0;
+      EmbeddedProto::sint32 hts_temp_ = 0;
+      EmbeddedProto::sint32 hts_humidity_ = 0;
+      EmbeddedProto::sint32 batt_temp_ = 0;
+      EmbeddedProto::sint32 curr_servo_pan_ = 0;
+      EmbeddedProto::sint32 curr_servo_tilt_ = 0;
+      EmbeddedProto::sint32 home_servo_pan_ = 0;
+      EmbeddedProto::sint32 home_servo_tilt_ = 0;
       EmbeddedProto::enumeration<Locomotion_Status> loco_status_ = static_cast<Locomotion_Status>(0);
 
 };
@@ -1862,12 +1862,12 @@ class Joystick_Input final: public ::EmbeddedProto::MessageInterface
       typename presence::TYPE presence_[presence::SIZE] = {0};
 
       EmbeddedProto::enumeration<Buttons> button_ = static_cast<Buttons>(0);
-      EmbeddedProto::int32 LJOY_X_ = 0;
-      EmbeddedProto::int32 LJOY_Y_ = 0;
-      EmbeddedProto::int32 RJOY_X_ = 0;
-      EmbeddedProto::int32 RJOY_Y_ = 0;
-      EmbeddedProto::int32 TR_ = 0;
-      EmbeddedProto::int32 TL_ = 0;
+      EmbeddedProto::sint32 LJOY_X_ = 0;
+      EmbeddedProto::sint32 LJOY_Y_ = 0;
+      EmbeddedProto::sint32 RJOY_X_ = 0;
+      EmbeddedProto::sint32 RJOY_Y_ = 0;
+      EmbeddedProto::sint32 TR_ = 0;
+      EmbeddedProto::sint32 TL_ = 0;
 
 };
 
@@ -2729,8 +2729,8 @@ class SLAM_Data final: public ::EmbeddedProto::MessageInterface
       EmbeddedProto::floatfixed eul_y_ = 0.0;
       EmbeddedProto::floatfixed eul_p_ = 0.0;
       EmbeddedProto::floatfixed eul_r_ = 0.0;
-      EmbeddedProto::int32 pan_ = 0;
-      EmbeddedProto::int32 tilt_ = 0;
+      EmbeddedProto::sint32 pan_ = 0;
+      EmbeddedProto::sint32 tilt_ = 0;
 
 };
 

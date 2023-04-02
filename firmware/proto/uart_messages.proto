@@ -26,12 +26,12 @@ message Joystick_Input
     }
 
     optional Buttons button = 1; // bit per button
-    optional int32 LJOY_X = 2; // int16_t
-    optional int32 LJOY_Y = 3;
-    optional int32 RJOY_X = 4;
-    optional int32 RJOY_Y = 5;
-    optional int32 TR = 6; //uint8_t
-    optional int32 TL = 7;
+    optional sint32 LJOY_X = 2; // int16_t
+    optional sint32 LJOY_Y = 3;
+    optional sint32 RJOY_X = 4;
+    optional sint32 RJOY_Y = 5;
+    optional sint32 TR = 6; //uint8_t
+    optional sint32 TL = 7;
 }
 
 message SLAM_Data
@@ -49,8 +49,8 @@ message SLAM_Data
     optional float eul_r = 6;
 
     // angles
-    optional int32 pan = 7;
-    optional int32 tilt = 8;
+    optional sint32 pan = 7;
+    optional sint32 tilt = 8;
 }
 
 message GUI_Data
@@ -62,15 +62,15 @@ message GUI_Data
         NORMAL_DRIVING_MODE = 2;
     }
 
-    optional int32 cpu_temp = 1;   // done
-    optional int32 calib_status = 2; // done (needs parsing on jetson side)
-    optional int32 hts_temp = 3; 
-    optional int32 hts_humidity = 4;
-    optional int32 batt_temp = 5;
-    optional int32 curr_servo_pan = 6; //done
-    optional int32 curr_servo_tilt = 7; // done
-    optional int32 home_servo_pan = 8; // done
-    optional int32 home_servo_tilt = 9; // done
+    optional sint32 cpu_temp = 1;   // done
+    optional sint32 calib_status = 2; // done (needs parsing on jetson side)
+    optional sint32 hts_temp = 3; 
+    optional sint32 hts_humidity = 4;
+    optional sint32 batt_temp = 5;
+    optional sint32 curr_servo_pan = 6; //done
+    optional sint32 curr_servo_tilt = 7; // done
+    optional sint32 home_servo_pan = 8; // done
+    optional sint32 home_servo_tilt = 9; // done
     optional Locomotion_Status loco_status = 10; //done
     
 }
