@@ -465,9 +465,14 @@ if __name__ == "__main__":
             msg_len = len(proto_msg_serialized)
 
             og_size = 3 + 6*5   # int32's could take up to 10 bytes to encode if it is negative
+                                # int32 expecsts the number to be mostly postive.
+                                # sint32 is more efffient with negative numbers
                                 # something about forward compatibility with int64's
+            og_size_raw = 2 + 6*4
             print(f"msg_len = {msg_len}, og_size={og_size}")
             print(f"COMPRESSION: {(msg_len*100 / og_size)}")
+            print(f"COMPRESSION2: {msg_len*100 / og_size_raw}")
+
 
             
             # print("proto msg", proto_msg_serialized)
