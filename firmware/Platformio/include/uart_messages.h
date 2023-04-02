@@ -1862,12 +1862,12 @@ class Joystick_Input final: public ::EmbeddedProto::MessageInterface
       typename presence::TYPE presence_[presence::SIZE] = {0};
 
       EmbeddedProto::enumeration<Buttons> button_ = static_cast<Buttons>(0);
-      EmbeddedProto::int32 LJOY_X_ = 0;
-      EmbeddedProto::int32 LJOY_Y_ = 0;
-      EmbeddedProto::int32 RJOY_X_ = 0;
-      EmbeddedProto::int32 RJOY_Y_ = 0;
-      EmbeddedProto::int32 TR_ = 0;
-      EmbeddedProto::int32 TL_ = 0;
+      EmbeddedProto::sint32 LJOY_X_ = 0;
+      EmbeddedProto::sint32 LJOY_Y_ = 0;
+      EmbeddedProto::sint32 RJOY_X_ = 0;
+      EmbeddedProto::sint32 RJOY_Y_ = 0;
+      EmbeddedProto::sint32 TR_ = 0;
+      EmbeddedProto::sint32 TL_ = 0;
 
 };
 
