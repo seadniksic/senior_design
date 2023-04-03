@@ -2,6 +2,7 @@
 #define ROVERNETWORKING_CPP
 
 #include "roverNetworking.h"
+#include <time.h>
 
 std::unique_ptr<ReceiveData> imagePortServer, pointCloudServer, statusPortServer, commandsServer, cameraPositionServer;
 std::unique_ptr<TransmitData> imageClient, pointCloudClient, statusClient, commandsPortClient, cameraPositionClient;
@@ -31,6 +32,7 @@ void initializeNetwork()
 void sendCameraData()
 {
     int incomingSize = 0;
+    begin = clock();
     while(incomingSize == 0)
         incomingSize = imagePortServer->getData(static_cast<void*>(cameraBuffer.get()), IMAGE_BUFFER_SIZE);
     imageClient->sendPayload(static_cast<void*>(cameraBuffer.get()), incomingSize);

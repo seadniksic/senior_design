@@ -16,7 +16,7 @@ import math
 
 
 window_title = "Stream"
-model_save_path = "models"
+model_save_path = "models/movenet_multipose_lightning_1"
 model = tf.saved_model.load(model_save_path)
 tf.debugging.set_log_device_placement(True)
 movenet = model.signatures['serving_default']
