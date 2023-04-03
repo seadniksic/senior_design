@@ -18,6 +18,6 @@ def map_data_callback(msg):
     sock.sendall(sendData)
 
 rospy.init_node("mapSub")
-rospy.Subscriber("/rtabmap/", MapData, map_data_callback)
+rospy.Subscriber("/rtabmap/mapData", MapData, map_data_callback)
 rospy.spin()
 sock.close()
