@@ -2,14 +2,30 @@
 
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import String
+from cv_bridge import CvBridge
+from sensor_msgs.msg import Image
+import cv2
+import numpy as np
 import socket, select
 import uart_messages_pb2
+
+def createString(msg):
+    output = "CPU Temperature: " + str(msg.cpu_temp) + "\n"
+    output += "Calibration Status: " + str(msg.calib_status) + "\n"
+    output  += "HTS Temperature: " + str(msg.hts_temp) + "\n"
+    output += "HTS Humidity: " + str(msg.hts_humidity) + "\n"
+    output += "Battery Temperature: " + str(msg.batt_temp) + "\n"
+    output += "Current Servo Pan: " + str(msg.curr_servo_pan) + "\n"
+    output += "Current Servo Tilt: " + str(msg.home_servo_pan) + "\n"
+    output += "Home Servo Pan: " + str(msg.home_servo_pan) + "\n"
+    output += "Home Servo Tilt: " + str(msg.home_servo_tilt) + "\n"
+    output += "Locomotion Status: " + str(msg.loco_status) + "\n"
+    return output
 
 class RoverStatusPublisher(Node):
     def __init__(self):
         super().__init__('roverStatusPublisher')
-        self.roverStatusPublisher = self.create_publisher(String, 'roverStatusStream', 10)
+        self.roverStatusPublisher = self.create_publisher(Image, 'roverStatusStream', 10)
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.bind(("127.0.0.1", 8091))
         self.socket.listen(1)
@@ -17,6 +33,7 @@ class RoverStatusPublisher(Node):
         timerPeriod = 1 / 60
         self.create_timer(timerPeriod, self.roverStatusTimerCallBack)
         self.client = None
+        self.bridge = CvBridge()
     
     def roverStatusTimerCallBack(self):
         try:
@@ -42,11 +59,30 @@ class RoverStatusPublisher(Node):
             except Exception as e:
                 print("Fucking idiot ran into " + str(e))
             
+
             calib_stat_str = bin(response.calib_status)
             local_stat = bin(response.loco_status)
             print(f"cpu_temp={response.cpu_temp}, calib_stat={calib_stat_str}, servo_pan={response.curr_servo_pan}, servo_tilt={response.curr_servo_tilt}, servo_pan_home={response.home_servo_pan}, servo_tilt_home={response.home_servo_tilt}, loco_status={local_stat}")
             print(response.cpu_temp)
             self.roverStatusPublisher.publish(msg)
+
+
+            newOutput = createString(response)
+            display = np.zeros((500, 500, 3), np.uint8)
+            display.fill(255)
+
+            font = cv2.FONT_HERSHEY_SIMPLEX
+            font_scale = 1
+            color = (0, 0, 0)
+            thickness = 2
+
+            text_size, _ = cv2.getTextSize(newOutput, font, font_scale, thickness)
+            text_x = (display.shape[1] - text_size[0]) // 2
+            text_y = (display.shape[0] + text_size[1]) // 2
+            cv2.putText(display, newOutput, (text_x, text_y), font, font_scale, color, thickness)
+
+            rosMsg = self.bridge.cv2_to_imgmsg(display, encoding="passthrough")
+            self.roverStatusPublisher.publish(rosMsg)
 
         except Exception as e:
             print("Rover Status Publisher ran into " + str(e))
