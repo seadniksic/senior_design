@@ -9,7 +9,7 @@ class BridgeHeader:
         self.frame_id = mapHeader.frame_id
     
     def fillNewHeader(self, newHeader):
-        newHeaderseq = self.seq
+        newHeader.seq = self.seq
         newHeader.stamp = self.stamp
         newHeader.frame_id = self.frame_id
 
