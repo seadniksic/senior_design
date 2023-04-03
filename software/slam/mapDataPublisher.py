@@ -1,15 +1,19 @@
-import rclpy, pickle, socket, zstd, select
-from rclpy.node import Node
-from rtabmap_ros.msg import MapData
-from rosMapToRos2Map import Ros1MapDataBridge
+#!/usr/bin/env python
 
-class MinimalPublisher(Node):
+import rospy
+import pickle
+import socket
+import zstd
+import select
+from rtabmap_ros.msg import MapData
+
+class MinimalPublisher:
 
     def __init__(self):
-        super().__init__('minimal_publisher')
-        self.publisher_ = self.create_publisher(MapData, 'mapDataStream', 10)
-        timer_period = 0.016666  # seconds
-        self.timer = self.create_timer(timer_period, self.timer_callback)
+        rospy.init_node('minimal_publisher')
+        self.publisher_ = rospy.Publisher('mapDataStream', MapData, queue_size=10)
+        timer_period = rospy.Duration.from_sec(0.016666)  # seconds
+        self.timer = rospy.Timer(timer_period, self.timer_callback)
 
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         host = "127.0.0.1"
@@ -17,16 +21,15 @@ class MinimalPublisher(Node):
 
         self.sock.bind((host, port))
         self.sock.listen(1)
-        self.client, addr = self.sock.accept()
-        self.readSockets = [self.client]
+        self.client = None
 
 
-    def timer_callback(self):
+    def timer_callback(self, event):
         if self.client is None:
-            readSocket, writeSocket, errorSocket = select.select([self.socket], [], [], 0)
+            readSocket, writeSocket, errorSocket = select.select([self.sock], [], [], 0)
             if len(readSocket) == 0:
                 return
-            self.client, addr = self.socket.accept()
+            self.client, addr = self.sock.accept()
         readSocket, writeSocket, errorSocket = select.select([self.client], [], [], 0)
         if len(readSocket) == 0:
             return
@@ -42,19 +45,14 @@ class MinimalPublisher(Node):
 
         newMap = zstd.decompress(msg)
         newMap = pickle.loads(newMap)
-
-        self.publisher_.publish(newMap.getMapData())
+        print("published!")
+        self.publisher_.publish(newMap)
 
 
 def main(args=None):
-    rclpy.init(args=args)
-
     minimal_publisher = MinimalPublisher()
 
-    rclpy.spin(minimal_publisher)
-
-    minimal_publisher.destroy_node()
-    rclpy.shutdown()
+    rospy.spin()
 
 
 if __name__ == '__main__':
