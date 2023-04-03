@@ -23,7 +23,7 @@
 // BL = Back Left
 #define BL_IN3_PIN 26 //This pin will become #define BL_IN2_PIN 21
 #define BL_IN4_PIN 27 //The low side of the diff pair H Bridge control input can be removed
-#define BR_EN_PIN 23 //This will be changed for Carrier Board
+#define BL_EN_PIN 23 //This will be changed for Carrier Board
 
 //New pinout for back wheel control
 // #define BR_IN1_PIN 20
