@@ -3,7 +3,8 @@
 
 #define LOCAL_IP "127.0.0.1"
 #define HOST_IP "10.42.0.1"
-#define CLIENT_IP "10.42.0.12"
+// #define CLIENT_IP "10.42.0.12"
+#define CLIENT_IP "10.42.0.45"
 
 #define WIFI_IMAGE_PORT 8080
 #define WIFI_POINT_CLOUD_PORT 8081

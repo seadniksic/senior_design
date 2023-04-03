@@ -19,7 +19,7 @@ class ImagePublisher:
         self.client = None
         self.bridge = CvBridge()
     
-    def timer_callback(self):
+    def timer_callback(self, event):
         try:
             if self.client is None:
                 readSocket, writeSocket, errorSocket = select.select([self.socket], [], [], 0)
@@ -46,6 +46,11 @@ class ImagePublisher:
 
         except Exception as e:
             print("Image Publisher ran into " + str(e))
+            print("Attempting to reconnect...")
+            
+            if self.client is not None:
+                self.client.close()
+            self.client = None
     
     def shutdownNode(self):
         if self.socket is not None:

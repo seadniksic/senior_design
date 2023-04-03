@@ -1,23 +1,22 @@
 #!/usr/bin/env python
 
-import rclpy
-from rclpy.node import Node
+import rospy, socket, select, pickle
 from geometry_msgs.msg import Point
-import socket, select, pickle
 
-class CameraPositionPublisher(Node):
+class CameraPositionPublisher:
     def __init__(self):
-        super().__init__('cameraPositionPublisher')
-        self.cameraPositionPublisher = self.create_publisher(Point, 'cameraPositionStream', 10)
+        rospy.init_node('cameraPositionPublisher')
+        self.publisher_ = rospy.Publisher('cameraPositionStream', Point, queue_size=10)
+        timer_period = rospy.Duration.from_sec(0.016666)  # seconds
+        self.timer = rospy.Timer(timer_period, self.timer_callback)
+
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.bind(("127.0.0.1", 8094))
         self.socket.listen(1)
 
-        timerPeriod = 1 / 60
-        self.create_timer(timerPeriod, self.cameraPositionTimerCallBack)
         self.client = None
     
-    def cameraPositionTimerCallBack(self):
+    def timer_callback(self, event):
         try:
             if self.client is None:
                 readSocket, writeSocket, errorSocket = select.select([self.socket], [], [], 0)
@@ -36,10 +35,15 @@ class CameraPositionPublisher(Node):
                 msg += self.client.recv(size - len(msg))
             
             pointData = pickle.load(msg)
-            self.cameraPositionPublisher.publish(pointData)
+            self.publisher_.publish(pointData)
 
         except Exception as e:
-            print("Camera Position Publisher ran into " + str(e))
+            print("Image Publisher ran into " + str(e))
+            print("Attempting to reconnect...")
+            
+            if self.client is not None:
+                self.client.close()
+            self.client = None
     
     def shutdownNode(self):
         if self.socket is not None:
@@ -49,12 +53,9 @@ class CameraPositionPublisher(Node):
 
 if __name__ == '__main__':
     try:
-        rclpy.init()
         cameraPositionNode = CameraPositionPublisher()
-        rclpy.spin(cameraPositionNode)
-        cameraPositionNode.shutdownNode()
-        cameraPositionNode.destroy_node()
-        rclpy.shutdown()
+
+        rospy.spin()
     except KeyboardInterrupt:
         pass
 
