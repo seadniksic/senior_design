@@ -17,14 +17,14 @@ class BigDaddyPublisher(Node):
         self.imagePublisher_ = self.create_publisher(Image, 'imageStream', 10)
         self.pointCloudPublisher_ = self.create_publisher(PointCloud2, 'pointCloudStream', 10)
         self.positionPublisher_ = self.create_publisher(Point, 'cameraPositionStream', 10)
-        self.statusPublisher_ = self.create_publisher(String, 'statusStream', 10)
+        # self.statusPublisher_ = self.create_publisher(String, 'statusStream', 10)
 
         timerPeriod = 0.016666  # seconds
 
         self.imageTimer = self.create_timer(timerPeriod, self.imageTimerCallBack)
         self.pointCloudTimer = self.create_timer(timerPeriod, self.pointCloudTimerCallBack)
         self.positionTimer = self.create_timer(timerPeriod, self.positionTimerCallBack)
-        self.statusTimer = self.create_timer(timerPeriod, self.statusTimerCallBack)
+        # self.statusTimer = self.create_timer(timerPeriod, self.statusTimerCallBack)
 
         self.imageSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.imageSocket.bind(("127.0.0.1", 8089))
@@ -38,14 +38,14 @@ class BigDaddyPublisher(Node):
         self.positionSocket.bind(("127.0.0.1", 8094))
         self.positionSocket.listen(1)
 
-        self.statusSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.statusSocket.bind(("127.0.0.1", 8091))
-        self.statusSocket.listen(1)
+        # self.statusSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # self.statusSocket.bind(("127.0.0.1", 8091))
+        # self.statusSocket.listen(1)
 
         self.imageClient = None
         self.pointCloudClient = None
         self.positionClient = None
-        self.statusClient = None
+        # self.statusClient = None
 
     def imageTimerCallBack(self):
         try:
@@ -143,29 +143,29 @@ class BigDaddyPublisher(Node):
         except Exception as e:
             print("ran into " + str(e))
     
-    def statusTimerCallBack(self):
-        try:
-            if self.statusClient is None:
-                readSocket, writeSocket, errorSocket = select.select([self.statusSocket], [], [], 0)
-                if len(readSocket) == 0:
-                    return
-                self.statusClient, addr = self.statusSocket.accept()
+    # def statusTimerCallBack(self):
+    #     try:
+    #         if self.statusClient is None:
+    #             readSocket, writeSocket, errorSocket = select.select([self.statusSocket], [], [], 0)
+    #             if len(readSocket) == 0:
+    #                 return
+    #             self.statusClient, addr = self.statusSocket.accept()
             
-            readSocket, writeSocket, errorSocket = select.select([self.statusClient], [], [], 0)
-            if len(readSocket) == 0:
-                return
-            size = self.statusClient.recv(8)
-            size = int.from_bytes(size, 'little')
-            if size <= 0:
-                return
-            msg = self.statusClient.recv(1400)
-            while len(msg) < size:
-                msg += self.statusClient.recv(min(1400, size - len(msg)))
+    #         readSocket, writeSocket, errorSocket = select.select([self.statusClient], [], [], 0)
+    #         if len(readSocket) == 0:
+    #             return
+    #         size = self.statusClient.recv(8)
+    #         size = int.from_bytes(size, 'little')
+    #         if size <= 0:
+    #             return
+    #         msg = self.statusClient.recv(1400)
+    #         while len(msg) < size:
+    #             msg += self.statusClient.recv(min(1400, size - len(msg)))
             
-            self.statusPublisher_.publish(str(msg))
+    #         self.statusPublisher_.publish(str(msg))
         
-        except Exception as e:
-            print("ran into " + str(e))
+    #     except Exception as e:
+    #         print("ran into " + str(e))
     
 def main(args=None):
     rclpy.init(args=args)
