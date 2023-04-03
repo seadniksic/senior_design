@@ -4,7 +4,7 @@
 #include <Arduino.h>
 #include "pinout.h"
 
-#define ANALOG_WRITE_VAL 200
+#define ANALOG_WRITE_VAL 10
 #define FREQ 1000
 
 // Function Macros

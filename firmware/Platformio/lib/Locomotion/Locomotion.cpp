@@ -213,22 +213,16 @@ void Locomotion_Init()
 
 void Locomotion_Run()
 {
-  for (int i = 0; i < 3; i++)
-  {
-    digitalWrite(13, HIGH);
-    delay(100);
-    digitalWrite(13, LOW);
-    delay(100);
-  }
+
 
   Locomotion_Drive_Forward();
   delay(2000);
   Locomotion_All_Axis_Off();
+  delay(2000);
+  Locomotion_Drive_Backward();
+  delay(2000);
+  Locomotion_All_Axis_Off();
 
-  while (true)
-  {
-    digitalWrite(13, HIGH);
-  }
 }
 
 

@@ -48,6 +48,8 @@ void main_prog()
   bool reset_comms_status = false;
   uint8_t LED_state = HIGH;
 
+  Locomotion_Run();
+
   // Main while loop
   while(1)
   {
@@ -59,6 +61,8 @@ void main_prog()
       LED_state = !LED_state;
       digitalWrite(ONBOARD_LED_PIN, LED_state);
     }
+
+    
 
     
 
@@ -137,7 +141,7 @@ void main_prog()
   //     // Clear the buffer
   //     UartComms_ClearWriteBuffer();
   //   }
-  // }  
+  }  
 }
 
 void setup() {
