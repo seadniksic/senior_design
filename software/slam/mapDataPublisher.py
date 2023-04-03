@@ -1,16 +1,12 @@
 #!/usr/bin/env python
 
-import rospy
-import pickle
-import socket
-import zstd
-import select
+import rospy, pickle, socket, zstd, select
 from rtabmap_ros.msg import MapData
 
 class MinimalPublisher:
 
     def __init__(self):
-        rospy.init_node('minimal_publisher')
+        rospy.init_node('mapDataPublisher')
         self.publisher_ = rospy.Publisher('mapDataStream', MapData, queue_size=10)
         timer_period = rospy.Duration.from_sec(0.016666)  # seconds
         self.timer = rospy.Timer(timer_period, self.timer_callback)
