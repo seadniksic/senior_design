@@ -54,7 +54,7 @@ class BridgeNodeData:
         self.wordIds = nodeData.wordIdValues
 
         self.wordKpts = nodeData.wordKpts
-        self.wordPts = pcl_conversions.fromPCL(nodeData.cloud)
+        self.wordPts = None
     
     def fillNewNodes(self, newNodes):
         newNodes.id = self.id
@@ -86,6 +86,7 @@ class Ros1MapDataBridge:
         self.header = BridgeHeader(map.header)
         self.graph = BridgeGraph(map.graph)
         self.nodes = BridgeNodeData(map.nodes)
+        self.nodes.wordPts = pcl_conversions.fromPCL(map.cloud)
     
     def getMapData(self):
         newMap = MapData()
