@@ -1,9 +1,40 @@
 import rclpy
+import pclpy
 from rclpy.node import Node
-import lz4.frame
+import pickle, zstd
 from rtabmap_ros.msg import MapData
-import socket
+import socket, io
+from pclpy import pcl
 
+
+class RenameUnpickler(pickle.Unpickler):
+    def find_class(self, module, name):
+        renamed_module = module
+        if module == "rtabmap_ros.msg._MapData":
+            renamed_module = "rtabmap_ros.msg._map_data"
+        if module == "std_msgs.msg._Header":
+            renamed_module = "std_msgs.msg._header"
+        if module == "genpy.rostime":
+            renamed_module = "rclpy.time"
+        if module == "rtabmap_ros.msg._NodeData":
+            renamed_module = "rtabmap_ros.msg._node_data"
+        if module == "geometry_msgs.msg._Pose":
+            renamed_module = "geometry_msgs.msg._pose"
+        if module == "geometry_msgs.msg._Point":
+            renamed_module = "geometry_msgs.msg._point"
+
+        return super(RenameUnpickler, self).find_class(renamed_module, name)
+
+
+def renamed_load(file_obj):
+    currVal = RenameUnpickler(file_obj)
+    print(type(currVal))
+    return currVal.load()
+
+
+def renamed_loads(pickled_bytes):
+    file_obj = io.BytesIO(pickled_bytes)
+    return renamed_load(file_obj)
 
 class MinimalPublisher(Node):
 
@@ -34,13 +65,20 @@ class MinimalPublisher(Node):
         while len(msg) < size:
             msg += self.client.recv(size - len(msg))
 
-        newMapData = lz4.frame.decompress(msg)
-        mapData = MapData()
-        mapData.header = None #Need to implemenmt
-        mapData.id = None #need to implement
-        mapData.data = newMapData
+        compression = pcl.OctreePointCloudCompression.PointXYZRGB()
+        compression.setCompressionOptions(8, True)
 
-        self.publisher_.publish(mapData)
+        # Decompress the compressed data
+        decompressed_cloud = pclpy.pcl.PointCloud.PointXYZRGB()
+        compression.decompressPointCloud(msg, decompressed_cloud)
+
+        # Convert the decompressed PCL PointCloud<PointXYZRGB> object back to a PointCloud2 message
+        decompressed_msg = pclpy.pcl.toROSMsg(decompressed_cloud)
+        # decompressed_msg.header = 
+        # decompressed_msg.fields = fields
+        decompressed_msg.is_dense = True
+
+        self.publisher_.publish(decompressed_msg)
 
 
 def main(args=None):
