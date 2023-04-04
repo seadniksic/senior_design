@@ -10,6 +10,9 @@ from timeit import default_timer as timer
 import pickle, socket
 import matplotlib.pyplot as plt
 import numpy as np
+import rospy
+from sensor_msgs.msg import Imu
+from std_msgs.msg import Float32
 
 ############################
 ####      GLOBALS     ######
@@ -227,7 +230,11 @@ if __name__ == "__main__":
         sendtimer_end = timer()
 
         sendData = bytearray()
-
+        imu_pub = rospy.Publisher('/rover/imu', Imu, queue_size=10)
+        pan_pub = rospy.Publisher('/rover/pan', Float32, queue_size=10)
+        tilt_pub = rospy.Publisher('/rover/tilt', Float32, queue_size=10)
+        
+        rospy.init_node('rover', anonymous=True)
         while True: 
             #loop timer
             start = timer()
@@ -313,6 +320,22 @@ if __name__ == "__main__":
                     reply = uart_messages_pb2.SLAM_Data()
                     try: 
                         reply.ParseFromString(data)
+                        imu_msg = Imu()
+                        imu_msg.linear_acceleration.x = reply.lia_x
+                        imu_msg.linear_acceleration.y = reply.lia_y
+                        imu_msg.linear_acceleration.z = reply.lia_z
+                        imu_msg.orientation.x = np.sin(reply.eul_r/2) * np.cos(reply.eul_p/2) * np.cos(reply.eul_y/2) - np.cos(reply.eul_r/2) * np.sin(reply.eul_p/2) * np.sin(reply.eul_y/2)
+                        imu_msg.orientation.y = np.cos(reply.eul_r/2) * np.sin(reply.eul_p/2) * np.cos(reply.eul_y/2) + np.sin(reply.eul_r/2) * np.cos(reply.eul_p/2) * np.sin(reply.eul_y/2)
+                        imu_msg.orientation.z = np.cos(reply.eul_r/2) * np.cos(reply.eul_p/2) * np.sin(reply.eul_y/2) - np.sin(reply.eul_r/2) * np.sin(reply.eul_p/2) * np.cos(reply.eul_y/2)
+                        imu_msg.orientation.w = np.cos(reply.eul_r/2) * np.cos(reply.eul_p/2) * np.cos(reply.eul_y/2) + np.sin(reply.eul_r/2) * np.sin(reply.eul_p/2) * np.sin(reply.eul_y/2)
+                        
+                        pan_msg = Float32(data=reply.pan)
+                        tilt_msg = Float32(data=reply.tilt)
+
+                        imu_pub.publish(imu_msg)
+                        pan_pub.publish(pan_msg)
+                        tilt_pub.publish(tilt_msg)
+
                         # print(end_slam_timer-start_slam_timer,num_bytes ,reply.lia_x, reply.lia_y, reply.lia_z, reply.eul_y, reply.eul_p,reply.eul_r, reply.pan, reply.tilt)
                     except Exception as e:
                         print("corrupt message, failed to serialize SLAM_DATA")
