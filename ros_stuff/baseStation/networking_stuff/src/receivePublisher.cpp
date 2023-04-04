@@ -14,7 +14,7 @@ ReceivePublisher::ReceivePublisher(const int receivePort, const int bufferSize, 
 
     this->receiveDataPublisher = n.advertise<std_msgs::String>(name, 10);
 
-    this->timer = n.createTimer(ros::Duration(0.016666), this->start);
+    this->timer = n.createTimer(ros::Duration(0.016666), &ReceivePublisher::start, this);
 
     ros::spin();
 }
