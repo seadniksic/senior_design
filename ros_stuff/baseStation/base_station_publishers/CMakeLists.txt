@@ -12,6 +12,7 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   rtabmap_ros
   sensor_msgs
+  std_msgs
 )
 
 ## System dependencies are found with CMake's conventions

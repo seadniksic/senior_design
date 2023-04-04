@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import rospy, cv2, socket, select
-from sensor_msgs.msg import String
+from std_msgs.msg import String
 from cv_bridge import CvBridge
 from sensor_msgs.msg import Image
 import numpy as np
@@ -9,17 +9,15 @@ import numpy as np
 class ImagePublisher:
     def __init__(self):
         rospy.init_node('imagePublisher')
-        rospy.init_node('imageSubsriber')
         self.publisher_ = rospy.Publisher('imageFeedStream', Image, queue_size=10)
         self.subscriber_ = rospy.Subscriber('cameraFeedNetworkNodePublisher', String, self.callback)
 
         self.bridge = CvBridge()
         rospy.spin()
     
-    def timer_callback(self, msg):
+    def callback(self, msg):
         try: 
-            data = bytearray()
-            data.extend(map(ord, msg))
+            data = bytearray(msg.data, 'utf-8')
             buffer = np.frombuffer(data, np.uint8)
             image = cv2.imdecode(buffer, cv2.IMREAD_COLOR)
 
