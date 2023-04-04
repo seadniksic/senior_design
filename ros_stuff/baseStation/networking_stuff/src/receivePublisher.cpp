@@ -29,7 +29,7 @@ void ReceivePublisher::start(const ros::TimerEvent& event)
         if(debug)
             std::cout << name << " has wirelessly received " << returnSize << " bytes...\n" << std::endl;
         
-        std::memcpy(neMsg.data(), buffer, returnSize);
+        std::memcpy(newMsg.data(), buffer, returnSize);
         receiveDataPublisher.publish(newMsg);
     }
 }
