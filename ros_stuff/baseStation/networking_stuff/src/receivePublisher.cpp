@@ -5,7 +5,6 @@
 
 ReceivePublisher::ReceivePublisher(const int receivePort, const int bufferSize, std::string name, int debugMode)
 {
-    ros::init(argc, argv, name);
 
     this->server = std::make_unique<ReceiveData>(receivePort, name);
     this->buffer = std::make_unique<char[]>(bufferSize);
