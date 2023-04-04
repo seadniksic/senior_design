@@ -24,7 +24,7 @@ void ReceivePublisher::start()
 
         int returnSize = this->server->getData(static_cast<void*>(this->buffer.get()), this->bufferSize);
         if(debug)
-            std::cout << name << " has wirelessly received " << returnSize << " bytes...\n" <, std::endl;
+            std::cout << name << " has wirelessly received " << returnSize << " bytes...\n" << std::endl;
         newString.append(buffer.get(), returnSize);
         newMsg.data = newString;
 
