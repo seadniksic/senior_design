@@ -88,32 +88,36 @@ int ReceiveData::getData(void *buffer, size_t bufferLength)
     }
     else
     {
-        int receivedBytes = 0;
-        uint64_t receivingPacketLength = 0;
-
-        int receiveValue = recv(clientSocket, &receivingPacketLength, sizeof(receivingPacketLength), 0);
-        
-        if(receiveValue <= 0 || receivingPacketLength > bufferLength)
+        //If already connected, check to see if there is data waiting
+        if(availableDataClient())
         {
-            std::cout << "Closing socket due to bad size read for " << name << "..." << std::endl;
-            close(clientSocket);
-            clientSocket = -1;
-            return 0;
-        }
+            int receivedBytes = 0;
+            uint64_t receivingPacketLength = 0;
 
-        while(receivedBytes < bufferLength && receivedBytes < receivingPacketLength)
-        {
-            receiveValue = recv(clientSocket, ((char *)buffer + receivedBytes * sizeof(char)), min(min(MAX_PACKET_SIZE, bufferLength - receivedBytes), receivingPacketLength - receivedBytes), 0);
-            if(receiveValue <= 0)
+            int receiveValue = recv(clientSocket, &receivingPacketLength, sizeof(receivingPacketLength), 0);
+            
+            if(receiveValue <= 0 || receivingPacketLength > bufferLength)
             {
-                std::cout << "Closing socket due to bad data read for " << name << "..." <<std::endl;
+                std::cout << "Closing socket due to bad size read for " << name << "..." << std::endl;
                 close(clientSocket);
                 clientSocket = -1;
-                break;
+                return 0;
             }
-            receivedBytes += receiveValue;
+
+            while(receivedBytes < bufferLength && receivedBytes < receivingPacketLength)
+            {
+                receiveValue = recv(clientSocket, ((char *)buffer + receivedBytes * sizeof(char)), min(min(MAX_PACKET_SIZE, bufferLength - receivedBytes), receivingPacketLength - receivedBytes), 0);
+                if(receiveValue <= 0)
+                {
+                    std::cout << "Closing socket due to bad data read for " << name << "..." <<std::endl;
+                    close(clientSocket);
+                    clientSocket = -1;
+                    break;
+                }
+                receivedBytes += receiveValue;
+            }
+            return receivedBytes;
         }
-        return receivedBytes;
     }
 
     return 0;
