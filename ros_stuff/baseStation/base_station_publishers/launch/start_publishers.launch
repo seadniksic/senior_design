@@ -1,0 +1,9 @@
+<launch>
+
+    <node pkg="base_station_publishers" type="cameraPositionPublisherNode.py" name="camera_position_publisher" output="screen"/>
+    <node pkg="base_station_publishers" type="imageFeedPublisherNode.py" name="image_feed_publisher" output="screen"/>
+    <node pkg="base_station_publishers" type="mapDataPublisherNode.py" name="map_data_publisher" output="screen"/>
+    <node pkg="base_station_publishers" type="roverStatusPublisher.py" name="rover_status_publisher" output="screen"/>
+    <node pkg="base_station_publishers" type="basestation_comms.py" name="base_station_comms" output="screen"/>
+    <node type="rviz" name="rviz" pkg="rviz" />
+</launch>
