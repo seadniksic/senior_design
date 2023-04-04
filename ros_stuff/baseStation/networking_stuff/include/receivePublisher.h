@@ -18,9 +18,9 @@ class ReceivePublisher{
         ros::NodeHandle n;
         ros::Publisher receiveDataPublisher;
         ros::Timer timer;
+        static void start(const ros::TimerEvent& event);
     public:
         ReceivePublisher(const int receivePort, const int bufferSize, std::string name, int debugMode);
-        void start(const ros::TimerEvent& event);
 };
 
 

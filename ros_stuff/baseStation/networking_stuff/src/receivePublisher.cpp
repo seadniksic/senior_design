@@ -19,7 +19,7 @@ ReceivePublisher::ReceivePublisher(const int receivePort, const int bufferSize, 
     ros::spin();
 }
 
-void ReceivePublisher::start(const ros::TimerEvent& event)
+static void ReceivePublisher::start(const ros::TimerEvent& event)
 {
     std_msgs::String newMsg;
     std::string newString;
