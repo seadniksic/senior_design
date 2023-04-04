@@ -27,8 +27,8 @@ void ReceivePublisher::start(const ros::TimerEvent& event)
         if(debug)
             std::cout << name << " has wirelessly received " << returnSize << " bytes...\n" << std::endl;
         std_msgs::UInt8MultiArray newMsg;
-        newMsg.resize(returnSize);
-        std::memcpy(newMsg.data(), buffer, returnSize);
+        newMsg.data.resize(returnSize);
+        std::memcpy(newMsg.data.data(), buffer, returnSize);
         receiveDataPublisher.publish(newMsg);
     }
 }
