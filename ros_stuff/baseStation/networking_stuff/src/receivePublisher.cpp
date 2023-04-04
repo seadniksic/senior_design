@@ -12,7 +12,7 @@ ReceivePublisher::ReceivePublisher(const int receivePort, const int bufferSize, 
     this->name = name;
     this->debug = debugMode;
 
-    this->receiveDataPublisher = n.advertise<std_msgs::String>(name, 10);
+    this->receiveDataPublisher = n.advertise<std_msgs::UInt8MultiArray>(name, 10);
 
     this->timer = n.createTimer(ros::Duration(0.016666), &ReceivePublisher::start, this);
 
@@ -21,17 +21,15 @@ ReceivePublisher::ReceivePublisher(const int receivePort, const int bufferSize, 
 
 void ReceivePublisher::start(const ros::TimerEvent& event)
 {
-    std_msgs::String newMsg;
-    std::string newString;
+    std_msgs::UInt8MultiArray newMsg;
 
     int returnSize = this->server->getData(static_cast<void*>(this->buffer.get()), this->bufferSize);
     if(returnSize > 0)
     {
         if(debug)
             std::cout << name << " has wirelessly received " << returnSize << " bytes...\n" << std::endl;
-        newString.append(buffer.get(), returnSize);
-        newMsg.data = newString;
-
+        
+        std::memcpy(neMsg.data(), buffer, returnSize);
         receiveDataPublisher.publish(newMsg);
     }
 }

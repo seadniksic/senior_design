@@ -3,7 +3,7 @@
 
 #include <memory>
 #include <ros/ros.h>
-#include <std_msgs/String.h>
+#include <std_msgs/UInt8MultiArray.h>
 #include <string>
 #include "receiveData.h"
 #include "common.h"
