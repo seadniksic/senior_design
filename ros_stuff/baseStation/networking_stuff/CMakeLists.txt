@@ -141,7 +141,7 @@ set(CAMERA_FEED_NETWORK_NODE_SRC
 	src/cameraFeedWireNode.cpp
 	src/receiveData.cpp
 	src/transmitData.cpp
-	src/passThroughWire.cpp
+	src/receivePublisher.cpp
 )
 
 add_executable(${PROJECT_NAME}_camera_feed_network_node ${CAMERA_FEED_NETWORK_NODE_SRC})

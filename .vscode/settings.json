@@ -5,6 +5,8 @@
         "new": "cpp",
         "*.tcc": "cpp",
         "fstream": "cpp",
-        "cstring": "cpp"
+        "cstring": "cpp",
+        "memory": "cpp",
+        "iosfwd": "cpp"
     }
 }
