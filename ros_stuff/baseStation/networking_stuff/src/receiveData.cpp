@@ -88,6 +88,9 @@ int ReceiveData::getData(void *buffer, size_t bufferLength)
     }
     else
     {
+        //If already connected, check to see if there is data waiting
+        if(availableDataClient())
+        {
             int receivedBytes = 0;
             uint64_t receivingPacketLength = 0;
 
@@ -114,6 +117,7 @@ int ReceiveData::getData(void *buffer, size_t bufferLength)
                 receivedBytes += receiveValue;
             }
             return receivedBytes;
+        }
     }
 
     return 0;
