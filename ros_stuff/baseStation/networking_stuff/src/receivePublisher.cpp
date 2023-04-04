@@ -24,7 +24,7 @@ void ReceivePublisher::start()
 
         int returnSize = this->server->getData(static_cast<void*>(this->buffer.get()), this->bufferSize);
 
-        newString.append(buffer, returnSize);
+        newString.append(buffer.get(), returnSize);
         newMsg.data = newString;
 
         receiveDataPublisher.publish(newMsg);
