@@ -51,7 +51,7 @@ bridge = CvBridge()
 rospy.init_node('imagePublisher')
 publisher_ = rospy.Publisher('imageFeedStream', Image, queue_size=10)
 
-def callback(self, msg):
+def callback(msg):
     try: 
         data = bytearray(msg.data, 'utf-8')
         buffer = np.frombuffer(data, np.uint8)
