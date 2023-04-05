@@ -164,7 +164,7 @@ add_executable(${PROJECT_NAME}_map_data_network_node ${MAP_DATA_NETWORK_NODE_SRC
 set(ROVER_COMMANDS_NETWORK_NODE_SRC
 	src/roverCommandsWireNode.cpp
 	src/receiveData.cpp
-	src/receivePublisher.cpp
+	src/transmitSubscriber.cpp
 )
 
 add_executable(${PROJECT_NAME}_rover_commands_network_node ${ROVER_COMMANDS_NETWORK_NODE_SRC})
@@ -172,7 +172,7 @@ add_executable(${PROJECT_NAME}_rover_commands_network_node ${ROVER_COMMANDS_NETW
 set(ROVER_STATUS_NETWORK_NODE_SRC
 	src/roverStatusWireNode.cpp
 	src/transmitData.cpp
-	src/transmitSubscriber.cpp
+	src/receivePublisher.cpp
 )
 
 add_executable(${PROJECT_NAME}_rover_status_network_node ${ROVER_STATUS_NETWORK_NODE_SRC})
