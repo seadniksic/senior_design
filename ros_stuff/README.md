@@ -4,13 +4,13 @@ ROS packages that might not work
 ROVER<br><br>
 
 ROS Subscribers:<br>
-cameraFeedNetworkNodeSubscriber<br>
-cameraPositionNetworkNodeSubsriber<br>
-mapDataNetworkNodeSubscriber<br>
-roverStatusNetworkNodeSubsriber<br><br>
+Sead: cameraFeedNetworkNodeSubscriber<br>
+Tej: cameraPositionNetworkNodeSubsriber<br>
+Tej: mapDataNetworkNodeSubscriber<br>
+Eric: roverStatusNetworkNodeSubsriber<br><br>
 
 ROS Publishers:<br>
-roverCommandsNetworkNodePublisher<br>
+Eric: roverCommandsNetworkNodePublisher<br>
 
 ---------------------------------------
 
@@ -18,12 +18,12 @@ roverCommandsNetworkNodePublisher<br>
 BASESTATION<br><br>
 
 ROS Subscribers:<br>
-roverCommandsNetworkNodeSubscriber<br><br>
+Eric: roverCommandsNetworkNodeSubscriber<br><br>
 
 ROS Publishers:<br>
-cameraFeedNetworkNodePublisher<br>
-cameraPositionNetworkNodePublisher<br>
-mapDataNetworkNodePublisher<br>
-roverStatusNetworkNodePublisher<br>
+Joey: cameraFeedNetworkNodePublisher<br>
+Joey: cameraPositionNetworkNodePublisher<br>
+Joey: mapDataNetworkNodePublisher<br>
+Joey: roverStatusNetworkNodePublisher<br>
 
 ---------------------------------------
