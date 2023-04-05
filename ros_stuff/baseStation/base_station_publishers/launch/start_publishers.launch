@@ -1,5 +1,5 @@
 <launch>
-
+    <node pkg="tf" type="static_transform_publisher" name="static_transform_publisher" args="0.0 0.0 0.0 0.0 0.0 0.0 map base_link 1000"/>
     <node pkg="base_station_publishers" type="cameraPositionPublisherNode.py" name="camera_position_publisher" output="screen"/>
     <node pkg="base_station_publishers" type="imageFeedPublisherNode.py" name="image_feed_publisher" output="screen"/>
     <node pkg="base_station_publishers" type="mapDataPublisherNode.py" name="map_data_publisher" output="screen"/>

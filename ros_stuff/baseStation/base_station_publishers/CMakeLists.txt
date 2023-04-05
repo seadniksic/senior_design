@@ -13,7 +13,12 @@ find_package(catkin REQUIRED COMPONENTS
   rtabmap_ros
   sensor_msgs
   std_msgs
+  visualization_msgs
 )
+
+find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
+include_directories(${Python3_INCLUDE_DIRS})
+link_directories(${Python3_LIBRARY_DIRS})
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -171,9 +176,9 @@ catkin_install_python(PROGRAMS
   src/mapDataPublisherNode.py
   src/basestation_comms.py
   src/roverStatusPublisher.py
-  src/uart_messages_pb2.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
+
 
 ## Mark executables for installation
 ## See http://docs.ros.org/melodic/api/catkin/html/howto/format1/building_executables.html

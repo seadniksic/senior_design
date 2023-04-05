@@ -1,9 +1,8 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 import rospy
 import time
 from time import sleep
-import uart_messages_pb2
 import evdev
 import sys
 from evdev import categorize, ecodes
@@ -11,6 +10,9 @@ from timeit import default_timer as timer
 import random
 import sys
 from std_msgs.msg import UInt8MultiArray
+import uart_messages_pb2
+
+print(sys.argv[0])
 
 
 ############################
@@ -146,7 +148,7 @@ if __name__ == "__main__":
 
     # networking
     rospy.init_node('roverCommandsPublisher')
-    publisher_ = rospy.Publisher('roverCommandsNetworkNodePublisher', UInt8MultiArray, queue_size=10)
+    publisher_ = rospy.Publisher('roverCommandsNetworkNodeSubscriber', UInt8MultiArray, queue_size=10)
 
     while True: 
         event = joystick.dev.read_one()
@@ -215,6 +217,8 @@ if __name__ == "__main__":
         if (end_time - start_time) > g.sleep_time:
             
             start_time = end_time
+
+            uart_messages_pb2.thingystupid()
             
             # store joystick message
             proto_msg = uart_messages_pb2.Joystick_Input()

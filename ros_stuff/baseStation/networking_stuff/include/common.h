@@ -30,7 +30,7 @@
 
 #define IMAGE_DEBUG 0
 #define POINT_CLOUD_DEBUG 0
-#define STATUS_DEBUG 0
+#define STATUS_DEBUG 1
 #define COMMANDS_DEBUG 0
 #define POISITON_DEBUG 0 
 
