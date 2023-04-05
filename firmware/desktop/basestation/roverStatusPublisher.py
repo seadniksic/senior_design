@@ -55,18 +55,13 @@ class RoverStatusPublisher:
                 response.ParseFromString(msg)
             except Exception as e:
                 print("Fucking idiot ran into " + str(e))
-<<<<<<< HEAD
-=======
-            
 
             calib_stat_str = bin(response.calib_status)
             local_stat = bin(response.loco_status)
             print(f"cpu_temp={response.cpu_temp}, calib_stat={calib_stat_str}, servo_pan={response.curr_servo_pan}, servo_tilt={response.curr_servo_tilt}, servo_pan_home={response.home_servo_pan}, servo_tilt_home={response.home_servo_tilt}, loco_status={local_stat}")
             print(response.cpu_temp)
             self.roverStatusPublisher.publish(msg)
-
-
->>>>>>> ae389e18fe2a748a25220a4052f376feb1ddc8b2
+            
             newOutput = createString(response)
             display = np.zeros((500, 500, 3), np.uint8)
             display.fill(255)
@@ -105,6 +100,3 @@ if __name__ == '__main__':
         rospy.spin()
     except KeyboardInterrupt:
         pass
-
-    finally:
-        imageNode.shutdownNode()
