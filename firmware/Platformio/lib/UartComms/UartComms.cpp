@@ -1,13 +1,13 @@
 #include "UartComms.h"
 
 
-static UartReadBuffer read_buffer;
-static UartWriteBuffer write_buffer;
-static Joystick_Input js_in;
-static GUI_Data gui_data;
-static SLAM_Data slam_data;
-static elapsedMillis rcv_clock;
-static elapsedMillis commTimer;
+static UartReadBuffer g_read_buffer;
+static UartWriteBuffer g_write_buffer;
+static Joystick_Input g_js_in;
+static GUI_Data g_gui_data;
+static SLAM_Data g_slam_data;
+static elapsedMillis g_rcv_clock;
+static elapsedMillis g_commTimer;
 
 static UartComms_t uartComms = {0};
 
@@ -15,13 +15,13 @@ void UartComms_Init()
 {
     HWSERIAL.begin(500000);
 
-    uartComms.read_buffer= &read_buffer;
-    uartComms.write_buffer= &write_buffer;
-    uartComms.js_in = &js_in;
-    uartComms.gui_data = &gui_data;
-    uartComms.slam_data = &slam_data;
-    uartComms.rcv_clock = rcv_clock;
-    uartComms.time_since_last_serialize = commTimer;
+    uartComms.read_buffer= &g_read_buffer;
+    uartComms.write_buffer= &g_write_buffer;
+    uartComms.js_in = &g_js_in;
+    uartComms.gui_data = &g_gui_data;
+    uartComms.slam_data = &g_slam_data;
+    uartComms.rcv_clock = g_rcv_clock;
+    uartComms.time_since_last_serialize = g_commTimer;
     uartComms.commsNeedReset = false;
     uartComms.syncByteStatus = false;
 }
@@ -102,7 +102,7 @@ void UartComms_RcvControls()
 
     if(available_packet)
     {
-      auto deserialize_status = js_in.deserialize(*uartComms.read_buffer);
+      auto deserialize_status = uartComms.js_in->deserialize(*uartComms.read_buffer);
       if(::EmbeddedProto::Error::NO_ERRORS == deserialize_status)
       {
         uint32_t btn_status = (uint32_t)uartComms.js_in->get_button();

@@ -55,6 +55,7 @@ class RoverStatusPublisher:
                 response.ParseFromString(msg)
             except Exception as e:
                 print("Fucking idiot ran into " + str(e))
+            
             newOutput = createString(response)
             display = np.zeros((500, 500, 3), np.uint8)
             display.fill(255)
