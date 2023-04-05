@@ -146,7 +146,7 @@ if __name__ == "__main__":
 
     # networking
     rospy.init_node('roverCommandsPublisher')
-    publisher_ = rospy.Publisher('roverCommandsPublisherNode', UInt8MultiArray, queue_size=10)
+    publisher_ = rospy.Publisher('roverCommandsNetworkNodePublisher', UInt8MultiArray, queue_size=10)
 
     while True: 
         event = joystick.dev.read_one()

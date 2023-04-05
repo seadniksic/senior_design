@@ -139,27 +139,24 @@ include_directories(
 
 set(CAMERA_FEED_NETWORK_NODE_SRC
 	src/cameraFeedWireNode.cpp
-	src/receiveData.cpp
 	src/transmitData.cpp
-	src/passThroughWire.cpp
+	src/transmitSubscriber.cpp
 )
 
 add_executable(${PROJECT_NAME}_camera_feed_network_node ${CAMERA_FEED_NETWORK_NODE_SRC})
 
 set(CAMERA_POSITION_NETWORK_NODE_SRC
 	src/cameraPositionWireNode.cpp
-	src/receiveData.cpp
 	src/transmitData.cpp
-	src/passThroughWire.cpp
+	src/transmitSubscriber.cpp
 )
 
 add_executable(${PROJECT_NAME}_camera_position_network_node ${CAMERA_POSITION_NETWORK_NODE_SRC})
 
 set(MAP_DATA_NETWORK_NODE_SRC
 	src/pointCloudWireNode.cpp
-	src/receiveData.cpp
 	src/transmitData.cpp
-	src/passThroughWire.cpp
+	src/transmitSubscriber.cpp
 )
 
 add_executable(${PROJECT_NAME}_map_data_network_node ${MAP_DATA_NETWORK_NODE_SRC})
@@ -167,17 +164,15 @@ add_executable(${PROJECT_NAME}_map_data_network_node ${MAP_DATA_NETWORK_NODE_SRC
 set(ROVER_COMMANDS_NETWORK_NODE_SRC
 	src/roverCommandsWireNode.cpp
 	src/receiveData.cpp
-	src/transmitData.cpp
-	src/passThroughWire.cpp
+	src/receivePublisher.cpp
 )
 
 add_executable(${PROJECT_NAME}_rover_commands_network_node ${ROVER_COMMANDS_NETWORK_NODE_SRC})
 
 set(ROVER_STATUS_NETWORK_NODE_SRC
 	src/roverStatusWireNode.cpp
-	src/receiveData.cpp
 	src/transmitData.cpp
-	src/passThroughWire.cpp
+	src/transmitSubscriber.cpp
 )
 
 add_executable(${PROJECT_NAME}_rover_status_network_node ${ROVER_STATUS_NETWORK_NODE_SRC})
