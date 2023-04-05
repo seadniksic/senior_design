@@ -11,7 +11,7 @@ TransmitSubscriber::TransmitSubscriber(const int transmitPort, const char *trans
     this->name = name;
     this->debug = debugMode;
 
-    transmitDataPublisher = n.subscribe(subName, 1000, &TransmitData::start, this);
+    transmitDataPublisher = n.subscribe(subName, 1000, &TransmitSubscriber::start, this);
 
     ros::spin();
 }
