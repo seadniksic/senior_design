@@ -1,29 +1,29 @@
 ROS packages that might not work
 
 ---------------------------------------
-ROVER
+ROVER<br><br>
 
-ROS Subscribers:\n
-cameraFeedNetworkNodeSubscriber\n
-cameraPositionNetworkNodeSubsriber\n
-mapDataNetworkNodeSubscriber\n
-roverStatusNetworkNodeSubsriber\n
+ROS Subscribers:<br>
+cameraFeedNetworkNodeSubscriber<br>
+cameraPositionNetworkNodeSubsriber<br>
+mapDataNetworkNodeSubscriber<br>
+roverStatusNetworkNodeSubsriber<br><br>
 
-ROS Publishers:\n
-roverCommandsNetworkNodePublisher\n
-
----------------------------------------
+ROS Publishers:<br>
+roverCommandsNetworkNodePublisher<br>
 
 ---------------------------------------
-BASESTATION
 
-ROS Subscribers:
-roverCommandsNetworkNodeSubscriber
+---------------------------------------
+BASESTATION<br><br>
 
-ROS Publishers:
-cameraFeedNetworkNodePublisher
-cameraPositionNetworkNodePublisher
-mapDataNetworkNodePublisher
-roverStatusNetworkNodePublisher
+ROS Subscribers:<br>
+roverCommandsNetworkNodeSubscriber<br><br>
+
+ROS Publishers:<br>
+cameraFeedNetworkNodePublisher<br>
+cameraPositionNetworkNodePublisher<br>
+mapDataNetworkNodePublisher<br>
+roverStatusNetworkNodePublisher<br>
 
 ---------------------------------------
