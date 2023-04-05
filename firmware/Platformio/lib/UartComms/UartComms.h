@@ -9,8 +9,8 @@
 #include <elapsedMillis.h>
 
 
-#define HWSERIAL Serial2 // pins 7 and 8
-#define HWSERIAL_BAUD 115200
+#define HWSERIAL Serial3 // pins 7 and 8
+#define HWSERIAL_BAUD 500000
 #define SYNC_BYTE_READ 0x64 // read
 #define SYNC_BYTE_WRITE 0x46
 #define TIMEOUT_DATA 20 //ms

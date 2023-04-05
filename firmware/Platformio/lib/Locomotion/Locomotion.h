@@ -8,38 +8,37 @@
 #define FREQ 1000
 
 // Function Macros
-#define AXIS_FORWARD(in1, in2, en, pwm) \
-  analogWrite(en, pwm); \
-  digitalWrite(in1, LOW); \
-  digitalWrite(in2, HIGH);
+#define AXIS_FORWARD(in1, in2, pwm) \
+    analogWrite(in1, 255-pwm); \
+    digitalWrite(in2, HIGH);
 
-#define AXIS_BACKWARD(in1, in2, en, pwm) \
-    analogWrite(en, pwm); \
-    digitalWrite(in1, HIGH); \
+#define AXIS_BACKWARD(in1, in2, pwm) \
+    analogWrite(in1, pwm); \
     digitalWrite(in2, LOW); 
 
-#define AXIS_OFF(in1, in2, en) \
-    digitalWrite(en, LOW); \
-    digitalWrite(in1, LOW); \
+#define AXIS_FORWARD_FLIPPED(in1, in2, pwm) \
+    analogWrite(in1, pwm); \
+    digitalWrite(in2, LOW);
+
+#define AXIS_BACKWARD_FLIPPED(in1, in2, pwm) \
+    analogWrite(in1, 255-pwm); \
+    digitalWrite(in2, HIGH); 
+
+#define AXIS_OFF(in1, in2) \
+    analogWrite(in1, 0); \
     digitalWrite(in2, LOW);
 
 // Wheel directions
-#define FRFOR(PWM) AXIS_FORWARD(FR_IN4_PIN, FR_IN3_PIN, FR_EN_PIN, PWM)
-#define FLFOR(PWM) AXIS_FORWARD(FL_IN2_PIN, FL_IN1_PIN, FL_EN_PIN, PWM)
-#define BRFOR(PWM) AXIS_FORWARD(BR_IN1_PIN, BR_IN2_PIN, BR_EN_PIN, PWM)
-#define BLFOR(PWM) AXIS_FORWARD(BL_IN3_PIN, BL_IN4_PIN, BL_EN_PIN, PWM)
-#define FRBACK(PWM) AXIS_BACKWARD(FR_IN4_PIN, FR_IN3_PIN, FR_EN_PIN, PWM)
-#define FLBACK(PWM) AXIS_BACKWARD(FL_IN2_PIN, FL_IN1_PIN, FL_EN_PIN, PWM)
-#define BRBACK(PWM) AXIS_BACKWARD(BR_IN1_PIN, BR_IN2_PIN, BR_EN_PIN, PWM)
-#define BLBACK(PWM) AXIS_BACKWARD(BL_IN3_PIN, BL_IN4_PIN, BL_EN_PIN, PWM)
+#define FRFOR(PWM) AXIS_FORWARD(FR_IN3_PIN, FR_IN4_PIN, PWM)
+#define FLFOR(PWM) AXIS_FORWARD_FLIPPED(FL_IN1_PIN, FL_IN2_PIN, PWM)
+#define BRFOR(PWM) AXIS_FORWARD_FLIPPED(BR_IN1_PIN, BR_IN2_PIN, PWM)
+#define BLFOR(PWM) AXIS_FORWARD_FLIPPED(BL_IN3_PIN, BL_IN4_PIN, PWM)
+#define FRBACK(PWM) AXIS_BACKWARD(FR_IN3_PIN, FR_IN4_PIN, PWM)
+#define FLBACK(PWM) AXIS_BACKWARD_FLIPPED(FL_IN1_PIN, FL_IN2_PIN, PWM)
+#define BRBACK(PWM) AXIS_BACKWARD_FLIPPED(BR_IN1_PIN, BR_IN2_PIN, PWM)
+#define BLBACK(PWM) AXIS_BACKWARD_FLIPPED(BL_IN3_PIN, BL_IN4_PIN, PWM)
 
-// Wheel EN
-#define BLON digitalWrite(BL_EN_PIN, HIGH);
-#define BRON digitalWrite(BR_EN_PIN, HIGH);
-#define FRON digitalWrite(FR_EN_PIN, HIGH);
-#define FLON digitalWrite(FL_EN_PIN, HIGH);
-
-void Locomotion_Init_Axis(uint8_t in1, uint8_t in2, uint8_t en);
+void Locomotion_Init_Axis(uint8_t in1, uint8_t in2);
 
 void Locomotion_Drive_Left();
 void Locomotion_Drive_Left(const uint8_t &val);
@@ -72,7 +71,6 @@ void Locomotion_Rotate_CW(const uint8_t &val);
 
 void Locomotion_Rotate_CCW();
 void Locomotion_Rotate_CCW(const uint8_t &val);
-
 
 void Locomotion_Lateral_Arc_CW();
 void Locomotion_Lateral_Arc_CCW();
