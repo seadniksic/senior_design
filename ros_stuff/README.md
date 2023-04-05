@@ -1,6 +1,7 @@
 ROS packages that might not work
 
-----------------ROVER------------------
+---------------------------------------
+ROVER
 
 ROS Subscribers:
 cameraFeedNetworkNodeSubscriber
@@ -13,7 +14,8 @@ roverCommandsNetworkNodePublisher
 
 ---------------------------------------
 
--------------BASESTATION---------------
+---------------------------------------
+BASESTATION
 
 ROS Subscribers:
 roverCommandsNetworkNodeSubscriber
