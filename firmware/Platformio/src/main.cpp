@@ -48,9 +48,9 @@ void main_prog()
   bool reset_comms_status = false;
   uint8_t LED_state = HIGH;
 
-  Locomotion_Run();
 
-  // Main while loop
+  Locomotion_Run();  // Main while loop
+
   while(1)
   {
 
