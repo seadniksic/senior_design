@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import rospy
 import time
 from time import sleep
 import uart_messages_pb2
@@ -8,7 +9,8 @@ import sys
 from evdev import categorize, ecodes
 from timeit import default_timer as timer
 import random
-import socket, pickle, sys
+import sys
+from std_msgs.msg import UInt8MultiArray
 
 
 ############################
@@ -143,10 +145,8 @@ if __name__ == "__main__":
     end_time = None
 
     # networking
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    host = socket.gethostname()
-    port = 8088 
-    sock.connect((host, port))
+    rospy.init_node('roverCommandsPublisher')
+    publisher_ = rospy.Publisher('roverCommandsPublisherNode', UInt8MultiArray, queue_size=10)
 
     while True: 
         event = joystick.dev.read_one()
@@ -251,6 +251,6 @@ if __name__ == "__main__":
             print(sendData)
             
             # send the data over wifi
-            messageSize = int(len(sendData)).to_bytes(8, byteorder='little', signed=False)
-            sock.sendall(messageSize)
-            sock.sendall(sendData)
+            messagePayload = UInt8MultiArray()
+            messagePayload.data = sendData
+            publisher_.publish(messagePayload)

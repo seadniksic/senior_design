@@ -1,14 +1,14 @@
-#ifndef TRANSMITLISTENER_H
-#define TRANSMITLISTENER_H
+#ifndef TRANSMITSUBSCRIBER_H
+#define TRANSMITSUBSCRIBER_H
 
 #include <memory>
 #include <ros/ros.h>
-#include <std_msgs/String.h>
+#include <std_msgs/UInt8MultiArray.h>
 #include <string>
 #include "transmitData.h"
 #include "common.h"
 
-class TransmitListener{
+class TransmitSubscriber{ 
     private:
         std::unique_ptr<TransmitData> client;
         std::unique_ptr<char[]> buffer;
@@ -17,9 +17,9 @@ class TransmitListener{
         std::string name;
         ros::NodeHandle n;
         ros::Subscriber transmitDataPublisher;
-        void start(const std_msgs::String::ConstPtr& msg);
+        void start(const std_msgs::UInt8MultiArray::ConstPtr& byte_array_msg);
     public:
-        TransmitListener(const int transmitPort, const char *transmitIP, const int bufferSize, std::string name, int debugMode, std::string subName);
+        TransmitSubscriber(const int transmitPort, const char *transmitIP, const int bufferSize, std::string name, int debugMode, std::string subName);
 };
 
 #endif

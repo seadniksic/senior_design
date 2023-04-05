@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import rospy, cv2, socket, select
+import rospy, cv2
 from std_msgs.msg import UInt8MultiArray
 from cv_bridge import CvBridge
 from sensor_msgs.msg import Image
@@ -26,7 +26,7 @@ class ImagePublisher:
             self.publisher_.publish(rosMsg)
 
         except Exception as e:
-            print("Image Publisher ran into " + str(e))
+            print("Image Publisher ran into: " + str(e))
 
 if __name__ == '__main__':
     try:
@@ -34,7 +34,4 @@ if __name__ == '__main__':
 
     except KeyboardInterrupt:
         pass
-
-    finally:
-        print("Shutting down node")
 

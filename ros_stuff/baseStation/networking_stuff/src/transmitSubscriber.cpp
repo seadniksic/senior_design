@@ -1,9 +1,9 @@
 #ifndef TRANSMITLISTENER_CPP
 #define TRANSMITLISTENER_CPP
 
-#include "transmitListener.h"
+#include "transmitSubscriber.h"
 
-TransmitListener::TransmitListener(const int transmitPort, const char *transmitIP, const int bufferSize, std::string name, int debugMode, std::string subName)
+TransmitSubscriber::TransmitSubscriber(const int transmitPort, const char *transmitIP, const int bufferSize, std::string name, int debugMode, std::string subName)
 {
     ros::init(argc, argv, name);
 
@@ -18,9 +18,9 @@ TransmitListener::TransmitListener(const int transmitPort, const char *transmitI
     ros::spin();
 }
 
-TransmitListener::start(const std_msgs::String::ConstPtr& msg)
+TransmitSubscriber::start(const std_msgs::UInt8MultiArray::ConstPtr& byte_array_msg)
 {
-    this->client->sendPayload(static_cast<void*>(const_cast<std_msgs::String::ConstPtr&>(msg).get()) , static_cast<int>(message_string.length()));
+    this->client->sendPayload(static_cast<void*>(byte_array_msg->data) , byte_array_msg->data);
 }
 
 #endif

@@ -1,15 +1,15 @@
 #ifndef RECEIVEPUBLISHER_H
 #define RECEIVEPUBLISHER_H
 
-#include <memory>
+#include <memory> 
 #include <ros/ros.h>
 #include <std_msgs/UInt8MultiArray.h>
 #include <string>
 #include "receiveData.h"
-#include "common.h"
+#include "common.h" 
 
 class ReceivePublisher{
-    private:
+    private: 
         std::unique_ptr<ReceiveData> server;
         std::unique_ptr<char[]> buffer;
         uint64_t bufferSize;

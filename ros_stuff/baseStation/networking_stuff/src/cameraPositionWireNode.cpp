@@ -1,5 +1,5 @@
 #include <ros/ros.h>
-#include "passThroughWire.h"
+#include "receivePublisher.h"
 
 int main(int argc, char **argv)
 {
@@ -7,14 +7,6 @@ int main(int argc, char **argv)
     ros::NodeHandle newNode;
     ros::Rate rate(60);
 
-    PassThroughWire connection(WIFI_CAMERA_LOCATION_PORT, BASE_STATION_CAMERA_LOCATION_PORT, LOCAL_IP, CAMERA_POSITION_BUFFER_SIZE, "Camera Position Wire", POISITON_DEBUG);
-
-    while (ros::ok())
-    {
-        connection.update();
-        ros::spinOnce();
-        rate.sleep();
-    }
-
+    ReceivePublisher newPublisher(WIFI_CAMERA_LOCATION_PORT, CAMERA_POSITION_BUFFER_SIZE, "cameraPositionNetworkNodePublisher", POISITON_DEBUG);
     return 0;
 }
