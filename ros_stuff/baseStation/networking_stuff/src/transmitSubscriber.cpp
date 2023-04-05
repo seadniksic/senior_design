@@ -16,7 +16,7 @@ TransmitSubscriber::TransmitSubscriber(const int transmitPort, const char *trans
     ros::spin();
 }
 
-TransmitSubscriber::start(const std_msgs::UInt8MultiArray::ConstPtr& byte_array_msg)
+void TransmitSubscriber::start(const std_msgs::UInt8MultiArray::ConstPtr& byte_array_msg)
 {
     this->client->sendPayload(static_cast<void*>(byte_array_msg->data) , byte_array_msg->data);
 }
