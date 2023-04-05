@@ -5,8 +5,6 @@
 
 TransmitSubscriber::TransmitSubscriber(const int transmitPort, const char *transmitIP, const int bufferSize, std::string name, int debugMode, std::string subName)
 {
-    ros::init(argc, argv, name);
-
     this->client = std::make_unique<TransmitData>(transmitIP, transmitPort, name);
     this->buffer = std::make_unique<char[]>(bufferSize);
     this->bufferSize = bufferSize;
