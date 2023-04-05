@@ -3,14 +3,14 @@ ROS packages that might not work
 ---------------------------------------
 ROVER
 
-ROS Subscribers:
-cameraFeedNetworkNodeSubscriber
-cameraPositionNetworkNodeSubsriber
-mapDataNetworkNodeSubscriber
-roverStatusNetworkNodeSubsriber
+ROS Subscribers:\n
+cameraFeedNetworkNodeSubscriber\n
+cameraPositionNetworkNodeSubsriber\n
+mapDataNetworkNodeSubscriber\n
+roverStatusNetworkNodeSubsriber\n
 
-ROS Publishers:
-roverCommandsNetworkNodePublisher
+ROS Publishers:\n
+roverCommandsNetworkNodePublisher\n
 
 ---------------------------------------
 
