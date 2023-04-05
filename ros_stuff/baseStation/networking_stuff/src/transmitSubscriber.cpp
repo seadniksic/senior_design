@@ -18,6 +18,8 @@ TransmitSubscriber::TransmitSubscriber(const int transmitPort, const char *trans
 
 void TransmitSubscriber::start(const std_msgs::UInt8MultiArray::ConstPtr& byte_array_msg)
 {
+    if(debug)
+        std::cout << name << " will wirelessly transmit " << byte_array_msg->data.size() << " bytes...\n" << std::endl;
     this->client->sendPayload(reinterpret_cast<const void*>(byte_array_msg->data.data()), byte_array_msg->data.size());
 }
 
