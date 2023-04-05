@@ -1,13 +1,9 @@
 #!/usr/bin/env python
 
-import rclpy
-from rclpy.node import Node
+import rospy, cv2, socket, select,uart_messages_pb2
 from cv_bridge import CvBridge
 from sensor_msgs.msg import Image
-import cv2
 import numpy as np
-import socket, select
-import uart_messages_pb2
 
 def createString(msg):
     output = "CPU Temperature: " + str(msg.cpu_temp) + "\n"
@@ -22,20 +18,21 @@ def createString(msg):
     output += "Locomotion Status: " + str(msg.loco_status) + "\n"
     return output
 
-class RoverStatusPublisher(Node):
+class RoverStatusPublisher:
     def __init__(self):
-        super().__init__('roverStatusPublisher')
-        self.roverStatusPublisher = self.create_publisher(Image, 'roverStatusStream', 10)
+        rospy.init_node('roverStatusPublisher')
+        self.publisher_ = rospy.Publisher('roverStatusStream', Image, queue_size=10)
+        timer_period = rospy.Duration.from_sec(0.016666)  # seconds
+        self.timer = rospy.Timer(timer_period, self.timer_callback)
+
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.bind(("127.0.0.1", 8091))
         self.socket.listen(1)
 
-        timerPeriod = 1 / 60
-        self.create_timer(timerPeriod, self.roverStatusTimerCallBack)
         self.client = None
         self.bridge = CvBridge()
     
-    def roverStatusTimerCallBack(self):
+    def timer_callback(self, event):
         try:
             if self.client is None:
                 readSocket, writeSocket, errorSocket = select.select([self.socket], [], [], 0)
@@ -52,21 +49,19 @@ class RoverStatusPublisher(Node):
             msg = self.client.recv(size)
             while len(msg) < size:
                 msg += self.client.recv(size - len(msg))
-            
+
             response = uart_messages_pb2.GUI_Data()
             try:
                 response.ParseFromString(msg)
             except Exception as e:
                 print("Fucking idiot ran into " + str(e))
-            
 
             calib_stat_str = bin(response.calib_status)
             local_stat = bin(response.loco_status)
             print(f"cpu_temp={response.cpu_temp}, calib_stat={calib_stat_str}, servo_pan={response.curr_servo_pan}, servo_tilt={response.curr_servo_tilt}, servo_pan_home={response.home_servo_pan}, servo_tilt_home={response.home_servo_tilt}, loco_status={local_stat}")
             print(response.cpu_temp)
             self.roverStatusPublisher.publish(msg)
-
-
+            
             newOutput = createString(response)
             display = np.zeros((500, 500, 3), np.uint8)
             display.fill(255)
@@ -82,10 +77,15 @@ class RoverStatusPublisher(Node):
             cv2.putText(display, newOutput, (text_x, text_y), font, font_scale, color, thickness)
 
             rosMsg = self.bridge.cv2_to_imgmsg(display, encoding="passthrough")
-            self.roverStatusPublisher.publish(rosMsg)
+            self.publisher_.publish(rosMsg)
 
         except Exception as e:
-            print("Rover Status Publisher ran into " + str(e))
+            print("Image Publisher ran into " + str(e))
+            print("Attempting to reconnect...")
+            
+            if self.client is not None:
+                self.client.close()
+            self.client = None
     
     def shutdownNode(self):
         if self.socket is not None:
@@ -95,14 +95,8 @@ class RoverStatusPublisher(Node):
 
 if __name__ == '__main__':
     try:
-        rclpy.init()
-        roverStatusNode = RoverStatusPublisher()
-        rclpy.spin(roverStatusNode)
-        roverStatusNode.shutdownNode()
-        roverStatusNode.destroy_node()
-        rclpy.shutdown()
+        imageNode = ImagePublisher()
+
+        rospy.spin()
     except KeyboardInterrupt:
         pass
-
-    finally:
-        roverStatusNode.shutdownNode()

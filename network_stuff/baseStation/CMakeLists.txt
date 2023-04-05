@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.9)
+set(CMAKE_CXX_FLAGS "-pthread")
 
 project(BaseStationApplication VERSION 1.0.0 DESCRIPTION "The base station application")
 

@@ -1,23 +1,22 @@
 #!/usr/bin/env python
 
-import rclpy
-from rclpy.node import Node
-from std_msgs.msg import String
-import socket, select
+import rospy, pickle, socket, zstd, select
+from rtabmap_ros.msg import MapData
 
-class RoverStatusPublisher(Node):
+class MapDataPublisher:
     def __init__(self):
-        super().__init__('roverStatusPublisher')
-        self.roverStatusPublisher = self.create_publisher(String, 'roverStatusStream', 10)
+        rospy.init_node('mapDataPublisher')
+        self.publisher_ = rospy.Publisher('mapDataStream', MapData, queue_size=10)
+        timer_period = rospy.Duration.from_sec(0.016666)  # seconds
+        self.timer = rospy.Timer(timer_period, self.timer_callback)
+
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.socket.bind(("127.0.0.1", 8091))
+        self.socket.bind(("127.0.0.1", 8090))
         self.socket.listen(1)
 
-        timerPeriod = 1 / 60
-        self.create_timer(timerPeriod, self.roverStatusTimerCallBack)
         self.client = None
     
-    def roverStatusTimerCallBack(self):
+    def timer_callback(self, event):
         try:
             if self.client is None:
                 readSocket, writeSocket, errorSocket = select.select([self.socket], [], [], 0)
@@ -35,11 +34,17 @@ class RoverStatusPublisher(Node):
             while len(msg) < size:
                 msg += self.client.recv(size - len(msg))
             
-
-            self.roverStatusPublisher.publish(msg)
+            newMap = zstd.decompress(msg)
+            newMap = pickle.loads(newMap)
+            self.publisher_.publish(newMap)
 
         except Exception as e:
-            print("Rover Status Publisher ran into " + str(e))
+            print("Image Publisher ran into " + str(e))
+            print("Attempting to reconnect...")
+            
+            if self.client is not None:
+                self.client.close()
+            self.client = None
     
     def shutdownNode(self):
         if self.socket is not None:
@@ -49,14 +54,11 @@ class RoverStatusPublisher(Node):
 
 if __name__ == '__main__':
     try:
-        rclpy.init()
-        roverStatusNode = RoverStatusPublisher()
-        rclpy.spin(roverStatusNode)
-        roverStatusNode.shutdownNode()
-        roverStatusNode.destroy_node()
-        rclpy.shutdown()
+        mapNode = MapDataPublisher()
+
+        rospy.spin()
     except KeyboardInterrupt:
         pass
 
     finally:
-        roverStatusNode.shutdownNode()
+        mapNode.shutdownNode()
