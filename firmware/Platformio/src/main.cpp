@@ -26,7 +26,7 @@ void main_prog()
   CameraGimbal_Init();
   Joystick_Init();
   Locomotion_Init();
-  // bno055::init(false);
+  bno055::init(false);
   UartComms_Init();
   LightBar_Init();
   CPUTemp_Init();
@@ -108,8 +108,8 @@ void main_prog()
       // Serial.println("running slam loop");
 
       //Store all the data
-      // bno055::get_euler_ypr(slam_local);
-      // bno055::get_lia_xyz(slam_local);
+      bno055::get_euler_ypr(slam_local);
+      bno055::get_lia_xyz(slam_local);
       CameraGimbal_StoreAngles(slam_local);
 
       // Send the data 
