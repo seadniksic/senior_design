@@ -27,7 +27,7 @@ void UartComms_Init()
 }
 
 // As of right now this is blocking, not ideal
-#pragma message("should just put this into a struct and pass the struct.")
+// #pragma message("should just put this into a struct and pass the struct.")
 
 void UartComms_RcvControls()
 {
@@ -105,9 +105,9 @@ void UartComms_RcvControls()
       auto deserialize_status = uartComms.js_in->deserialize(*uartComms.read_buffer);
       if(::EmbeddedProto::Error::NO_ERRORS == deserialize_status)
       {
-        uint32_t btn_status = (uint32_t)uartComms.js_in->get_button();
         uartComms.time_since_last_serialize = 0;
 
+        // uint32_t btn_status = (uint32_t)uartComms.js_in->get_button();
 
         // Serial.println(btn_status);
         // returns enum class Buttons derived from uint32_t type.

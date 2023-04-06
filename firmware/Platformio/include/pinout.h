@@ -88,14 +88,11 @@
 #define ONBOARD_LED_PIN 13
 
 /* pins for battery monitoring / control */
-#pragma message("complete these pins battery control")
+// #pragma message("complete these pins battery control")
 
 
 /* pins for interacting with jetson? */
-#pragma message("complete these pins for jetson")
-
-
-
+// #pragma message("complete these pins for jetson")
 
 
 

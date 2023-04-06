@@ -162,8 +162,8 @@ typedef struct
     int16_t mag_rad;
 } Calib_Data_t;
 
-
-#warning "switch convention to what the other files have, prefix bno055 and capital for funcs"
+// TODO:
+// #pragma message("switch convention to what the other files have, prefix bno055 and capital for funcs")
 
 namespace bno055
 {

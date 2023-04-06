@@ -62,7 +62,6 @@ void main_prog()
       digitalWrite(ONBOARD_LED_PIN, LED_state);
     }
 
-    // #warning "Updated Joy Comms Read Rate to 40 Hz, Verify!!" //verified works like normal
     if(joy_comms_clock > TS_JOY_COMMS)
     {
       joy_comms_clock -= TS_JOY_COMMS;

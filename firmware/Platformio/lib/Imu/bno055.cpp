@@ -68,7 +68,7 @@ bool bno055::init(bool run_calib)
     }
 
     // change temp output to be F
-    #warning "need to update get data functions cause LSB changes when u update units"
+    // #pragma message("need to update get data functions cause LSB changes when u update units")
     set_units(TEMP_UNIT_F | ANDRIOD_ORIENTATION | EULER_ANG_UNIT_RAD);   
     // uint8_t result; 
     // bno.read(BNO_UNIT_SEL, &result, true);
