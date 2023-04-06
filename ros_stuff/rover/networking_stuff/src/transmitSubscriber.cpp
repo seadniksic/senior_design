@@ -3,9 +3,9 @@
 
 #include "transmitSubscriber.h"
 
-TransmitSubscriber::TransmitSubscriber(const int transmitPort, const char *transmitIP, const int bufferSize, std::string name, int debugMode, std::string subName)
+TransmitSubscriber::TransmitSubscriber(const int transmitPort, const char *transmitIP, const int bufferSize, std::string name, int debugMode, std::string subName, const uint8_t priority)
 {
-    this->client = std::make_unique<TransmitData>(transmitIP, transmitPort, name);
+    this->client = std::make_unique<TransmitData>(transmitIP, transmitPort, name, priority);
     this->buffer = std::make_unique<char[]>(bufferSize);
     this->bufferSize = bufferSize;
     this->name = name;

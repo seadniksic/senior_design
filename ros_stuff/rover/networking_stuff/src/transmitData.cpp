@@ -2,18 +2,26 @@
 #define TRANSMITDATA_CPP
 #include "transmitData.h"
 
-TransmitData::TransmitData(const char *ipAddress, uint16_t port, std::string name)
+TransmitData::TransmitData(const char *ipAddress, uint16_t port, std::string name, const uint8_t priority)
 {
     this->name = name;
     //Create socket
     sock = socket(AF_INET, SOCK_STREAM, 0);
     if(sock == -1)
         std::cerr << "Failed to create socket for " << name << "..." << std::endl;
-
+    
     //Mark the IP address it should be connecting to
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_port = htons(port);
     serverAddress.sin_addr.s_addr = inet_addr(ipAddress);
+
+    if(priority > 6)
+        this->priority = 0;
+    else
+        this->priority = priority;
+    
+    if(setsockopt(sock, SOL_SOCKET, SO_PRIORITY, &this->priority, sizeof(this->priority)) < 0)
+        std::cerr << "Failed to set priority for " << name << "..." << std::endl;
 
     currentlyConnected = false;
 }
@@ -48,6 +56,8 @@ int TransmitData::sendPayload(const void *payLoad, size_t dataLength)
                 sock = socket(AF_INET, SOCK_STREAM, 0);
                 if(sock == -1)
                     std::cerr << "Failed to create socket for " << name << "..." << std::endl;
+                if(setsockopt(sock, SOL_SOCKET, SO_PRIORITY, &this->priority, sizeof(this->priority)) < 0)
+                    std::cerr << "Failed to set priority for " << name << "..." << std::endl;
                 return sentBytes;
             }
             else

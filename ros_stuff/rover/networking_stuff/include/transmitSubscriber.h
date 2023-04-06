@@ -19,7 +19,7 @@ class TransmitSubscriber{
         ros::Subscriber transmitDataPublisher;
         void start(const std_msgs::UInt8MultiArray::ConstPtr& byte_array_msg);
     public:
-        TransmitSubscriber(const int transmitPort, const char *transmitIP, const int bufferSize, std::string name, int debugMode, std::string subName);
+        TransmitSubscriber(const int transmitPort, const char *transmitIP, const int bufferSize, std::string name, int debugMode, std::string subName, const uint8_t priority);
 };
 
 #endif
