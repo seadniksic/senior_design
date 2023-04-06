@@ -48,7 +48,9 @@ void main_prog()
   bool reset_comms_status = false;
   uint8_t LED_state = HIGH;
 
-  // Main while loop
+
+  // Locomotion_Run();  // Main while loop
+
   while(1)
   {
 
@@ -84,7 +86,7 @@ void main_prog()
     {
       print_clock -= TS_PRINT_1;
 
-      // Joystick_Print();
+      Joystick_Print();
 
       if(reset_comms_status)
       {

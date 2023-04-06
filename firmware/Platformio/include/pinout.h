@@ -16,36 +16,24 @@
 // GOAL IS HAVE ALL OF THEM BE ON THEIR OWN TIMERS IN CASE I NEED THAT
 
 // BR = Back Right
-#define BR_IN1_PIN 20 // This pin will stay the same
-#define BR_IN2_PIN 21 //The low side of the diff pair H Bridge control input can be removed
-#define BR_EN_PIN 5 //This will be changed for Carrier Board
+#define FL_IN1_PIN 5
+#define FL_IN2_PIN 21 
+#define FL_EN_PIN 20 //these are now acting as in1 pins, needs to be disabled
 
 // BL = Back Left
-#define BL_IN3_PIN 26 //This pin will become #define BL_IN2_PIN 21
-#define BL_IN4_PIN 27 //The low side of the diff pair H Bridge control input can be removed
-#define BR_EN_PIN 23 //This will be changed for Carrier Board
-
-//New pinout for back wheel control
-// #define BR_IN1_PIN 20
-// #define BL_IN2_PIN 21
-//#define Back_EN_PIN 5 //Combining both BR and BL enable pins for new motor driver IC, this frees up pin 23
-
-
+#define FR_IN3_PIN 23
+#define FR_IN4_PIN 27 
+#define FR_EN_PIN 26 //these are now acting as in1 pins, needs to be disabled
 
 // FL = Front Left
-#define FL_IN1_PIN 41 // This pin will stay the same
-#define FL_IN2_PIN 32 //The low side of the diff pair H Bridge control input can be removed
-#define FL_EN_PIN 9 //This will be changed for Carrier Board
+#define BR_IN1_PIN 9 
+#define BR_IN2_PIN 32 
+#define BR_EN_PIN 41 //these are now acting as in1 pins, needs to be disabled
 
 // FR = Front Right
-#define FR_IN3_PIN 34 //This pin will become #define FR_IN2_PIN 40
-#define FR_IN4_PIN 40 //The low side of the diff pair H Bridge control input can be removed
-#define FR_EN_PIN 28 //This will be changed for Carrier Board
-
-//New pinout for front wheel control
-//#define FL_IN1_PIN 41
-//#define FR_IN2_PIN 40
-//#define Front_SLEEP_PIN 9 //Combining both FR and FL enable pins for new motor driver IC, this frees up pin 28
+#define BL_IN3_PIN 28 
+#define BL_IN4_PIN 40 
+#define BL_EN_PIN 34 //these are now acting as in1 pins, needs to be disabled
 
 /* i2c buses */
 #define I2C_SCL_GYRO_PIN 16

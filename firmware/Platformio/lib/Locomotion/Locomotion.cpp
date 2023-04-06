@@ -177,58 +177,70 @@ void Locomotion_Rotate_CCW(const uint8_t &val)
 
 void Locomotion_All_Axis_Off()
 {
-  AXIS_OFF(BR_IN1_PIN, BR_IN2_PIN, BR_EN_PIN);
-  AXIS_OFF(BL_IN3_PIN, BL_IN4_PIN, BL_EN_PIN);
-  AXIS_OFF(FR_IN4_PIN, FR_IN3_PIN, FR_EN_PIN);
-  AXIS_OFF(FL_IN2_PIN, FL_IN1_PIN, FL_EN_PIN);
+  AXIS_OFF(BR_IN1_PIN, BR_IN2_PIN);
+  AXIS_OFF(BL_IN3_PIN, BL_IN4_PIN);
+  AXIS_OFF(FR_IN3_PIN, FR_IN4_PIN);
+  AXIS_OFF(FL_IN1_PIN, FL_IN2_PIN);
 }
 
-void Locomotion_Init_Axis(uint8_t in1, uint8_t in2, uint8_t en)
+void Locomotion_Init_Axis(uint8_t in1, uint8_t in2)
 {
-  pinMode(en, OUTPUT);
-  digitalWrite(en, LOW);
-
   pinMode(in1, OUTPUT);
   pinMode(in2, OUTPUT);
-  digitalWrite(in1, LOW);
+  analogWrite(in1, 0);
   digitalWrite(in2, LOW);
-
 }
 
 void Locomotion_Init()
 {
-  pinMode(13, OUTPUT);
 
-  Locomotion_Init_Axis(BR_IN1_PIN, BR_IN2_PIN, BR_EN_PIN);
-  Locomotion_Init_Axis(BL_IN3_PIN, BL_IN4_PIN, BL_EN_PIN);
-  Locomotion_Init_Axis(FR_IN4_PIN, FR_IN3_PIN, FR_EN_PIN);
-  Locomotion_Init_Axis(FL_IN2_PIN, FL_IN1_PIN, FL_EN_PIN);
+  // set all the encoder pins to low since they not being used
+  pinMode(BR_ENC_PHASEA_PIN, INPUT);
+  pinMode(BR_ENC_PHASEB_PIN, INPUT);
+  pinMode(BL_ENC_PHASEA_PIN, INPUT);
+  pinMode(BL_ENC_PHASEB_PIN, INPUT);
+  pinMode(FL_ENC_PHASEA_PIN, INPUT);
+  pinMode(FL_ENC_PHASEB_PIN, INPUT);
+  pinMode(FR_ENC_PHASEA_PIN, INPUT);
+  pinMode(FR_ENC_PHASEB_PIN, INPUT);
 
-  analogWriteFrequency(FL_EN_PIN, FREQ);
-  analogWriteFrequency(FR_EN_PIN, FREQ);
-  analogWriteFrequency(BR_EN_PIN, FREQ);
-  analogWriteFrequency(BL_EN_PIN, FREQ);
+  // set all in1 pins as input because these will be shorted to enable pins
+  // the pin def is switched tho, EN now points to the old IN1 pins
+  pinMode(BR_EN_PIN, INPUT);
+  pinMode(BL_EN_PIN, INPUT);
+  pinMode(FL_EN_PIN, INPUT);
+  pinMode(FR_EN_PIN, INPUT);
+
+
+  Locomotion_Init_Axis(BR_IN1_PIN, BR_IN2_PIN);
+  Locomotion_Init_Axis(BL_IN3_PIN, BL_IN4_PIN);
+  Locomotion_Init_Axis(FR_IN3_PIN, FR_IN4_PIN);
+  Locomotion_Init_Axis(FL_IN1_PIN, FL_IN2_PIN);
+
+  analogWriteFrequency(BR_IN1_PIN, FREQ);
+  analogWriteFrequency(BL_IN3_PIN, FREQ);
+  analogWriteFrequency(FL_IN1_PIN, FREQ);
+  analogWriteFrequency(FR_IN3_PIN, FREQ);
 
 }
 
 void Locomotion_Run()
 {
-  for (int i = 0; i < 3; i++)
-  {
-    digitalWrite(13, HIGH);
-    delay(100);
-    digitalWrite(13, LOW);
-    delay(100);
-  }
 
-  Locomotion_Drive_Forward();
-  delay(2000);
+  // Locomotion_Differential_Drive_Forward(255,255);
+  // Locomotion_Drive_Forward();
+  // delay(2000);
+  // Locomotion_Differential_Drive_Forward(150,150);
+  // Locomotion_All_Axis_Off();
+  // delay(2000);
+  // Locomotion_Differential_Drive_Forward(200,200);
+  // Locomotion_Drive_Backward();
+  // delay(2000);
+  // Locomotion_Differential_Drive_Forward(75,14);
+  // delay(1000);
+  // delay(8000);
   Locomotion_All_Axis_Off();
 
-  while (true)
-  {
-    digitalWrite(13, HIGH);
-  }
 }
 
 
