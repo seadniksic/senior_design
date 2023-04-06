@@ -135,7 +135,7 @@ void main_prog()
       CameraGimbal_StoreHomeAngles(gui_local);
       bno055::store_calib_status(gui_local);
       Joystick_Store_Control_State(gui_local);
-      
+      HTS221_ReadData(gui_local);
       
       // Send the data
       UartComms_SendGUIData();
