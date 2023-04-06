@@ -1,35 +1,16 @@
 #include "bno055.h"
-#include "i2c_device.h"
 #include "util.h"
 
-// which master you pick will depend on the pins
-// Master1 is defined in imx_rt1060_i2c_driver.cpp
-static I2CMaster & master1 = Master1; //pins 16 and 17 on teensy 4.1
-static I2CDevice bno = I2CDevice(master1, BNO_I2C_ADDRESS, _LITTLE_ENDIAN); //confirmed its big endian
+static I2CDevice * bno;
 static uint8_t Data_Buffer[6] ={0};
 static Vec3_Data_t vec3_data = {0};
 Calib_Data_t calib_data = {0};
 Calib_Data_t ACTUAL_CALIB_DATA = {0};
 
-void bno055::initialize_calib_profile(Calib_Data_t & cal_data)
-{
-    // const int16_t temp = 0x0000;
-    cal_data.acc.x.s_16 = 400;
-    cal_data.acc.y.s_16 = -400;
-    cal_data.acc.z.s_16 = 403;
-    cal_data.mag.x.s_16 = -403;
-    cal_data.mag.y.s_16 = 412;
-    cal_data.mag.z.s_16 = -412;
-    cal_data.gyr.x.s_16 = 212;
-    cal_data.gyr.y.s_16 = -212;
-    cal_data.gyr.z.s_16 = 300;
-    cal_data.acc_rad = -480; // working!!
-    cal_data.mag_rad = 480; //for some reason this wont go to zero but it works when u write other values
-}
 
-bool bno055::init(bool run_calib)
+bool bno055::init(I2CDevice * dev, bool run_calib)
 {
-    master1.begin(400000); //start the i2c master at 400khz
+    bno = dev;
 
     // Initialize calibration profile (for testing)
     initialize_calib_profile(ACTUAL_CALIB_DATA);
@@ -56,10 +37,10 @@ bool bno055::init(bool run_calib)
     }
 
     // set to normal power mode
-    bno.write(BNO_POWER_MODE_REG, (uint8_t)0x00, true);
+    bno->write(BNO_POWER_MODE_REG, (uint8_t)0x00, true);
 
     // set to page 0
-    bno.write(BNO_PAGE_ID_REG, (uint8_t)0x00, true);
+    bno->write(BNO_PAGE_ID_REG, (uint8_t)0x00, true);
 
     // perform self test
     if(!self_test())
@@ -71,7 +52,7 @@ bool bno055::init(bool run_calib)
     // #pragma message("need to update get data functions cause LSB changes when u update units")
     set_units(TEMP_UNIT_F | ANDRIOD_ORIENTATION | EULER_ANG_UNIT_RAD);   
     // uint8_t result; 
-    // bno.read(BNO_UNIT_SEL, &result, true);
+    // bno->read(BNO_UNIT_SEL, &result, true);
     // Serial.printf("the value of unit sel reg is : 0x%X\n", result);
 
 
@@ -132,6 +113,22 @@ bool bno055::init(bool run_calib)
     return true;
 }
 
+void bno055::initialize_calib_profile(Calib_Data_t & cal_data)
+{
+    // const int16_t temp = 0x0000;
+    cal_data.acc.x.s_16 = 400;
+    cal_data.acc.y.s_16 = -400;
+    cal_data.acc.z.s_16 = 403;
+    cal_data.mag.x.s_16 = -403;
+    cal_data.mag.y.s_16 = 412;
+    cal_data.mag.z.s_16 = -412;
+    cal_data.gyr.x.s_16 = 212;
+    cal_data.gyr.y.s_16 = -212;
+    cal_data.gyr.z.s_16 = 300;
+    cal_data.acc_rad = -480; // working!!
+    cal_data.mag_rad = 480; //for some reason this wont go to zero but it works when u write other values
+}
+
 void bno055::calibrate(uint8_t mode)
 {
     uint8_t result = 0, target_calib = 0;
@@ -171,7 +168,7 @@ void bno055::calibrate(uint8_t mode)
     do
     {
         // Serial.printf("[BNO055]: attempting to calibrate: result = 0x%X, target = 0x%X\n", result, target_calib);
-        bno.read(BNO_CALIB_STAT, &result, true);
+        bno->read(BNO_CALIB_STAT, &result, true);
         // bits 5 and 4 are gyr stat, bits 3 and 2 are acc stat, bits 1 and 0 are mag stat
         // 0 is uncal, 2 = cal
         Serial.printf("[BNO055]: Calibrating...: g:%u a:%u m:%u s:%u; Desired:%u,%u,%u,%u; current: 0x%X, Desired 0x%X\n", \
@@ -203,7 +200,7 @@ void bno055::print_calibration()
 {
     uint8_t result = 0;
     // Serial.printf("[BNO055]: attempting to calibrate: result = 0x%X, target = 0x%X\n", result, target_calib);
-    bno.read(BNO_CALIB_STAT, &result, true);
+    bno->read(BNO_CALIB_STAT, &result, true);
         // bits 5 and 4 are gyr stat, bits 3 and 2 are acc stat, bits 1 and 0 are mag stat
     Serial.printf("gyr_cal=%u \t acc_cal=%u \t mag_cal=%u \t sys_cal=%u\n", \
         BNO_GET_GYR_CAL(result), BNO_GET_ACC_CAL(result), BNO_GET_MAG_CAL(result), BNO_GET_SYS_CAL(result));
@@ -212,7 +209,7 @@ void bno055::print_calibration()
 
 void bno055::get_calib_stat(uint8_t & status)
 {
-    if(!bno.read(BNO_CALIB_STAT, &status, true))
+    if(!bno->read(BNO_CALIB_STAT, &status, true))
     {
         status = 0;
     }
@@ -235,7 +232,7 @@ bool bno055::get_calib_profile()
     }
 
     // Serial.println("Getting offsets1");
-    if(!bno.read(ACC_OFFSET_X_LSB, Data_Buffer, (size_t)6,true))
+    if(!bno->read(ACC_OFFSET_X_LSB, Data_Buffer, (size_t)6,true))
     {
         Serial.println("Failed to get ACC_OFFSETs");
         enter_run_mode();
@@ -247,7 +244,7 @@ bool bno055::get_calib_profile()
     calib_data.acc.z.s_16 = REG_DATA_TO_VAL_S16(Data_Buffer[5], Data_Buffer[4]);
 
     // Serial.println("Getting offsets2");
-    if(!bno.read(MAG_OFFSET_X_LSB, Data_Buffer, (size_t)6,true))
+    if(!bno->read(MAG_OFFSET_X_LSB, Data_Buffer, (size_t)6,true))
     {
         Serial.println("Failed to get MAG_OFFSETS");
         enter_run_mode();
@@ -259,7 +256,7 @@ bool bno055::get_calib_profile()
     calib_data.mag.z.s_16 = REG_DATA_TO_VAL_S16(Data_Buffer[5], Data_Buffer[4]);
 
     // Serial.println("Getting offsets3");
-    if(!bno.read(GYR_OFFSET_X_LSB, Data_Buffer, (size_t)6,true))
+    if(!bno->read(GYR_OFFSET_X_LSB, Data_Buffer, (size_t)6,true))
     {
         Serial.println("Failed to get GYR_OFFSETS");
         enter_run_mode();
@@ -271,7 +268,7 @@ bool bno055::get_calib_profile()
     calib_data.gyr.z.s_16 = REG_DATA_TO_VAL_S16(Data_Buffer[5], Data_Buffer[4]);
 
     // Serial.println("Getting offsets4");
-    if(!bno.read(ACC_RADIUS_LSB, Data_Buffer, (size_t)2,true))
+    if(!bno->read(ACC_RADIUS_LSB, Data_Buffer, (size_t)2,true))
     {
         Serial.println("Failed to get ACC_RADIUS");
         enter_run_mode();
@@ -281,7 +278,7 @@ bool bno055::get_calib_profile()
     calib_data.acc_rad = REG_DATA_TO_VAL_S16(Data_Buffer[1], Data_Buffer[0]);
 
     // Serial.println("Getting offsets5");
-    if(!bno.read(MAG_RADIUS_LSB, Data_Buffer, (size_t)2,true))
+    if(!bno->read(MAG_RADIUS_LSB, Data_Buffer, (size_t)2,true))
     {
         Serial.println("Failed to get MAG_RADIUS");
         enter_run_mode();
@@ -318,12 +315,12 @@ bool bno055::write_sensor_offsets(const Offset_t & data, uint8_t start_reg)
     // Serial.printf("%u ", data.z.us_8[DATA_LSB]);
     // Serial.printf("%u ", data.z.us_8[DATA_MSB]);
     // Serial.println("");
-    status = status && bno.write(start_reg++, data.x.us_8[DATA_LSB], true);
-    status = status && bno.write(start_reg++, data.x.us_8[DATA_MSB], true);
-    status = status && bno.write(start_reg++, data.y.us_8[DATA_LSB], true);
-    status = status && bno.write(start_reg++, data.y.us_8[DATA_MSB], true);
-    status = status && bno.write(start_reg++, data.z.us_8[DATA_LSB], true);
-    status = status && bno.write(start_reg++, data.z.us_8[DATA_MSB], true);
+    status = status && bno->write(start_reg++, data.x.us_8[DATA_LSB], true);
+    status = status && bno->write(start_reg++, data.x.us_8[DATA_MSB], true);
+    status = status && bno->write(start_reg++, data.y.us_8[DATA_LSB], true);
+    status = status && bno->write(start_reg++, data.y.us_8[DATA_MSB], true);
+    status = status && bno->write(start_reg++, data.z.us_8[DATA_LSB], true);
+    status = status && bno->write(start_reg++, data.z.us_8[DATA_MSB], true);
     return status;
 }
 
@@ -341,8 +338,8 @@ bool bno055::write_sensor_radius(const int16_t & data, uint8_t start_reg)
     // Serial.printf("radius data: %X", data);
     // Serial.printf("msb: %X", (uint8_t)((data & (int16_t)0xFF00) >> 8));
     // Serial.printf("lsb: %X", (uint8_t)(data & (int16_t)0x00FF));
-    status = status && bno.write(++start_reg, (uint8_t)((data & (int16_t)0xFF00) >> 8), true); //write MSB, ++ start_reg because lsb is passed in
-    status = status && bno.write(--start_reg, (uint8_t)(data & (int16_t)0x00FF), true); //write LSB, -- to get back down to lsb byte
+    status = status && bno->write(++start_reg, (uint8_t)((data & (int16_t)0xFF00) >> 8), true); //write MSB, ++ start_reg because lsb is passed in
+    status = status && bno->write(--start_reg, (uint8_t)(data & (int16_t)0x00FF), true); //write LSB, -- to get back down to lsb byte
     return status;
 }
 
@@ -446,7 +443,7 @@ bool bno055::check_IDs()
     uint8_t result[4] = {0};
 
     // read all of the IDs off the chip
-    if(bno.read(BNO_CHIP_ID_REG, result, NUM_ID_REG, true))
+    if(bno->read(BNO_CHIP_ID_REG, result, NUM_ID_REG, true))
     {
         if(result[0] == BNO_CHIP_ID && result[1] == BNO_ACC_ID && result[2] == BNO_ACC_ID && result[3] == BNO_GYR_ID)
         {
@@ -466,7 +463,7 @@ bool bno055::check_IDs()
 bool bno055::establish_comms()
 {
     uint8_t result = 0;
-    if(bno.read(BNO_CHIP_ID_REG, &result, true))
+    if(bno->read(BNO_CHIP_ID_REG, &result, true))
     {
         Serial.println("[BNO055]: Successfully established comms.");
         return true;
@@ -479,20 +476,20 @@ bool bno055::establish_comms()
 void bno055::get_temp()
 {
     uint8_t result = 0;
-    bno.read(BNO_TEMP_REG, &result, true);
+    bno->read(BNO_TEMP_REG, &result, true);
     Serial.printf("[BNO055]: Temperature is %u F\n", result);
 }
 
 bool bno055::get_sys_status()
 {
     uint8_t result= 0;
-    bno.read(BNO_SYS_STATUS_REG, &result, true);
+    bno->read(BNO_SYS_STATUS_REG, &result, true);
     Serial.printf("[BNO055]: sys status reg is 0x%X\n", result);
     
     if(result == 0x01)
     {
         Serial.println("[BNO055]: SYS ERROR PRESENT");
-        bno.read(BNO_SYS_ERR, &result, true);
+        bno->read(BNO_SYS_ERR, &result, true);
         Serial.printf("[BNO055]: sys error reg is 0x%X\n", result);
         return false;
     } 
@@ -504,7 +501,7 @@ bool bno055::get_sys_status()
 void bno055::get_euler_ypr(SLAM_Data * sd)
 {
     // register is automatically incremented when reading multiple bytes
-    if(!bno.read(BNO_EUL_HEADING_LSB, Data_Buffer, (size_t)6, true))
+    if(!bno->read(BNO_EUL_HEADING_LSB, Data_Buffer, (size_t)6, true))
     {
         Serial.println("euler ypr read failing");
     }
@@ -522,7 +519,7 @@ void bno055::get_euler_ypr(SLAM_Data * sd)
 
 void bno055::get_lia_xyz(SLAM_Data * sd)
 {
-    if(!bno.read(BNO_LIA_X_LSB, Data_Buffer, (size_t)6, true))
+    if(!bno->read(BNO_LIA_X_LSB, Data_Buffer, (size_t)6, true))
     {
         Serial.println("lia xyz read failing");
     }
@@ -543,14 +540,14 @@ void bno055::get_lia_xyz(SLAM_Data * sd)
 opr_mode_e bno055::get_mode()
 {
     uint8_t result;
-    bno.read(BNO_OPR_MODE_REG, &result, true);
+    bno->read(BNO_OPR_MODE_REG, &result, true);
     return (opr_mode_e)(result & 0x0F);
      
 }
 
 bool bno055::reset_sys()
 {
-    bno.write(BNO_SYS_TRIGGER, (uint8_t)BITMASK_5, true);
+    bno->write(BNO_SYS_TRIGGER, (uint8_t)BITMASK_5, true);
     delay(1000); // wait for the chip to reboot
 
     // check to if comms restored and chip is working
@@ -561,7 +558,7 @@ bool bno055::reset_sys()
     }
 
     // reset the reset bit.
-    bno.write(BNO_SYS_TRIGGER, (uint8_t)0x00, true);
+    bno->write(BNO_SYS_TRIGGER, (uint8_t)0x00, true);
     return true;
 }
 
@@ -569,7 +566,7 @@ void bno055::set_mode(opr_mode_e mode)
 {
     Serial.println("[BNO055]: Changing operation modes.. ");
     // Serial.printf("[BNO055]: writing mode 0x%X\n", (uint8_t)(mode));
-    bno.write(BNO_OPR_MODE_REG, (uint8_t)(mode), true);
+    bno->write(BNO_OPR_MODE_REG, (uint8_t)(mode), true);
     Serial.println("Done writing mode");
     delay(30); // at most needs, about 20ms to switch modes 
 }
@@ -613,7 +610,7 @@ bool bno055::self_test()
     // power on self test (section 3.8)
     // the self test checks the acc, mag, and gyr ids and does an internal self check as well.
     uint8_t result;
-    if(!bno.read(BNO_ST_RESULT, &result, true))
+    if(!bno->read(BNO_ST_RESULT, &result, true))
     {
         Serial.println("[BNO055]: Comms failed on Power on Self Test Passed");
         return false;
@@ -639,7 +636,7 @@ void bno055::set_units(uint8_t units)
 {
     //config units
     // set temp to be F
-    if(bno.write(BNO_UNIT_SEL, units, true))
+    if(bno->write(BNO_UNIT_SEL, units, true))
     {
         Serial.println("[BNO055]: successfully wrote config units.");
     }
@@ -647,7 +644,7 @@ void bno055::set_units(uint8_t units)
 
     // read again to confirm selection
     uint8_t result;
-    bno.read(BNO_UNIT_SEL, &result, true);
+    bno->read(BNO_UNIT_SEL, &result, true);
     Serial.printf("[BNO055]: Result is 0x%X (reading unit_sel reg after writing to it)\n", result);
 }
 
@@ -655,14 +652,14 @@ bool bno055::set_clock_source(uint8_t clk_source)
 {
     uint8_t result;
     //check sys clk status
-    bno.read(BNO_SYS_CLK_STATUS, &result, true);
+    bno->read(BNO_SYS_CLK_STATUS, &result, true);
     if(!(result & 0x01)) //bit 0 of result needs to be 0
     {
         //if if statement true then, we are free to configure clk source
         Serial.println("[BNO055]: Free to config clk source, configuring..");
         //set to external oscillator
         //set clk to external osc
-        bno.write(BNO_SYS_TRIGGER, clk_source, true);
+        bno->write(BNO_SYS_TRIGGER, clk_source, true);
         delay(1000); // takes a while to quick in
         Serial.println("[BNO055]: CLK SOURCE CONFIGURED");
         return true;

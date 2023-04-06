@@ -1,4 +1,6 @@
 #include <Arduino.h>
+#include "config.h"
+#include "pinout.h"
 #include <Locomotion.h>
 #include <elapsedMillis.h>
 #include <Joystick.h>
@@ -7,9 +9,10 @@
 #include <InternalTemperature.h>
 #include <LightBar.h>
 #include <CameraGimbal.h>
-#include "pinout.h"
-#include "config.h"
 #include "main.h"
+#include <I2C_Def.h>
+#include <HTS221.h>
+
 
 void main_prog()
 {
@@ -22,11 +25,15 @@ void main_prog()
   // Delay to allow for serial monitor connection and monitoring
   delay(2000);
 
+  // Init I2C for sensors
+  I2C_Def_Init();
+
   // Initialize Modules
   CameraGimbal_Init();
   Joystick_Init();
   Locomotion_Init();
-  bno055::init(false);
+  bno055::init(I2C_Def_GetBnoDev(), false);
+  HTS221_Init(I2C_Def_GetHtsDev());
   UartComms_Init();
   LightBar_Init();
   CPUTemp_Init();
