@@ -17,7 +17,7 @@ Overall, this code defines a class that can be used to pass data through a netwo
 PassThroughWire::PassThroughWire(const int receivePort, const int transmitPort, const char *transmitIP, const int bufferSize, std::string name, int debugMode)
 {
     this->server = std::make_unique<ReceiveData>(receivePort, name);
-    this->client = std::make_unique<TransmitData>(transmitIP, transmitPort, name);
+    this->client = std::make_unique<TransmitData>(transmitIP, transmitPort, name, IMAGE_FEED_PRIORITY);
     this->buffer = std::make_unique<char[]>(bufferSize);
     this->bufferSize = bufferSize;
     this->name = name;

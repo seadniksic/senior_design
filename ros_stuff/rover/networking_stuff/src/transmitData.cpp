@@ -19,9 +19,10 @@ TransmitData::TransmitData(const char *ipAddress, uint16_t port, std::string nam
         this->priority = 0;
     else
         this->priority = priority;
-    
-    if(setsockopt(sock, SOL_SOCKET, SO_PRIORITY, &this->priority, sizeof(this->priority)) < 0)
-        std::cerr << "Failed to set priority for " << name << "..." << std::endl;
+
+    int sendPriority = static_cast<int>(this->priority);
+    if(setsockopt(sock, SOL_SOCKET, SO_PRIORITY, &sendPriority, sizeof(sendPriority)) < 0)
+        std::cerr << "Failed to set priority for " << name << "..." <<  std::endl;
 
     currentlyConnected = false;
 }
@@ -56,7 +57,9 @@ int TransmitData::sendPayload(const void *payLoad, size_t dataLength)
                 sock = socket(AF_INET, SOCK_STREAM, 0);
                 if(sock == -1)
                     std::cerr << "Failed to create socket for " << name << "..." << std::endl;
-                if(setsockopt(sock, SOL_SOCKET, SO_PRIORITY, &this->priority, sizeof(this->priority)) < 0)
+                
+                int sendPriority = static_cast<int>(this->priority);
+                if(setsockopt(sock, SOL_SOCKET, SO_PRIORITY, &sendPriority, sizeof(sendPriority)) < 0)
                     std::cerr << "Failed to set priority for " << name << "..." << std::endl;
                 return sentBytes;
             }
