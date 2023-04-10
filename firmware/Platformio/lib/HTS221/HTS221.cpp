@@ -37,15 +37,16 @@ void HTS221_Init(I2CDevice * dev)
     // Wait until device reboots
     while(1)
     {
-        if(!hts->read(HTS221_CTRL_REG_2, &result, true))
+        delay(5);
+        if(hts->read(HTS221_CTRL_REG_2, &result, true))
         {
-            delay(10);
-            if((result & 0x80) == 0x80)
+            if((result & 0x80) == 0x00)
             {
                 Serial.println("Device rebooted.");
                 break;
             }
         }
+        Serial.println("Waiting for device to reboot.");
     }
 
     // rewrite control reg 1
@@ -88,11 +89,10 @@ bool HTS221_EstablishComms()
     uint8_t res = 0;
     if(!hts->read(HTS221_WHOAMI, &res, true))
     {
-        Serial.println("failed to write to HTS");
+        Serial.println("Failed to read WHOAMI reg.");
         return false;
     }
 
-    Serial.println(res);
     return (res == HTS221_CHIP_ID);
 }
 
@@ -146,12 +146,12 @@ bool HTS221_GetTempCalib()
     }
     const int16_t T1_OUT = (int16_t)(hts_data[0]) | (((int16_t)(hts_data[1])) << 8);
 
-    Serial.printf("t1: %u, t0: %u, t1_out: %d, t0_out %d", T1, T0, T1_OUT, T0_OUT);
+    Serial.printf("t1: %u, t0: %u, t1_out: %d, t0_out %d\n", T1, T0, T1_OUT, T0_OUT);
 
     // see page 27 in datasheet, equations of lines, rise/over. y=mx+b => b=y-mx
     calib.temp_slope = (((float)(T1 - T0)) / (((float)(T1_OUT - T0_OUT)) * 8.0f));
     calib.temp_base = (((float)T1) / 8.0f) - (calib.temp_slope*((float)T1_OUT));
-    Serial.printf("temp slope: %f, temp b: %f", calib.temp_slope, calib.temp_base);
+    Serial.printf("temp slope: %f, temp b: %f\n", calib.temp_slope, calib.temp_base);
     return true;
 }
 
@@ -179,11 +179,11 @@ bool HTS221_GetHumidCalib()
     }
     const int16_t H1_OUT = (int16_t)(hts_data[0]) | (((int16_t)(hts_data[1])) << 8);
 
-    Serial.printf("h1: %u, h0: %u, h1_out: %d, h0_out %d", H1, H0, H1_OUT, H0_OUT);
+    Serial.printf("h1: %u, h0: %u, h1_out: %d, h0_out %d\n", H1, H0, H1_OUT, H0_OUT);
 
     calib.humid_slope = (((float)(H1-H0)) / (((float)(H1_OUT - H0_OUT)) * 2.0f));
     calib.humid_base = (((float)H1) / 2.0f) - (calib.humid_slope*((float)H1_OUT));
-    Serial.printf("humid slope: %f, humid b: %f", calib.humid_slope, calib.humid_base);
+    Serial.printf("humid slope: %f, humid b: %f\n", calib.humid_slope, calib.humid_base);
     return true;
 }
 
@@ -221,6 +221,8 @@ void HTS221_ReadData(GUI_Data * gd)
         Serial.println("Failed to begin start for new dataset");
         return;
     }
+
+    Serial.printf("TEMP: %lu, %HUMID: %lu\n", gd->get_hts_temp(), gd->get_hts_humidity());
 
 }
 
