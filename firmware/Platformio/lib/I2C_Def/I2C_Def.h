@@ -4,8 +4,9 @@
 #include "i2c_device.h"
 #include "config.h"
 
-void I2C_Def_Init();
-I2CDevice * I2C_Def_GetBnoDev();
-I2CDevice * I2C_Def_GetHtsDev();
+inline void I2C_Def_Init(I2CMaster & master)
+{
+    master.begin(I2C_SPEED);
+}
 
 #endif

@@ -44,7 +44,7 @@ typedef struct{
     float temp_base;
 } HTS221_Calib_t;
 
-void HTS221_Init();
+void HTS221_Init(I2CDevice * dev);
 bool HTS221_EstablishComms();
 bool HTS221_Calibrate();
 bool HTS221_GetTempCalib();

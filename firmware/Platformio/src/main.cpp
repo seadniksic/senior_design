@@ -26,16 +26,18 @@ void main_prog()
   delay(2000);
 
   // Init I2C for sensors
-  // I2C_Def_Init();
-
-
+  // Master1 is defined in imx_rt1060_i2c_driver.cpp, pins 16 and 17 on teensy 4.1 
+  I2CMaster & g_master = Master1; // declaring reference variable
+  I2CDevice hts = I2CDevice(g_master, HTS221_I2CADDR, _LITTLE_ENDIAN);
+  I2CDevice bno = I2CDevice(g_master, BNO_I2C_ADDRESS, _LITTLE_ENDIAN);
+  I2C_Def_Init(g_master);
 
   // Initialize Modules
   CameraGimbal_Init();
   Joystick_Init();
   Locomotion_Init();
-  // bno055::init(I2C_Def_GetBnoDev(), false);
-  HTS221_Init();
+  // bno055::init(&bno, false);
+  HTS221_Init(&hts);
   UartComms_Init();
   LightBar_Init();
   CPUTemp_Init();
