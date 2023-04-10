@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 import rospy, cv2, uart_messages_pb2
-from visualization_msgs.msg import Marker, MarkerArray
-from std_msgs.msg import UInt8MultiArray
+from jsk_rviz_plugins.msg import OverlayText
+from std_msgs.msg import UInt8MultiArray, ColorRGBA
 
 def createString(msg):
     output = "CPU Temperature: " + str(msg.cpu_temp) + "\n"
@@ -10,9 +10,8 @@ def createString(msg):
     output += "Gyroscope Calibration Status: " + str((msg.calib_status & 30) >> 4) + "\n"
     output += "Accelerometer Calibration Status: " + str((msg.calib_status & 12) >> 2) + "\n"
     output += "Magnometer Calibration Status: " + str((msg.calib_status & 3)) + "\n"
-    output += "Calibration Status: " + str(msg.calib_status) + "\n"
-    output  += "HTS Temperature: " + str(msg.hts_temp) + "\n"
-    output += "HTS Humidity: " + str(msg.hts_humidity) + "\n"
+    output  += "HTS Temperature: " + str(msg.hts_temp / 1000) + "\n"
+    output += "HTS Humidity: " + str(msg.hts_humidity / 1000) + "\n"
     output += "Battery Temperature: " + str(msg.batt_temp) + "\n"
     output += "Current Servo Pan: " + str(msg.curr_servo_pan) + "\n"
     output += "Current Servo Tilt: " + str(msg.home_servo_pan) + "\n"
@@ -25,7 +24,7 @@ def createString(msg):
 class RoverStatusPublisher:
     def __init__(self):
         rospy.init_node('roverStatusPublisher')
-        self.publisher_ = rospy.Publisher('roverStatusStream', MarkerArray, queue_size=10)
+        self.publisher_ = rospy.Publisher('roverStatusStream', OverlayText, queue_size=10)
         self.subscriber_ = rospy.Subscriber('roverStatusNetworkNodePublisher', UInt8MultiArray, self.callback)
 
         rospy.spin()
@@ -35,28 +34,23 @@ class RoverStatusPublisher:
             response = uart_messages_pb2.GUI_Data()
             try:
                 response.ParseFromString(msg.data)
+                print(response)
             except Exception as e:
                 print("Fucking idiot ran into " + str(e))
-            newOutput = createString(response)
 
-            marker_array = MarkerArray()
-            text_marker = Marker()
-            text_marker.type = Marker.TEXT_VIEW_FACING
-            text_marker.action = Marker.ADD
-            text_marker.header.frame_id = 'map'
-            text_marker.header.stamp = rospy.Time.now()
-            text_marker.pose.position.x = 0.5 # Set the x-coordinate to move the text to the left
-            text_marker.pose.position.y = 0.5 # Set the y-coordinate to move the text to the top
-            text_marker.pose.position.z = 1.5
-            text_marker.scale.z = 0.1 # Set a smaller font size
-            text_marker.color.a = 1.0
-            text_marker.color.r = 1.0
-            text_marker.color.g = 1.0
-            text_marker.color.b = 1.0
-            text_marker.text = newOutput
-            marker_array.markers.append(text_marker)
+            newMsg = OverlayText()
+            newMsg.text = createString(response)
+            newMsg.width = 600
+            newMsg.height = 600
+            newMsg.left = 10
+            newMsg.top = 10
+            newMsg.text_size = 10
+            newMsg.line_width = 2
+            newMsg.font = "DejaVu Sans Mono"
+            newMsg.fg_color = ColorRGBA(25 / 255.0, 1.0, 240.0 / 255.0, 1.0)
+            newMsg.bg_color = ColorRGBA(0.0, 0.0, 0.0, 0.2)
             
-            self.publisher_.publish(marker_array)
+            self.publisher_.publish(newMsg)
 
         except Exception as e:
             print("Rover Status Publisher ran into: " + str(e))
