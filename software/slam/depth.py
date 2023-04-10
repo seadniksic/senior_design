@@ -8,12 +8,12 @@ import time
 
 
 bridge = CvBridge()
-newPub = rospy.Publisher("cameraFeedNetworkNodeSubscriber", UInt8MultiArray, 5)
+newPub = rospy.Publisher("cameraFeedNetworkNodeSubscriber", UInt8MultiArray, queue_size=5)
 
 def image_callback(msg):
     sendData = bridge.imgmsg_to_cv2(msg, desired_encoding='passthrough')
     start =  time.time()
-    __, sendData = cv2.imencode('.jpg', sendData, [int(cv2.IMWRITE_JPEG_QUALITY), 50])
+    __, sendData = cv2.imencode('.jpg', sendData, [int(cv2.IMWRITE_JPEG_QUALITY), 90])
     messagePayload = UInt8MultiArray()
     messagePayload.data = sendData.tobytes()
     newPub.publish(messagePayload)
