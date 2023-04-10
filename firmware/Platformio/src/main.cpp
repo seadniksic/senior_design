@@ -26,14 +26,16 @@ void main_prog()
   delay(2000);
 
   // Init I2C for sensors
-  I2C_Def_Init();
+  // I2C_Def_Init();
+
+
 
   // Initialize Modules
   CameraGimbal_Init();
   Joystick_Init();
   Locomotion_Init();
-  bno055::init(I2C_Def_GetBnoDev(), false);
-  HTS221_Init(I2C_Def_GetHtsDev());
+  // bno055::init(I2C_Def_GetBnoDev(), false);
+  HTS221_Init();
   UartComms_Init();
   LightBar_Init();
   CPUTemp_Init();
@@ -68,6 +70,8 @@ void main_prog()
       LED_state = !LED_state;
       digitalWrite(ONBOARD_LED_PIN, LED_state);
     }
+
+# if 0
 
     if(joy_comms_clock > TS_JOY_COMMS)
     {
@@ -125,23 +129,25 @@ void main_prog()
       UartComms_ClearWriteBuffer();
     }
 
+    #endif
+
     if(gui_data_clock > TS_GUI_DATA)
     {
       gui_data_clock -= TS_GUI_DATA;
 
       // Populate the Data
-      UartComms_PopulateGUITempCPU(InternalTemperature.readTemperatureF());
-      CameraGimbal_StoreAngles(gui_local);
-      CameraGimbal_StoreHomeAngles(gui_local);
-      bno055::store_calib_status(gui_local);
-      Joystick_Store_Control_State(gui_local);
+      // UartComms_PopulateGUITempCPU(InternalTemperature.readTemperatureF());
+      // CameraGimbal_StoreAngles(gui_local);
+      // CameraGimbal_StoreHomeAngles(gui_local);
+      // bno055::store_calib_status(gui_local);
+      // Joystick_Store_Control_State(gui_local);
       HTS221_ReadData(gui_local);
       
       // Send the data
-      UartComms_SendGUIData();
+      // UartComms_SendGUIData();
 
       // Clear the buffer
-      UartComms_ClearWriteBuffer();
+      // UartComms_ClearWriteBuffer();
     }
   }  
 }

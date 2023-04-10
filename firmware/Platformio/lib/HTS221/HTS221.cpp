@@ -1,13 +1,16 @@
 #include "HTS221.h"
 
-static I2CDevice * hts;
+// static I2CDevice * hts;
+
+static I2CMaster & g_master = Master; //pins 16 and 17 on teensy 4.1
+static I2CDevice hts = I2CDevice(g_master, HTS221_I2CADDR, _LITTLE_ENDIAN);
 
 static HTS221_Calib_t calib = {0};
 static uint8_t hts_data[2] = {0};
 
-void HTS221_Init(I2CDevice * dev)
+void HTS221_Init()
 {
-    hts = dev;
+    g_master.begin(400000);
     uint8_t result;
 
     // Try to talk to the HTS
@@ -18,14 +21,14 @@ void HTS221_Init(I2CDevice * dev)
     }
 
     // Turn on the device
-    if(!hts->write(HTS221_CTRL_REG_1, (uint8_t)0x80, true))
+    if(!hts.write(HTS221_CTRL_REG_1, (uint8_t)0x80, true))
     {
         Serial.println("Failed to write control reg 1");
         return;
     }
 
     // Boot
-    if(!hts->write(HTS221_CTRL_REG_2, (uint8_t)0x80, true))
+    if(!hts.write(HTS221_CTRL_REG_2, (uint8_t)0x80, true))
     {
         Serial.println("Failed to put device into boot");
     }
@@ -35,7 +38,7 @@ void HTS221_Init(I2CDevice * dev)
     // Wait until device reboots
     while(1)
     {
-        if(!hts->read(HTS221_CTRL_REG_2, &result, true))
+        if(!hts.read(HTS221_CTRL_REG_2, &result, true))
         {
             delay(10);
             if((result & 0x80) == 0x80)
@@ -47,14 +50,14 @@ void HTS221_Init(I2CDevice * dev)
     }
 
     // rewrite control reg 1
-    if(!hts->write(HTS221_CTRL_REG_1, (uint8_t)0b10000100, true))
+    if(!hts.write(HTS221_CTRL_REG_1, (uint8_t)0b10000100, true))
     {
         Serial.println("Failed to write control reg 1");
         return;
     }
     
     // write control reg 2. set heater to disable
-    if(!hts->write(HTS221_CTRL_REG_2, (uint8_t)0b00000000, true))
+    if(!hts.write(HTS221_CTRL_REG_2, (uint8_t)0b00000000, true))
     {
         Serial.println("Failed to write control reg 2");
         return;
@@ -72,7 +75,7 @@ void HTS221_Init(I2CDevice * dev)
     }
 
     // Trigger a reading
-    if(!hts->write(HTS221_CTRL_REG_2, (uint8_t)0x01, true))
+    if(!hts.write(HTS221_CTRL_REG_2, (uint8_t)0x01, true))
     {
         Serial.println("Failed to begin start for new dataset");
         return;
@@ -84,11 +87,13 @@ void HTS221_Init(I2CDevice * dev)
 bool HTS221_EstablishComms()
 {
     uint8_t res = 0;
-    if(!hts->read(HTS221_WHOAMI, &res, true))
+    if(!hts.read(HTS221_WHOAMI, &res, true))
     {
+        Serial.println("failed to write to HTS");
         return false;
     }
 
+    Serial.println(res);
     return (res == HTS221_CHIP_ID);
 }
 
@@ -116,12 +121,12 @@ bool HTS221_GetTempCalib()
     // see .h file for the note
 
     uint8_t T0_T1_MSB = 0;
-    if(!hts->read(AUTOINCR(HTS221_T0_DEGC_X8), hts_data, (size_t)2, true))
+    if(!hts.read(AUTOINCR(HTS221_T0_DEGC_X8), hts_data, (size_t)2, true))
     {
         return false;
     }
 
-    if(!hts->read(HTS221_T1_T0_MSB, &T0_T1_MSB, true))
+    if(!hts.read(HTS221_T1_T0_MSB, &T0_T1_MSB, true))
     {
         return false;
     }
@@ -130,13 +135,13 @@ bool HTS221_GetTempCalib()
     const uint16_t T0 = ((uint16_t)(hts_data[0]) | ((((uint16_t)(T0_T1_MSB)) & 0x03) << 8));
     const uint16_t T1 = ((uint16_t)(hts_data[1]) | ((((uint16_t)(T0_T1_MSB)) & 0x0C) << 6));
     
-    if(!hts->read(AUTOINCR(HTS221_T0_OUT), hts_data, (size_t)2,true))
+    if(!hts.read(AUTOINCR(HTS221_T0_OUT), hts_data, (size_t)2,true))
     {
         return false;
     }
     const int16_t T0_OUT = (int16_t)(hts_data[0]) | (((int16_t)(hts_data[1])) << 8);
 
-    if(!hts->read(AUTOINCR(HTS221_T1_OUT), hts_data, (size_t)2,true))
+    if(!hts.read(AUTOINCR(HTS221_T1_OUT), hts_data, (size_t)2,true))
     {
         return false;
     }
@@ -158,18 +163,18 @@ bool HTS221_GetHumidCalib()
     // see .h file for the note
 
     uint8_t H0, H1;
-    if(!hts->read(HTS221_H0_RH_X2, &H0, true) || !hts->read(HTS221_H1_RH_X2, &H1, true))
+    if(!hts.read(HTS221_H0_RH_X2, &H0, true) || !hts.read(HTS221_H1_RH_X2, &H1, true))
     {
         return false;
     }
 
-    if(!hts->read(AUTOINCR(HTS221_H0_T0), hts_data, (size_t)2, true))
+    if(!hts.read(AUTOINCR(HTS221_H0_T0), hts_data, (size_t)2, true))
     {
         return false;
     }
     const int16_t H0_OUT = (int16_t)(hts_data[0]) | (((int16_t)(hts_data[1])) << 8);
 
-    if(!hts->read(AUTOINCR(HTS221_H0_T1), hts_data, (size_t)2, true))
+    if(!hts.read(AUTOINCR(HTS221_H0_T1), hts_data, (size_t)2, true))
     {
         return false;
     }
@@ -192,7 +197,7 @@ void HTS221_ReadData(GUI_Data * gd)
         return;
     }
 
-    if(!hts->read(AUTOINCR(HTS221_TEMP_OUT_L), hts_data, (size_t)2, true))
+    if(!hts.read(AUTOINCR(HTS221_TEMP_OUT_L), hts_data, (size_t)2, true))
     {
         Serial.println("Failed to read TEMP");
         return;
@@ -202,7 +207,7 @@ void HTS221_ReadData(GUI_Data * gd)
     #warning "you're gonna want to make this a float"
     gd->set_hts_temp(int32_t(C_TO_F(calib.temp_slope*((float)TEMP) + calib.temp_base) * 1000));
 
-    if(!hts->read(AUTOINCR(HTS221_HUMIDITY_OUT), hts_data, (size_t)2, true))
+    if(!hts.read(AUTOINCR(HTS221_HUMIDITY_OUT), hts_data, (size_t)2, true))
     {
         Serial.println("Failed to read HUMID");
         return;
@@ -212,7 +217,7 @@ void HTS221_ReadData(GUI_Data * gd)
     gd->set_hts_humidity((int32_t)((calib.humid_slope*HUMID + calib.humid_base) * 1000));
 
     // Inform sensor to get next reading
-    if(!hts->write(HTS221_CTRL_REG_2, (uint8_t)0x01, true))
+    if(!hts.write(HTS221_CTRL_REG_2, (uint8_t)0x01, true))
     {
         Serial.println("Failed to begin start for new dataset");
         return;
@@ -223,7 +228,7 @@ void HTS221_ReadData(GUI_Data * gd)
 bool HTS221_DataAvail()
 {
     uint8_t data;
-    if(!hts->read(HTS221_STATUS_REG, &data, true))
+    if(!hts.read(HTS221_STATUS_REG, &data, true))
     {
         return false;
     }
