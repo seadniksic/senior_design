@@ -1,23 +1,17 @@
-import rospy, socket, pickle, zstd
+import rospy, pickle, zstd
 from rtabmap_ros.msg import MapData
+from std_msgs.msg import UInt8MultiArray
 
-
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-host = "127.0.0.1"
-port = 8085
-sock.connect((host, port))
+pubby = rospy.Publisher("mapDataNetworkNodeSubscriber", UInt8MultiArray, queue_size=10)
 
 def map_data_callback(msg):
-    # msgData = Ros1MapDataBridge(msg)
     sendData = pickle.dumps(msg)
 
     sendData = zstd.compress(sendData)
-
-    size = int(len(sendData)).to_bytes(8, byteorder="little", signed=False)
-    sock.sendall(size)
-    sock.sendall(sendData)
+    newMsg = UInt8MultiArray()
+    newMsg.data = sendData
+    pubby.publish(newMsg)
 
 rospy.init_node("mapSub")
 rospy.Subscriber("/rtabmap/mapData", MapData, map_data_callback)
 rospy.spin()
-sock.close()
