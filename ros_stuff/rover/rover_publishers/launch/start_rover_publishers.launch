@@ -1,0 +1,5 @@
+<launch>
+
+<node="rover_publishers" type="better_jetson_comms.py" output="screen"/>
+
+</launch>
