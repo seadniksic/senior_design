@@ -1,3 +1,6 @@
 [submodule "EmbeddedProto"]
 	path = EmbeddedProto
 	url = https://github.com/Embedded-AMS/EmbeddedProto.git
+[submodule "ros_stuff/rover/catkin"]
+	path = ros_stuff/rover/catkin
+	url = https://github.com/ericsherman4/catkin
