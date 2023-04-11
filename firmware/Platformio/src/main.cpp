@@ -13,6 +13,15 @@
 #include <I2C_Def.h>
 #include <HTS221.h>
 
+////////////////////////////
+///////  GLOBAL VARS  //////
+////////////////////////////
+
+The_Watcher_t g_watcher = {0};
+
+////////////////////////////
+/////// MAIN PROGRAM  //////
+////////////////////////////
 
 void main_prog()
 {
@@ -36,8 +45,8 @@ void main_prog()
   CameraGimbal_Init();
   Joystick_Init();
   Locomotion_Init();
-  bno055::init(&bno, false);
-  HTS221_Init(&hts);
+  g_watcher.bno_init = bno055::init(&bno, false);
+  g_watcher.hts_init = HTS221_Init(&hts);
   UartComms_Init();
   LightBar_Init();
   CPUTemp_Init();
@@ -63,14 +72,26 @@ void main_prog()
   while(1)
   {
 
-    if(heartbeat > TS_HEARTBEAT )
+    if(!g_watcher.bno_init || !g_watcher.hts_init)
     {
-      heartbeat -= TS_HEARTBEAT;
+      if(heartbeat > TS_HEARTBEAT_DESTRESS)
+      {
+        heartbeat -= TS_HEARTBEAT_DESTRESS;
 
-      LED_state = !LED_state;
-      digitalWrite(ONBOARD_LED_PIN, LED_state);
+        LED_state = !LED_state;
+        digitalWrite(ONBOARD_LED_PIN, LED_state);
+      }
     }
+    else
+    {
+      if(heartbeat > TS_HEARTBEAT)
+      {
+        heartbeat -= TS_HEARTBEAT;
 
+        LED_state = !LED_state;
+        digitalWrite(ONBOARD_LED_PIN, LED_state);
+      }
+    }
 
     if(joy_comms_clock > TS_JOY_COMMS)
     {
@@ -81,6 +102,7 @@ void main_prog()
       if((*UartComms_GetTimeSinceLastRead()) > SERIAL_COMMS_RECEIVE_TIMEOUT)
       {
         reset_comms_status = true;
+        g_watcher.resetting_comms++;
         UartComms_ClearJoystick();
       }
       else
@@ -139,6 +161,9 @@ void main_prog()
       bno055::store_calib_status(gui_local);
       Joystick_Store_Control_State(gui_local);
       HTS221_ReadData(gui_local);
+
+      //TODO: update rest of fields
+      // probably make a function in main.h
       
       // Send the data
       UartComms_SendGUIData();
@@ -149,13 +174,17 @@ void main_prog()
   }  
 }
 
+///////////////////////////
+/// SILLY ARDUINO STUFF ///
+///////////////////////////
+
 void setup() {
   // do not use this function, write setup code in main_prog
   return;
 }
 
 void loop() {
-  // implement all code in main
+  // implement all code in main 
   
   main_prog(); // main_prog should never return
 }

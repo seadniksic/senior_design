@@ -5,7 +5,7 @@ static I2CDevice * hts;
 static HTS221_Calib_t calib = {0};
 static uint8_t hts_data[2] = {0};
 
-void HTS221_Init(I2CDevice * dev)
+bool HTS221_Init(I2CDevice * dev)
 {
 
     hts = dev;
@@ -16,14 +16,14 @@ void HTS221_Init(I2CDevice * dev)
     if(!HTS221_EstablishComms())
     {
         Serial.println("Failed to establish comms with HTS.");
-        return;
+        return false;
     }
 
     // Turn on the device
     if(!hts->write(HTS221_CTRL_REG_1, (uint8_t)0x80, true))
     {
         Serial.println("Failed to write control reg 1");
-        return;
+        return false;
     }
 
     // Boot
@@ -33,6 +33,8 @@ void HTS221_Init(I2CDevice * dev)
     }
 
     Serial.println("Rebooting HTS221.");
+
+    elapsedMillis clock;
 
     // Wait until device reboots
     while(1)
@@ -47,20 +49,26 @@ void HTS221_Init(I2CDevice * dev)
             }
         }
         Serial.println("Waiting for device to reboot.");
+
+        if(clock > HTS_BOOT_TIMEOUT)
+        {
+            Serial.println("Timed out while booting.");
+            return false;
+        }
     }
 
     // rewrite control reg 1
     if(!hts->write(HTS221_CTRL_REG_1, (uint8_t)0b10000100, true))
     {
         Serial.println("Failed to write control reg 1");
-        return;
+        return false;
     }
     
     // write control reg 2. set heater to disable
     if(!hts->write(HTS221_CTRL_REG_2, (uint8_t)0b00000000, true))
     {
         Serial.println("Failed to write control reg 2");
-        return;
+        return false;
     }
 
     // Set temp and humidity resolution
@@ -71,17 +79,18 @@ void HTS221_Init(I2CDevice * dev)
     if(!HTS221_Calibrate())
     {
         Serial.println("Failed to calibrate HTS221");
-        return;
+        return false;
     }
 
     // Trigger a reading
     if(!hts->write(HTS221_CTRL_REG_2, (uint8_t)0x01, true))
     {
         Serial.println("Failed to begin start for new dataset");
-        return;
+        return false;
     }
 
     Serial.println("Successfully initialized HTS221");
+    return true;
 }
 
 bool HTS221_EstablishComms()

@@ -1,5 +1,5 @@
 #include "UartComms.h"
-
+#include "main.h"
 
 static UartReadBuffer g_read_buffer;
 static UartWriteBuffer g_write_buffer;
@@ -95,6 +95,7 @@ void UartComms_RcvControls()
         if(uartComms.syncByteStatus == false)
         {
           Serial.println("sync byte not found yet.");
+          g_watcher.lost_sync_byte++;
           uartComms.syncByteStatus = true;
         }
       }

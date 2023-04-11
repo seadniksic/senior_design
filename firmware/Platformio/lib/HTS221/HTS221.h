@@ -4,6 +4,7 @@
 #include "i2c_device.h"
 #include "MessageInterface.h"
 #include "uart_messages.h"
+#include <elapsedMillis.h>
 
 // #defines taken from Adafruit, HTS221 Library, all credit goes to them
 #define HTS221_I2CADDR 0x5F ///< HTS221 default i2c address
@@ -25,6 +26,8 @@
 #define HTS221_T0_OUT 0x3C       ///< T0_OUT LSByte
 #define HTS221_T1_OUT 0x3E       ///< T1_OUT LSByte
 
+#define HTS_BOOT_TIMEOUT 500
+
 /*
 The I²C embedded in the HTS221 behaves like a slave device and the following protocol
 must be adhered to. After the start condition (ST) a slave address is sent, once a slave
@@ -44,7 +47,7 @@ typedef struct{
     float temp_base;
 } HTS221_Calib_t;
 
-void HTS221_Init(I2CDevice * dev);
+bool HTS221_Init(I2CDevice * dev);
 bool HTS221_EstablishComms();
 bool HTS221_Calibrate();
 bool HTS221_GetTempCalib();

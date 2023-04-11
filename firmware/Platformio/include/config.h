@@ -25,12 +25,13 @@
 
 // TASK SCHEDULER (time in ms)
 #define TS_HEARTBEAT 500 // 2 Hz
+#define TS_HEARTBEAT_DESTRESS 100 // 10Hz
 #define TS_PRINT_1 100 // 10 Hz
 #define TS_PRINT_2
 #define TS_PRINT_3
 #define TS_JOY_UPDATE 50 // 20Hz
 #define TS_JOY_COMMS 25 // 40Hz
 #define TS_SLAM_COMMS 10 // 100Hz
-#define TS_GUI_DATA 200 // 5 Hz
+#define TS_GUI_DATA 500 // 2 Hz
 
 #endif
