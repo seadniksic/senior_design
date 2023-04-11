@@ -5,5 +5,6 @@
     <node pkg="networking_stuff" type="networking_stuff_map_data_network_node" name="map_data_network_node" output="screen"/>
     <node pkg="networking_stuff" type="networking_stuff_rover_commands_network_node" name="rover_commands_network_node" output="screen"/>
     <node pkg="networking_stuff" type="networking_stuff_rover_status_network_node" name="rover_status_network_node" output="screen"/>
+    <node pkg="networking_stuff" type="networking_stuff_reactive_camera_network_node" name="reactive_camera_network_node" output="screen"/>
     
 </launch>

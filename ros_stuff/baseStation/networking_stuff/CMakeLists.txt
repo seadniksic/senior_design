@@ -177,6 +177,14 @@ set(ROVER_STATUS_NETWORK_NODE_SRC
 
 add_executable(${PROJECT_NAME}_rover_status_network_node ${ROVER_STATUS_NETWORK_NODE_SRC})
 
+set(REACTIVE_CAMERA_NETWORK_NODE_SRC
+	src/reactiveCameraWireNode.cpp
+	src/receiveData.cpp
+	src/receivePublisher.cpp
+)
+
+add_executable(${PROJECT_NAME}_reactive_camera_network_node ${REACTIVE_CAMERA_NETWORK_NODE_SRC})
+
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -198,6 +206,7 @@ target_link_libraries(${PROJECT_NAME}_camera_position_network_node ${catkin_LIBR
 target_link_libraries(${PROJECT_NAME}_map_data_network_node ${catkin_LIBRARIES})
 target_link_libraries(${PROJECT_NAME}_rover_commands_network_node ${catkin_LIBRARIES})
 target_link_libraries(${PROJECT_NAME}_rover_status_network_node ${catkin_LIBRARIES})
+target_link_libraries(${PROJECT_NAME}_reactive_camera_network_node ${catkin_LIBRARIES})
 
 #############
 ## Install ##
