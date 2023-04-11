@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <UartComms.h>
+#include "i2c_device.h"
 
 #define BNO_RUN_MODE BNO_OPR_MODE_NDOF_FMC_OFF
 
@@ -167,7 +168,7 @@ typedef struct
 
 namespace bno055
 {
-    bool init(bool run_calib);
+    bool init(I2CDevice * dev, bool run_calib);
     bool establish_comms();
     bool check_IDs();
     void get_temp();

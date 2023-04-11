@@ -20,6 +20,9 @@
 #define SERIAL_BAUD 500000
 #define SERIAL_COMMS_RECEIVE_TIMEOUT 350
 
+// I2C
+#define I2C_SPEED 400000
+
 // TASK SCHEDULER (time in ms)
 #define TS_HEARTBEAT 500 // 2 Hz
 #define TS_PRINT_1 100 // 10 Hz
