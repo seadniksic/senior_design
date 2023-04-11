@@ -60,8 +60,6 @@ void main_prog()
   uint8_t LED_state = HIGH;
 
 
-  // Locomotion_Run();  // Main while loop
-
   while(1)
   {
 

@@ -70,6 +70,13 @@ bool bno055::init(I2CDevice * dev, bool run_calib)
         return false;
     }
 
+    //write the stored calibration
+    Serial.println("Writing the stored calibration values.");
+    if(!write_calib_profile(ACTUAL_CALIB_DATA))
+    {
+        Serial.println("Failed to write calibration profile. Values may be unstable!!");
+    }
+
     // set out of config mode
     opr_mode_e desired_mode = (opr_mode_e)BNO_RUN_MODE;
 
@@ -82,7 +89,6 @@ bool bno055::init(I2CDevice * dev, bool run_calib)
     // Sensor calibration
     if(run_calib)
     {
-        
         calibrate(desired_mode);
     }
     else
@@ -115,18 +121,17 @@ bool bno055::init(I2CDevice * dev, bool run_calib)
 
 void bno055::initialize_calib_profile(Calib_Data_t & cal_data)
 {
-    // const int16_t temp = 0x0000;
-    cal_data.acc.x.s_16 = 400;
-    cal_data.acc.y.s_16 = -400;
-    cal_data.acc.z.s_16 = 403;
-    cal_data.mag.x.s_16 = -403;
-    cal_data.mag.y.s_16 = 412;
-    cal_data.mag.z.s_16 = -412;
-    cal_data.gyr.x.s_16 = 212;
-    cal_data.gyr.y.s_16 = -212;
-    cal_data.gyr.z.s_16 = 300;
-    cal_data.acc_rad = -480; // working!!
-    cal_data.mag_rad = 480; //for some reason this wont go to zero but it works when u write other values
+    cal_data.acc.x.s_16 = 424;
+    cal_data.acc.y.s_16 = -424;
+    cal_data.acc.z.s_16 = 377;
+    cal_data.mag.x.s_16 = -208;
+    cal_data.mag.y.s_16 = 280;
+    cal_data.mag.z.s_16 = -244;
+    cal_data.gyr.x.s_16 = -1;
+    cal_data.gyr.y.s_16 = -2;
+    cal_data.gyr.z.s_16 = 0;
+    cal_data.acc_rad = 1000; 
+    cal_data.mag_rad = 984; 
 }
 
 void bno055::calibrate(uint8_t mode)
@@ -392,10 +397,6 @@ bool bno055::write_calib_profile(const Calib_Data_t & cal_data)
 
     get_calib_profile();
     print_calib_profile();
-
-
-
-
 
     if(!enter_run_mode())
     {
