@@ -19,6 +19,25 @@
 
 The_Watcher_t g_watcher = {0};
 
+///////////////////////////
+///   HELPER FUNCTIONS  ///
+///////////////////////////
+
+void Watcher_StoreData(GUI_Data * gd)
+{
+  uint32_t dev_status = ((uint32_t)g_watcher.bno_init) | \
+                        (((uint32_t)g_watcher.hts_init) << 1);
+
+  gd->set_dev_status((GUI_Data::Device_Status)dev_status);
+  gd->set_i2c_msg_failed(g_watcher.i2c_msg_failed);
+  gd->set_i2c_msg_passed(g_watcher.i2c_msg_passed);
+  gd->set_uart_msg_failed(g_watcher.uart_msg_failed);
+  gd->set_uart_msg_passed(g_watcher.uart_msg_passed);
+  gd->set_lost_sync_byte(g_watcher.lost_sync_byte);
+  gd->set_reseting_comms(g_watcher.resetting_comms);
+}
+
+
 ////////////////////////////
 /////// MAIN PROGRAM  //////
 ////////////////////////////
@@ -161,9 +180,7 @@ void main_prog()
       bno055::store_calib_status(gui_local);
       Joystick_Store_Control_State(gui_local);
       HTS221_ReadData(gui_local);
-
-      //TODO: update rest of fields
-      // probably make a function in main.h
+      Watcher_StoreData(gui_local);
       
       // Send the data
       UartComms_SendGUIData();

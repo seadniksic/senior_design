@@ -1,5 +1,6 @@
 #include "bno055.h"
 #include "util.h"
+#include "main.h"
 
 static I2CDevice * bno;
 static uint8_t Data_Buffer[6] ={0};
@@ -217,7 +218,10 @@ void bno055::get_calib_stat(uint8_t & status)
     if(!bno->read(BNO_CALIB_STAT, &status, true))
     {
         status = 0;
+        g_watcher.i2c_msg_failed++;
+        return;
     }
+    g_watcher.i2c_msg_passed++;
 }
 
 
@@ -505,7 +509,11 @@ void bno055::get_euler_ypr(SLAM_Data * sd)
     if(!bno->read(BNO_EUL_HEADING_LSB, Data_Buffer, (size_t)6, true))
     {
         Serial.println("euler ypr read failing");
+        g_watcher.i2c_msg_failed++;
+        return;
     }
+
+    g_watcher.i2c_msg_passed++;
 
     vec3_data.v1.s_16 = REG_DATA_TO_VAL_S16(Data_Buffer[1], Data_Buffer[0]); //yaw
     vec3_data.v2.s_16 = REG_DATA_TO_VAL_S16(Data_Buffer[3], Data_Buffer[2]); //pitch
@@ -523,7 +531,11 @@ void bno055::get_lia_xyz(SLAM_Data * sd)
     if(!bno->read(BNO_LIA_X_LSB, Data_Buffer, (size_t)6, true))
     {
         Serial.println("lia xyz read failing");
+        g_watcher.i2c_msg_failed++;
+        return;
     }
+
+    g_watcher.i2c_msg_passed++;
 
     vec3_data.v1.s_16 = REG_DATA_TO_VAL_S16(Data_Buffer[1], Data_Buffer[0]); //x
     vec3_data.v2.s_16 = REG_DATA_TO_VAL_S16(Data_Buffer[3], Data_Buffer[2]); //y

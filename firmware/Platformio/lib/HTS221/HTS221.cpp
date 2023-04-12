@@ -1,4 +1,5 @@
 #include "HTS221.h"
+#include "main.h"
 
 static I2CDevice * hts;
 
@@ -208,17 +209,26 @@ void HTS221_ReadData(GUI_Data * gd)
     if(!hts->read(AUTOINCR(HTS221_TEMP_OUT_L), hts_data, (size_t)2, true))
     {
         Serial.println("Failed to read TEMP");
+        g_watcher.i2c_msg_failed++;
         return;
+    }
+    else
+    {
+        g_watcher.i2c_msg_passed++;
     }
 
     const int16_t TEMP = (int16_t)(hts_data[0]) | (((int16_t)(hts_data[1])) << 8);
-    #warning "you're gonna want to make this a float"
     gd->set_hts_temp(int32_t(C_TO_F(calib.temp_slope*((float)TEMP) + calib.temp_base) * 1000));
 
     if(!hts->read(AUTOINCR(HTS221_HUMIDITY_OUT), hts_data, (size_t)2, true))
     {
         Serial.println("Failed to read HUMID");
+        g_watcher.i2c_msg_failed++;
         return;
+    }
+    else
+    {
+        g_watcher.i2c_msg_passed++;
     }
 
     const int16_t HUMID = (int16_t)(hts_data[0]) | (((int16_t)(hts_data[1])) << 8);
@@ -228,11 +238,15 @@ void HTS221_ReadData(GUI_Data * gd)
     if(!hts->write(HTS221_CTRL_REG_2, (uint8_t)0x01, true))
     {
         Serial.println("Failed to begin start for new dataset");
+        g_watcher.i2c_msg_failed++;
         return;
     }
+    else
+    {
+        g_watcher.i2c_msg_passed++;
+    }
 
-    Serial.printf("TEMP: %lu, %HUMID: %lu\n", gd->get_hts_temp(), gd->get_hts_humidity());
-
+    // Serial.printf("TEMP: %lu, %HUMID: %lu\n", gd->get_hts_temp(), gd->get_hts_humidity());
 }
 
 bool HTS221_DataAvail()
@@ -240,7 +254,9 @@ bool HTS221_DataAvail()
     uint8_t data;
     if(!hts->read(HTS221_STATUS_REG, &data, true))
     {
+        g_watcher.i2c_msg_failed++;
         return false;
     }
+    g_watcher.i2c_msg_passed++;
     return ((data & 0x03) == 0x03);
 }

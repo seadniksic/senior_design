@@ -79,14 +79,14 @@ message GUI_Data
     optional sint32 home_servo_pan = 8; 
     optional sint32 home_servo_tilt = 9; 
     optional Locomotion_Status loco_status = 10; 
+    
     optional Device_Status dev_status = 11;
     optional sint32 i2c_msg_failed = 12;
     optional sint32 i2c_msg_passed = 13;
     optional sint32 uart_msg_failed = 14;
     optional sint32 uart_msg_passed = 15;
-
-    optional sint32 lost_sync_byte = 16; //dome
-    optional sint32 reseting_comms = 17; //done
+    optional sint32 lost_sync_byte = 16; 
+    optional sint32 reseting_comms = 17;
 
     
 }

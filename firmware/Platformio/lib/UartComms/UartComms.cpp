@@ -59,6 +59,7 @@ void UartComms_RcvControls()
           if(uartComms.rcv_clock > TIMEOUT_NUMBYTES)
           {
             Serial.println("Message timeout while waiting for num_bytes!");
+            g_watcher.uart_msg_failed++;
             return;
           }
         }
@@ -73,6 +74,7 @@ void UartComms_RcvControls()
           if(uartComms.rcv_clock > TIMEOUT_DATA)
           {
             Serial.println("Message timeout while waiting for data!");
+            g_watcher.uart_msg_failed++;
             return;
           }
 
@@ -107,6 +109,7 @@ void UartComms_RcvControls()
       if(::EmbeddedProto::Error::NO_ERRORS == deserialize_status)
       {
         uartComms.time_since_last_serialize = 0;
+        g_watcher.uart_msg_passed++;
 
         // uint32_t btn_status = (uint32_t)uartComms.js_in->get_button();
 
@@ -154,6 +157,7 @@ void UartComms_RcvControls()
       else
       {
         Serial.println("Failed to serialize message.");
+        g_watcher.uart_msg_failed++;
         HWSERIAL.flush();
       }
 
@@ -185,6 +189,12 @@ void UartComms_SendGUIData()
 
     // Now transmit the actual data.
     HWSERIAL.write(uartComms.write_buffer->get_data(), uartComms.write_buffer->get_size());
+    g_watcher.uart_msg_passed++;
+  }
+  else
+  {
+    Serial.println("Failed to serialize GUI Data.");
+    g_watcher.uart_msg_failed++;
   }
 }
 
@@ -201,6 +211,12 @@ void UartComms_SendSLAMData()
 
     // Now transmit the actual data.
     HWSERIAL.write(uartComms.write_buffer->get_data(), uartComms.write_buffer->get_size());
+    g_watcher.uart_msg_passed++;
+  }
+  else
+  {
+    Serial.println("Failed to serialize SLAM Data.");
+    g_watcher.uart_msg_failed++;
   }
 }
 
