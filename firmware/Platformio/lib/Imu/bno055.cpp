@@ -33,7 +33,7 @@ bool bno055::init(I2CDevice * dev, bool run_calib)
     // change to config mode (although it should already be in config mode because of the reset)
     if(!enter_config_mode())
     {
-        Serial.println("Failed to enter the config mode");
+        Serial.println("[BNO055]: Failed to enter the config mode");
         return false;
     }
 
@@ -71,46 +71,50 @@ bool bno055::init(I2CDevice * dev, bool run_calib)
         return false;
     }
 
-    Serial.println("hello1");
-    get_sys_status();
+    // enter config mode to write the calibration profile
+    if(!enter_config_mode())
+    {
+        return false;
+    }
 
     //write the stored calibration
-    Serial.println("Writing the stored calibration values.");
+    Serial.println("[BNO055]: Writing the stored calibration values.");
     if(!write_calib_profile(ACTUAL_CALIB_DATA))
     {
-        Serial.println("Failed to write calibration profile. Values may be unstable!!");
+        Serial.println("[BNO055]: Failed to write calibration profile.");
+        return false;
     }
 
     // set out of config mode
-    // opr_mode_e desired_mode = (opr_mode_e)BNO_RUN_MODE;
+    opr_mode_e desired_mode = (opr_mode_e)BNO_RUN_MODE;
 
-    // if(!enter_run_mode())
-    // {
-    //     Serial.println("Failed to enter run mode");
-    //     return false;
-    // }
+    if(!enter_run_mode())
+    {
+        Serial.println("[BNO055]: Failed to enter run mode");
+        return false;
+    }
 
-    // // Sensor calibration
-    // if(run_calib)
-    // {
-    //     calibrate(desired_mode);
-    // }
-    // else
-    // {
-    //     Serial.println("-----------------------------");
-    //     delay(1);
-    //     Serial.println("-----------------------------");
-    //     delay(1);
-    //     Serial.println("-----------------------------");
-    //     delay(1);
-    //     Serial.println("WARNING: OMITTING CALIBRATION");
-    //     delay(1);
-    //     Serial.println("-----------------------------");
-    //     delay(1);
-    //     Serial.println("-----------------------------");
-    //     delay(1);
-    //     Serial.println("-----------------------------");
-    // }
+    // Sensor calibration
+    if(run_calib)
+    {
+        calibrate(desired_mode);
+    }
+    else
+    {
+        Serial.println("[BNO055]: -----------------------------");
+        delay(1);
+        Serial.println("[BNO055]: -----------------------------");
+        delay(1);
+        Serial.println("[BNO055]: -----------------------------");
+        delay(1);
+        Serial.println("[BNO055]: WARNING: OMITTING CALIBRATION");
+        delay(1);
+        Serial.println("[BNO055]: -----------------------------");
+        delay(1);
+        Serial.println("[BNO055]: -----------------------------");
+        delay(1);
+        Serial.println("[BNO055]: -----------------------------");
+    }
 
     // check state of the system at this point, if all is good proceed.
     if(!get_sys_status())
@@ -226,7 +230,7 @@ void bno055::get_calib_stat(uint8_t & status)
     g_watcher.i2c_msg_passed++;
 }
 
-
+// prereq: most be in config mode
 bool bno055::get_calib_profile()
 {
     /*
@@ -237,16 +241,12 @@ bool bno055::get_calib_profile()
 
     // need to switch to config mode to read calibration data
     // if any of the reads fails and the function returns false, need to ensure we are back in run mode
-    // if(!enter_config_mode())
-    // {
-    //     return false;
-    // }
+    // TODO: ^
 
     // Serial.println("Getting offsets1");
     if(!bno->read(ACC_OFFSET_X_LSB, Data_Buffer, (size_t)6,true))
     {
         Serial.println("Failed to get ACC_OFFSETs");
-        enter_run_mode();
         return false;
     }
 
@@ -258,7 +258,6 @@ bool bno055::get_calib_profile()
     if(!bno->read(MAG_OFFSET_X_LSB, Data_Buffer, (size_t)6,true))
     {
         Serial.println("Failed to get MAG_OFFSETS");
-        enter_run_mode();
         return false;
     }
 
@@ -270,7 +269,6 @@ bool bno055::get_calib_profile()
     if(!bno->read(GYR_OFFSET_X_LSB, Data_Buffer, (size_t)6,true))
     {
         Serial.println("Failed to get GYR_OFFSETS");
-        enter_run_mode();
         return false;
     }
 
@@ -282,7 +280,6 @@ bool bno055::get_calib_profile()
     if(!bno->read(ACC_RADIUS_LSB, Data_Buffer, (size_t)2,true))
     {
         Serial.println("Failed to get ACC_RADIUS");
-        enter_run_mode();
         return false;
     }
 
@@ -292,30 +289,15 @@ bool bno055::get_calib_profile()
     if(!bno->read(MAG_RADIUS_LSB, Data_Buffer, (size_t)2,true))
     {
         Serial.println("Failed to get MAG_RADIUS");
-        enter_run_mode();
         return false;
     }
 
     calib_data.mag_rad = REG_DATA_TO_VAL_S16(Data_Buffer[1], Data_Buffer[0]);
 
-
-    // Serial.println("Reach here");
-
-    // if(!enter_run_mode())
-    // {
-    //     Serial.println("failed to enter back into run mode");
-    //     return false;
-    // }
-    // else
-    // {
-    //     Serial.println("successfully back in run mode");
-    // }
-
-    // Serial.println("returning true");
-
     return true;
 }
 
+// prereq: most be in config mode
 bool bno055::write_sensor_offsets(const Offset_t & data, uint8_t start_reg)
 {
     bool status = true;
@@ -335,6 +317,7 @@ bool bno055::write_sensor_offsets(const Offset_t & data, uint8_t start_reg)
     return status;
 }
 
+// prereq: most be in config mode
 bool bno055::write_sensor_radius(const int16_t & data, uint8_t start_reg)
 {
     /*
@@ -354,6 +337,7 @@ bool bno055::write_sensor_radius(const int16_t & data, uint8_t start_reg)
     return status;
 }
 
+// prereq: most be in config mode
 bool bno055::write_calib_profile(const Calib_Data_t & cal_data)
 {
     /*
@@ -365,11 +349,6 @@ bool bno055::write_calib_profile(const Calib_Data_t & cal_data)
     2. Write the corresponding sensor offsets and radius data
     3. Change operation mode to fusion mode
     */
-
-    // if(!enter_config_mode())
-    // {
-    //     return false;
-    // }
 
     if(!write_sensor_offsets(cal_data.acc, ACC_OFFSET_X_LSB))
     {
@@ -401,13 +380,8 @@ bool bno055::write_calib_profile(const Calib_Data_t & cal_data)
         return false;
     }
 
-    // get_calib_profile();
-    // print_calib_profile();
-
-    if(!enter_run_mode())
-    {
-        return false;
-    }
+    get_calib_profile();
+    print_calib_profile();
 
     return true;
 }
@@ -510,7 +484,7 @@ void bno055::get_euler_ypr(SLAM_Data * sd)
     // register is automatically incremented when reading multiple bytes
     if(!bno->read(BNO_EUL_HEADING_LSB, Data_Buffer, (size_t)6, true))
     {
-        Serial.println("euler ypr read failing");
+        Serial.println("[BNO055]: euler ypr read failing");
         g_watcher.i2c_msg_failed++;
         return;
     }
@@ -532,7 +506,7 @@ void bno055::get_lia_xyz(SLAM_Data * sd)
 {
     if(!bno->read(BNO_LIA_X_LSB, Data_Buffer, (size_t)6, true))
     {
-        Serial.println("lia xyz read failing");
+        Serial.println("[BNO055]: lia xyz read failing");
         g_watcher.i2c_msg_failed++;
         return;
     }
@@ -582,7 +556,7 @@ void bno055::set_mode(opr_mode_e mode)
     Serial.println("[BNO055]: Changing operation modes.. ");
     // Serial.printf("[BNO055]: writing mode 0x%X\n", (uint8_t)(mode));
     bno->write(BNO_OPR_MODE_REG, (uint8_t)(mode), true);
-    Serial.println("Done writing mode");
+    Serial.println("[BNO055]: Done writing mode");
     delay(30); // at most needs, about 20ms to switch modes 
 }
 
@@ -594,12 +568,12 @@ bool bno055::enter_config_mode()
     {
         Serial.println("[BNO055]: Failed to enter config mode, retrying..");
         set_mode(OPR_MODE_CONFIG);
-        if(++error_count > 5)
+        if(++error_count > 10)
         {
             return false;
         }
     }
-    Serial.println("Succesfully entered config mode");
+    Serial.println("[BNO055]: Succesfully entered config mode");
     return true;
 }
 
@@ -611,12 +585,12 @@ bool bno055::enter_run_mode()
     {
         Serial.println("[BNO055]: Failed to set mode, retrying..");
         set_mode((opr_mode_e)BNO_RUN_MODE);
-        if(++error_count > 5)
+        if(++error_count > 10)
         {
             return false;
         }
     }
-    Serial.println("Entered run mode");
+    Serial.println("[BNO055]: Entered run mode");
     return true;
 }
 

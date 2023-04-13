@@ -175,25 +175,35 @@ void Joystick_Run()
         if(control_state.control.bits.print_imu_calib)
         {
             control_state.control.bits.print_imu_calib = 0;
+            
+            // Print calibration status
             bno055::print_calibration();
-            if(bno055::get_calib_profile())
+
+            if(bno055::enter_config_mode())
             {
-                bno055::print_calib_profile();
-            }
+                // Attempt to get calibration profile
+                if(bno055::get_calib_profile())
+                {
+                    bno055::print_calib_profile();
+                }
+                
+                // return to run mode
+                bno055::enter_run_mode();
+            }  
         }
 
-        if(control_state.control.bits.write_calib_profile)
-        {
-            control_state.control.bits.write_calib_profile = 0;
-            if(bno055::write_calib_profile(ACTUAL_CALIB_DATA))
-            {
-                Serial.println("successfully wrote calib profile");
-            }
-            else
-            {
-                Serial.println("FAILED TO WRITE CALIB PROFILE");
-            }
-        }
+        // if(control_state.control.bits.write_calib_profile)
+        // {
+        //     control_state.control.bits.write_calib_profile = 0;
+        //     if(bno055::write_calib_profile(ACTUAL_CALIB_DATA))
+        //     {
+        //         Serial.println("successfully wrote calib profile");
+        //     }
+        //     else
+        //     {
+        //         Serial.println("FAILED TO WRITE CALIB PROFILE");
+        //     }
+        // }
     }
     
 
