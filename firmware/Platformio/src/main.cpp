@@ -118,13 +118,16 @@ void main_prog()
 
       UartComms_RcvControls();
 
-      if((*UartComms_GetTimeSinceLastRead()) > SERIAL_COMMS_RECEIVE_TIMEOUT)
+      // Reset joystick only once after it looses comms
+      if(((*UartComms_GetTimeSinceLastRead()) > SERIAL_COMMS_RECEIVE_TIMEOUT) && reset_comms_status == false)
       {
         reset_comms_status = true;
         g_watcher.resetting_comms++;
         UartComms_ClearJoystick();
       }
-      else
+
+      // Clear flag if comms restablished
+      if(((*UartComms_GetTimeSinceLastRead()) <= SERIAL_COMMS_RECEIVE_TIMEOUT) && reset_comms_status == true)
       {
         reset_comms_status = false;
       }

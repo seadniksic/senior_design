@@ -41,7 +41,7 @@ void UartComms_SendSLAMData();
 void UartComms_ClearWriteBuffer();
 void UartComms_ClearReadBuffer();
 void UartComms_ClearBuffers();
-elapsedMillis* UartComms_GetTimeSinceLastRead();
+const elapsedMillis* UartComms_GetTimeSinceLastRead();
 void UartComms_ClearJoystick();
 Joystick_Input* UartComms_GetJoystick();
 SLAM_Data* UartComms_GetSLAMData();

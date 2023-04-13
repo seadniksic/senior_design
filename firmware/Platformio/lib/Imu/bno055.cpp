@@ -71,6 +71,9 @@ bool bno055::init(I2CDevice * dev, bool run_calib)
         return false;
     }
 
+    Serial.println("hello1");
+    get_sys_status();
+
     //write the stored calibration
     Serial.println("Writing the stored calibration values.");
     if(!write_calib_profile(ACTUAL_CALIB_DATA))
@@ -79,36 +82,35 @@ bool bno055::init(I2CDevice * dev, bool run_calib)
     }
 
     // set out of config mode
-    opr_mode_e desired_mode = (opr_mode_e)BNO_RUN_MODE;
+    // opr_mode_e desired_mode = (opr_mode_e)BNO_RUN_MODE;
 
-    if(!enter_run_mode())
-    {
-        Serial.println("Failed to enter run mode");
-        return false;
-    }
+    // if(!enter_run_mode())
+    // {
+    //     Serial.println("Failed to enter run mode");
+    //     return false;
+    // }
 
-    // Sensor calibration
-    if(run_calib)
-    {
-        calibrate(desired_mode);
-    }
-    else
-    {
-        Serial.println("-----------------------------");
-        delay(1);
-        Serial.println("-----------------------------");
-        delay(1);
-        Serial.println("-----------------------------");
-        delay(1);
-        Serial.println("WARNING: OMITTING CALIBRATION");
-        delay(1);
-        Serial.println("-----------------------------");
-        delay(1);
-        Serial.println("-----------------------------");
-        delay(1);
-        Serial.println("-----------------------------");
-
-    }
+    // // Sensor calibration
+    // if(run_calib)
+    // {
+    //     calibrate(desired_mode);
+    // }
+    // else
+    // {
+    //     Serial.println("-----------------------------");
+    //     delay(1);
+    //     Serial.println("-----------------------------");
+    //     delay(1);
+    //     Serial.println("-----------------------------");
+    //     delay(1);
+    //     Serial.println("WARNING: OMITTING CALIBRATION");
+    //     delay(1);
+    //     Serial.println("-----------------------------");
+    //     delay(1);
+    //     Serial.println("-----------------------------");
+    //     delay(1);
+    //     Serial.println("-----------------------------");
+    // }
 
     // check state of the system at this point, if all is good proceed.
     if(!get_sys_status())
@@ -235,10 +237,10 @@ bool bno055::get_calib_profile()
 
     // need to switch to config mode to read calibration data
     // if any of the reads fails and the function returns false, need to ensure we are back in run mode
-    if(!enter_config_mode())
-    {
-        return false;
-    }
+    // if(!enter_config_mode())
+    // {
+    //     return false;
+    // }
 
     // Serial.println("Getting offsets1");
     if(!bno->read(ACC_OFFSET_X_LSB, Data_Buffer, (size_t)6,true))
@@ -299,15 +301,15 @@ bool bno055::get_calib_profile()
 
     // Serial.println("Reach here");
 
-    if(!enter_run_mode())
-    {
-        Serial.println("failed to enter back into run mode");
-        return false;
-    }
-    else
-    {
-        Serial.println("successfully back in run mode");
-    }
+    // if(!enter_run_mode())
+    // {
+    //     Serial.println("failed to enter back into run mode");
+    //     return false;
+    // }
+    // else
+    // {
+    //     Serial.println("successfully back in run mode");
+    // }
 
     // Serial.println("returning true");
 
@@ -364,10 +366,10 @@ bool bno055::write_calib_profile(const Calib_Data_t & cal_data)
     3. Change operation mode to fusion mode
     */
 
-    if(!enter_config_mode())
-    {
-        return false;
-    }
+    // if(!enter_config_mode())
+    // {
+    //     return false;
+    // }
 
     if(!write_sensor_offsets(cal_data.acc, ACC_OFFSET_X_LSB))
     {
@@ -380,7 +382,7 @@ bool bno055::write_calib_profile(const Calib_Data_t & cal_data)
         Serial.println("Failled at writing MAG offsets");
         return false;
     }
-
+    
     if(!write_sensor_offsets(cal_data.gyr, GYR_OFFSET_X_LSB))
     {
         Serial.println("Failled at writing GYR offsets");
@@ -399,8 +401,8 @@ bool bno055::write_calib_profile(const Calib_Data_t & cal_data)
         return false;
     }
 
-    get_calib_profile();
-    print_calib_profile();
+    // get_calib_profile();
+    // print_calib_profile();
 
     if(!enter_run_mode())
     {

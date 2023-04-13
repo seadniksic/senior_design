@@ -246,7 +246,7 @@ Joystick_Input* UartComms_GetJoystick()
   return uartComms.js_in;
 }
 
-elapsedMillis* UartComms_GetTimeSinceLastRead()
+const elapsedMillis* UartComms_GetTimeSinceLastRead()
 {
   return &uartComms.time_since_last_serialize;
 }
