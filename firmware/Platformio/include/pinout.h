@@ -26,14 +26,14 @@
 #define FR_EN_PIN 26 //these are now acting as in1 pins, needs to be disabled
 
 // FL = Front Left
-#define BR_IN1_PIN 9 
-#define BR_IN2_PIN 32 
-#define BR_EN_PIN 41 //these are now acting as in1 pins, needs to be disabled
+#define BL_IN3_PIN 9 
+#define BL_IN4_PIN 32 
+#define BL_EN_PIN 41 //these are now acting as in1 pins, needs to be disabled
 
 // FR = Front Right
-#define BL_IN3_PIN 28 
-#define BL_IN4_PIN 40 
-#define BL_EN_PIN 34 //these are now acting as in1 pins, needs to be disabled
+#define BR_IN1_PIN 28 
+#define BR_IN2_PIN 40 
+#define BR_EN_PIN 34 //these are now acting as in1 pins, needs to be disabled
 
 /* i2c buses */
 #define I2C_SCL_GYRO_PIN 16

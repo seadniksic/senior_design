@@ -10,6 +10,7 @@
 inline void LightBar_Init()
 {
     pinMode(LIGHTBAR_PIN, OUTPUT);
+    analogWrite(LIGHTBAR_PIN, 0);
 }
 
 inline void LightBar_Brightness(const uint8_t &val)

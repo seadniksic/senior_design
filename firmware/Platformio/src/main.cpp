@@ -46,6 +46,7 @@ void main_prog()
 {
   // Initialize the onboard LED
   pinMode(ONBOARD_LED_PIN, OUTPUT);
+  digitalWrite(ONBOARD_LED_PIN, HIGH);
 
   // Setup Serial Monitor
   Serial.begin(SERIAL_BAUD);
@@ -139,7 +140,7 @@ void main_prog()
     {
       print_clock -= TS_PRINT_1;
 
-      // Joystick_Print();
+      Joystick_Print();
 
       if(reset_comms_status)
       {
