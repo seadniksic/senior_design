@@ -1,3 +1,6 @@
 [submodule "EmbeddedProto"]
 	path = EmbeddedProto
 	url = https://github.com/Embedded-AMS/EmbeddedProto.git
+
+[submodule "orb_slam3_ros"]
+	url = https://github.com/Embedded-AMS/EmbeddedProto.git
