@@ -206,6 +206,15 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
         clear_reseting_comms();
       }
 
+      if(rhs.has_uptime())
+      {
+        set_uptime(rhs.get_uptime());
+      }
+      else
+      {
+        clear_uptime();
+      }
+
     }
 
     GUI_Data(const GUI_Data&& rhs ) noexcept
@@ -363,6 +372,15 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
         clear_reseting_comms();
       }
 
+      if(rhs.has_uptime())
+      {
+        set_uptime(rhs.get_uptime());
+      }
+      else
+      {
+        clear_uptime();
+      }
+
     }
 
     ~GUI_Data() override = default;
@@ -400,7 +418,8 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
       UART_MSG_FAILED = 14,
       UART_MSG_PASSED = 15,
       LOST_SYNC_BYTE = 16,
-      RESETING_COMMS = 17
+      RESETING_COMMS = 17,
+      UPTIME = 18
     };
 
     GUI_Data& operator=(const GUI_Data& rhs)
@@ -556,6 +575,15 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
       else
       {
         clear_reseting_comms();
+      }
+
+      if(rhs.has_uptime())
+      {
+        set_uptime(rhs.get_uptime());
+      }
+      else
+      {
+        clear_uptime();
       }
 
       return *this;
@@ -714,6 +742,15 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
       else
       {
         clear_reseting_comms();
+      }
+      
+      if(rhs.has_uptime())
+      {
+        set_uptime(rhs.get_uptime());
+      }
+      else
+      {
+        clear_uptime();
       }
       
       return *this;
@@ -1185,6 +1222,34 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
     inline const int32_t& get_reseting_comms() const { return reseting_comms_.get(); }
     inline int32_t reseting_comms() const { return reseting_comms_.get(); }
 
+    static constexpr char const* UPTIME_NAME = "uptime";
+    inline bool has_uptime() const
+    {
+      return 0 != (presence::mask(presence::fields::UPTIME) & presence_[presence::index(presence::fields::UPTIME)]);
+    }
+    inline void clear_uptime()
+    {
+      presence_[presence::index(presence::fields::UPTIME)] &= ~(presence::mask(presence::fields::UPTIME));
+      uptime_.clear();
+    }
+    inline void set_uptime(const int32_t& value)
+    {
+      presence_[presence::index(presence::fields::UPTIME)] |= presence::mask(presence::fields::UPTIME);
+      uptime_ = value;
+    }
+    inline void set_uptime(const int32_t&& value)
+    {
+      presence_[presence::index(presence::fields::UPTIME)] |= presence::mask(presence::fields::UPTIME);
+      uptime_ = value;
+    }
+    inline int32_t& mutable_uptime()
+    {
+      presence_[presence::index(presence::fields::UPTIME)] |= presence::mask(presence::fields::UPTIME);
+      return uptime_.get();
+    }
+    inline const int32_t& get_uptime() const { return uptime_.get(); }
+    inline int32_t uptime() const { return uptime_.get(); }
+
 
     ::EmbeddedProto::Error serialize(::EmbeddedProto::WriteBufferInterface& buffer) const override
     {
@@ -1273,6 +1338,11 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
       if(has_reseting_comms() && (::EmbeddedProto::Error::NO_ERRORS == return_value))
       {
         return_value = reseting_comms_.serialize_with_id(static_cast<uint32_t>(FieldNumber::RESETING_COMMS), buffer, true);
+      }
+
+      if(has_uptime() && (::EmbeddedProto::Error::NO_ERRORS == return_value))
+      {
+        return_value = uptime_.serialize_with_id(static_cast<uint32_t>(FieldNumber::UPTIME), buffer, true);
       }
 
       return return_value;
@@ -1376,6 +1446,11 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
             return_value = reseting_comms_.deserialize_check_type(buffer, wire_type);
             break;
 
+          case FieldNumber::UPTIME:
+            presence_[presence::index(presence::fields::UPTIME)] |= presence::mask(presence::fields::UPTIME);
+            return_value = uptime_.deserialize_check_type(buffer, wire_type);
+            break;
+
           case FieldNumber::NOT_SET:
             return_value = ::EmbeddedProto::Error::INVALID_FIELD_ID;
             break;
@@ -1422,6 +1497,7 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
       clear_uart_msg_passed();
       clear_lost_sync_byte();
       clear_reseting_comms();
+      clear_uptime();
 
     }
 
@@ -1480,6 +1556,9 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
           break;
         case FieldNumber::RESETING_COMMS:
           name = RESETING_COMMS_NAME;
+          break;
+        case FieldNumber::UPTIME:
+          name = UPTIME_NAME;
           break;
         default:
           name = "Invalid FieldNumber";
@@ -1558,6 +1637,7 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
       left_chars = uart_msg_passed_.to_string(left_chars, indent_level + 2, UART_MSG_PASSED_NAME, false);
       left_chars = lost_sync_byte_.to_string(left_chars, indent_level + 2, LOST_SYNC_BYTE_NAME, false);
       left_chars = reseting_comms_.to_string(left_chars, indent_level + 2, RESETING_COMMS_NAME, false);
+      left_chars = uptime_.to_string(left_chars, indent_level + 2, UPTIME_NAME, false);
   
       if( 0 == indent_level) 
       {
@@ -1604,11 +1684,12 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
           UART_MSG_FAILED,
           UART_MSG_PASSED,
           LOST_SYNC_BYTE,
-          RESETING_COMMS
+          RESETING_COMMS,
+          UPTIME
         };
 
         // The number of fields for which presence has to be tracked.
-        static constexpr uint32_t N_FIELDS = 17;
+        static constexpr uint32_t N_FIELDS = 18;
 
         // Which type are we using to track presence.
         using TYPE = uint32_t;
@@ -1649,6 +1730,7 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
       EmbeddedProto::sint32 uart_msg_passed_ = 0;
       EmbeddedProto::sint32 lost_sync_byte_ = 0;
       EmbeddedProto::sint32 reseting_comms_ = 0;
+      EmbeddedProto::sint32 uptime_ = 0;
 
 };
 

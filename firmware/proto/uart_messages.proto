@@ -87,5 +87,7 @@ message GUI_Data
     optional sint32 uart_msg_passed = 15;
     optional sint32 lost_sync_byte = 16; 
     optional sint32 reseting_comms = 17;
+
+    optional sint32 uptime = 18;
     
 }
