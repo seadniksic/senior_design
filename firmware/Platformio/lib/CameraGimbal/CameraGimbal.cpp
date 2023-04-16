@@ -10,11 +10,12 @@ void CameraGimbal_Init()
 {
     cameraGimbal.s_pan = &Servo_Pan;
     cameraGimbal.s_pan->attach(PAN_SERVO_PIN);
+    cameraGimbal.prev_pan_pos = ANGLE_CENTER;
     CameraGimbal_Set_Pan(ANGLE_CENTER);
 
     cameraGimbal.s_tilt = &Servo_Tilt;
     cameraGimbal.s_tilt->attach(TILT_SERVO_PIN);
-    cameraGimbal.prev_tilt_pos = 90;
+    cameraGimbal.prev_tilt_pos = ANGLE_CENTER;
     CameraGimbal_Set_Tilt(ANGLE_CENTER);
 
     cameraGimbal.servo_speed = START_SPEED;
@@ -26,17 +27,47 @@ void CameraGimbal_Set_Pan(const uint8_t &val)
 {
     if(val > ANGLE_MAX)
         return;
-    cameraGimbal.s_pan->write(val);
+    // cameraGimbal.s_pan->write(val);
     cameraGimbal.pan_pos=val;
+    cameraGimbal.pan_pos_f = val;
 }
 
 void CameraGimbal_Set_Tilt(const uint8_t &val)
 {
-    // Axis is backwards, lowest value has camera pointing straight up
     if(val > MAX_TILT || val < MIN_TILT)
         return;
-    cameraGimbal.s_tilt->write(180-val);
+    
+    // const uint8_t write_val = 180-val;
+    // cameraGimbal.tilt_pos = (write_val*NEW_VAL_PERCENT) + (cameraGimbal.prev_tilt_pos*OLD_VAL_PERCENT);
+
+    // cameraGimbal.s_tilt->write(new_val);
+    // Serial.print("newval: ");
+    // Serial.println(val);
     cameraGimbal.tilt_pos=val;
+    cameraGimbal.tilt_pos_f = (float)val;
+    // cameraGimbal.s_tilt->write(cameraGimbal.tilt_pos);
+}
+
+void CameraGimbal_Run()
+{
+    // Run filter
+    const float smoothed_tilt = cameraGimbal.tilt_pos_f*NEW_VAL_PERCENT + cameraGimbal.prev_tilt_pos*OLD_VAL_PERCENT;
+    const float smoothed_pan = cameraGimbal.pan_pos_f*NEW_VAL_PERCENT + cameraGimbal.prev_pan_pos*OLD_VAL_PERCENT;
+
+    // Serial.print("smoothed_tilt, ");
+    // Serial.print(smoothed_tilt);
+    // Serial.print(", ");
+    // Serial.print("prev_tilt_pos, ");
+    // Serial.print(cameraGimbal.prev_tilt_pos);
+    // Serial.print(", ");
+    // Serial.print("current_tilt_pos, ");
+    // Serial.println(cameraGimbal.tilt_pos_f);
+
+    cameraGimbal.prev_tilt_pos = smoothed_tilt;
+    cameraGimbal.prev_pan_pos = smoothed_pan;
+
+    cameraGimbal.s_tilt->write(round(smoothed_tilt));
+    cameraGimbal.s_pan->write(round(smoothed_pan));
 }
 
 uint8_t CameraGimbal_Get_Pan()

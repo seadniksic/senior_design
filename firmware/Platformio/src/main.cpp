@@ -79,7 +79,7 @@ void main_prog()
   elapsedMillis joy_update_clock;
   elapsedMillis joy_comms_clock;
   elapsedMillis slam_data;
-  elapsedMillis servo_clock;
+  elapsedMillis servo_update_clock;
   elapsedMillis gui_data_clock;
 
   // Variables
@@ -143,7 +143,7 @@ void main_prog()
     {
       print_clock -= TS_PRINT_1;
 
-      Joystick_Print();
+      // Joystick_Print();
 
       if(reset_comms_status)
       {
@@ -196,6 +196,13 @@ void main_prog()
       // Clear the buffer
       UartComms_ClearWriteBuffer();
     }
+
+    if(servo_update_clock > TS_SERVO_UPDATE)
+    {
+      servo_update_clock -= TS_SERVO_UPDATE;
+      CameraGimbal_Run();
+    }
+
   }  
 }
 

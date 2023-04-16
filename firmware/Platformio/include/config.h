@@ -33,5 +33,6 @@
 #define TS_JOY_COMMS 25 // 40Hz
 #define TS_SLAM_COMMS 10 // 100Hz
 #define TS_GUI_DATA 500 // 2 Hz
+#define TS_SERVO_UPDATE 10 // 100 Hz
 
 #endif
