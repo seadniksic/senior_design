@@ -13,6 +13,7 @@ typedef struct
     uint32_t uart_msg_passed;
     uint32_t lost_sync_byte;
     uint32_t resetting_comms;
+    uint32_t uptime; 
 } The_Watcher_t; 
 
 extern The_Watcher_t g_watcher;

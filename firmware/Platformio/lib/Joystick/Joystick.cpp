@@ -12,7 +12,7 @@ static control_state_t control_state = {0};
 void Joystick_Init()
 {
     control_state.control.bits.turn_off = 1;
-    control_state.headlight_brightness = BRIGHTNESS_STEP;
+    control_state.headlight_brightness = LIGHTBAR_BRIGHTNESS_STEP;
 }
 
 void Joystick_Print()
@@ -219,7 +219,7 @@ void Joystick_Run()
     // Handle LightBar
     if(DPAD_LEFT_PRESSED)
     {
-        LightBar_Brightness(0);
+        LightBar_State(false);
     }
     else if(DPAD_RIGHT_PRESSED)
     {
@@ -227,17 +227,17 @@ void Joystick_Run()
     }
     else if(DPAD_UP_PRESSED)
     {
-        if(control_state.headlight_brightness <= (255 - BRIGHTNESS_STEP))
+        if(control_state.headlight_brightness <= (255 - LIGHTBAR_BRIGHTNESS_STEP))
         {
-            control_state.headlight_brightness += BRIGHTNESS_STEP;
+            control_state.headlight_brightness += LIGHTBAR_BRIGHTNESS_STEP;
             LightBar_Brightness(control_state.headlight_brightness);
         }
     }
     else if(DPAD_DOWN_PRESSED)
     {
-        if(control_state.headlight_brightness >= (BRIGHTNESS_STEP))
+        if(control_state.headlight_brightness >= (LIGHTBAR_BRIGHTNESS_STEP + LIGHTBAR_MIN_BRIGHTNESS))
         {
-            control_state.headlight_brightness -= BRIGHTNESS_STEP;
+            control_state.headlight_brightness -= LIGHTBAR_BRIGHTNESS_STEP;
             LightBar_Brightness(control_state.headlight_brightness);
         }
     }

@@ -35,7 +35,9 @@ void Watcher_StoreData(GUI_Data * gd)
   gd->set_uart_msg_passed(g_watcher.uart_msg_passed);
   gd->set_lost_sync_byte(g_watcher.lost_sync_byte);
   gd->set_reseting_comms(g_watcher.resetting_comms);
+  gd->set_uptime(g_watcher.uptime);
 }
+
 
 
 ////////////////////////////
@@ -81,6 +83,7 @@ void main_prog()
   elapsedMillis gui_data_clock;
 
   // Variables
+  elapsedMillis uptime_clock;
   SLAM_Data * slam_local = UartComms_GetSLAMData();
   Joystick_Input * joy_local = UartComms_GetJoystick();
   GUI_Data * gui_local = UartComms_GetGUIData();
@@ -184,6 +187,7 @@ void main_prog()
       bno055::store_calib_status(gui_local);
       Joystick_Store_Control_State(gui_local);
       HTS221_ReadData(gui_local);
+      g_watcher.uptime = ((uint32_t)uptime_clock) / 1000;
       Watcher_StoreData(gui_local);
       
       // Send the data

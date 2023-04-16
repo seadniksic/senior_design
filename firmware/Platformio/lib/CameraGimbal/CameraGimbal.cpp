@@ -14,6 +14,7 @@ void CameraGimbal_Init()
 
     cameraGimbal.s_tilt = &Servo_Tilt;
     cameraGimbal.s_tilt->attach(TILT_SERVO_PIN);
+    cameraGimbal.prev_tilt_pos = 90;
     CameraGimbal_Set_Tilt(ANGLE_CENTER);
 
     cameraGimbal.servo_speed = START_SPEED;
@@ -23,7 +24,7 @@ void CameraGimbal_Init()
 
 void CameraGimbal_Set_Pan(const uint8_t &val)
 {
-    if(val > 180)
+    if(val > ANGLE_MAX)
         return;
     cameraGimbal.s_pan->write(val);
     cameraGimbal.pan_pos=val;
@@ -31,9 +32,10 @@ void CameraGimbal_Set_Pan(const uint8_t &val)
 
 void CameraGimbal_Set_Tilt(const uint8_t &val)
 {
-    if(val > 180 || val < MIN_TILT)
+    // Axis is backwards, lowest value has camera pointing straight up
+    if(val > MAX_TILT || val < MIN_TILT)
         return;
-    cameraGimbal.s_tilt->write(val);
+    cameraGimbal.s_tilt->write(180-val);
     cameraGimbal.tilt_pos=val;
 }
 

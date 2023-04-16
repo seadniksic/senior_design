@@ -9,7 +9,8 @@
 #define ANGLE_MIN 0
 #define ANGLE_CENTER 90
 
-#define MIN_TILT 65
+#define MIN_TILT 70
+#define MAX_TILT 140
 
 #define START_SPEED 4
 #define MAX_SERVO_SPEED 15
@@ -19,7 +20,9 @@ typedef struct {
     Servo *s_pan;
     Servo *s_tilt;
     uint8_t pan_pos;
+    uint8_t prev_pan_pos;
     uint8_t tilt_pos;
+    uint8_t prev_tilt_pos;
     uint8_t servo_speed;
     uint8_t pan_home_pos;
     uint8_t tilt_home_pos;
