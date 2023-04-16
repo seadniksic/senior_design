@@ -89,5 +89,7 @@ message GUI_Data
     optional sint32 reseting_comms = 17;
 
     optional sint32 uptime = 18;
+    optional sint32 teensy_loop_time = 19;
+    optional sint32 bms_temp = 20;
     
 }
