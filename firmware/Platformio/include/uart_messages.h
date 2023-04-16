@@ -215,6 +215,24 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
         clear_uptime();
       }
 
+      if(rhs.has_teensy_loop_time())
+      {
+        set_teensy_loop_time(rhs.get_teensy_loop_time());
+      }
+      else
+      {
+        clear_teensy_loop_time();
+      }
+
+      if(rhs.has_bms_temp())
+      {
+        set_bms_temp(rhs.get_bms_temp());
+      }
+      else
+      {
+        clear_bms_temp();
+      }
+
     }
 
     GUI_Data(const GUI_Data&& rhs ) noexcept
@@ -381,6 +399,24 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
         clear_uptime();
       }
 
+      if(rhs.has_teensy_loop_time())
+      {
+        set_teensy_loop_time(rhs.get_teensy_loop_time());
+      }
+      else
+      {
+        clear_teensy_loop_time();
+      }
+
+      if(rhs.has_bms_temp())
+      {
+        set_bms_temp(rhs.get_bms_temp());
+      }
+      else
+      {
+        clear_bms_temp();
+      }
+
     }
 
     ~GUI_Data() override = default;
@@ -419,7 +455,9 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
       UART_MSG_PASSED = 15,
       LOST_SYNC_BYTE = 16,
       RESETING_COMMS = 17,
-      UPTIME = 18
+      UPTIME = 18,
+      TEENSY_LOOP_TIME = 19,
+      BMS_TEMP = 20
     };
 
     GUI_Data& operator=(const GUI_Data& rhs)
@@ -584,6 +622,24 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
       else
       {
         clear_uptime();
+      }
+
+      if(rhs.has_teensy_loop_time())
+      {
+        set_teensy_loop_time(rhs.get_teensy_loop_time());
+      }
+      else
+      {
+        clear_teensy_loop_time();
+      }
+
+      if(rhs.has_bms_temp())
+      {
+        set_bms_temp(rhs.get_bms_temp());
+      }
+      else
+      {
+        clear_bms_temp();
       }
 
       return *this;
@@ -751,6 +807,24 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
       else
       {
         clear_uptime();
+      }
+      
+      if(rhs.has_teensy_loop_time())
+      {
+        set_teensy_loop_time(rhs.get_teensy_loop_time());
+      }
+      else
+      {
+        clear_teensy_loop_time();
+      }
+      
+      if(rhs.has_bms_temp())
+      {
+        set_bms_temp(rhs.get_bms_temp());
+      }
+      else
+      {
+        clear_bms_temp();
       }
       
       return *this;
@@ -1250,6 +1324,62 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
     inline const int32_t& get_uptime() const { return uptime_.get(); }
     inline int32_t uptime() const { return uptime_.get(); }
 
+    static constexpr char const* TEENSY_LOOP_TIME_NAME = "teensy_loop_time";
+    inline bool has_teensy_loop_time() const
+    {
+      return 0 != (presence::mask(presence::fields::TEENSY_LOOP_TIME) & presence_[presence::index(presence::fields::TEENSY_LOOP_TIME)]);
+    }
+    inline void clear_teensy_loop_time()
+    {
+      presence_[presence::index(presence::fields::TEENSY_LOOP_TIME)] &= ~(presence::mask(presence::fields::TEENSY_LOOP_TIME));
+      teensy_loop_time_.clear();
+    }
+    inline void set_teensy_loop_time(const int32_t& value)
+    {
+      presence_[presence::index(presence::fields::TEENSY_LOOP_TIME)] |= presence::mask(presence::fields::TEENSY_LOOP_TIME);
+      teensy_loop_time_ = value;
+    }
+    inline void set_teensy_loop_time(const int32_t&& value)
+    {
+      presence_[presence::index(presence::fields::TEENSY_LOOP_TIME)] |= presence::mask(presence::fields::TEENSY_LOOP_TIME);
+      teensy_loop_time_ = value;
+    }
+    inline int32_t& mutable_teensy_loop_time()
+    {
+      presence_[presence::index(presence::fields::TEENSY_LOOP_TIME)] |= presence::mask(presence::fields::TEENSY_LOOP_TIME);
+      return teensy_loop_time_.get();
+    }
+    inline const int32_t& get_teensy_loop_time() const { return teensy_loop_time_.get(); }
+    inline int32_t teensy_loop_time() const { return teensy_loop_time_.get(); }
+
+    static constexpr char const* BMS_TEMP_NAME = "bms_temp";
+    inline bool has_bms_temp() const
+    {
+      return 0 != (presence::mask(presence::fields::BMS_TEMP) & presence_[presence::index(presence::fields::BMS_TEMP)]);
+    }
+    inline void clear_bms_temp()
+    {
+      presence_[presence::index(presence::fields::BMS_TEMP)] &= ~(presence::mask(presence::fields::BMS_TEMP));
+      bms_temp_.clear();
+    }
+    inline void set_bms_temp(const int32_t& value)
+    {
+      presence_[presence::index(presence::fields::BMS_TEMP)] |= presence::mask(presence::fields::BMS_TEMP);
+      bms_temp_ = value;
+    }
+    inline void set_bms_temp(const int32_t&& value)
+    {
+      presence_[presence::index(presence::fields::BMS_TEMP)] |= presence::mask(presence::fields::BMS_TEMP);
+      bms_temp_ = value;
+    }
+    inline int32_t& mutable_bms_temp()
+    {
+      presence_[presence::index(presence::fields::BMS_TEMP)] |= presence::mask(presence::fields::BMS_TEMP);
+      return bms_temp_.get();
+    }
+    inline const int32_t& get_bms_temp() const { return bms_temp_.get(); }
+    inline int32_t bms_temp() const { return bms_temp_.get(); }
+
 
     ::EmbeddedProto::Error serialize(::EmbeddedProto::WriteBufferInterface& buffer) const override
     {
@@ -1343,6 +1473,16 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
       if(has_uptime() && (::EmbeddedProto::Error::NO_ERRORS == return_value))
       {
         return_value = uptime_.serialize_with_id(static_cast<uint32_t>(FieldNumber::UPTIME), buffer, true);
+      }
+
+      if(has_teensy_loop_time() && (::EmbeddedProto::Error::NO_ERRORS == return_value))
+      {
+        return_value = teensy_loop_time_.serialize_with_id(static_cast<uint32_t>(FieldNumber::TEENSY_LOOP_TIME), buffer, true);
+      }
+
+      if(has_bms_temp() && (::EmbeddedProto::Error::NO_ERRORS == return_value))
+      {
+        return_value = bms_temp_.serialize_with_id(static_cast<uint32_t>(FieldNumber::BMS_TEMP), buffer, true);
       }
 
       return return_value;
@@ -1451,6 +1591,16 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
             return_value = uptime_.deserialize_check_type(buffer, wire_type);
             break;
 
+          case FieldNumber::TEENSY_LOOP_TIME:
+            presence_[presence::index(presence::fields::TEENSY_LOOP_TIME)] |= presence::mask(presence::fields::TEENSY_LOOP_TIME);
+            return_value = teensy_loop_time_.deserialize_check_type(buffer, wire_type);
+            break;
+
+          case FieldNumber::BMS_TEMP:
+            presence_[presence::index(presence::fields::BMS_TEMP)] |= presence::mask(presence::fields::BMS_TEMP);
+            return_value = bms_temp_.deserialize_check_type(buffer, wire_type);
+            break;
+
           case FieldNumber::NOT_SET:
             return_value = ::EmbeddedProto::Error::INVALID_FIELD_ID;
             break;
@@ -1498,6 +1648,8 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
       clear_lost_sync_byte();
       clear_reseting_comms();
       clear_uptime();
+      clear_teensy_loop_time();
+      clear_bms_temp();
 
     }
 
@@ -1559,6 +1711,12 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
           break;
         case FieldNumber::UPTIME:
           name = UPTIME_NAME;
+          break;
+        case FieldNumber::TEENSY_LOOP_TIME:
+          name = TEENSY_LOOP_TIME_NAME;
+          break;
+        case FieldNumber::BMS_TEMP:
+          name = BMS_TEMP_NAME;
           break;
         default:
           name = "Invalid FieldNumber";
@@ -1638,6 +1796,8 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
       left_chars = lost_sync_byte_.to_string(left_chars, indent_level + 2, LOST_SYNC_BYTE_NAME, false);
       left_chars = reseting_comms_.to_string(left_chars, indent_level + 2, RESETING_COMMS_NAME, false);
       left_chars = uptime_.to_string(left_chars, indent_level + 2, UPTIME_NAME, false);
+      left_chars = teensy_loop_time_.to_string(left_chars, indent_level + 2, TEENSY_LOOP_TIME_NAME, false);
+      left_chars = bms_temp_.to_string(left_chars, indent_level + 2, BMS_TEMP_NAME, false);
   
       if( 0 == indent_level) 
       {
@@ -1685,11 +1845,13 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
           UART_MSG_PASSED,
           LOST_SYNC_BYTE,
           RESETING_COMMS,
-          UPTIME
+          UPTIME,
+          TEENSY_LOOP_TIME,
+          BMS_TEMP
         };
 
         // The number of fields for which presence has to be tracked.
-        static constexpr uint32_t N_FIELDS = 18;
+        static constexpr uint32_t N_FIELDS = 20;
 
         // Which type are we using to track presence.
         using TYPE = uint32_t;
@@ -1731,6 +1893,8 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
       EmbeddedProto::sint32 lost_sync_byte_ = 0;
       EmbeddedProto::sint32 reseting_comms_ = 0;
       EmbeddedProto::sint32 uptime_ = 0;
+      EmbeddedProto::sint32 teensy_loop_time_ = 0;
+      EmbeddedProto::sint32 bms_temp_ = 0;
 
 };
 
