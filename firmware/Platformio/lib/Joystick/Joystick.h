@@ -100,8 +100,8 @@ CONTROL BUTTONS:
 #define CENTER_CAMS (control_state.control.bits.center_cams)
 
 /* Speed */
-#define MAX_SPEED 170
-#define MIN_SPEED 60
+#define MAX_SPEED 200
+#define MIN_SPEED 75
 
 /* Mapping */
 #define IN_MIN JOY_HIGH

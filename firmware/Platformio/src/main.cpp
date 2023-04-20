@@ -36,6 +36,8 @@ void Watcher_StoreData(GUI_Data * gd)
   gd->set_lost_sync_byte(g_watcher.lost_sync_byte);
   gd->set_reseting_comms(g_watcher.resetting_comms);
   gd->set_uptime(g_watcher.uptime);
+  gd->set_teensy_loop_time(g_watcher.max_looptime);
+  gd->set_bms_temp(Battery_ReadTemp());
 }
 
 
@@ -81,6 +83,7 @@ void main_prog()
   elapsedMillis slam_data;
   elapsedMillis servo_update_clock;
   elapsedMillis gui_data_clock;
+  elapsedMicros teensy_looptime;
 
   // Variables
   elapsedMillis uptime_clock;
@@ -89,11 +92,14 @@ void main_prog()
   GUI_Data * gui_local = UartComms_GetGUIData();
 
   bool reset_comms_status = false;
+  bool first_receive = false;
   uint8_t LED_state = HIGH;
 
 
   while(1)
   {
+
+    teensy_looptime = 0;
 
     if(!g_watcher.bno_init || !g_watcher.hts_init)
     {
@@ -120,7 +126,11 @@ void main_prog()
     {
       joy_comms_clock -= TS_JOY_COMMS;
 
-      UartComms_RcvControls();
+      // once we start receiving joystick controls, start sending data back 
+      if(UartComms_RcvControls())
+      {
+        first_receive = true;
+      }
 
       // Reset joystick only once after it looses comms
       if(((*UartComms_GetTimeSinceLastRead()) > SERIAL_COMMS_RECEIVE_TIMEOUT) && reset_comms_status == false)
@@ -144,6 +154,13 @@ void main_prog()
       print_clock -= TS_PRINT_1;
 
       // Joystick_Print();
+
+      // this works but doesnt fix the key problem. 
+      // Serial.print("Recievestart: ");
+      // Serial.println(first_receive);
+
+      Serial.print("Teensy looptime: ");
+      Serial.println(g_watcher.looptime);
 
       if(reset_comms_status)
       {
@@ -180,21 +197,26 @@ void main_prog()
     {
       gui_data_clock -= TS_GUI_DATA;
 
-      // Populate the Data
-      UartComms_PopulateGUITempCPU(InternalTemperature.readTemperatureF());
-      CameraGimbal_StoreAngles(gui_local);
-      CameraGimbal_StoreHomeAngles(gui_local);
-      bno055::store_calib_status(gui_local);
-      Joystick_Store_Control_State(gui_local);
-      HTS221_ReadData(gui_local);
-      g_watcher.uptime = ((uint32_t)uptime_clock) / 1000;
-      Watcher_StoreData(gui_local);
-      
-      // Send the data
-      UartComms_SendGUIData();
+      if(first_receive)
+      {
 
-      // Clear the buffer
-      UartComms_ClearWriteBuffer();
+        // Populate the Data
+        UartComms_PopulateGUITempCPU(InternalTemperature.readTemperatureF());
+        CameraGimbal_StoreAngles(gui_local);
+        CameraGimbal_StoreHomeAngles(gui_local);
+        bno055::store_calib_status(gui_local);
+        Joystick_Store_Control_State(gui_local);
+        HTS221_ReadData(gui_local);
+        g_watcher.uptime = ((uint32_t)uptime_clock) / 1000;
+        Watcher_StoreData(gui_local);
+        
+        // Send the data
+        UartComms_SendGUIData();
+
+        // Clear the buffer
+        UartComms_ClearWriteBuffer();
+
+      }
     }
 
     if(servo_update_clock > TS_SERVO_UPDATE)
@@ -203,7 +225,13 @@ void main_prog()
       CameraGimbal_Run();
     }
 
-  }  
+    g_watcher.looptime = (uint32_t)teensy_looptime;
+    if(g_watcher.looptime > g_watcher.max_looptime)
+    {
+      g_watcher.max_looptime = g_watcher.looptime;
+    }
+
+  }  //end of main while 
 }
 
 ///////////////////////////

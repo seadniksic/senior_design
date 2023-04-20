@@ -10,7 +10,7 @@
 #define ANGLE_CENTER 90
 
 //axis is flipped, 0 is straight up
-#define MIN_TILT 40 //180-140
+#define MIN_TILT 50 //180-140
 #define MAX_TILT 110 //180-70
 
 #define START_SPEED 4

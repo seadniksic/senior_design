@@ -29,7 +29,7 @@ void UartComms_Init()
 // As of right now this is blocking, not ideal
 // #pragma message("should just put this into a struct and pass the struct.")
 
-void UartComms_RcvControls()
+bool UartComms_RcvControls()
 {
     // protobuf
     // now the first byte will be a special sync byte indicating start of message. 
@@ -60,7 +60,7 @@ void UartComms_RcvControls()
           {
             Serial.println("Message timeout while waiting for num_bytes!");
             g_watcher.uart_msg_failed++;
-            return;
+            return false;
           }
         }
 
@@ -75,7 +75,7 @@ void UartComms_RcvControls()
           {
             Serial.println("Message timeout while waiting for data!");
             g_watcher.uart_msg_failed++;
-            return;
+            return false;
           }
 
           // read the actual message.
@@ -159,8 +159,14 @@ void UartComms_RcvControls()
         Serial.println("Failed to serialize message.");
         g_watcher.uart_msg_failed++;
         HWSERIAL.flush();
+        return false;
       }
 
+      return true;
+    }
+    else
+    {
+      return false;
     }
 }
 
