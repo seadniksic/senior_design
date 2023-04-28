@@ -9,8 +9,8 @@
 #include <elapsedMillis.h>
 
 
-#define HWSERIAL Serial2 // pins 7 and 8
-#define HWSERIAL_BAUD 115200
+#define HWSERIAL Serial3 // pins 7 and 8
+#define HWSERIAL_BAUD 500000
 #define SYNC_BYTE_READ 0x64 // read
 #define SYNC_BYTE_WRITE 0x46
 #define TIMEOUT_DATA 20 //ms
@@ -34,14 +34,14 @@ typedef struct {
 
 
 void UartComms_Init();
-void UartComms_RcvControls();
+bool UartComms_RcvControls();
 void UartComms_PopulateGUITempCPU(const float &cpu_temp);
 void UartComms_SendGUIData();
 void UartComms_SendSLAMData();
 void UartComms_ClearWriteBuffer();
 void UartComms_ClearReadBuffer();
 void UartComms_ClearBuffers();
-elapsedMillis* UartComms_GetTimeSinceLastRead();
+const elapsedMillis* UartComms_GetTimeSinceLastRead();
 void UartComms_ClearJoystick();
 Joystick_Input* UartComms_GetJoystick();
 SLAM_Data* UartComms_GetSLAMData();

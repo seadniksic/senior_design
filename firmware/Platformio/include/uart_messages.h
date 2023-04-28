@@ -143,6 +143,96 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
         clear_loco_status();
       }
 
+      if(rhs.has_dev_status())
+      {
+        set_dev_status(rhs.get_dev_status());
+      }
+      else
+      {
+        clear_dev_status();
+      }
+
+      if(rhs.has_i2c_msg_failed())
+      {
+        set_i2c_msg_failed(rhs.get_i2c_msg_failed());
+      }
+      else
+      {
+        clear_i2c_msg_failed();
+      }
+
+      if(rhs.has_i2c_msg_passed())
+      {
+        set_i2c_msg_passed(rhs.get_i2c_msg_passed());
+      }
+      else
+      {
+        clear_i2c_msg_passed();
+      }
+
+      if(rhs.has_uart_msg_failed())
+      {
+        set_uart_msg_failed(rhs.get_uart_msg_failed());
+      }
+      else
+      {
+        clear_uart_msg_failed();
+      }
+
+      if(rhs.has_uart_msg_passed())
+      {
+        set_uart_msg_passed(rhs.get_uart_msg_passed());
+      }
+      else
+      {
+        clear_uart_msg_passed();
+      }
+
+      if(rhs.has_lost_sync_byte())
+      {
+        set_lost_sync_byte(rhs.get_lost_sync_byte());
+      }
+      else
+      {
+        clear_lost_sync_byte();
+      }
+
+      if(rhs.has_reseting_comms())
+      {
+        set_reseting_comms(rhs.get_reseting_comms());
+      }
+      else
+      {
+        clear_reseting_comms();
+      }
+
+      if(rhs.has_uptime())
+      {
+        set_uptime(rhs.get_uptime());
+      }
+      else
+      {
+        clear_uptime();
+      }
+
+      if(rhs.has_teensy_loop_time())
+      {
+        set_teensy_loop_time(rhs.get_teensy_loop_time());
+      }
+      else
+      {
+        clear_teensy_loop_time();
+      }
+
+      if(rhs.has_bms_temp())
+      {
+        set_bms_temp(rhs.get_bms_temp());
+      }
+      else
+      {
+        clear_bms_temp();
+      }
+
     }
 
     GUI_Data(const GUI_Data&& rhs ) noexcept
@@ -237,6 +327,96 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
         clear_loco_status();
       }
 
+      if(rhs.has_dev_status())
+      {
+        set_dev_status(rhs.get_dev_status());
+      }
+      else
+      {
+        clear_dev_status();
+      }
+
+      if(rhs.has_i2c_msg_failed())
+      {
+        set_i2c_msg_failed(rhs.get_i2c_msg_failed());
+      }
+      else
+      {
+        clear_i2c_msg_failed();
+      }
+
+      if(rhs.has_i2c_msg_passed())
+      {
+        set_i2c_msg_passed(rhs.get_i2c_msg_passed());
+      }
+      else
+      {
+        clear_i2c_msg_passed();
+      }
+
+      if(rhs.has_uart_msg_failed())
+      {
+        set_uart_msg_failed(rhs.get_uart_msg_failed());
+      }
+      else
+      {
+        clear_uart_msg_failed();
+      }
+
+      if(rhs.has_uart_msg_passed())
+      {
+        set_uart_msg_passed(rhs.get_uart_msg_passed());
+      }
+      else
+      {
+        clear_uart_msg_passed();
+      }
+
+      if(rhs.has_lost_sync_byte())
+      {
+        set_lost_sync_byte(rhs.get_lost_sync_byte());
+      }
+      else
+      {
+        clear_lost_sync_byte();
+      }
+
+      if(rhs.has_reseting_comms())
+      {
+        set_reseting_comms(rhs.get_reseting_comms());
+      }
+      else
+      {
+        clear_reseting_comms();
+      }
+
+      if(rhs.has_uptime())
+      {
+        set_uptime(rhs.get_uptime());
+      }
+      else
+      {
+        clear_uptime();
+      }
+
+      if(rhs.has_teensy_loop_time())
+      {
+        set_teensy_loop_time(rhs.get_teensy_loop_time());
+      }
+      else
+      {
+        clear_teensy_loop_time();
+      }
+
+      if(rhs.has_bms_temp())
+      {
+        set_bms_temp(rhs.get_bms_temp());
+      }
+      else
+      {
+        clear_bms_temp();
+      }
+
     }
 
     ~GUI_Data() override = default;
@@ -246,6 +426,13 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
       NONE = 0,
       CONTROLS_INHIBIT = 1,
       NORMAL_DRIVING_MODE = 2
+    };
+
+    enum class Device_Status : uint32_t
+    {
+      NONE_1 = 0,
+      BNO_INIT_SUCCESS = 1,
+      HTS_INIT_SUCCESS = 2
     };
 
     enum class FieldNumber : uint32_t
@@ -260,7 +447,17 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
       CURR_SERVO_TILT = 7,
       HOME_SERVO_PAN = 8,
       HOME_SERVO_TILT = 9,
-      LOCO_STATUS = 10
+      LOCO_STATUS = 10,
+      DEV_STATUS = 11,
+      I2C_MSG_FAILED = 12,
+      I2C_MSG_PASSED = 13,
+      UART_MSG_FAILED = 14,
+      UART_MSG_PASSED = 15,
+      LOST_SYNC_BYTE = 16,
+      RESETING_COMMS = 17,
+      UPTIME = 18,
+      TEENSY_LOOP_TIME = 19,
+      BMS_TEMP = 20
     };
 
     GUI_Data& operator=(const GUI_Data& rhs)
@@ -353,6 +550,96 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
       else
       {
         clear_loco_status();
+      }
+
+      if(rhs.has_dev_status())
+      {
+        set_dev_status(rhs.get_dev_status());
+      }
+      else
+      {
+        clear_dev_status();
+      }
+
+      if(rhs.has_i2c_msg_failed())
+      {
+        set_i2c_msg_failed(rhs.get_i2c_msg_failed());
+      }
+      else
+      {
+        clear_i2c_msg_failed();
+      }
+
+      if(rhs.has_i2c_msg_passed())
+      {
+        set_i2c_msg_passed(rhs.get_i2c_msg_passed());
+      }
+      else
+      {
+        clear_i2c_msg_passed();
+      }
+
+      if(rhs.has_uart_msg_failed())
+      {
+        set_uart_msg_failed(rhs.get_uart_msg_failed());
+      }
+      else
+      {
+        clear_uart_msg_failed();
+      }
+
+      if(rhs.has_uart_msg_passed())
+      {
+        set_uart_msg_passed(rhs.get_uart_msg_passed());
+      }
+      else
+      {
+        clear_uart_msg_passed();
+      }
+
+      if(rhs.has_lost_sync_byte())
+      {
+        set_lost_sync_byte(rhs.get_lost_sync_byte());
+      }
+      else
+      {
+        clear_lost_sync_byte();
+      }
+
+      if(rhs.has_reseting_comms())
+      {
+        set_reseting_comms(rhs.get_reseting_comms());
+      }
+      else
+      {
+        clear_reseting_comms();
+      }
+
+      if(rhs.has_uptime())
+      {
+        set_uptime(rhs.get_uptime());
+      }
+      else
+      {
+        clear_uptime();
+      }
+
+      if(rhs.has_teensy_loop_time())
+      {
+        set_teensy_loop_time(rhs.get_teensy_loop_time());
+      }
+      else
+      {
+        clear_teensy_loop_time();
+      }
+
+      if(rhs.has_bms_temp())
+      {
+        set_bms_temp(rhs.get_bms_temp());
+      }
+      else
+      {
+        clear_bms_temp();
       }
 
       return *this;
@@ -448,6 +735,96 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
       else
       {
         clear_loco_status();
+      }
+      
+      if(rhs.has_dev_status())
+      {
+        set_dev_status(rhs.get_dev_status());
+      }
+      else
+      {
+        clear_dev_status();
+      }
+      
+      if(rhs.has_i2c_msg_failed())
+      {
+        set_i2c_msg_failed(rhs.get_i2c_msg_failed());
+      }
+      else
+      {
+        clear_i2c_msg_failed();
+      }
+      
+      if(rhs.has_i2c_msg_passed())
+      {
+        set_i2c_msg_passed(rhs.get_i2c_msg_passed());
+      }
+      else
+      {
+        clear_i2c_msg_passed();
+      }
+      
+      if(rhs.has_uart_msg_failed())
+      {
+        set_uart_msg_failed(rhs.get_uart_msg_failed());
+      }
+      else
+      {
+        clear_uart_msg_failed();
+      }
+      
+      if(rhs.has_uart_msg_passed())
+      {
+        set_uart_msg_passed(rhs.get_uart_msg_passed());
+      }
+      else
+      {
+        clear_uart_msg_passed();
+      }
+      
+      if(rhs.has_lost_sync_byte())
+      {
+        set_lost_sync_byte(rhs.get_lost_sync_byte());
+      }
+      else
+      {
+        clear_lost_sync_byte();
+      }
+      
+      if(rhs.has_reseting_comms())
+      {
+        set_reseting_comms(rhs.get_reseting_comms());
+      }
+      else
+      {
+        clear_reseting_comms();
+      }
+      
+      if(rhs.has_uptime())
+      {
+        set_uptime(rhs.get_uptime());
+      }
+      else
+      {
+        clear_uptime();
+      }
+      
+      if(rhs.has_teensy_loop_time())
+      {
+        set_teensy_loop_time(rhs.get_teensy_loop_time());
+      }
+      else
+      {
+        clear_teensy_loop_time();
+      }
+      
+      if(rhs.has_bms_temp())
+      {
+        set_bms_temp(rhs.get_bms_temp());
+      }
+      else
+      {
+        clear_bms_temp();
       }
       
       return *this;
@@ -728,6 +1105,281 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
     inline const Locomotion_Status& get_loco_status() const { return loco_status_.get(); }
     inline Locomotion_Status loco_status() const { return loco_status_.get(); }
 
+    static constexpr char const* DEV_STATUS_NAME = "dev_status";
+    inline bool has_dev_status() const
+    {
+      return 0 != (presence::mask(presence::fields::DEV_STATUS) & presence_[presence::index(presence::fields::DEV_STATUS)]);
+    }
+    inline void clear_dev_status()
+    {
+      presence_[presence::index(presence::fields::DEV_STATUS)] &= ~(presence::mask(presence::fields::DEV_STATUS));
+      dev_status_.clear();
+    }
+    inline void set_dev_status(const Device_Status& value)
+    {
+      presence_[presence::index(presence::fields::DEV_STATUS)] |= presence::mask(presence::fields::DEV_STATUS);
+      dev_status_ = value;
+    }
+    inline void set_dev_status(const Device_Status&& value)
+    {
+      presence_[presence::index(presence::fields::DEV_STATUS)] |= presence::mask(presence::fields::DEV_STATUS);
+      dev_status_ = value;
+    }
+    inline const Device_Status& get_dev_status() const { return dev_status_.get(); }
+    inline Device_Status dev_status() const { return dev_status_.get(); }
+
+    static constexpr char const* I2C_MSG_FAILED_NAME = "i2c_msg_failed";
+    inline bool has_i2c_msg_failed() const
+    {
+      return 0 != (presence::mask(presence::fields::I2C_MSG_FAILED) & presence_[presence::index(presence::fields::I2C_MSG_FAILED)]);
+    }
+    inline void clear_i2c_msg_failed()
+    {
+      presence_[presence::index(presence::fields::I2C_MSG_FAILED)] &= ~(presence::mask(presence::fields::I2C_MSG_FAILED));
+      i2c_msg_failed_.clear();
+    }
+    inline void set_i2c_msg_failed(const int32_t& value)
+    {
+      presence_[presence::index(presence::fields::I2C_MSG_FAILED)] |= presence::mask(presence::fields::I2C_MSG_FAILED);
+      i2c_msg_failed_ = value;
+    }
+    inline void set_i2c_msg_failed(const int32_t&& value)
+    {
+      presence_[presence::index(presence::fields::I2C_MSG_FAILED)] |= presence::mask(presence::fields::I2C_MSG_FAILED);
+      i2c_msg_failed_ = value;
+    }
+    inline int32_t& mutable_i2c_msg_failed()
+    {
+      presence_[presence::index(presence::fields::I2C_MSG_FAILED)] |= presence::mask(presence::fields::I2C_MSG_FAILED);
+      return i2c_msg_failed_.get();
+    }
+    inline const int32_t& get_i2c_msg_failed() const { return i2c_msg_failed_.get(); }
+    inline int32_t i2c_msg_failed() const { return i2c_msg_failed_.get(); }
+
+    static constexpr char const* I2C_MSG_PASSED_NAME = "i2c_msg_passed";
+    inline bool has_i2c_msg_passed() const
+    {
+      return 0 != (presence::mask(presence::fields::I2C_MSG_PASSED) & presence_[presence::index(presence::fields::I2C_MSG_PASSED)]);
+    }
+    inline void clear_i2c_msg_passed()
+    {
+      presence_[presence::index(presence::fields::I2C_MSG_PASSED)] &= ~(presence::mask(presence::fields::I2C_MSG_PASSED));
+      i2c_msg_passed_.clear();
+    }
+    inline void set_i2c_msg_passed(const int32_t& value)
+    {
+      presence_[presence::index(presence::fields::I2C_MSG_PASSED)] |= presence::mask(presence::fields::I2C_MSG_PASSED);
+      i2c_msg_passed_ = value;
+    }
+    inline void set_i2c_msg_passed(const int32_t&& value)
+    {
+      presence_[presence::index(presence::fields::I2C_MSG_PASSED)] |= presence::mask(presence::fields::I2C_MSG_PASSED);
+      i2c_msg_passed_ = value;
+    }
+    inline int32_t& mutable_i2c_msg_passed()
+    {
+      presence_[presence::index(presence::fields::I2C_MSG_PASSED)] |= presence::mask(presence::fields::I2C_MSG_PASSED);
+      return i2c_msg_passed_.get();
+    }
+    inline const int32_t& get_i2c_msg_passed() const { return i2c_msg_passed_.get(); }
+    inline int32_t i2c_msg_passed() const { return i2c_msg_passed_.get(); }
+
+    static constexpr char const* UART_MSG_FAILED_NAME = "uart_msg_failed";
+    inline bool has_uart_msg_failed() const
+    {
+      return 0 != (presence::mask(presence::fields::UART_MSG_FAILED) & presence_[presence::index(presence::fields::UART_MSG_FAILED)]);
+    }
+    inline void clear_uart_msg_failed()
+    {
+      presence_[presence::index(presence::fields::UART_MSG_FAILED)] &= ~(presence::mask(presence::fields::UART_MSG_FAILED));
+      uart_msg_failed_.clear();
+    }
+    inline void set_uart_msg_failed(const int32_t& value)
+    {
+      presence_[presence::index(presence::fields::UART_MSG_FAILED)] |= presence::mask(presence::fields::UART_MSG_FAILED);
+      uart_msg_failed_ = value;
+    }
+    inline void set_uart_msg_failed(const int32_t&& value)
+    {
+      presence_[presence::index(presence::fields::UART_MSG_FAILED)] |= presence::mask(presence::fields::UART_MSG_FAILED);
+      uart_msg_failed_ = value;
+    }
+    inline int32_t& mutable_uart_msg_failed()
+    {
+      presence_[presence::index(presence::fields::UART_MSG_FAILED)] |= presence::mask(presence::fields::UART_MSG_FAILED);
+      return uart_msg_failed_.get();
+    }
+    inline const int32_t& get_uart_msg_failed() const { return uart_msg_failed_.get(); }
+    inline int32_t uart_msg_failed() const { return uart_msg_failed_.get(); }
+
+    static constexpr char const* UART_MSG_PASSED_NAME = "uart_msg_passed";
+    inline bool has_uart_msg_passed() const
+    {
+      return 0 != (presence::mask(presence::fields::UART_MSG_PASSED) & presence_[presence::index(presence::fields::UART_MSG_PASSED)]);
+    }
+    inline void clear_uart_msg_passed()
+    {
+      presence_[presence::index(presence::fields::UART_MSG_PASSED)] &= ~(presence::mask(presence::fields::UART_MSG_PASSED));
+      uart_msg_passed_.clear();
+    }
+    inline void set_uart_msg_passed(const int32_t& value)
+    {
+      presence_[presence::index(presence::fields::UART_MSG_PASSED)] |= presence::mask(presence::fields::UART_MSG_PASSED);
+      uart_msg_passed_ = value;
+    }
+    inline void set_uart_msg_passed(const int32_t&& value)
+    {
+      presence_[presence::index(presence::fields::UART_MSG_PASSED)] |= presence::mask(presence::fields::UART_MSG_PASSED);
+      uart_msg_passed_ = value;
+    }
+    inline int32_t& mutable_uart_msg_passed()
+    {
+      presence_[presence::index(presence::fields::UART_MSG_PASSED)] |= presence::mask(presence::fields::UART_MSG_PASSED);
+      return uart_msg_passed_.get();
+    }
+    inline const int32_t& get_uart_msg_passed() const { return uart_msg_passed_.get(); }
+    inline int32_t uart_msg_passed() const { return uart_msg_passed_.get(); }
+
+    static constexpr char const* LOST_SYNC_BYTE_NAME = "lost_sync_byte";
+    inline bool has_lost_sync_byte() const
+    {
+      return 0 != (presence::mask(presence::fields::LOST_SYNC_BYTE) & presence_[presence::index(presence::fields::LOST_SYNC_BYTE)]);
+    }
+    inline void clear_lost_sync_byte()
+    {
+      presence_[presence::index(presence::fields::LOST_SYNC_BYTE)] &= ~(presence::mask(presence::fields::LOST_SYNC_BYTE));
+      lost_sync_byte_.clear();
+    }
+    inline void set_lost_sync_byte(const int32_t& value)
+    {
+      presence_[presence::index(presence::fields::LOST_SYNC_BYTE)] |= presence::mask(presence::fields::LOST_SYNC_BYTE);
+      lost_sync_byte_ = value;
+    }
+    inline void set_lost_sync_byte(const int32_t&& value)
+    {
+      presence_[presence::index(presence::fields::LOST_SYNC_BYTE)] |= presence::mask(presence::fields::LOST_SYNC_BYTE);
+      lost_sync_byte_ = value;
+    }
+    inline int32_t& mutable_lost_sync_byte()
+    {
+      presence_[presence::index(presence::fields::LOST_SYNC_BYTE)] |= presence::mask(presence::fields::LOST_SYNC_BYTE);
+      return lost_sync_byte_.get();
+    }
+    inline const int32_t& get_lost_sync_byte() const { return lost_sync_byte_.get(); }
+    inline int32_t lost_sync_byte() const { return lost_sync_byte_.get(); }
+
+    static constexpr char const* RESETING_COMMS_NAME = "reseting_comms";
+    inline bool has_reseting_comms() const
+    {
+      return 0 != (presence::mask(presence::fields::RESETING_COMMS) & presence_[presence::index(presence::fields::RESETING_COMMS)]);
+    }
+    inline void clear_reseting_comms()
+    {
+      presence_[presence::index(presence::fields::RESETING_COMMS)] &= ~(presence::mask(presence::fields::RESETING_COMMS));
+      reseting_comms_.clear();
+    }
+    inline void set_reseting_comms(const int32_t& value)
+    {
+      presence_[presence::index(presence::fields::RESETING_COMMS)] |= presence::mask(presence::fields::RESETING_COMMS);
+      reseting_comms_ = value;
+    }
+    inline void set_reseting_comms(const int32_t&& value)
+    {
+      presence_[presence::index(presence::fields::RESETING_COMMS)] |= presence::mask(presence::fields::RESETING_COMMS);
+      reseting_comms_ = value;
+    }
+    inline int32_t& mutable_reseting_comms()
+    {
+      presence_[presence::index(presence::fields::RESETING_COMMS)] |= presence::mask(presence::fields::RESETING_COMMS);
+      return reseting_comms_.get();
+    }
+    inline const int32_t& get_reseting_comms() const { return reseting_comms_.get(); }
+    inline int32_t reseting_comms() const { return reseting_comms_.get(); }
+
+    static constexpr char const* UPTIME_NAME = "uptime";
+    inline bool has_uptime() const
+    {
+      return 0 != (presence::mask(presence::fields::UPTIME) & presence_[presence::index(presence::fields::UPTIME)]);
+    }
+    inline void clear_uptime()
+    {
+      presence_[presence::index(presence::fields::UPTIME)] &= ~(presence::mask(presence::fields::UPTIME));
+      uptime_.clear();
+    }
+    inline void set_uptime(const int32_t& value)
+    {
+      presence_[presence::index(presence::fields::UPTIME)] |= presence::mask(presence::fields::UPTIME);
+      uptime_ = value;
+    }
+    inline void set_uptime(const int32_t&& value)
+    {
+      presence_[presence::index(presence::fields::UPTIME)] |= presence::mask(presence::fields::UPTIME);
+      uptime_ = value;
+    }
+    inline int32_t& mutable_uptime()
+    {
+      presence_[presence::index(presence::fields::UPTIME)] |= presence::mask(presence::fields::UPTIME);
+      return uptime_.get();
+    }
+    inline const int32_t& get_uptime() const { return uptime_.get(); }
+    inline int32_t uptime() const { return uptime_.get(); }
+
+    static constexpr char const* TEENSY_LOOP_TIME_NAME = "teensy_loop_time";
+    inline bool has_teensy_loop_time() const
+    {
+      return 0 != (presence::mask(presence::fields::TEENSY_LOOP_TIME) & presence_[presence::index(presence::fields::TEENSY_LOOP_TIME)]);
+    }
+    inline void clear_teensy_loop_time()
+    {
+      presence_[presence::index(presence::fields::TEENSY_LOOP_TIME)] &= ~(presence::mask(presence::fields::TEENSY_LOOP_TIME));
+      teensy_loop_time_.clear();
+    }
+    inline void set_teensy_loop_time(const int32_t& value)
+    {
+      presence_[presence::index(presence::fields::TEENSY_LOOP_TIME)] |= presence::mask(presence::fields::TEENSY_LOOP_TIME);
+      teensy_loop_time_ = value;
+    }
+    inline void set_teensy_loop_time(const int32_t&& value)
+    {
+      presence_[presence::index(presence::fields::TEENSY_LOOP_TIME)] |= presence::mask(presence::fields::TEENSY_LOOP_TIME);
+      teensy_loop_time_ = value;
+    }
+    inline int32_t& mutable_teensy_loop_time()
+    {
+      presence_[presence::index(presence::fields::TEENSY_LOOP_TIME)] |= presence::mask(presence::fields::TEENSY_LOOP_TIME);
+      return teensy_loop_time_.get();
+    }
+    inline const int32_t& get_teensy_loop_time() const { return teensy_loop_time_.get(); }
+    inline int32_t teensy_loop_time() const { return teensy_loop_time_.get(); }
+
+    static constexpr char const* BMS_TEMP_NAME = "bms_temp";
+    inline bool has_bms_temp() const
+    {
+      return 0 != (presence::mask(presence::fields::BMS_TEMP) & presence_[presence::index(presence::fields::BMS_TEMP)]);
+    }
+    inline void clear_bms_temp()
+    {
+      presence_[presence::index(presence::fields::BMS_TEMP)] &= ~(presence::mask(presence::fields::BMS_TEMP));
+      bms_temp_.clear();
+    }
+    inline void set_bms_temp(const int32_t& value)
+    {
+      presence_[presence::index(presence::fields::BMS_TEMP)] |= presence::mask(presence::fields::BMS_TEMP);
+      bms_temp_ = value;
+    }
+    inline void set_bms_temp(const int32_t&& value)
+    {
+      presence_[presence::index(presence::fields::BMS_TEMP)] |= presence::mask(presence::fields::BMS_TEMP);
+      bms_temp_ = value;
+    }
+    inline int32_t& mutable_bms_temp()
+    {
+      presence_[presence::index(presence::fields::BMS_TEMP)] |= presence::mask(presence::fields::BMS_TEMP);
+      return bms_temp_.get();
+    }
+    inline const int32_t& get_bms_temp() const { return bms_temp_.get(); }
+    inline int32_t bms_temp() const { return bms_temp_.get(); }
+
 
     ::EmbeddedProto::Error serialize(::EmbeddedProto::WriteBufferInterface& buffer) const override
     {
@@ -781,6 +1433,56 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
       if(has_loco_status() && (::EmbeddedProto::Error::NO_ERRORS == return_value))
       {
         return_value = loco_status_.serialize_with_id(static_cast<uint32_t>(FieldNumber::LOCO_STATUS), buffer, true);
+      }
+
+      if(has_dev_status() && (::EmbeddedProto::Error::NO_ERRORS == return_value))
+      {
+        return_value = dev_status_.serialize_with_id(static_cast<uint32_t>(FieldNumber::DEV_STATUS), buffer, true);
+      }
+
+      if(has_i2c_msg_failed() && (::EmbeddedProto::Error::NO_ERRORS == return_value))
+      {
+        return_value = i2c_msg_failed_.serialize_with_id(static_cast<uint32_t>(FieldNumber::I2C_MSG_FAILED), buffer, true);
+      }
+
+      if(has_i2c_msg_passed() && (::EmbeddedProto::Error::NO_ERRORS == return_value))
+      {
+        return_value = i2c_msg_passed_.serialize_with_id(static_cast<uint32_t>(FieldNumber::I2C_MSG_PASSED), buffer, true);
+      }
+
+      if(has_uart_msg_failed() && (::EmbeddedProto::Error::NO_ERRORS == return_value))
+      {
+        return_value = uart_msg_failed_.serialize_with_id(static_cast<uint32_t>(FieldNumber::UART_MSG_FAILED), buffer, true);
+      }
+
+      if(has_uart_msg_passed() && (::EmbeddedProto::Error::NO_ERRORS == return_value))
+      {
+        return_value = uart_msg_passed_.serialize_with_id(static_cast<uint32_t>(FieldNumber::UART_MSG_PASSED), buffer, true);
+      }
+
+      if(has_lost_sync_byte() && (::EmbeddedProto::Error::NO_ERRORS == return_value))
+      {
+        return_value = lost_sync_byte_.serialize_with_id(static_cast<uint32_t>(FieldNumber::LOST_SYNC_BYTE), buffer, true);
+      }
+
+      if(has_reseting_comms() && (::EmbeddedProto::Error::NO_ERRORS == return_value))
+      {
+        return_value = reseting_comms_.serialize_with_id(static_cast<uint32_t>(FieldNumber::RESETING_COMMS), buffer, true);
+      }
+
+      if(has_uptime() && (::EmbeddedProto::Error::NO_ERRORS == return_value))
+      {
+        return_value = uptime_.serialize_with_id(static_cast<uint32_t>(FieldNumber::UPTIME), buffer, true);
+      }
+
+      if(has_teensy_loop_time() && (::EmbeddedProto::Error::NO_ERRORS == return_value))
+      {
+        return_value = teensy_loop_time_.serialize_with_id(static_cast<uint32_t>(FieldNumber::TEENSY_LOOP_TIME), buffer, true);
+      }
+
+      if(has_bms_temp() && (::EmbeddedProto::Error::NO_ERRORS == return_value))
+      {
+        return_value = bms_temp_.serialize_with_id(static_cast<uint32_t>(FieldNumber::BMS_TEMP), buffer, true);
       }
 
       return return_value;
@@ -849,6 +1551,56 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
             return_value = loco_status_.deserialize_check_type(buffer, wire_type);
             break;
 
+          case FieldNumber::DEV_STATUS:
+            presence_[presence::index(presence::fields::DEV_STATUS)] |= presence::mask(presence::fields::DEV_STATUS);
+            return_value = dev_status_.deserialize_check_type(buffer, wire_type);
+            break;
+
+          case FieldNumber::I2C_MSG_FAILED:
+            presence_[presence::index(presence::fields::I2C_MSG_FAILED)] |= presence::mask(presence::fields::I2C_MSG_FAILED);
+            return_value = i2c_msg_failed_.deserialize_check_type(buffer, wire_type);
+            break;
+
+          case FieldNumber::I2C_MSG_PASSED:
+            presence_[presence::index(presence::fields::I2C_MSG_PASSED)] |= presence::mask(presence::fields::I2C_MSG_PASSED);
+            return_value = i2c_msg_passed_.deserialize_check_type(buffer, wire_type);
+            break;
+
+          case FieldNumber::UART_MSG_FAILED:
+            presence_[presence::index(presence::fields::UART_MSG_FAILED)] |= presence::mask(presence::fields::UART_MSG_FAILED);
+            return_value = uart_msg_failed_.deserialize_check_type(buffer, wire_type);
+            break;
+
+          case FieldNumber::UART_MSG_PASSED:
+            presence_[presence::index(presence::fields::UART_MSG_PASSED)] |= presence::mask(presence::fields::UART_MSG_PASSED);
+            return_value = uart_msg_passed_.deserialize_check_type(buffer, wire_type);
+            break;
+
+          case FieldNumber::LOST_SYNC_BYTE:
+            presence_[presence::index(presence::fields::LOST_SYNC_BYTE)] |= presence::mask(presence::fields::LOST_SYNC_BYTE);
+            return_value = lost_sync_byte_.deserialize_check_type(buffer, wire_type);
+            break;
+
+          case FieldNumber::RESETING_COMMS:
+            presence_[presence::index(presence::fields::RESETING_COMMS)] |= presence::mask(presence::fields::RESETING_COMMS);
+            return_value = reseting_comms_.deserialize_check_type(buffer, wire_type);
+            break;
+
+          case FieldNumber::UPTIME:
+            presence_[presence::index(presence::fields::UPTIME)] |= presence::mask(presence::fields::UPTIME);
+            return_value = uptime_.deserialize_check_type(buffer, wire_type);
+            break;
+
+          case FieldNumber::TEENSY_LOOP_TIME:
+            presence_[presence::index(presence::fields::TEENSY_LOOP_TIME)] |= presence::mask(presence::fields::TEENSY_LOOP_TIME);
+            return_value = teensy_loop_time_.deserialize_check_type(buffer, wire_type);
+            break;
+
+          case FieldNumber::BMS_TEMP:
+            presence_[presence::index(presence::fields::BMS_TEMP)] |= presence::mask(presence::fields::BMS_TEMP);
+            return_value = bms_temp_.deserialize_check_type(buffer, wire_type);
+            break;
+
           case FieldNumber::NOT_SET:
             return_value = ::EmbeddedProto::Error::INVALID_FIELD_ID;
             break;
@@ -888,6 +1640,16 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
       clear_home_servo_pan();
       clear_home_servo_tilt();
       clear_loco_status();
+      clear_dev_status();
+      clear_i2c_msg_failed();
+      clear_i2c_msg_passed();
+      clear_uart_msg_failed();
+      clear_uart_msg_passed();
+      clear_lost_sync_byte();
+      clear_reseting_comms();
+      clear_uptime();
+      clear_teensy_loop_time();
+      clear_bms_temp();
 
     }
 
@@ -925,6 +1687,36 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
           break;
         case FieldNumber::LOCO_STATUS:
           name = LOCO_STATUS_NAME;
+          break;
+        case FieldNumber::DEV_STATUS:
+          name = DEV_STATUS_NAME;
+          break;
+        case FieldNumber::I2C_MSG_FAILED:
+          name = I2C_MSG_FAILED_NAME;
+          break;
+        case FieldNumber::I2C_MSG_PASSED:
+          name = I2C_MSG_PASSED_NAME;
+          break;
+        case FieldNumber::UART_MSG_FAILED:
+          name = UART_MSG_FAILED_NAME;
+          break;
+        case FieldNumber::UART_MSG_PASSED:
+          name = UART_MSG_PASSED_NAME;
+          break;
+        case FieldNumber::LOST_SYNC_BYTE:
+          name = LOST_SYNC_BYTE_NAME;
+          break;
+        case FieldNumber::RESETING_COMMS:
+          name = RESETING_COMMS_NAME;
+          break;
+        case FieldNumber::UPTIME:
+          name = UPTIME_NAME;
+          break;
+        case FieldNumber::TEENSY_LOOP_TIME:
+          name = TEENSY_LOOP_TIME_NAME;
+          break;
+        case FieldNumber::BMS_TEMP:
+          name = BMS_TEMP_NAME;
           break;
         default:
           name = "Invalid FieldNumber";
@@ -996,6 +1788,16 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
       left_chars = home_servo_pan_.to_string(left_chars, indent_level + 2, HOME_SERVO_PAN_NAME, false);
       left_chars = home_servo_tilt_.to_string(left_chars, indent_level + 2, HOME_SERVO_TILT_NAME, false);
       left_chars = loco_status_.to_string(left_chars, indent_level + 2, LOCO_STATUS_NAME, false);
+      left_chars = dev_status_.to_string(left_chars, indent_level + 2, DEV_STATUS_NAME, false);
+      left_chars = i2c_msg_failed_.to_string(left_chars, indent_level + 2, I2C_MSG_FAILED_NAME, false);
+      left_chars = i2c_msg_passed_.to_string(left_chars, indent_level + 2, I2C_MSG_PASSED_NAME, false);
+      left_chars = uart_msg_failed_.to_string(left_chars, indent_level + 2, UART_MSG_FAILED_NAME, false);
+      left_chars = uart_msg_passed_.to_string(left_chars, indent_level + 2, UART_MSG_PASSED_NAME, false);
+      left_chars = lost_sync_byte_.to_string(left_chars, indent_level + 2, LOST_SYNC_BYTE_NAME, false);
+      left_chars = reseting_comms_.to_string(left_chars, indent_level + 2, RESETING_COMMS_NAME, false);
+      left_chars = uptime_.to_string(left_chars, indent_level + 2, UPTIME_NAME, false);
+      left_chars = teensy_loop_time_.to_string(left_chars, indent_level + 2, TEENSY_LOOP_TIME_NAME, false);
+      left_chars = bms_temp_.to_string(left_chars, indent_level + 2, BMS_TEMP_NAME, false);
   
       if( 0 == indent_level) 
       {
@@ -1035,11 +1837,21 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
           CURR_SERVO_TILT,
           HOME_SERVO_PAN,
           HOME_SERVO_TILT,
-          LOCO_STATUS
+          LOCO_STATUS,
+          DEV_STATUS,
+          I2C_MSG_FAILED,
+          I2C_MSG_PASSED,
+          UART_MSG_FAILED,
+          UART_MSG_PASSED,
+          LOST_SYNC_BYTE,
+          RESETING_COMMS,
+          UPTIME,
+          TEENSY_LOOP_TIME,
+          BMS_TEMP
         };
 
         // The number of fields for which presence has to be tracked.
-        static constexpr uint32_t N_FIELDS = 10;
+        static constexpr uint32_t N_FIELDS = 20;
 
         // Which type are we using to track presence.
         using TYPE = uint32_t;
@@ -1073,6 +1885,16 @@ class GUI_Data final: public ::EmbeddedProto::MessageInterface
       EmbeddedProto::sint32 home_servo_pan_ = 0;
       EmbeddedProto::sint32 home_servo_tilt_ = 0;
       EmbeddedProto::enumeration<Locomotion_Status> loco_status_ = static_cast<Locomotion_Status>(0);
+      EmbeddedProto::enumeration<Device_Status> dev_status_ = static_cast<Device_Status>(0);
+      EmbeddedProto::sint32 i2c_msg_failed_ = 0;
+      EmbeddedProto::sint32 i2c_msg_passed_ = 0;
+      EmbeddedProto::sint32 uart_msg_failed_ = 0;
+      EmbeddedProto::sint32 uart_msg_passed_ = 0;
+      EmbeddedProto::sint32 lost_sync_byte_ = 0;
+      EmbeddedProto::sint32 reseting_comms_ = 0;
+      EmbeddedProto::sint32 uptime_ = 0;
+      EmbeddedProto::sint32 teensy_loop_time_ = 0;
+      EmbeddedProto::sint32 bms_temp_ = 0;
 
 };
 

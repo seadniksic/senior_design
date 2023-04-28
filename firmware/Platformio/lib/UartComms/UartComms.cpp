@@ -1,5 +1,5 @@
 #include "UartComms.h"
-
+#include "main.h"
 
 static UartReadBuffer g_read_buffer;
 static UartWriteBuffer g_write_buffer;
@@ -27,9 +27,9 @@ void UartComms_Init()
 }
 
 // As of right now this is blocking, not ideal
-#pragma message("should just put this into a struct and pass the struct.")
+// #pragma message("should just put this into a struct and pass the struct.")
 
-void UartComms_RcvControls()
+bool UartComms_RcvControls()
 {
     // protobuf
     // now the first byte will be a special sync byte indicating start of message. 
@@ -59,7 +59,8 @@ void UartComms_RcvControls()
           if(uartComms.rcv_clock > TIMEOUT_NUMBYTES)
           {
             Serial.println("Message timeout while waiting for num_bytes!");
-            return;
+            g_watcher.uart_msg_failed++;
+            return false;
           }
         }
 
@@ -73,7 +74,8 @@ void UartComms_RcvControls()
           if(uartComms.rcv_clock > TIMEOUT_DATA)
           {
             Serial.println("Message timeout while waiting for data!");
-            return;
+            g_watcher.uart_msg_failed++;
+            return false;
           }
 
           // read the actual message.
@@ -95,6 +97,7 @@ void UartComms_RcvControls()
         if(uartComms.syncByteStatus == false)
         {
           Serial.println("sync byte not found yet.");
+          g_watcher.lost_sync_byte++;
           uartComms.syncByteStatus = true;
         }
       }
@@ -105,9 +108,10 @@ void UartComms_RcvControls()
       auto deserialize_status = uartComms.js_in->deserialize(*uartComms.read_buffer);
       if(::EmbeddedProto::Error::NO_ERRORS == deserialize_status)
       {
-        uint32_t btn_status = (uint32_t)uartComms.js_in->get_button();
         uartComms.time_since_last_serialize = 0;
+        g_watcher.uart_msg_passed++;
 
+        // uint32_t btn_status = (uint32_t)uartComms.js_in->get_button();
 
         // Serial.println(btn_status);
         // returns enum class Buttons derived from uint32_t type.
@@ -153,9 +157,16 @@ void UartComms_RcvControls()
       else
       {
         Serial.println("Failed to serialize message.");
+        g_watcher.uart_msg_failed++;
         HWSERIAL.flush();
+        return false;
       }
 
+      return true;
+    }
+    else
+    {
+      return false;
     }
 }
 
@@ -184,6 +195,12 @@ void UartComms_SendGUIData()
 
     // Now transmit the actual data.
     HWSERIAL.write(uartComms.write_buffer->get_data(), uartComms.write_buffer->get_size());
+    g_watcher.uart_msg_passed++;
+  }
+  else
+  {
+    Serial.println("Failed to serialize GUI Data.");
+    g_watcher.uart_msg_failed++;
   }
 }
 
@@ -200,6 +217,12 @@ void UartComms_SendSLAMData()
 
     // Now transmit the actual data.
     HWSERIAL.write(uartComms.write_buffer->get_data(), uartComms.write_buffer->get_size());
+    g_watcher.uart_msg_passed++;
+  }
+  else
+  {
+    Serial.println("Failed to serialize SLAM Data.");
+    g_watcher.uart_msg_failed++;
   }
 }
 
@@ -229,7 +252,7 @@ Joystick_Input* UartComms_GetJoystick()
   return uartComms.js_in;
 }
 
-elapsedMillis* UartComms_GetTimeSinceLastRead()
+const elapsedMillis* UartComms_GetTimeSinceLastRead()
 {
   return &uartComms.time_since_last_serialize;
 }

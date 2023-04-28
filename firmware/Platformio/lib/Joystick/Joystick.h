@@ -50,7 +50,7 @@ CONTROL BUTTONS:
 #define BTN_NONE_PRESSED (joy_state.buttons.state == 0)
 
 /* analog input ranges*/
-#define JOY_DEADZONE 10000 // in one direction
+#define JOY_DEADZONE 5000 // in one direction
 #define JOY_MIDDLE 0
 #define JOY_MAX 32768 // down and right are positive
 #define JOY_MIN (-JOY_MAX)
@@ -99,11 +99,15 @@ CONTROL BUTTONS:
 #define IN_RUNNING_MODE (control_state.control.bits.turn_off == RUNNING_MODE)
 #define CENTER_CAMS (control_state.control.bits.center_cams)
 
+/* Speed */
+#define MAX_SPEED 200
+#define MIN_SPEED 75
+
 /* Mapping */
 #define IN_MIN JOY_HIGH
 #define IN_MAX JOY_MAX
-#define OUT_MIN 100
-#define OUT_MAX 255
+#define OUT_MIN MIN_SPEED
+#define OUT_MAX MAX_SPEED
 #define RATIO ((float)(OUT_MAX - OUT_MIN) / (float)(IN_MAX - IN_MIN))
 
 

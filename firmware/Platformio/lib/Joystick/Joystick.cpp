@@ -12,7 +12,7 @@ static control_state_t control_state = {0};
 void Joystick_Init()
 {
     control_state.control.bits.turn_off = 1;
-    control_state.headlight_brightness = BRIGHTNESS_STEP;
+    control_state.headlight_brightness = LIGHTBAR_BRIGHTNESS_STEP;
 }
 
 void Joystick_Print()
@@ -175,25 +175,35 @@ void Joystick_Run()
         if(control_state.control.bits.print_imu_calib)
         {
             control_state.control.bits.print_imu_calib = 0;
+            
+            // Print calibration status
             bno055::print_calibration();
-            if(bno055::get_calib_profile())
+
+            if(bno055::enter_config_mode())
             {
-                bno055::print_calib_profile();
-            }
+                // Attempt to get calibration profile
+                if(bno055::get_calib_profile())
+                {
+                    bno055::print_calib_profile();
+                }
+                
+                // return to run mode
+                bno055::enter_run_mode();
+            }  
         }
 
-        if(control_state.control.bits.write_calib_profile)
-        {
-            control_state.control.bits.write_calib_profile = 0;
-            if(bno055::write_calib_profile(ACTUAL_CALIB_DATA))
-            {
-                Serial.println("successfully wrote calib profile");
-            }
-            else
-            {
-                Serial.println("FAILED TO WRITE CALIB PROFILE");
-            }
-        }
+        // if(control_state.control.bits.write_calib_profile)
+        // {
+        //     control_state.control.bits.write_calib_profile = 0;
+        //     if(bno055::write_calib_profile(ACTUAL_CALIB_DATA))
+        //     {
+        //         Serial.println("successfully wrote calib profile");
+        //     }
+        //     else
+        //     {
+        //         Serial.println("FAILED TO WRITE CALIB PROFILE");
+        //     }
+        // }
     }
     
 
@@ -209,7 +219,7 @@ void Joystick_Run()
     // Handle LightBar
     if(DPAD_LEFT_PRESSED)
     {
-        LightBar_Brightness(0);
+        LightBar_State(false);
     }
     else if(DPAD_RIGHT_PRESSED)
     {
@@ -217,17 +227,17 @@ void Joystick_Run()
     }
     else if(DPAD_UP_PRESSED)
     {
-        if(control_state.headlight_brightness <= (255 - BRIGHTNESS_STEP))
+        if(control_state.headlight_brightness <= (255 - LIGHTBAR_BRIGHTNESS_STEP))
         {
-            control_state.headlight_brightness += BRIGHTNESS_STEP;
+            control_state.headlight_brightness += LIGHTBAR_BRIGHTNESS_STEP;
             LightBar_Brightness(control_state.headlight_brightness);
         }
     }
     else if(DPAD_DOWN_PRESSED)
     {
-        if(control_state.headlight_brightness >= (BRIGHTNESS_STEP))
+        if(control_state.headlight_brightness >= (LIGHTBAR_BRIGHTNESS_STEP + LIGHTBAR_MIN_BRIGHTNESS))
         {
-            control_state.headlight_brightness -= BRIGHTNESS_STEP;
+            control_state.headlight_brightness -= LIGHTBAR_BRIGHTNESS_STEP;
             LightBar_Brightness(control_state.headlight_brightness);
         }
     }
@@ -237,28 +247,30 @@ void Joystick_Run()
     {
         if(LJOY_UP && RJOY_RIGHT)
         {
-            const uint8_t mapped = Joystick_Map_Generic(Joystick_Map(joy_state.rjoy_x), 0, 255, 0, (OUT_MAX - OUT_MIN)/2);
+            // take the joystick value and map it to a range of OUT_MIN to OUT_MAX
+            // and then map that value from 0 to 150 to 0 to 70
+            const uint8_t mapped = Joystick_Map_Generic(Joystick_Map(joy_state.rjoy_x), 0, MAX_SPEED, 0, (OUT_MAX - OUT_MIN)/2);
             const uint8_t pwm_left = OUT_MAX - OUT_MIN + mapped;  // left side should move faster
             const uint8_t pwm_right = OUT_MAX - OUT_MIN - mapped;
             Locomotion_Differential_Drive_Forward(pwm_left, pwm_right);
         }
         else if(LJOY_UP && RJOY_LEFT)
         {
-            const uint8_t mapped = Joystick_Map_Generic(Joystick_Map(joy_state.rjoy_x), 0, 255, 0, (OUT_MAX - OUT_MIN)/2);
+            const uint8_t mapped = Joystick_Map_Generic(Joystick_Map(joy_state.rjoy_x), 0, MAX_SPEED, 0, (OUT_MAX - OUT_MIN)/2);
             const uint8_t pwm_left = OUT_MAX - OUT_MIN - mapped; 
             const uint8_t pwm_right = OUT_MAX - OUT_MIN + mapped; // right_side should move faster
             Locomotion_Differential_Drive_Forward(pwm_left, pwm_right);
         }
         else if(LJOY_DOWN && RJOY_RIGHT)
         {
-            const uint8_t mapped = Joystick_Map_Generic(Joystick_Map(joy_state.rjoy_x), 0, 255, 0, (OUT_MAX - OUT_MIN)/2);
+            const uint8_t mapped = Joystick_Map_Generic(Joystick_Map(joy_state.rjoy_x), 0, MAX_SPEED, 0, (OUT_MAX - OUT_MIN)/2);
             const uint8_t pwm_left = OUT_MAX - OUT_MIN + mapped; 
             const uint8_t pwm_right = OUT_MAX - OUT_MIN - mapped; // right_side should move faster
             Locomotion_Differential_Drive_Backward(pwm_left, pwm_right);
         }
         else if(LJOY_DOWN && RJOY_LEFT)
         {
-            const uint8_t mapped = Joystick_Map_Generic(Joystick_Map(joy_state.rjoy_x), 0, 255, 0, (OUT_MAX - OUT_MIN)/2);
+            const uint8_t mapped = Joystick_Map_Generic(Joystick_Map(joy_state.rjoy_x), 0, MAX_SPEED, 0, (OUT_MAX - OUT_MIN)/2);
             const uint8_t pwm_left = OUT_MAX - OUT_MIN - mapped; 
             const uint8_t pwm_right = OUT_MAX - OUT_MIN + mapped; // right_side should move faster
             Locomotion_Differential_Drive_Backward(pwm_left, pwm_right);

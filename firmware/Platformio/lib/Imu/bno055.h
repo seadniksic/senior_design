@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <UartComms.h>
+#include "i2c_device.h"
 
 #define BNO_RUN_MODE BNO_OPR_MODE_NDOF_FMC_OFF
 
@@ -162,12 +163,12 @@ typedef struct
     int16_t mag_rad;
 } Calib_Data_t;
 
-
-#warning "switch convention to what the other files have, prefix bno055 and capital for funcs"
+// TODO:
+// #pragma message("switch convention to what the other files have, prefix bno055 and capital for funcs")
 
 namespace bno055
 {
-    bool init(bool run_calib);
+    bool init(I2CDevice * dev, bool run_calib);
     bool establish_comms();
     bool check_IDs();
     void get_temp();

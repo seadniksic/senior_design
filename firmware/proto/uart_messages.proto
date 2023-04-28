@@ -62,15 +62,34 @@ message GUI_Data
         NORMAL_DRIVING_MODE = 2;
     }
 
-    optional sint32 cpu_temp = 1;   // done
-    optional sint32 calib_status = 2; // done (needs parsing on jetson side)
+    enum Device_Status
+    {
+        NONE_1 = 0;
+        BNO_INIT_SUCCESS = 1;
+        HTS_INIT_SUCCESS = 2;
+    }
+
+    optional sint32 cpu_temp = 1;   
+    optional sint32 calib_status = 2; 
     optional sint32 hts_temp = 3; 
     optional sint32 hts_humidity = 4;
     optional sint32 batt_temp = 5;
-    optional sint32 curr_servo_pan = 6; //done
-    optional sint32 curr_servo_tilt = 7; // done
-    optional sint32 home_servo_pan = 8; // done
-    optional sint32 home_servo_tilt = 9; // done
-    optional Locomotion_Status loco_status = 10; //done
+    optional sint32 curr_servo_pan = 6; 
+    optional sint32 curr_servo_tilt = 7; 
+    optional sint32 home_servo_pan = 8; 
+    optional sint32 home_servo_tilt = 9; 
+    optional Locomotion_Status loco_status = 10; 
+    
+    optional Device_Status dev_status = 11;
+    optional sint32 i2c_msg_failed = 12;
+    optional sint32 i2c_msg_passed = 13;
+    optional sint32 uart_msg_failed = 14;
+    optional sint32 uart_msg_passed = 15;
+    optional sint32 lost_sync_byte = 16; 
+    optional sint32 reseting_comms = 17;
+
+    optional sint32 uptime = 18;
+    optional sint32 teensy_loop_time = 19;
+    optional sint32 bms_temp = 20;
     
 }
